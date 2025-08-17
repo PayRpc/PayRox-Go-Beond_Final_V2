@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ManifestUtils",
+  "sourceName": "contracts/manifest/ManifestUtils.sol",
+  "abi": [],
+  "bytecode": "0x6080806040523460175760399081601c823930815050f35b5f80fdfe5f80fdfea26469706673582212200a0a0014b8e90608140a145874e54337d426ae964411d62cdbae2a91f4c7cc6764736f6c634300081e0033",
+  "deployedBytecode": "0x5f80fdfea26469706673582212200a0a0014b8e90608140a145874e54337d426ae964411d62cdbae2a91f4c7cc6764736f6c634300081e0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
