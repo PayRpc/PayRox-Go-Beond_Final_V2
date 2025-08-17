@@ -1,6 +1,6 @@
 import hre from 'hardhat';
 import { generateManifestLeaves } from '../utils/merkle';
-import { verifyOrderedProof, processOrderedProof } from '../utils/ordered-merkle';
+import { verifyOrderedProof } from '../utils/ordered-merkle';
 
 async function main() {
   console.log('Starting semi-real merkle simulation...');
@@ -30,17 +30,23 @@ async function main() {
         for (const libName of Object.keys(libs)) {
           // Provide a deterministic dummy address per library (last 20 hex chars from keccak)
           if (!libraryAddresses[libName]) {
-            const dummy = hre.ethers.utils.keccak256(hre.ethers.utils.toUtf8Bytes(libName)).slice(-40);
+            const ethers = (hre as any).ethers;
+            const dummy = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(libName)).slice(-40);
             libraryAddresses[libName] = '0x' + dummy;
           }
         }
       }
-    } catch (e) {
+    } catch (_e) {
       // ignore artifact read errors here
     }
   }
 
-  const { root, tree, proofs, positions, leaves, leafMeta } = await generateManifestLeaves(manifest, artifacts, factoryAddress, { libraryAddresses });
+  const { root, proofs, positions, leaves, leafMeta } = await generateManifestLeaves(
+    manifest,
+    artifacts,
+    factoryAddress,
+    { libraryAddresses },
+  );
 
   console.log('Computed root:', root);
   console.log('Leaves count:', leaves.length);
@@ -54,7 +60,7 @@ async function main() {
     let ok = false;
     try {
       ok = verifyOrderedProof(leaves[i], proof, pos, root);
-    } catch (e) {
+    } catch (_e) {
       ok = false;
     }
     console.log(`leaf ${i} (${meta.selector}) proof length ${proof.length} => verified: ${ok}`);

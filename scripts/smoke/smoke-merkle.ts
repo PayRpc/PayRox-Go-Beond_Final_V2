@@ -1,4 +1,4 @@
-import { encodeLeaf, deriveSelectorsFromAbi } from '../utils/merkle';
+import { encodeLeaf } from '../utils/merkle';
 import { createRouteLeaf, processOrderedProof, verifyOrderedProof } from '../utils/ordered-merkle';
 import assert from 'assert';
 

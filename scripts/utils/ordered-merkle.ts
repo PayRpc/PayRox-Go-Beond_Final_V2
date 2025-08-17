@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { keccak256, concat, AbiCoder, toUtf8Bytes } from 'ethers';
 
 /**
  * Process an ordered Merkle proof using bitfield position encoding (LSB-first)
@@ -12,15 +12,15 @@ export function processOrderedProof(leaf: string, proof: string[], positionsHex:
   // - computed starts as _hashLeaf(leaf) == keccak256(0x00 || leaf)
   // - at each step: computed = isRight ? keccak256(0x01 || computed || proof[i]) : keccak256(0x01 || proof[i] || computed)
   const positions = BigInt(positionsHex);
-  let computed = ethers.utils.keccak256(ethers.utils.concat(['0x00', leaf]));
+  let computed = keccak256(concat(['0x00', leaf]));
 
   for (let i = 0n; i < BigInt(proof.length); i++) {
     const sib = proof[Number(i)];
     const isRight = ((positions >> i) & 1n) === 1n;
     if (isRight) {
-      computed = ethers.utils.keccak256(ethers.utils.concat(['0x01', computed, sib]));
+      computed = keccak256(concat(['0x01', computed, sib]));
     } else {
-      computed = ethers.utils.keccak256(ethers.utils.concat(['0x01', sib, computed]));
+      computed = keccak256(concat(['0x01', sib, computed]));
     }
   }
 
@@ -61,12 +61,8 @@ export function verifyOrderedProof(
  */
 export function createRouteLeaf(selector: string, facet: string, codehash: string): string {
   // Use proper ABI encoding: bytes4, address, bytes32 (not padded bytes32s)
-  return ethers.utils.keccak256(
-    ethers.utils.defaultAbiCoder.encode(
-      ['bytes4', 'address', 'bytes32'],
-      [selector, facet, codehash],
-    ),
-  );
+  const abi = new AbiCoder();
+  return keccak256(abi.encode(['bytes4', 'address', 'bytes32'], [selector, facet, codehash]));
 }
 
 /**
@@ -75,5 +71,5 @@ export function createRouteLeaf(selector: string, facet: string, codehash: strin
  * @returns 32-byte hash of version string
  */
 export function getVersionBytes32(version: string): string {
-  return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(version));
+  return keccak256(toUtf8Bytes(version));
 }

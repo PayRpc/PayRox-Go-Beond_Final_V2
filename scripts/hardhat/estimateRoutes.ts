@@ -2,7 +2,7 @@ import hre from 'hardhat';
 import { encodeLeaf } from '../utils/merkle';
 
 async function main() {
-  const ethers = hre.ethers;
+  const ethers = (hre as any).ethers;
   console.log('Compiling and deploying minimal fixtures for gas estimation...');
 
   const [deployer] = await ethers.getSigners();
@@ -30,7 +30,10 @@ async function main() {
       gasLibAddress = gasLib.address;
       console.log('Deployed GasOptimizationUtils at', gasLibAddress);
     } catch (linkErr) {
-      console.warn('GasOptimizationUtils deploy/link skipped:', (linkErr as any)?.message || linkErr);
+      console.warn(
+        'GasOptimizationUtils deploy/link skipped:',
+        (linkErr as any)?.message || linkErr,
+      );
     }
 
     let FacetFactory;
@@ -84,7 +87,13 @@ async function main() {
   }
 
   try {
-    const gas = await dispatcher.estimateGas.applyRoutes(selectors, facets, codehashes, proofs, isRight);
+    const gas = await dispatcher.estimateGas.applyRoutes(
+      selectors,
+      facets,
+      codehashes,
+      proofs,
+      isRight,
+    );
     console.log(`estimateGas applyRoutes => ${gas.toString()}`);
   } catch (err) {
     console.error('estimateGas failed:', (err && (err as Error).message) || err);

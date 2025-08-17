@@ -25,22 +25,22 @@ function buildSelectorMap(artifactsDir) {
           outputs: item.outputs || [],
         });
       }
-    } catch {}
+    } catch {
+      // ignore malformed artifact JSON
+    }
   }
   return map;
 }
 
 function paramList(inputs) {
   return inputs
-    .map((i, idx) => `${i.type} ${i.name && i.name.trim() ? i.name : `p${idx}`}`)
+    .map((i, _i) => `${i.type} ${i.name && i.name.trim() ? i.name : `p${_i}`}`)
     .join(', ');
 }
 function returnList(outputs) {
   if (!outputs || outputs.length === 0) return '';
   return (
-    ' returns (' +
-    outputs.map((o, idx) => `${o.type}${o.name ? ` ${o.name}` : ''}`).join(', ') +
-    ')'
+    ' returns (' + outputs.map((o) => `${o.type}${o.name ? ` ${o.name}` : ''}`).join(', ') + ')'
   );
 }
 

@@ -32,7 +32,7 @@ export interface FileOperationOptions {
 
 export interface DirectoryOptions {
   recursive?: boolean;
-  filter?: (file: string) => boolean;
+  filter?: (_file: string) => boolean;
   maxDepth?: number;
   followSymlinks?: boolean;
 }
@@ -48,9 +48,9 @@ export interface ArchiveOptions {
 export class FileOperationError extends Error {
   constructor(
     message: string,
-    public readonly operation: string,
-    public readonly filePath: string,
-    public readonly cause?: Error,
+    public readonly _operation: string,
+    public readonly _filePath: string,
+    public readonly _cause?: Error,
   ) {
     super(message);
     this.name = 'FileOperationError';
@@ -60,7 +60,7 @@ export class FileOperationError extends Error {
 export class SecurityError extends Error {
   constructor(
     message: string,
-    public readonly filePath: string,
+    public readonly _filePath: string,
   ) {
     super(message);
     this.name = 'SecurityError';
@@ -609,7 +609,7 @@ export function listFiles(
 
     // Return metadata if requested
     if (options.includeMetadata) {
-      return files.map((file) => getFileMetadata(file, { validatePath: false }));
+      return files.map((_file) => getFileMetadata(_file, { validatePath: false }));
     }
 
     return files;

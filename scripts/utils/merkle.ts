@@ -1,10 +1,11 @@
-import { utils } from 'ethers';
+// Ethers v6: no utils namespace export; import needed functions directly
+import { keccak256, concat, solidityPacked, toUtf8Bytes, getCreate2Address } from 'ethers';
 
 /**
  * Pair hash matching OrderedMerkle._hashNode: keccak256(0x01 || left || right)
  */
 function pairHash(a: string, b: string): string {
-  return utils.keccak256(utils.concat(['0x01', a, b]));
+  return keccak256(concat(['0x01', a, b]));
 }
 
 /**
@@ -13,8 +14,11 @@ function pairHash(a: string, b: string): string {
  */
 export function encodeLeaf(selector: string, facet: string, codehash: string): string {
   // use packed encoding to match abi.encodePacked
-  const packed = utils.solidityPack(['bytes1', 'bytes4', 'address', 'bytes32'], ['0x00', selector, facet, codehash]);
-  return utils.keccak256(packed);
+  const packed = solidityPacked(
+    ['bytes1', 'bytes4', 'address', 'bytes32'],
+    ['0x00', selector, facet, codehash],
+  );
+  return keccak256(packed);
 }
 
 /** Build a Merkle proof for a leaf index given all levels */
@@ -36,7 +40,7 @@ export function deriveSelectorsFromAbi(abi: any[]): string[] {
   const sigs = abi
     .filter((f) => f?.type === 'function')
     .map((f) => `${f.name}(${(f.inputs || []).map((i: any) => i.type).join(',')})`);
-  const sels = sigs.map((sig) => utils.keccak256(utils.toUtf8Bytes(sig)).slice(0, 10));
+  const sels = sigs.map((sig) => keccak256(toUtf8Bytes(sig)).slice(0, 10));
   return Array.from(new Set(sels));
 }
 
@@ -148,8 +152,8 @@ export async function generateManifestLeaves(
       );
     }
 
-    const runtimeHash = utils.keccak256(runtime); // == EXTCODEHASH on-chain
-    const initCodeHash = utils.keccak256(creation);
+    const runtimeHash = keccak256(runtime); // == EXTCODEHASH on-chain
+    const initCodeHash = keccak256(creation);
 
     // Prefer explicit deployed address when provided on facet entry or manifest.deployment.addresses
     const explicitAddress =
@@ -167,9 +171,9 @@ export async function generateManifestLeaves(
         manifest?.deployment?.[facet.name]?.salt ??
         manifest?.deployment?.[facet.name?.toLowerCase?.() ?? '']?.salt;
 
-      const salt = explicitSalt ?? utils.keccak256(utils.toUtf8Bytes(`PayRox-${facet.name}`));
+      const salt = explicitSalt ?? keccak256(toUtf8Bytes(`PayRox-${facet.name}`));
 
-      facetAddress = utils.getCreate2Address(factoryAddress, salt, initCodeHash);
+      facetAddress = getCreate2Address(factoryAddress, salt, initCodeHash);
     }
 
     // Use configured selectors if given, else derive from ABI
@@ -191,7 +195,7 @@ export async function generateManifestLeaves(
   }
 
   if (leaves.length === 0) {
-    return { root: utils.keccak256('0x'), tree: [], proofs: {}, positions: {}, leaves, leafMeta };
+    return { root: keccak256('0x'), tree: [], proofs: {}, positions: {}, leaves, leafMeta };
   }
 
   // Build Merkle using the same scheme as OrderedMerkle.sol:
@@ -201,7 +205,7 @@ export async function generateManifestLeaves(
   const tree: string[][] = [];
 
   // First level: hashed leaf nodes (_hashLeaf)
-  const leafNodes = leaves.map((l) => utils.keccak256(utils.concat(['0x00', l])));
+  const leafNodes = leaves.map((l) => keccak256(concat(['0x00', l])));
   tree.push(leafNodes);
 
   let level = leafNodes;
@@ -233,7 +237,7 @@ export async function generateManifestLeaves(
       const isRight = idx % 2 === 1; // node is right child
       const siblingIsRight = !isRight; // sibling is right if node is left
       if (siblingIsRight) {
-        bits |= (1n << BigInt(level));
+        bits |= 1n << BigInt(level);
       }
       idx = Math.floor(idx / 2);
     }
