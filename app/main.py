@@ -10,6 +10,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import subprocess
 
 from fastapi import FastAPI, HTTPException, Query, Body
+import hashlib
+from pydantic import BaseModel
+from typing import Any
+from pathlib import Path as _Path
+try:
+    from app.utils.facet_splitter import split_facet_file, compute_fingerprint, MAX_FACET_CODE
+except Exception:
+    # If utils not present at import time, fallback and import lazily in handlers
+    split_facet_file = None
+    compute_fingerprint = None
+    MAX_FACET_CODE = 24576
 from pydantic import BaseModel, Field
 from rank_bm25 import BM25Okapi
 from ollama import Client
@@ -992,6 +1003,107 @@ def _json_or_repair(client: Client, model: str, raw_text: str, schema_txt: str) 
         resp = client.generate(model=model, prompt=repair_prompt, options={"temperature": 0.0, "num_predict": 512})
         repaired = resp.get("response", "").strip()
         return json.loads(repaired)
+
+
+    ### Refactor validation + simulation endpoints
+    class RefactorValidateRequest(BaseModel):
+        source_file: str
+        expected_codehash: Optional[str] = None
+        allow_split: bool = True
+
+
+    class RefactorValidateResponse(BaseModel):
+        ok: bool
+        lockfile: Optional[str] = None
+        fingerprint: Optional[str] = None
+        warnings: List[str] = []
+
+
+    @app.post('/refactor/validate', response_model=RefactorValidateResponse)
+    def refactor_validate(req: RefactorValidateRequest):
+        """Validate a facet source and emit a deterministic refactor.lock.json under .payrox/.
+
+        The lockfile contains a fingerprint, per-facet metadata (name, size, selectors), and
+        a tools+env section for reproducibility.
+        """
+        # lazy import of splitter
+        global split_facet_file, compute_fingerprint
+        if split_facet_file is None:
+            try:
+                from app.utils.facet_splitter import split_facet_file as _s, compute_fingerprint as _f
+                split_facet_file = _s
+                compute_fingerprint = _f
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"splitter import error: {e}")
+
+        src = _safe_path(req.source_file)
+        try:
+            facets = split_facet_file(str(src))
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail=f"source not found: {req.source_file}")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"split error: {e}")
+
+        warnings: List[str] = []
+        lock = {
+            "version": 1,
+            "source": str(src.relative_to(CONTRACTS_ROOT)),
+            "facets": [],
+            "tools": {"node": NODE_BIN},
+        }
+
+        for f in facets:
+            if f.get('size', 0) > MAX_FACET_CODE:
+                if req.allow_split:
+                    warnings.append(f"facet {f.get('name')} exceeds EIP-170 size ({f.get('size')}); recommend splitting")
+                else:
+                    raise HTTPException(status_code=400, detail=f"facet {f.get('name')} size {f.get('size')} > MAX")
+            lock['facets'].append({
+                "name": f.get('name'),
+                "size": f.get('size'),
+                "selectors": f.get('selectors', []),
+            })
+
+        fingerprint = compute_fingerprint(lock) if compute_fingerprint else hashlib.sha256(json.dumps(lock, sort_keys=True).encode()).hexdigest()
+        lock['fingerprint'] = fingerprint
+
+        out_path = Path('.payrox') / 'refactor.lock.json'
+        if not out_path.parent.exists():
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(lock, indent=2), encoding='utf-8')
+
+        return RefactorValidateResponse(ok=True, lockfile=str(out_path), fingerprint=fingerprint, warnings=warnings)
+
+
+    class SimulateCutRequest(BaseModel):
+        cuts: List[Dict[str, Any]]
+
+
+    class SimulateCutResponse(BaseModel):
+        ok: bool
+        issues: List[str] = []
+
+
+    @app.post('/simulate/cut', response_model=SimulateCutResponse)
+    def simulate_cut(req: SimulateCutRequest):
+        """Simulate a proposed cut plan and run lightweight checks (selector collisions, missing selectors).
+
+        This is a fast local validation and does not execute the blockchain.
+        """
+        issues: List[str] = []
+        seen_selectors = {}
+        for c in req.cuts:
+            facet = c.get('facet')
+            sels = c.get('selectors', [])
+            if not facet:
+                issues.append('cut missing facet address/name')
+                continue
+            for s in sels:
+                if s in seen_selectors and seen_selectors[s] != facet:
+                    issues.append(f"selector collision: {s} between {seen_selectors[s]} and {facet}")
+                seen_selectors[s] = facet
+
+        return SimulateCutResponse(ok=(len(issues) == 0), issues=issues)
 
 
 # -----------------------------------------------------------------------------
