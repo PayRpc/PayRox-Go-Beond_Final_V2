@@ -1,8 +1,64 @@
+# Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment
 .env
-.vscode/
+.env.*
+
+# TypeScript / build
 dist/
 build/
+*.tsbuildinfo
+
+# Hardhat / Solidity
+artifacts/
+cache/
+typechain/
+coverage/
+*.dbg.json
+artifacts/build-info/
+cache/solidity-files-cache.json
+
+# Python
 __pycache__/
+*.py[cod]
+*.egg-info/
 .venv/
+venv/
+env/
+ENV/
+.Python
+
+# Virtual environment folders
+*/.venv/
+
+# Datasets and RAG cache (generated, large files)
+.rag_cache/
+datasets/
+
+# Logs
+logs/
 *.log
+
+# Editor/IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Other
+*.pem
+*.key
+npm-debug.log
+yarn.lock
