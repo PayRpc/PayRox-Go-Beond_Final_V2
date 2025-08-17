@@ -1,0 +1,43 @@
+{
+  "patterns": {
+    "refactoring": {
+      "monolithToDiamond": {
+        "confidence": 98,
+        "learned": true
+      },
+      "facetSplitting": {
+        "confidence": 95,
+        "learned": true
+      },
+      "selectorPreservation": {
+        "confidence": 99,
+        "learned": true
+      },
+      "storageIsolation": {
+        "confidence": 97,
+        "learned": true
+      },
+      "accessControlMapping": {
+        "confidence": 94,
+        "learned": true
+      },
+      "initIdempotence": {
+        "confidence": 96,
+        "learned": true
+      },
+      "eip170Compliance": {
+        "confidence": 99,
+        "learned": true
+      },
+      "eip2535Integration": {
+        "confidence": 98,
+        "learned": true
+      }
+    }
+  },
+  "learningStats": {
+    "totalPatterns": 8,
+    "averageConfidence": 97,
+    "lastUpdate": "2025-08-17T20:27:13.738Z"
+  }
+}

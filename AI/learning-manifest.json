@@ -1,0 +1,24 @@
+{
+  "capabilities": {
+    "universalRefactoring": true,
+    "monolithToDiamond": true,
+    "eip2535Compliance": true,
+    "eip170Enforcement": true,
+    "selectorParity": true,
+    "storageIsolation": true,
+    "accessControlMapping": true,
+    "initIdempotence": true
+  },
+  "refactorLearning": {
+    "patternRecognition": true,
+    "facetSplitting": true,
+    "upgradeableMapping": true,
+    "externalDependencyHandling": true,
+    "semanticsPreservation": true,
+    "validationEnforcement": true
+  },
+  "activeLearning": {
+    "lastPromptIntegration": "2025-08-17T20:27:13.735Z",
+    "universalRefactorEnabled": true
+  }
+}

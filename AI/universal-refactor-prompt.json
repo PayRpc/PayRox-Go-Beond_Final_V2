@@ -1,0 +1,129 @@
+{
+  "title": "PayRox Refactor AI — Universal Monolith → Diamond Prompt",
+  "version": "1.1.0",
+  "created": "2025-08-17T20:27:13.731Z",
+  "purpose": "Refactor arbitrary monolithic Solidity contracts into EIP-2535 diamond facets",
+  "inputs": {
+    "primary": "Monolith source (Solidity ≥ 0.8.20)",
+    "optional": [
+      "Facet plan (facet → functions)",
+      "Options (limits, tags)"
+    ]
+  },
+  "requiredOutputs": {
+    "compilableFiles": [
+      "contracts/interfaces/facets/I<Facet>.sol",
+      "contracts/libraries/Lib<Facet>Storage.sol",
+      "contracts/facets/<Facet>.sol (implements I<Facet>)",
+      "contracts/init/Init<Module>.sol (optional - one-time setup / ERC-165)"
+    ],
+    "diamondCutPlan": "JSON - { facet, action, selectors[] } + optional initAddress/initCalldata",
+    "facetManifest": "JSON - { name, selectors[], signatures[], estimatedSize, securityLevel, versionTag }",
+    "selfCheck": "Footer with validation ticks"
+  },
+  "hardRules": {
+    "eip170": "Each facet runtime ≤ 24,576 bytes. If over, split and update outputs",
+    "eip2535": {
+      "dispatcher": "Owns IDiamondLoupe (+ ERC-165). Facets do not import/implement Loupe",
+      "facetImplementation": "Each facet implements only its own I<Facet>; register via init if required"
+    },
+    "selectorParity": "Every public/external function exposed in monolith keeps exact signature & mutability",
+    "storageIsolation": "No state vars in facets. Use Lib<Facet>Storage with unique slot",
+    "accessControl": "Keep modifiers/roles semantics. Roles live at diamond; diamond owner passes onlyOwner",
+    "initIdempotent": "Constructors/initialize() become Init contract call (idempotent)"
+  },
+  "repoConformantImports": {
+    "facetFiles": [
+      "import {BaseFacet} from \"../facets/BaseFacet.sol\";",
+      "import {LibDiamond} from \"../libraries/LibDiamond.sol\";",
+      "import {I<Facet>} from \"../interfaces/facets/I<Facet>.sol\";",
+      "import {Lib<Facet>Storage as S} from \"../libraries/Lib<Facet>Storage.sol\";"
+    ],
+    "storageLibTemplate": {
+      "header": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.30;",
+      "pattern": "library Lib<Facet>Storage {\n  bytes32 internal constant SLOT = keccak256(\"payrox.<facet>.v1\");\n  struct Layout { /* fields used by <Facet> */ }\n  function layout() internal pure returns (Layout storage l) { bytes32 s=SLOT; assembly { l.slot := s } }\n}"
+    },
+    "interfaceTemplate": {
+      "header": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.30;",
+      "pattern": "interface I<Facet> { /* exact monolith signatures */ }"
+    }
+  },
+  "upgradeableMapping": {
+    "removeMixins": [
+      "Initializable",
+      "UUPSUpgradeable",
+      "etc."
+    ],
+    "migrateConstructor": "constructor/initialize() to Init<Module>.sol via diamondCut _init/_calldata",
+    "reentrancyGuard": "Add tiny lock in storage or reuse project’s guard"
+  },
+  "externalDependencies": {
+    "policy": "Prefer minimal local interfaces under contracts/external/...; no new npm deps"
+  },
+  "facetSplitting": {
+    "principle": "Split by cohesion, not just size",
+    "commonBuckets": [
+      "Read/View",
+      "Write/User",
+      "Admin/Governance",
+      "Risk/Security",
+      "Oracle/Price/TWAP",
+      "Commit-Reveal/Queues"
+    ],
+    "overflowHandling": "If any facet > 24,576 bytes, split along natural boundaries and suffix A, B, etc."
+  },
+  "semanticsToPreserve": {
+    "eventsAndErrors": "Names & params unchanged (ABI stability)",
+    "timeBlockMath": "Preserve conversions",
+    "access": "Role checks at dispatcher; diamond owner passes onlyOwner",
+    "fallbackReceive": "Only if monolith exposed them"
+  },
+  "diamondCutAndInit": {
+    "cutArray": "Add/Replace/Remove with exact selectors",
+    "interfaceRegistration": "LibDiamond.setSupportedInterface(type(I<Facet>).interfaceId);",
+    "seedDefaults": "Thresholds/lists exactly as monolith did"
+  },
+  "validation": {
+    "required": [
+      "[✓] EIP-170 per facet",
+      "[✓] No Loupe in Facets",
+      "[✓] Selector Parity",
+      "[✓] ERC-165 registered (if needed)",
+      "[✓] Namespaced Storage only",
+      "[✓] Init Idempotent",
+      "[✓] Cut & Manifest match files"
+    ]
+  },
+  "payroxFacts": {
+    "solidityPragma": "pragma solidity 0.8.30;",
+    "loupe_selectors": {
+      "facets()": "0x7a0ed627",
+      "facetFunctionSelectors(address)": "0xadfca15e",
+      "facetAddresses()": "0x52ef6b2c",
+      "facetAddress(bytes4)": "0xcdffacc6",
+      "supportsInterface(bytes4)": "0x01ffc9a7"
+    },
+    "merkle": {
+      "leaf_encoding": "keccak256(abi.encode(bytes4,address,bytes32))",
+      "pair_hash": "keccak256(concat(left,right)) (ordered pair)",
+      "proof_orientation": "bool[] isRight per depth"
+    },
+    "epoch_validation": {
+      "rules": [
+        "frozen == false",
+        "activeEpoch >= 0",
+        "if pendingRoot != 0x00..00 then pendingEpoch > activeEpoch",
+        "respect activationDelay before activateCommittedRoot"
+      ]
+    },
+    "dispatcher_runtime_gating": "EXTCODEHASH equality gate on every call",
+    "constructor_hash_injection": {
+      "note": "expectedManifestDispatcher, expectedManifestHash, expectedFactoryBytecodeHash must be set & nonzero"
+    }
+  },
+  "outputFormatting": {
+    "solidityPragma": "pragma solidity 0.8.30;",
+    "spdxIdentifiers": "Use SPDX identifiers",
+    "filenamesAndPaths": "Keep exactly as listed"
+  }
+}
