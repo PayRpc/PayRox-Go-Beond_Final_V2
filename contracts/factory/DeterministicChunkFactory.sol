@@ -5,6 +5,7 @@ import {AccessControl}   from "@openzeppelin/contracts/access/AccessControl.sol"
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {Pausable}        from "@openzeppelin/contracts/utils/Pausable.sol";
 import {IChunkFactory}   from "../interfaces/IChunkFactory.sol";
+import {IManifestDispatcher} from "../interfaces/IManifestDispatcher.sol";
 import {ChunkFactoryLib} from "../utils/ChunkFactoryLib.sol";
 
 /// @title DeterministicChunkFactory
@@ -61,6 +62,7 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
     // System integrity variables
     address public immutable expectedManifestDispatcher;
     bytes32 public immutable expectedManifestHash;
+    bytes32 public immutable expectedDispatcherCodehash;    // NEW: separate dispatcher codehash
     bytes32 public immutable expectedFactoryBytecodeHash;
 
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
@@ -70,7 +72,8 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
     constructor(
         address _feeRecipient,
         address _manifestDispatcher,
-        bytes32 _manifestHash,
+        bytes32 _manifestHash,            // manifest root
+        bytes32 _dispatcherCodehash,      // dispatcher EXTCODEHASH
         bytes32 _factoryBytecodeHash,
         uint256 _baseFeeWei,
         bool _feesEnabled
@@ -79,6 +82,7 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
         if (_feeRecipient == address(0)) revert ZeroAddress();
         if (_manifestDispatcher == address(0)) revert ZeroAddress();
         if (_manifestHash == bytes32(0)) revert InvalidConstructorArgs();
+        if (_dispatcherCodehash == bytes32(0)) revert InvalidConstructorArgs();
         if (_factoryBytecodeHash == bytes32(0)) revert InvalidConstructorArgs();
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -90,6 +94,7 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
         feeRecipient = _feeRecipient;
         expectedManifestDispatcher = _manifestDispatcher;
         expectedManifestHash = _manifestHash;
+        expectedDispatcherCodehash = _dispatcherCodehash;    // NEW
         expectedFactoryBytecodeHash = _factoryBytecodeHash;
         baseFeeWei = _baseFeeWei;
         feesEnabled = _feesEnabled;
@@ -131,6 +136,7 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
 
         // ═══ CHECKS PHASE ═══
         bytes memory dataMemory = data;
+        require(data.length <= MAX_CHUNK_BYTES, "DeterministicChunkFactory: chunk exceeds size limit");
         require(ChunkFactoryLib.validateData(dataMemory), "DeterministicChunkFactory: invalid chunk data");
 
         bytes32 salt = ChunkFactoryLib.computeSalt(data);
@@ -365,6 +371,10 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
         return expectedManifestHash;
     }
 
+    function getExpectedDispatcherCodehash() external view returns (bytes32) {
+        return expectedDispatcherCodehash;
+    }
+
     function getExpectedFactoryBytecodeHash() external view returns (bytes32) {
         return expectedFactoryBytecodeHash;
     }
@@ -436,6 +446,7 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
     /// @notice Internal staging without fee collection (for batch operations)
     function _stageInternalNoFee(bytes calldata data) internal returns (address chunk, bytes32 hash) {
         bytes memory dataMemory = data;
+        require(data.length <= MAX_CHUNK_BYTES, "Invalid data size");
         require(ChunkFactoryLib.validateData(dataMemory), "Invalid data");
 
         bytes32 salt = ChunkFactoryLib.computeSalt(data);
@@ -465,18 +476,22 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
     }
 
     function _verifySystemIntegrity() internal view returns (bool) {
-        // Check manifest dispatcher
         if (expectedManifestDispatcher != address(0)) {
-            bytes32 dispatcherHash = expectedManifestDispatcher.codehash;
-            if (dispatcherHash != expectedManifestHash) return false;
+            // 1) Dispatcher codehash gate
+            if (expectedDispatcherCodehash != bytes32(0)) {
+                if (expectedManifestDispatcher.codehash != expectedDispatcherCodehash) return false;
+            }
+            // 2) Manifest root gate (ask dispatcher)
+            try IManifestDispatcher(expectedManifestDispatcher).activeRoot() returns (bytes32 root) {
+                if (expectedManifestHash != bytes32(0) && root != expectedManifestHash) return false;
+            } catch {
+                return false;
+            }
         }
-
-        // Check factory bytecode
+        // 3) Factory self-hash gate
         if (expectedFactoryBytecodeHash != bytes32(0)) {
-            bytes32 factoryHash = address(this).codehash;
-            if (factoryHash != expectedFactoryBytecodeHash) return false;
+            if (address(this).codehash != expectedFactoryBytecodeHash) return false;
         }
-
         return true;
     }
 

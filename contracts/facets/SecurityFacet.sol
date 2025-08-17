@@ -12,6 +12,9 @@ import {IAntiBotFacet} from "./IAntiBotFacet.sol";
  *         Call validateTransaction() in sensitive paths. No on-chain oracle dependency.
  */
 contract SecurityFacet is RefactorSafeFacetBase, ReentrancyGuard, IAntiBotFacet {
+    // ---- Errors ----
+    error AuthDenied();
+    
     // ---- Role ids (keccak256 constants) ----
     function GOVERNANCE_ROLE() public pure returns (bytes32) { return keccak256("GOVERNANCE_ROLE"); }
     function MONITOR_ROLE()    public pure returns (bytes32) { return keccak256("MONITOR_ROLE"); }
@@ -56,13 +59,13 @@ contract SecurityFacet is RefactorSafeFacetBase, ReentrancyGuard, IAntiBotFacet 
 
     modifier onlyGovOrOwner() {
         Sec.Layout storage L = Sec.layout();
-        if (!(L.roles[GOVERNANCE_ROLE()][msg.sender] || _isOwner(msg.sender))) revert();
+        if (!(L.roles[GOVERNANCE_ROLE()][msg.sender] || _isOwner(msg.sender))) revert AuthDenied();
         _;
     }
 
     modifier onlyMonitorOrOwner() {
         Sec.Layout storage L = Sec.layout();
-        if (!(L.roles[MONITOR_ROLE()][msg.sender] || _isOwner(msg.sender))) revert();
+        if (!(L.roles[MONITOR_ROLE()][msg.sender] || _isOwner(msg.sender))) revert AuthDenied();
         _;
     }
 

@@ -1,0 +1,56 @@
+{
+  "loupe_selectors": {
+    "facets()": "0x7a0ed627",
+    "facetFunctionSelectors(address)": "0xadfca15e", 
+    "facetAddresses()": "0x52ef6b2c",
+    "facetAddress(bytes4)": "0xcdffacc6",
+    "supportsInterface(bytes4)": "0x01ffc9a7"
+  },
+  "constructor_hash_injection": {
+    "enabled": true,
+    "variables": {
+      "manifest_hash_var": "EXPECTED_MANIFEST_HASH",
+      "factory_bytecode_hash_var": "EXPECTED_FACTORY_BYTECODE_HASH"
+    },
+    "applies_to": [
+      "DeterministicChunkFactory",
+      "ChunkFactoryFacet", 
+      "ManifestDispatcher"
+    ],
+    "threat_model": [
+      "missing/placeholder expected hashes",
+      "mismatched factory bytecode",
+      "unauthorized facet swap"
+    ],
+    "invariants": [
+      "All proposed facet routes must reference a facet whose extcodehash == runtime hash used in the leaf",
+      "Dispatcher only accepts routes provable under committed Merkle root",
+      "Loupe coverage present for facets (+ supportsInterface)"
+    ]
+  },
+  "merkle": {
+    "leaf_encoding": "keccak256(abi.encode(bytes4,address,bytes32))",
+    "pair_hash": "keccak256(concat(left,right)) (ordered pair)",
+    "proof_orientation": "bool[] isRight per depth"
+  },
+  "deployment": {
+    "factory_address_env": "PAYROX_FACTORY_ADDRESS",
+    "salt_convention": "keccak256('PayRox-' + FacetName) unless explicit salt provided",
+    "create2_address": "getCreate2Address(factory, salt, keccak256(creationBytecode))"
+  },
+  "dispatcher_addresses": {
+    "localhost": "0xDISPATCHER_LOCALHOST",
+    "sepolia": "0xDISPATCHER_SEPOLIA", 
+    "mainnet": "0xDISPATCHER_MAINNET"
+  },
+  "epoch_validation": {
+    "rules": [
+      "frozen == false",
+      "activeEpoch >= 0",
+      "if pendingRoot != 0x00..00 then pendingEpoch > activeEpoch",
+      "respect activationDelay before activateCommittedRoot"
+    ],
+    "cli": "scripts/ops/check-epoch.ts",
+    "timeout_ms": 15000
+  }
+}

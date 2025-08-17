@@ -259,6 +259,124 @@ def run_cmd(cmd: List[str], cwd: Optional[Path] = None, timeout: int = 60) -> Tu
         return 1, "", str(exc)
 
 
+# --- ADD: PayRox facts defaults + helpers -------------------
+FACTS_DEFAULT: Dict[str, Any] = {
+    "loupe_selectors": {
+        "facets()": "0x7a0ed627",
+        "facetFunctionSelectors(address)": "0xadfca15e",
+        "facetAddresses()": "0x52ef6b2c",
+        "facetAddress(bytes4)": "0xcdffacc6",
+        "supportsInterface(bytes4)": "0x01ffc9a7",
+    },
+    "constructor_hash_injection": {
+        "enabled": True,
+        "variables": {
+            "manifest_hash_var": "EXPECTED_MANIFEST_HASH",
+            "factory_bytecode_hash_var": "EXPECTED_FACTORY_BYTECODE_HASH",
+        },
+        "applies_to": [
+            "DeterministicChunkFactory",
+            "ChunkFactoryFacet",
+            "ManifestDispatcher",
+        ],
+        "threat_model": [
+            "missing/placeholder expected hashes",
+            "mismatched factory bytecode",
+            "unauthorized facet swap",
+        ],
+        "invariants": [
+            "All proposed facet routes must reference a facet whose extcodehash == runtime hash used in the leaf",
+            "Dispatcher only accepts routes provable under committed Merkle root",
+            "Loupe coverage present for facets (+ supportsInterface)",
+        ],
+    },
+    "merkle": {
+        "leaf_encoding": "keccak256(abi.encode(bytes4,address,bytes32))",
+        "pair_hash": "keccak256(concat(left,right)) (ordered pair)",
+        "proof_orientation": "bool[] isRight per depth",
+    },
+    "deployment": {
+        "factory_address_env": "PAYROX_FACTORY_ADDRESS",
+        "salt_convention": "keccak256('PayRox-' + FacetName) unless explicit salt provided",
+        "create2_address": "getCreate2Address(factory, salt, keccak256(creationBytecode))",
+    },
+    "dispatcher_addresses": {
+        "localhost": "0xDISPATCHER_LOCALHOST",
+        "sepolia": "0xDISPATCHER_SEPOLIA",
+        "mainnet": "0xDISPATCHER_MAINNET",
+    },
+    "epoch_validation": {
+        "rules": [
+            "frozen == false",
+            "activeEpoch >= 0",
+            "if pendingRoot != 0x00..00 then pendingEpoch > activeEpoch",
+            "respect activationDelay before activateCommittedRoot",
+        ],
+        "cli": "scripts/ops/check-epoch.ts",
+        "timeout_ms": 15000,
+    },
+}
+
+
+def _facts_read() -> Dict[str, Any]:
+    try:
+        if not FACTS_PATH.parent.exists():
+            FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        if FACTS_PATH.exists():
+            return json.loads(FACTS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    return {}
+
+
+def _facts_write(obj: Dict[str, Any]) -> None:
+    if not FACTS_PATH.parent.exists():
+        FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    FACTS_PATH.write_text(json.dumps(obj, indent=2), encoding="utf-8")
+
+
+def _merge_missing(dst: Dict[str, Any], src_defaults: Dict[str, Any], prefix: str = "") -> List[str]:
+    """Add keys from src_defaults into dst only if missing; return list of added key paths."""
+    added: List[str] = []
+    for k, v in src_defaults.items():
+        path = f"{prefix}.{k}" if prefix else k
+        if k not in dst:
+            dst[k] = v
+            added.append(path)
+        else:
+            if isinstance(v, dict) and isinstance(dst.get(k), dict):
+                added += _merge_missing(dst[k], v, path)
+    return added
+
+
+def _missing_keys(current: Dict[str, Any], src_defaults: Dict[str, Any], prefix: str = "") -> List[str]:
+    missing: List[str] = []
+    for k, v in src_defaults.items():
+        path = f"{prefix}.{k}" if prefix else k
+        if k not in current:
+            missing.append(path)
+        else:
+            if isinstance(v, dict) and isinstance(current.get(k), dict):
+                missing += _missing_keys(current[k], v, path)
+    return missing
+
+
+class FactsGetResponse(BaseModel):
+    facts_path: str
+    facts: Dict[str, Any]
+    missing_keys: List[str]
+
+
+class FactsUpgradeResponse(BaseModel):
+    ok: bool
+    facts_path: str
+    created: bool = Field(False, description="True if file did not exist before")
+    updated_keys: List[str]
+    missing_keys: List[str]
+    facts: Dict[str, Any]
+# --- END ADD -------------------------------------------------
+
+
 @app.post("/transform/apply", response_model=TransformApplyResponse)
 def transform_apply(body: TransformApplyRequest):
     """Run the conservative POC transformer and return produced artifacts.
@@ -404,6 +522,32 @@ def kb_show():
         "bytes": len(PINNED_CONTEXT.encode("utf-8")) if PINNED_CONTEXT else 0,
         "preview": preview,
     }
+
+
+# --- ADD: facts endpoints -----------------------------------
+@app.get("/arch/facts", response_model=FactsGetResponse)
+def arch_facts_get():
+    cur = _facts_read()
+    miss = _missing_keys(cur, FACTS_DEFAULT)
+    return FactsGetResponse(facts_path=str(FACTS_PATH), facts=cur, missing_keys=miss)
+
+
+@app.post("/arch/facts/upgrade", response_model=FactsUpgradeResponse)
+def arch_facts_upgrade():
+    existed = FACTS_PATH.exists()
+    cur = _facts_read()
+    updated_keys = _merge_missing(cur, FACTS_DEFAULT)
+    _facts_write(cur)
+    miss_after = _missing_keys(cur, FACTS_DEFAULT)
+    return FactsUpgradeResponse(
+        ok=True,
+        facts_path=str(FACTS_PATH),
+        created=not existed,
+        updated_keys=updated_keys,
+        missing_keys=miss_after,
+        facts=cur,
+    )
+# --- END ADD -------------------------------------------------
 
 
 # Admin endpoints for runtime maintenance

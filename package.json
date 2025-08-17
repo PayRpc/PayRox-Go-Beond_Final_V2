@@ -31,7 +31,9 @@
     "test:loupe": "npx hardhat test --grep \"(loupe|selectors)\"",
     "test:epoch": "npx hardhat test --grep \"epoch\"",
     "test:roles": "npx hardhat test --grep \"(roles|delegatecall|access)\"",
-    "test:size": "npx hardhat test --grep \"(size|gas|limit)\""
+    "test:size": "npx hardhat test --grep \"(size|gas|limit)\"",
+    "test:integrity": "npx hardhat test tests/diamond-compliance/integrity-checks.test.ts",
+    "payrox:self-check": "npm run compile && npm run test:integrity && npm run test:loupe && npm run test:epoch && npm run test:roles && npm run test:size && echo '✅ PayRox Self-Check Complete'"
   },
   "keywords": [],
   "author": "",
