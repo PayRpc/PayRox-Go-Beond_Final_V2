@@ -1,4 +1,10 @@
-import { keccak256, concat, AbiCoder, toUtf8Bytes } from 'ethers';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.processOrderedProof = processOrderedProof;
+exports.verifyOrderedProof = verifyOrderedProof;
+exports.createRouteLeaf = createRouteLeaf;
+exports.getVersionBytes32 = getVersionBytes32;
+const ethers_1 = require("ethers");
 /**
  * Process an ordered Merkle proof using bitfield position encoding (LSB-first)
  * @param leaf The leaf hash (0x-prefixed hex string)
@@ -6,20 +12,20 @@ import { keccak256, concat, AbiCoder, toUtf8Bytes } from 'ethers';
  * @param positionsHex Bitfield hex string (e.g., "0x01") where bit i = 1 means sibling i is on the right
  * @returns Computed root hash
  */
-export function processOrderedProof(leaf, proof, positionsHex) {
+function processOrderedProof(leaf, proof, positionsHex) {
     // Mirror Solidity OrderedMerkle.processProof:
     // - computed starts as _hashLeaf(leaf) == keccak256(0x00 || leaf)
     // - at each step: computed = isRight ? keccak256(0x01 || computed || proof[i]) : keccak256(0x01 || proof[i] || computed)
     const positions = BigInt(positionsHex);
-    let computed = keccak256(concat(['0x00', leaf]));
+    let computed = (0, ethers_1.keccak256)((0, ethers_1.concat)(['0x00', leaf]));
     for (let i = 0n; i < BigInt(proof.length); i++) {
         const sib = proof[Number(i)];
         const isRight = ((positions >> i) & 1n) === 1n;
         if (isRight) {
-            computed = keccak256(concat(['0x01', computed, sib]));
+            computed = (0, ethers_1.keccak256)((0, ethers_1.concat)(['0x01', computed, sib]));
         }
         else {
-            computed = keccak256(concat(['0x01', sib, computed]));
+            computed = (0, ethers_1.keccak256)((0, ethers_1.concat)(['0x01', sib, computed]));
         }
     }
     return computed;
@@ -32,7 +38,7 @@ export function processOrderedProof(leaf, proof, positionsHex) {
  * @param root Expected root hash (0x-prefixed hex string)
  * @returns True if proof is valid
  */
-export function verifyOrderedProof(leaf, proof, positionsHex, root) {
+function verifyOrderedProof(leaf, proof, positionsHex, root) {
     // Schema guardrail: assert no high bits beyond proof length
     const positions = BigInt(positionsHex);
     if (positions >> BigInt(proof.length) !== 0n) {
@@ -47,16 +53,16 @@ export function verifyOrderedProof(leaf, proof, positionsHex, root) {
  * @param codehash Expected codehash (0x-prefixed)
  * @returns Leaf hash for Merkle tree
  */
-export function createRouteLeaf(selector, facet, codehash) {
+function createRouteLeaf(selector, facet, codehash) {
     // Use proper ABI encoding: bytes4, address, bytes32 (not padded bytes32s)
-    const abi = new AbiCoder();
-    return keccak256(abi.encode(['bytes4', 'address', 'bytes32'], [selector, facet, codehash]));
+    const abi = new ethers_1.AbiCoder();
+    return (0, ethers_1.keccak256)(abi.encode(['bytes4', 'address', 'bytes32'], [selector, facet, codehash]));
 }
 /**
  * Generate versionBytes32 from version string for canonical manifest hashing
  * @param version Human-readable version string (e.g., "v1.2.3")
  * @returns 32-byte hash of version string
  */
-export function getVersionBytes32(version) {
-    return keccak256(toUtf8Bytes(version));
+function getVersionBytes32(version) {
+    return (0, ethers_1.keccak256)((0, ethers_1.toUtf8Bytes)(version));
 }

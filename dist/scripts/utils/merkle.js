@@ -1,19 +1,25 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.encodeLeaf = encodeLeaf;
+exports.deriveSelectorsFromAbi = deriveSelectorsFromAbi;
+exports.linkBytecode = linkBytecode;
+exports.generateManifestLeaves = generateManifestLeaves;
 // Ethers v6: no utils namespace export; import needed functions directly
-import { keccak256, concat, solidityPacked, toUtf8Bytes, getCreate2Address } from 'ethers';
+const ethers_1 = require("ethers");
 /**
  * Pair hash matching OrderedMerkle._hashNode: keccak256(0x01 || left || right)
  */
 function pairHash(a, b) {
-    return keccak256(concat(['0x01', a, b]));
+    return (0, ethers_1.keccak256)((0, ethers_1.concat)(['0x01', a, b]));
 }
 /**
  * Leaf encoder matching OrderedMerkle.leafOfSelectorRoute:
  * leaf = keccak256(abi.encodePacked(bytes1(0x00), selector, facet, codehash))
  */
-export function encodeLeaf(selector, facet, codehash) {
+function encodeLeaf(selector, facet, codehash) {
     // use packed encoding to match abi.encodePacked
-    const packed = solidityPacked(['bytes1', 'bytes4', 'address', 'bytes32'], ['0x00', selector, facet, codehash]);
-    return keccak256(packed);
+    const packed = (0, ethers_1.solidityPacked)(['bytes1', 'bytes4', 'address', 'bytes32'], ['0x00', selector, facet, codehash]);
+    return (0, ethers_1.keccak256)(packed);
 }
 /** Build a Merkle proof for a leaf index given all levels */
 function proofForIndex(levels, leafIndex) {
@@ -30,15 +36,15 @@ function proofForIndex(levels, leafIndex) {
     return proof;
 }
 /** Derive function selectors from ABI if not explicitly provided */
-export function deriveSelectorsFromAbi(abi) {
+function deriveSelectorsFromAbi(abi) {
     const sigs = abi
         .filter((f) => f?.type === 'function')
         .map((f) => `${f.name}(${(f.inputs || []).map((i) => i.type).join(',')})`);
-    const sels = sigs.map((sig) => keccak256(toUtf8Bytes(sig)).slice(0, 10));
+    const sels = sigs.map((sig) => (0, ethers_1.keccak256)((0, ethers_1.toUtf8Bytes)(sig)).slice(0, 10));
     return Array.from(new Set(sels));
 }
 /** Link runtime/creation bytecode using deployed link references and provided library addresses */
-export function linkBytecode(bytecode, linkReferences, libraryAddresses) {
+function linkBytecode(bytecode, linkReferences, libraryAddresses) {
     if (!bytecode || bytecode === '0x')
         return bytecode;
     // If no link refs, return as-is
@@ -83,7 +89,7 @@ export function linkBytecode(bytecode, linkReferences, libraryAddresses) {
  * @param factoryAddress deployed/predicted factory address used for CREATE2
  * @returns { root, tree, proofs, leaves, leafMeta }
  */
-export async function generateManifestLeaves(manifest, artifacts, factoryAddress, opts) {
+async function generateManifestLeaves(manifest, artifacts, factoryAddress, opts) {
     if (!factoryAddress) {
         // We allow factoryAddress to be absent only if all facets provide explicit addresses
         const allHaveAddresses = Array.isArray(manifest?.facets) &&
@@ -103,8 +109,8 @@ export async function generateManifestLeaves(manifest, artifacts, factoryAddress
         if (!runtime || runtime === '0x') {
             throw new Error(`Facet ${facet.name} has no runtime bytecode (is it abstract or an interface?).`);
         }
-        const runtimeHash = keccak256(runtime); // == EXTCODEHASH on-chain
-        const initCodeHash = keccak256(creation);
+        const runtimeHash = (0, ethers_1.keccak256)(runtime); // == EXTCODEHASH on-chain
+        const initCodeHash = (0, ethers_1.keccak256)(creation);
         // Prefer explicit deployed address when provided on facet entry or manifest.deployment.addresses
         const explicitAddress = facet.address ||
             manifest?.deployment?.addresses?.[facet.name] ||
@@ -118,8 +124,8 @@ export async function generateManifestLeaves(manifest, artifacts, factoryAddress
             const explicitSalt = manifest?.deployment?.salts?.[facet.name] ??
                 manifest?.deployment?.[facet.name]?.salt ??
                 manifest?.deployment?.[facet.name?.toLowerCase?.() ?? '']?.salt;
-            const salt = explicitSalt ?? keccak256(toUtf8Bytes(`PayRox-${facet.name}`));
-            facetAddress = getCreate2Address(factoryAddress, salt, initCodeHash);
+            const salt = explicitSalt ?? (0, ethers_1.keccak256)((0, ethers_1.toUtf8Bytes)(`PayRox-${facet.name}`));
+            facetAddress = (0, ethers_1.getCreate2Address)(factoryAddress, salt, initCodeHash);
         }
         // Use configured selectors if given, else derive from ABI
         const selectors = facet.selectors && facet.selectors.length > 0
@@ -137,7 +143,7 @@ export async function generateManifestLeaves(manifest, artifacts, factoryAddress
         }
     }
     if (leaves.length === 0) {
-        return { root: keccak256('0x'), tree: [], proofs: {}, positions: {}, leaves, leafMeta };
+        return { root: (0, ethers_1.keccak256)('0x'), tree: [], proofs: {}, positions: {}, leaves, leafMeta };
     }
     // Build Merkle using the same scheme as OrderedMerkle.sol:
     // - leafHash = keccak256(abi.encodePacked(bytes1(0x00), selector, facet, codehash))  (encodeLeaf)
@@ -145,7 +151,7 @@ export async function generateManifestLeaves(manifest, artifacts, factoryAddress
     // - nodeHash = keccak256(abi.encodePacked(bytes1(0x01), left, right))             (_hashNode)
     const tree = [];
     // First level: hashed leaf nodes (_hashLeaf)
-    const leafNodes = leaves.map((l) => keccak256(concat(['0x00', l])));
+    const leafNodes = leaves.map((l) => (0, ethers_1.keccak256)((0, ethers_1.concat)(['0x00', l])));
     tree.push(leafNodes);
     let level = leafNodes;
     while (level.length > 1) {

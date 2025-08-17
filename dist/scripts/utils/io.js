@@ -1,8 +1,69 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { promisify } from 'util';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FILE_LIMITS = exports.SecurityError = exports.FileOperationError = void 0;
+exports.validatePath = validatePath;
+exports.validateFileSize = validateFileSize;
+exports.readJsonFile = readJsonFile;
+exports.readJsonFileAsync = readJsonFileAsync;
+exports.writeJsonFile = writeJsonFile;
+exports.writeJsonFileAsync = writeJsonFileAsync;
+exports.readTextFile = readTextFile;
+exports.writeTextFile = writeTextFile;
+exports.readManifestFile = readManifestFile;
+exports.readDeploymentArtifact = readDeploymentArtifact;
+exports.saveDeploymentArtifact = saveDeploymentArtifact;
+exports.listFiles = listFiles;
+exports.ensureDirectoryExists = ensureDirectoryExists;
+exports.ensureDirectoryExistsAsync = ensureDirectoryExistsAsync;
+exports.getFileMetadata = getFileMetadata;
+exports.getFileMetadataAsync = getFileMetadataAsync;
+exports.copyFile = copyFile;
+exports.moveFile = moveFile;
+exports.deleteFile = deleteFile;
+exports.formatFileSize = formatFileSize;
+exports.isPathSafe = isPathSafe;
+exports.getFileExtension = getFileExtension;
+exports.isFileReadable = isFileReadable;
+exports.getDirectorySize = getDirectorySize;
+exports.cleanDirectory = cleanDirectory;
+const fs = __importStar(require("fs"));
+const path = __importStar(require("path"));
+const util_1 = require("util");
 // Custom error types
-export class FileOperationError extends Error {
+class FileOperationError extends Error {
     _operation;
     _filePath;
     _cause;
@@ -14,7 +75,8 @@ export class FileOperationError extends Error {
         this.name = 'FileOperationError';
     }
 }
-export class SecurityError extends Error {
+exports.FileOperationError = FileOperationError;
+class SecurityError extends Error {
     _filePath;
     constructor(message, _filePath) {
         super(message);
@@ -22,10 +84,11 @@ export class SecurityError extends Error {
         this.name = 'SecurityError';
     }
 }
+exports.SecurityError = SecurityError;
 // ═══════════════════════════════════════════════════════════════════════════
 // CONSTANTS & CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════
-export const FILE_LIMITS = {
+exports.FILE_LIMITS = {
     MAX_FILE_SIZE: 100 * 1024 * 1024, // 100MB
     MAX_JSON_SIZE: 50 * 1024 * 1024, // 50MB for JSON files
     MAX_TEXT_SIZE: 10 * 1024 * 1024, // 10MB for text files
@@ -33,15 +96,15 @@ export const FILE_LIMITS = {
 };
 // Async file system operations
 const fsPromises = {
-    readFile: promisify(fs.readFile),
-    writeFile: promisify(fs.writeFile),
-    readdir: promisify(fs.readdir),
-    stat: promisify(fs.stat),
-    mkdir: promisify(fs.mkdir),
-    access: promisify(fs.access),
-    copyFile: promisify(fs.copyFile),
-    unlink: promisify(fs.unlink),
-    rename: promisify(fs.rename),
+    readFile: (0, util_1.promisify)(fs.readFile),
+    writeFile: (0, util_1.promisify)(fs.writeFile),
+    readdir: (0, util_1.promisify)(fs.readdir),
+    stat: (0, util_1.promisify)(fs.stat),
+    mkdir: (0, util_1.promisify)(fs.mkdir),
+    access: (0, util_1.promisify)(fs.access),
+    copyFile: (0, util_1.promisify)(fs.copyFile),
+    unlink: (0, util_1.promisify)(fs.unlink),
+    rename: (0, util_1.promisify)(fs.rename),
 };
 // ═══════════════════════════════════════════════════════════════════════════
 // SECURITY & VALIDATION UTILITIES
@@ -52,7 +115,7 @@ const fsPromises = {
  * @param baseDir Optional base directory to restrict to
  * @throws SecurityError if path is unsafe
  */
-export function validatePath(filePath, baseDir) {
+function validatePath(filePath, baseDir) {
     if (!filePath || typeof filePath !== 'string') {
         throw new SecurityError('Invalid file path', filePath);
     }
@@ -81,18 +144,18 @@ export function validatePath(filePath, baseDir) {
  * @param maxSize Maximum allowed size
  * @param fileType Type of file for specific limits
  */
-export function validateFileSize(size, maxSize, fileType) {
+function validateFileSize(size, maxSize, fileType) {
     let limit = maxSize;
     if (!limit) {
         switch (fileType) {
             case 'json':
-                limit = FILE_LIMITS.MAX_JSON_SIZE;
+                limit = exports.FILE_LIMITS.MAX_JSON_SIZE;
                 break;
             case 'text':
-                limit = FILE_LIMITS.MAX_TEXT_SIZE;
+                limit = exports.FILE_LIMITS.MAX_TEXT_SIZE;
                 break;
             default:
-                limit = FILE_LIMITS.MAX_FILE_SIZE;
+                limit = exports.FILE_LIMITS.MAX_FILE_SIZE;
         }
     }
     if (size > limit) {
@@ -108,7 +171,7 @@ export function validateFileSize(size, maxSize, fileType) {
  * @param options File operation options
  * @returns Parsed JSON object with proper typing
  */
-export function readJsonFile(filePath, options = {}) {
+function readJsonFile(filePath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -139,7 +202,7 @@ export function readJsonFile(filePath, options = {}) {
  * @param options File operation options
  * @returns Promise with parsed JSON object
  */
-export async function readJsonFileAsync(filePath, options = {}) {
+async function readJsonFileAsync(filePath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -173,7 +236,7 @@ export async function readJsonFileAsync(filePath, options = {}) {
  * @param data Data to write
  * @param options File operation options with formatting
  */
-export function writeJsonFile(filePath, data, options = {}) {
+function writeJsonFile(filePath, data, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -209,7 +272,7 @@ export function writeJsonFile(filePath, data, options = {}) {
  * @param data Data to write
  * @param options File operation options
  */
-export async function writeJsonFileAsync(filePath, data, options = {}) {
+async function writeJsonFileAsync(filePath, data, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -251,7 +314,7 @@ export async function writeJsonFileAsync(filePath, data, options = {}) {
  * @param options File operation options
  * @returns File content as string
  */
-export function readTextFile(filePath, options = {}) {
+function readTextFile(filePath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -277,7 +340,7 @@ export function readTextFile(filePath, options = {}) {
  * @param content Content to write
  * @param options File operation options
  */
-export function writeTextFile(filePath, content, options = {}) {
+function writeTextFile(filePath, content, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -314,7 +377,7 @@ export function writeTextFile(filePath, content, options = {}) {
  * @param manifestPath Path to manifest file
  * @returns Typed manifest object
  */
-export function readManifestFile(manifestPath) {
+function readManifestFile(manifestPath) {
     const manifest = readJsonFile(manifestPath, { validatePath: true });
     // Basic validation
     if (!manifest.version || !manifest.network || !manifest.routes) {
@@ -327,7 +390,7 @@ export function readManifestFile(manifestPath) {
  * @param deploymentPath Path to deployment JSON
  * @returns Typed deployment info
  */
-export function readDeploymentArtifact(deploymentPath) {
+function readDeploymentArtifact(deploymentPath) {
     const artifact = readJsonFile(deploymentPath, { validatePath: true });
     if (!artifact.address || !artifact.transactionHash) {
         throw new FileOperationError('Invalid deployment artifact: missing address or transaction hash', 'read_deployment', deploymentPath);
@@ -339,7 +402,7 @@ export function readDeploymentArtifact(deploymentPath) {
  * @param deploymentPath Path to save artifact
  * @param artifact Deployment information
  */
-export function saveDeploymentArtifact(deploymentPath, artifact) {
+function saveDeploymentArtifact(deploymentPath, artifact) {
     const enhancedArtifact = {
         ...artifact,
         timestamp: artifact.timestamp || Date.now(),
@@ -360,7 +423,7 @@ export function saveDeploymentArtifact(deploymentPath, artifact) {
  * @param options Directory listing options
  * @returns Array of file paths
  */
-export function listFiles(dirPath, options = {}) {
+function listFiles(dirPath, options = {}) {
     try {
         validatePath(dirPath);
         if (!fs.existsSync(dirPath)) {
@@ -413,7 +476,7 @@ export function listFiles(dirPath, options = {}) {
  * @param dirPath Directory path
  * @param options Directory creation options
  */
-export function ensureDirectoryExists(dirPath, options = {}) {
+function ensureDirectoryExists(dirPath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(dirPath);
@@ -434,7 +497,7 @@ export function ensureDirectoryExists(dirPath, options = {}) {
  * @param dirPath Directory path
  * @param options Directory creation options
  */
-export async function ensureDirectoryExistsAsync(dirPath, options = {}) {
+async function ensureDirectoryExistsAsync(dirPath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(dirPath);
@@ -459,7 +522,7 @@ export async function ensureDirectoryExistsAsync(dirPath, options = {}) {
  * @param options Metadata options
  * @returns Enhanced file metadata object
  */
-export function getFileMetadata(filePath, options = {}) {
+function getFileMetadata(filePath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -493,7 +556,7 @@ export function getFileMetadata(filePath, options = {}) {
  * @param options Metadata options
  * @returns Promise with enhanced file metadata
  */
-export async function getFileMetadataAsync(filePath, options = {}) {
+async function getFileMetadataAsync(filePath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -530,7 +593,7 @@ export async function getFileMetadataAsync(filePath, options = {}) {
  * @param destinationPath Destination file path
  * @param options Copy operation options
  */
-export function copyFile(sourcePath, destinationPath, options = {}) {
+function copyFile(sourcePath, destinationPath, options = {}) {
     try {
         if (options.validatePaths !== false) {
             validatePath(sourcePath);
@@ -565,7 +628,7 @@ export function copyFile(sourcePath, destinationPath, options = {}) {
  * @param destinationPath Destination file path
  * @param options Move operation options
  */
-export function moveFile(sourcePath, destinationPath, options = {}) {
+function moveFile(sourcePath, destinationPath, options = {}) {
     try {
         if (options.validatePaths !== false) {
             validatePath(sourcePath);
@@ -590,7 +653,7 @@ export function moveFile(sourcePath, destinationPath, options = {}) {
  * @param filePath File path to delete
  * @param options Delete operation options
  */
-export function deleteFile(filePath, options = {}) {
+function deleteFile(filePath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(filePath);
@@ -623,7 +686,7 @@ export function deleteFile(filePath, options = {}) {
  * @param decimals Number of decimal places
  * @returns Formatted size string
  */
-export function formatFileSize(bytes, decimals = 2) {
+function formatFileSize(bytes, decimals = 2) {
     if (bytes === 0)
         return '0 B';
     const k = 1024;
@@ -638,7 +701,7 @@ export function formatFileSize(bytes, decimals = 2) {
  * @param filePath Path to check
  * @returns True if path is safe
  */
-export function isPathSafe(filePath) {
+function isPathSafe(filePath) {
     try {
         validatePath(filePath);
         return true;
@@ -652,7 +715,7 @@ export function isPathSafe(filePath) {
  * @param filePath File path
  * @returns File extension (including dot) or empty string
  */
-export function getFileExtension(filePath) {
+function getFileExtension(filePath) {
     if (!filePath || typeof filePath !== 'string') {
         return '';
     }
@@ -663,7 +726,7 @@ export function getFileExtension(filePath) {
  * @param filePath Path to check
  * @returns True if file exists and is readable
  */
-export function isFileReadable(filePath) {
+function isFileReadable(filePath) {
     try {
         fs.accessSync(filePath, fs.constants.F_OK | fs.constants.R_OK);
         return true;
@@ -678,7 +741,7 @@ export function isFileReadable(filePath) {
  * @param options Size calculation options
  * @returns Size in bytes
  */
-export function getDirectorySize(dirPath, options = {}) {
+function getDirectorySize(dirPath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(dirPath);
@@ -715,7 +778,7 @@ export function getDirectorySize(dirPath, options = {}) {
  * @param dirPath Directory path
  * @param options Clean operation options
  */
-export function cleanDirectory(dirPath, options = {}) {
+function cleanDirectory(dirPath, options = {}) {
     try {
         if (options.validatePath !== false) {
             validatePath(dirPath);

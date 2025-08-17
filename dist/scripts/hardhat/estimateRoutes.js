@@ -1,7 +1,12 @@
-import hre from 'hardhat';
-import { encodeLeaf } from '../utils/merkle';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const hardhat_1 = __importDefault(require("hardhat"));
+const merkle_1 = require("../utils/merkle");
 async function main() {
-    const ethers = hre.ethers;
+    const ethers = hardhat_1.default.ethers;
     console.log('Compiling and deploying minimal fixtures for gas estimation...');
     const [deployer] = await ethers.getSigners();
     console.log('Deployer:', deployer.address);
@@ -63,7 +68,7 @@ async function main() {
     // isRight is a bool[][] matching proofs; provide a single empty inner array
     const isRight = [[]];
     // Compute the leaf using the shared helper (matches OrderedMerkle.leafOfSelectorRoute)
-    const leaf = encodeLeaf(selectors[0], facets[0], codehashes[0]);
+    const leaf = (0, merkle_1.encodeLeaf)(selectors[0], facets[0], codehashes[0]);
     // Commit the root to make applyRoutes callable (commitRoot requires COMMIT_ROLE which deployer has)
     try {
         const root = ethers.utils.keccak256(ethers.utils.concat(['0x00', leaf]));

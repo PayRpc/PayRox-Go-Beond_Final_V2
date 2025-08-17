@@ -20,8 +20,8 @@
     "transform:sample": "node scripts/transformers/transform-one.js --file contracts/My.sol --contract My",
   "regression:gen": "node scripts/analysis/regression-harness-gen.js --contract",
   "harness:gen": "node scripts/analysis/regression-harness-gen.js --contract",
-  "plan:strict": "ts-node -P tsconfig.json scripts/cli/plan.ts",
-  "plan": "node dist/scripts/cli/plan.js --input"
+  "plan:strict": "node -r ts-node/register -r tsconfig-paths/register scripts/cli/plan.ts",
+  "plan": "node -r ts-node/register -r tsconfig-paths/register scripts/cli/plan.ts --input"
   },
   "keywords": [],
   "author": "",

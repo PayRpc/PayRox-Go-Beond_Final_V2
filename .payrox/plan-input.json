@@ -1,0 +1,1 @@
+{ "functions": [ { "name": "owner", "parameters": [], "stateMutability": "view" } ] }
