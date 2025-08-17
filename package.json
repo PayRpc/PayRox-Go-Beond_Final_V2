@@ -37,8 +37,9 @@
     "refactor:integrate": "node scripts/integrate-refactor-ai.js",
     "refactor:validate": "node AI/universal-refactor-validator.js",
     "gen:manifest": "pwsh -File scripts/split-and-manifest.ps1 -Source contracts/dispacher/ManifestDispacher.sol -UseSolc",
-    "ci:manifest": "node scripts/extract-selectors.js --source contracts/dispacher/ManifestDispacher.sol --splits artifacts/splits --out artifacts/manifests --expected manifests/expected/ManifestDispatcher.json"
-  ,"split:manifest": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1"
+  "ci:manifest": "node scripts/extract-selectors.js --source contracts/dispacher/ManifestDispacher.sol --splits artifacts/splits --out artifacts/manifests --expected manifests/expected/ManifestDispatcher.json",
+  "split:manifest": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1",
+  "validate:split": "node scripts/validate-split.js"
   },
   "keywords": [],
   "author": "",
