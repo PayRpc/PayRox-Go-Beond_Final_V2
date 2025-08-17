@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\audit\\AuditRegistry.sol": {
-      "lastModificationDate": 1755394620668,
+      "lastModificationDate": 1755395235957,
       "contentHash": "9fc1762cb14776f7b6864ef6bfca268f",
       "sourceName": "contracts/audit/AuditRegistry.sol",
       "solcConfig": {
@@ -44,8 +44,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\manifest\\ManifestTypes.sol": {
-      "lastModificationDate": 1755394620701,
-      "contentHash": "9076cd8f0428a66e855808ad0a47d04e",
+      "lastModificationDate": 1755397458737,
+      "contentHash": "7ad4adc78e1d9e9af6aa7f05f735dc63",
       "sourceName": "contracts/manifest/ManifestTypes.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -74,15 +74,15 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.30"
+        "0.8.30"
       ],
       "artifacts": [
         "ManifestTypes"
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\manifest\\ManifestUtils.sol": {
-      "lastModificationDate": 1755394620702,
-      "contentHash": "f47055fa933dff63e9d2e4c7d50289de",
+      "lastModificationDate": 1755397458752,
+      "contentHash": "d77faf7b5a037342abdf93524e57908b",
       "sourceName": "contracts/manifest/ManifestUtils.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -113,7 +113,7 @@
         "./ManifestTypes.sol"
       ],
       "versionPragmas": [
-        "^0.8.30"
+        "0.8.30"
       ],
       "artifacts": [
         "ManifestUtils"
@@ -350,7 +350,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\governance\\GovernanceOrchestrator.sol": {
-      "lastModificationDate": 1755394620685,
+      "lastModificationDate": 1755395235968,
       "contentHash": "8e4d497251cd9cceab342cfed4ed5121",
       "sourceName": "contracts/governance/GovernanceOrchestrator.sol",
       "solcConfig": {
