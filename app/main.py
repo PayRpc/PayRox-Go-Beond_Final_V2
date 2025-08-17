@@ -13,6 +13,10 @@ from fastapi import FastAPI, HTTPException, Query, Body
 from pydantic import BaseModel, Field
 from rank_bm25 import BM25Okapi
 from ollama import Client
+try:
+    from prometheus_fastapi_instrumentator import Instrumentator
+except Exception:
+    Instrumentator = None
 
 # -----------------------------------------------------------------------------
 # App
@@ -23,6 +27,14 @@ app = FastAPI(
     openapi_version="3.1.0",
     openapi_url="/openapi.json",
 )
+
+# Expose Prometheus metrics if the instrumentator is available
+if Instrumentator is not None:
+    try:
+        Instrumentator().instrument(app).expose(app, endpoint="/metrics", include_in_schema=False)
+    except Exception:
+        # non-fatal: metrics are best-effort
+        pass
 
 # Mount planner app under /planner prefix
 try:
