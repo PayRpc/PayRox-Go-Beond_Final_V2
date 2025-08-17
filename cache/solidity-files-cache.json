@@ -666,8 +666,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispacher.sol": {
-      "lastModificationDate": 1755394620668,
-      "contentHash": "ccc78a151bed88dfd160c69fb0c184db",
+      "lastModificationDate": 1755463373321,
+      "contentHash": "d728e8a528a35f5b4581bfb143d9fb9f",
       "sourceName": "contracts/dispacher/ManifestDispacher.sol",
       "solcConfig": {
         "version": "0.8.30",
