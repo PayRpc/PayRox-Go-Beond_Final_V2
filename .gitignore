@@ -61,3 +61,7 @@ yarn.lock
 # Analyzer/normalizer reports & stubs
 .payrox/*.report.json
 .payrox/stubs/
+
+# Local payrox generated artifacts - keep out of main repo unless intentional
+.payrox/generated/
+.payrox/*.report.json
