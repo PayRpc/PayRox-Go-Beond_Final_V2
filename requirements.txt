@@ -1,0 +1,6 @@
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+rank-bm25>=0.2.2
+ollama>=0.1.6
+requests>=2.31.0
+orjson>=3.9.0
