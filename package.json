@@ -10,9 +10,12 @@
     "lint": "eslint --ext .ts,.js scripts hardhat.config.ts --fix",
     "format": "prettier --write \"**/*.{ts,js,json,md,sol}\"",
     "test": "jest",
-  "audit:gated": "node scripts/security/audit-gate.cjs",
+    "audit:gated": "node scripts/security/audit-gate.cjs",
     "sol:format": "prettier --plugin-search-dir=. --write \"contracts/**/*.sol\"",
-    "sol:lint": "npx solhint 'contracts/**/*.sol'"
+    "sol:lint": "npx solhint 'contracts/**/*.sol'",
+    "build": "tsc -p tsconfig.json",
+    "analyze": "node dist/scripts/cli/analyze.js",
+  "analyze:light": "node dist/scripts/cli/analyze.js --light"
   },
   "keywords": [],
   "author": "",
@@ -36,7 +39,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-promise": "^7.2.1",
+  "eslint-plugin-promise": "^7.2.1",
     "ethers": "^6.15.0",
     "hardhat": "^2.26.3",
     "jest": "^30.0.5",
@@ -54,9 +57,14 @@
     "@openzeppelin/contracts": "^5.4.0",
     "@openzeppelin/contracts-upgradeable": "^5.4.0",
     "@solarity/hardhat-habits": "^1.0.1",
+    "@solidity-parser/parser": "0.20.2",
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.4",
+    "commander": "^11.0.0",
     "hardhat-abi-exporter": "^2.11.0",
     "hardhat-deploy": "^1.0.4",
     "hardhat-gas-reporter": "^2.3.0",
-    "hardhat-watcher": "^2.5.0"
+    "hardhat-watcher": "^2.5.0",
+    "solc": "^0.8.20"
   }
 }

@@ -3,16 +3,8 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
-
-# Environment
-.env
-.env.*
-
-# TypeScript / build
-dist/
-build/
-*.tsbuildinfo
+npm-debug.log
+yarn.lock
 
 # Hardhat / Solidity
 artifacts/
@@ -62,3 +54,10 @@ desktop.ini
 *.key
 npm-debug.log
 yarn.lock
+\n# Facet stubs (ignore raw, allow cleaned)
+**/*.facet.sol
+!**/*.cleaned.facet.sol
+
+# Analyzer/normalizer reports & stubs
+.payrox/*.report.json
+.payrox/stubs/

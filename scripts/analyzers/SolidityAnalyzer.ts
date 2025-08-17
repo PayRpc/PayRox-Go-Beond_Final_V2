@@ -19,7 +19,7 @@ import {
   AnalysisError,
   ManifestRoute,
   FacetCandidate,
-} from '../types/index';
+} from '../../scripts/types/index';
 
 // Define AST node types to replace 'any'
 interface ASTNode {
@@ -415,8 +415,9 @@ export class SolidityAnalyzer {
               sourceLocation: this.getSourceLocation(variable, sourceCode),
             };
 
-            // Update slot counter based on variable size
-            slotCounter += Math.ceil(variableInfo.size / 32);
+            // Update slot counter based on variable size (guarded)
+            const varSize = variableInfo.size || 32;
+            slotCounter += Math.ceil(varSize / 32);
 
             variables.push(variableInfo);
           }
@@ -719,7 +720,10 @@ export class SolidityAnalyzer {
     }
 
     const location = this.getSourceLocation(functionNode, sourceCode);
-    const functionCode = sourceCode.slice(location.start, location.end);
+  // Ensure numeric slice indices for source slices
+  const startIdx = typeof location.start === 'number' ? location.start : 0;
+  const endIdx = typeof location.end === 'number' ? location.end : sourceCode.length;
+  const functionCode = sourceCode.slice(startIdx, endIdx);
 
     // Rough estimation: 1 byte per 2 characters of source (accounting for compilation)
     return Math.ceil(functionCode.length / 2);
@@ -862,10 +866,11 @@ export class SolidityAnalyzer {
   private getSourceLocation(node: any, sourceCode: string): SourceLocation {
     if (node.loc) {
       return {
+        // Preserve numeric range-based SourceLocation shape; attach optional line/column when available
         start: node.range?.[0] || 0,
         end: node.range?.[1] || 0,
-        line: node.loc.start?.line || 0,
-        column: node.loc.start?.column || 0,
+        line: node.loc?.start?.line,
+        column: node.loc?.start?.column,
       };
     }
 
@@ -1124,7 +1129,7 @@ export class SolidityAnalyzer {
     }
 
     // Check for collisions
-    for (const [slot, vars] of Array.from(slotMap.entries())) {
+  for (const [slot, vars] of Array.from(slotMap.entries())) {
       if (vars.length > 1) {
         collisions.push(
           `Potential storage collision at slot ${slot}: ${vars.join(', ')}`
@@ -1485,7 +1490,7 @@ export class SolidityAnalyzer {
             
             if (chunkPlan.optimization.recommendations.length > 0) {
               console.log('Recommendations:');
-              chunkPlan.optimization.recommendations.forEach(rec => {
+              chunkPlan.optimization.recommendations.forEach((rec: string) => {
                 console.log(`  - ${rec}`);
               });
             }
@@ -2043,12 +2048,13 @@ export class SolidityAnalyzer {
     
     // Build routes from manifest routes in analysis
     analysis.manifestRoutes.forEach(route => {
-      const chunkId = functionToChunkMap.get(route.functionName) || 'unknown-chunk';
+      const funcName = route.functionName || '';
+      const chunkId = functionToChunkMap.get(funcName) || 'unknown-chunk';
       routes.push({
         selector: route.selector,
-        signature: this.findFunctionSignature(analysis.functions, route.functionName),
+        signature: this.findFunctionSignature(analysis.functions, funcName),
         chunkId,
-        functionName: route.functionName,
+        functionName: funcName,
         // In a real implementation, we would calculate actual facet addresses
         facet: '<predicted_facet_address>'
       });

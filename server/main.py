@@ -70,6 +70,15 @@ CONTRACTS_ROOT = Path(os.getenv('PRX_CONTRACTS_ROOT', r'C:\dev\contracts-sandbox
 ARCH_DIR = Path(os.getenv('PRX_ARCH_DIR', str(Path(CONTRACTS_ROOT) / 'arch'))).resolve()
 FACTS_PATH = ARCH_DIR / 'facts.json'
 
+# Environment & pinned context config (PayRox-aware defaults)
+# OLLAMA_HOST may be provided via OLLAMA_HOST or PRX_OLLAMA_HOST. Do not overwrite if already set.
+OLLAMA_HOST = os.getenv('PRX_OLLAMA_HOST', os.getenv('OLLAMA_HOST', 'http://127.0.0.1:11434'))
+if 'OLLAMA_HOST' not in os.environ:
+    os.environ['OLLAMA_HOST'] = OLLAMA_HOST
+
+# Optional pinned facts file (always visible to the analyzer/RAG)
+PRX_PINNED_FILE = Path(os.getenv('PRX_PINNED', '.payrox/pinned-go-beyond.md'))
+
 SCRIPTS_ROOT_ENV = os.getenv('PRX_SCRIPTS_ROOT')
 SCRIPTS_ROOT = Path(SCRIPTS_ROOT_ENV).resolve() if SCRIPTS_ROOT_ENV else None
 
@@ -106,6 +115,9 @@ def split_solidity(text: str) -> List[str]:
 
 def _load_pinned_context() -> str:
     try:
+        # Prefer PRX_PINNED_FILE, then ARCH facts.json as a fallback
+        if PRX_PINNED_FILE and PRX_PINNED_FILE.exists():
+            return PRX_PINNED_FILE.read_text(encoding='utf-8')
         if FACTS_PATH.exists():
             return FACTS_PATH.read_text(encoding='utf-8')
     except Exception:
@@ -151,6 +163,23 @@ def _retrieve(query: str, k: int = 6) -> List[Dict[str, Any]]:
     scores = BM25.get_scores(tokenize(query))
     top = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:k]
     return [DOCS[i] | {"score": float(scores[i])} for i in top]
+
+
+def _payrox_bucket_for_file(file_path: str) -> str:
+    """Lightweight heuristic: map file path to a small bucket used as a hint.
+
+    Buckets: core, administrative, liquidity, rewards, misc
+    """
+    p = file_path.lower()
+    if 'liquid' in p or 'liquidity' in p:
+        return 'liquidity'
+    if 'reward' in p or 'distrib' in p:
+        return 'rewards'
+    if 'admin' in p or 'govern' in p:
+        return 'administrative'
+    if 'core' in p or 'impl' in p:
+        return 'core'
+    return 'misc'
 
 
 def _load_index_if_present() -> bool:
@@ -488,10 +517,18 @@ def rag_ask(
     hits = _retrieve(q, k=k)
     context = "\n\n---\n".join(f"[{h['source']}] {h['text']}" for h in hits)
 
+    # add pinned facts and light bucket hints
+    pinned = _load_pinned_context()
+    bucket_hints = []
+    for h in hits:
+        bucket_hints.append(f"{h['source']}->{_payrox_bucket_for_file(h['source'])}")
+
     prompt = (
         "You are an expert Solidity assistant. Answer ONLY from the context. "
         "If it's not in the context, say you don't know.\n\n"
-        f"Question:\n{q}\n\nContext:\n{context}\n\nAnswer:"
+        f"PinnedFacts:\n{pinned}\n\n"
+        f"Question:\n{q}\n\nContext:\n{context}\n\n"
+        f"BucketHints:\n{', '.join(bucket_hints)}\n\nAnswer:"
     )
 
     try:
@@ -515,8 +552,10 @@ def rag_ask_with_context(
 ):
     hits = _retrieve(q, k=k)
     context = "\n\n---\n".join(f"[{h['source']}] {h['text']}" for h in hits)
+    pinned = _load_pinned_context()
     prompt = (
         "Answer ONLY from the context. If missing, say you don't know.\n\n"
+        f"PinnedFacts:\n{pinned}\n\n"
         f"Question:\n{q}\n\nContext:\n{context}\n\nAnswer:"
     )
     try:
