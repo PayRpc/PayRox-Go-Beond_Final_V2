@@ -8,15 +8,20 @@ import { ethers } from 'ethers';
  * @returns Computed root hash
  */
 export function processOrderedProof(leaf: string, proof: string[], positionsHex: string): string {
-  let computed = leaf.toLowerCase();
+  // Mirror Solidity OrderedMerkle.processProof:
+  // - computed starts as _hashLeaf(leaf) == keccak256(0x00 || leaf)
+  // - at each step: computed = isRight ? keccak256(0x01 || computed || proof[i]) : keccak256(0x01 || proof[i] || computed)
   const positions = BigInt(positionsHex);
+  let computed = ethers.utils.keccak256(ethers.utils.concat(['0x00', leaf]));
 
   for (let i = 0n; i < BigInt(proof.length); i++) {
-    const sib = proof[Number(i)].toLowerCase();
+    const sib = proof[Number(i)];
     const isRight = ((positions >> i) & 1n) === 1n;
-    computed = isRight
-      ? ethers.utils.keccak256(ethers.utils.concat([computed, sib]))
-      : ethers.utils.keccak256(ethers.utils.concat([sib, computed]));
+    if (isRight) {
+      computed = ethers.utils.keccak256(ethers.utils.concat(['0x01', computed, sib]));
+    } else {
+      computed = ethers.utils.keccak256(ethers.utils.concat(['0x01', sib, computed]));
+    }
   }
 
   return computed;

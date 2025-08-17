@@ -1,15 +1,20 @@
 import { utils } from 'ethers';
 
-/** Ordered pair hash (preserves left/right order for OpenZeppelin MerkleProof compatibility) */
+/**
+ * Pair hash matching OrderedMerkle._hashNode: keccak256(0x01 || left || right)
+ */
 function pairHash(a: string, b: string): string {
-  return utils.keccak256(utils.concat([a, b]));
+  return utils.keccak256(utils.concat(['0x01', a, b]));
 }
 
-/** Leaf encoder: keccak256(abi.encode(bytes4,address,bytes32)) */
+/**
+ * Leaf encoder matching OrderedMerkle.leafOfSelectorRoute:
+ * leaf = keccak256(abi.encodePacked(bytes1(0x00), selector, facet, codehash))
+ */
 export function encodeLeaf(selector: string, facet: string, codehash: string): string {
-  const abi = utils.defaultAbiCoder;
-  const enc = abi.encode(['bytes4', 'address', 'bytes32'], [selector, facet, codehash]);
-  return utils.keccak256(enc);
+  // use packed encoding to match abi.encodePacked
+  const packed = utils.solidityPack(['bytes1', 'bytes4', 'address', 'bytes32'], ['0x00', selector, facet, codehash]);
+  return utils.keccak256(packed);
 }
 
 /** Build a Merkle proof for a leaf index given all levels */
@@ -189,16 +194,22 @@ export async function generateManifestLeaves(
     return { root: utils.keccak256('0x'), tree: [], proofs: {}, positions: {}, leaves, leafMeta };
   }
 
-  // Build Merkle (ordered pair hashing - preserves left/right order)
+  // Build Merkle using the same scheme as OrderedMerkle.sol:
+  // - leafHash = keccak256(abi.encodePacked(bytes1(0x00), selector, facet, codehash))  (encodeLeaf)
+  // - leafNode = keccak256(abi.encodePacked(bytes1(0x00), leafHash))                 (_hashLeaf)
+  // - nodeHash = keccak256(abi.encodePacked(bytes1(0x01), left, right))             (_hashNode)
   const tree: string[][] = [];
-  tree.push(leaves);
 
-  let level = leaves;
+  // First level: hashed leaf nodes (_hashLeaf)
+  const leafNodes = leaves.map((l) => utils.keccak256(utils.concat(['0x00', l])));
+  tree.push(leafNodes);
+
+  let level = leafNodes;
   while (level.length > 1) {
     const next: string[] = [];
     for (let i = 0; i < level.length; i += 2) {
       if (i + 1 < level.length) next.push(pairHash(level[i], level[i + 1]));
-      else next.push(level[i]); // duplicate last node
+      else next.push(level[i]); // duplicate last node (no extra prefix)
     }
     tree.push(next);
     level = next;
@@ -211,6 +222,7 @@ export async function generateManifestLeaves(
   const positions: Record<string, string> = {};
   for (let i = 0; i < leaves.length; i++) {
     const key = `${leafMeta[i].selector}:${leafMeta[i].facet}:${leafMeta[i].codehash}`;
+    // proof should contain sibling *node* values (ie. hashed leaf nodes and upper nodes) as used by OrderedMerkle.processProof
     const proof = proofForIndex(tree, i);
     proofs[key] = proof;
 
