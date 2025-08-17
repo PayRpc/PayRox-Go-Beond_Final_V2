@@ -30,8 +30,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - name: Install dependencies
-      run: npm ci --force
+    - name: "Install dependencies (temporary: legacy-peer-deps)"
+      run: npm install --legacy-peer-deps
 
     - name: Lint
       run: npm run lint
