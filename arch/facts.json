@@ -1,0 +1,9 @@
+{
+  "loupe_selectors": {
+    "facets()": "0x7a0ed627",
+    "facetFunctionSelectors(address)": "0xadfca15e",
+    "facetAddresses()": "0x52ef6b2c",
+    "facetAddress(bytes4)": "0xcdffacc6",
+    "supportsInterface(bytes4)": "0x01ffc9a7"
+  }
+}
