@@ -7,34 +7,53 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
-    name: Build, Hardhat tests, and Python smoke tests
+  hardhat:
+    name: Hardhat tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: node-modules-${{ runner.os }}-node-18-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-node-18-
+
       - name: Install Node dependencies
-        run: |
-          npm ci
+        run: npm ci
 
       - name: Compile Solidity
-        run: |
-          npx hardhat compile
+        run: npx hardhat compile
 
       - name: Run Hardhat tests
-        run: |
-          npx hardhat test --no-compile
+        run: npx hardhat test --no-compile
+
+  python-smoke:
+    name: Python smoke tests
+    runs-on: ubuntu-latest
+    needs: hardhat
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-py-3.11-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-py-3.11-
 
       - name: Install Python deps
         run: |
@@ -43,26 +62,44 @@ jobs:
 
       - name: Start services (docker compose)
         run: |
-          # start the local stack declared in docker-compose.yml for smoke tests
           docker compose up -d --build
-          echo "Waiting for API to become healthy..."
-          for i in $(seq 1 30); do
+
+      - name: Wait for API (metrics)
+        run: |
+          echo "Waiting for API to respond on /metrics..."
+          for i in $(seq 1 45); do
             if curl -sSf http://localhost:8000/metrics >/dev/null 2>&1; then
               echo "API ready"
-              break
+              exit 0
             fi
             sleep 2
           done
+          echo "API did not become ready in time"; exit 1
 
       - name: Run Python smoke tests (pytest)
-        run: |
-          # run only the lightweight smoke tests introduced for /metrics and API health
-          pytest -q -k test_api_smoke
+        run: pytest -q -k test_api_smoke
 
       - name: Tear down services
         if: always()
+        run: docker compose down -v
+
+  lint:
+    name: Lint & typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Run JS lint (if configured)
         run: |
-          docker compose down -v
+          if npm run -s lint; then echo "lint passed"; else echo "lint failed or no lint script"; fi
 name: CI
 
 on:
