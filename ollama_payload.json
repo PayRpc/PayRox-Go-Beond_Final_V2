@@ -1,1 +1,0 @@
-{"model":"codellama:7b-instruct","messages":[{"role":"user","content":"Do you know files named ManifestTypes.sol or ManifestUtils.sol?"}],"max_tokens":300}
