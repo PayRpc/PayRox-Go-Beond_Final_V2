@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import subprocess
 
 from fastapi import FastAPI, HTTPException, Query, Body
 from pydantic import BaseModel, Field
@@ -95,6 +96,22 @@ NETWORK = os.getenv('PRX_NETWORK', 'localhost')
 
 class EchoIn(BaseModel):
     text: str
+
+class TransformApplyRequest(BaseModel):
+    file: str = Field(..., description="Path to .sol file relative to CONTRACTS_ROOT")
+    contract: Optional[str] = Field(None, description="Contract name (optional)")
+    save_to: Optional[str] = Field(None, description="Output subdir under .payrox/generated (optional)")
+
+
+class TransformApplyResponse(BaseModel):
+    out_file: Optional[str]
+    patch_file: Optional[str]
+    report: Optional[Dict[str, Any]] = None
+    stdout: Optional[str] = None
+    stderr: Optional[str] = None
+# Node binary and repo root defaults (safe, overridable via env)
+NODE_BIN = os.getenv('NODE_BIN', 'node')
+REPO_ROOT = Path(os.getenv('REPO_ROOT', '.')).resolve()
 
 
 def tokenize(s: str) -> List[str]:
@@ -197,6 +214,80 @@ def _load_index_if_present() -> bool:
     except Exception:
         pass
     return False
+
+
+def run_cmd(cmd: List[str], cwd: Optional[Path] = None, timeout: int = 60) -> Tuple[int, str, str]:
+    """Run a subprocess command and capture output. Returns (rc, stdout, stderr)."""
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(cwd) if cwd else None,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=False,
+            text=True,
+        )
+        out, err = proc.communicate(timeout=timeout)
+        return proc.returncode or 0, (out or ""), (err or "")
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        return 124, "", "timeout"
+    except Exception as exc:
+        return 1, "", str(exc)
+
+
+@app.post("/transform/apply", response_model=TransformApplyResponse)
+def transform_apply(body: TransformApplyRequest):
+    """Run the conservative POC transformer and return produced artifacts.
+
+    Safety: never overwrite sources. Outputs are written under .payrox/generated/transformers.
+    """
+    rel_path = Path(body.file)
+    abs_path = (CONTRACTS_ROOT / rel_path).resolve()
+    if not str(abs_path).startswith(str(CONTRACTS_ROOT)):
+        raise HTTPException(status_code=400, detail="Invalid file path")
+    if not abs_path.exists():
+        raise HTTPException(status_code=404, detail=f"Source not found: {abs_path}")
+
+    out_dir = Path('.payrox') / 'generated' / 'transformers'
+    if body.save_to:
+        out_dir = out_dir / body.save_to
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Build command
+    script = Path('scripts') / 'transformers' / 'transform-one.js'
+    if not script.exists():
+        raise HTTPException(status_code=500, detail=f"Transformer script missing: {script}")
+
+    cmd = [NODE_BIN, str(script.resolve()), '--file', str(abs_path),]
+    if body.contract:
+        cmd += ['--contract', body.contract]
+
+    rc, out, err = run_cmd(cmd, cwd=REPO_ROOT, timeout=120)
+
+    # The transformer writes files under .payrox/generated/transformers/<ts>/applied/
+    # Try to discover the most recent out/patch files in out_dir
+    out_file = None
+    patch_file = None
+    try:
+        candidates = list(out_dir.rglob('applied/*'))
+        candidates = [p for p in candidates if p.is_file()]
+        if candidates:
+            # newest by mtime
+            candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+            # pick first *.out or *.sol as out_file and *.patch as patch_file heuristics
+            for p in candidates:
+                if p.suffix == '.patch' and not patch_file:
+                    patch_file = str(p)
+                if p.suffix in {'.sol', '.txt', '.out'} and not out_file:
+                    out_file = str(p)
+    except Exception:
+        pass
+
+    resp = TransformApplyResponse(out_file=out_file, patch_file=patch_file, stdout=out, stderr=err)
+    if rc != 0:
+        raise HTTPException(status_code=500, detail={"rc": rc, "stdout": out, "stderr": err})
+    return resp
 
 
 # -----------------------------------------------------------------------------
@@ -703,3 +794,4 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    # Note: transform endpoint uses NODE_BIN and expects scripts/transformers/transform-one.js
