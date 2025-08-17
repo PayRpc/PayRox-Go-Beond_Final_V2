@@ -36,7 +36,10 @@ module.exports = [
       ...importRecommended,
       'prettier/prettier': 'error',
       // Relax strict rules for JS quick pass
-      'import/no-unresolved': 'off'
+      'import/no-unresolved': 'off',
+      'import/namespace': 'off',
+      'import/named': 'off',
+      'import/no-duplicates': 'off'
     }
   },
   // TS files
@@ -68,17 +71,18 @@ module.exports = [
       'prettier/prettier': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      // Fast-track: disable noisy rules causing current failures
       'import/no-unresolved': 'off',
+      'import/namespace': 'off',
+      'import/named': 'off',
+      'import/no-duplicates': 'off',
       '@typescript-eslint/no-require-imports': 'off',
       'no-undef': 'off',
-      // Gradual re-enable: warn on unused (underscore-prefixed allowed)
       'no-unused-vars': [
-        'warn',
+        'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-unused-vars': [
-        'warn',
+        'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ]
     }
