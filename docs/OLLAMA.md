@@ -4,7 +4,7 @@ This project uses Ollama for local LLM-based diagnostics. The FastAPI server cal
 
 Checklist to get Ollama working locally:
 
-- Install Ollama per the official instructions: https://ollama.ai/docs
+- Install Ollama per the official instructions: [Ollama docs](https://ollama.ai/docs)
 - Start Ollama (on macOS/Linux run `ollama serve` or use the system service on Windows).
 - Confirm Ollama is listening:
 
@@ -19,7 +19,7 @@ Project-specific checks
 
 - The FastAPI endpoint `/diag/ollama` performs a simple client check. Start the server and visit:
 
-```
+```http
 http://127.0.0.1:8000/diag/ollama
 ```
 
