@@ -411,7 +411,6 @@ def api_analyze(body: dict):
         raise HTTPException(status_code=502, detail=f"AI backend error: {exc}")
     return {"model": model, "response": resp.get("response", ""), "raw": resp}
 
-
 # -----------------------------------------------------------------------------
 # RAG (build + ask)
 # -----------------------------------------------------------------------------
