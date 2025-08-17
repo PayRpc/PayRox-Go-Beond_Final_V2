@@ -14,7 +14,7 @@ module.exports = [
   js.configs.recommended,
   // JS files: simpler parsing, Node globals
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', '**/*.cjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

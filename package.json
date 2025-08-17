@@ -10,6 +10,7 @@
     "lint": "eslint --ext .ts,.js scripts hardhat.config.ts --fix",
     "format": "prettier --write \"**/*.{ts,js,json,md,sol}\"",
     "test": "jest",
+  "audit:gated": "node scripts/security/audit-gate.cjs",
     "sol:format": "prettier --plugin-search-dir=. --write \"contracts/**/*.sol\"",
     "sol:lint": "npx solhint 'contracts/**/*.sol'"
   },
