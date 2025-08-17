@@ -43,13 +43,13 @@
     "tsconfig-paths": "^4.2.0",
     "typechain": "^8.3.2",
     "typescript": "^5.9.2",
-    "web3": "^1.10.4"
+  "web3": "^1.10.4",
+  "@solidstate/hardhat-bytecode-exporter": "^1.0.0"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.4.0",
     "@openzeppelin/contracts-upgradeable": "^5.4.0",
     "@solarity/hardhat-habits": "^1.0.1",
-    "@solidstate/hardhat-bytecode-exporter": "^2.0.0",
     "hardhat-abi-exporter": "^2.11.0",
     "hardhat-deploy": "^1.0.4",
     "hardhat-gas-reporter": "^2.3.0",
