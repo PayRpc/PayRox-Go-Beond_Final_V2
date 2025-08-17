@@ -1,0 +1,39 @@
+{
+  "description": "PayRox selector mapping - tracks function selectors and their implementations",
+  "selectors": {
+    "0x13af4035": {
+      "signature": "setOwner(address)",
+      "facet": "AdminFacet",
+      "type": "external",
+      "mutability": "nonpayable"
+    },
+    "0x893d20e8": {
+      "signature": "getOwner()",
+      "facet": "AdminFacet", 
+      "type": "external",
+      "mutability": "view"
+    },
+    "0x12345678": {
+      "signature": "processPayment(uint256)",
+      "facet": "CoreFacet",
+      "type": "external", 
+      "mutability": "payable"
+    },
+    "0x87654321": {
+      "signature": "getBalance()",
+      "facet": "CoreFacet",
+      "type": "external",
+      "mutability": "view"
+    }
+  },
+  "collision_check": {
+    "total_selectors": 4,
+    "unique_selectors": 4,
+    "collisions": []
+  },
+  "metadata": {
+    "generated_at": "2025-01-01T00:00:00.000Z",
+    "original_contract": "MonolithContract.sol",
+    "parity_verified": true
+  }
+}
