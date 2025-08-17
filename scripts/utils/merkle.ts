@@ -103,6 +103,7 @@ export async function generateManifestLeaves(
   root: string;
   tree: string[][];
   proofs: Record<string, string[]>;
+  positions: Record<string, string>;
   leaves: string[];
   leafMeta: LeafMeta[];
 }> {
@@ -185,7 +186,7 @@ export async function generateManifestLeaves(
   }
 
   if (leaves.length === 0) {
-    return { root: utils.keccak256('0x'), tree: [], proofs: {}, leaves, leafMeta };
+    return { root: utils.keccak256('0x'), tree: [], proofs: {}, positions: {}, leaves, leafMeta };
   }
 
   // Build Merkle (ordered pair hashing - preserves left/right order)
@@ -207,10 +208,26 @@ export async function generateManifestLeaves(
 
   // Proofs keyed by "selector:facet:codehash"
   const proofs: Record<string, string[]> = {};
+  const positions: Record<string, string> = {};
   for (let i = 0; i < leaves.length; i++) {
     const key = `${leafMeta[i].selector}:${leafMeta[i].facet}:${leafMeta[i].codehash}`;
-    proofs[key] = proofForIndex(tree, i);
+    const proof = proofForIndex(tree, i);
+    proofs[key] = proof;
+
+    // Build positions bitfield (LSB-first): bit i = 1 if sibling is on the right
+    let bits = 0n;
+    let idx = i;
+    for (let level = 0; level < tree.length - 1; level++) {
+      const isRight = idx % 2 === 1; // node is right child
+      const siblingIsRight = !isRight; // sibling is right if node is left
+      if (siblingIsRight) {
+        bits |= (1n << BigInt(level));
+      }
+      idx = Math.floor(idx / 2);
+    }
+    // positionsHex as 0x-prefixed hex
+    positions[key] = '0x' + bits.toString(16).padStart(Math.ceil((tree.length - 1) / 4), '0');
   }
 
-  return { root, tree, proofs, leaves, leafMeta };
+  return { root, tree, proofs, positions, leaves, leafMeta };
 }

@@ -399,7 +399,7 @@ contract ChunkFactoryFacet is IChunkFactory {
     function getFacetFunctionSelectors() external pure returns (bytes4[] memory selectors) {
         // Update this list to match EXACTLY what the facet exposes
         selectors = new bytes4[](34);
-        uint i;
+        uint256 i;
         // IChunkFactory interface functions
         selectors[i++] = IChunkFactory.stage.selector;
         selectors[i++] = IChunkFactory.stageMany.selector;

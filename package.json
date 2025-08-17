@@ -9,6 +9,9 @@
     "smoke:merkle": "ts-node -P tsconfig.hardhat.json scripts/smoke/smoke-merkle.ts",
     "lint": "eslint --ext .ts,.js scripts src --fix",
     "format": "prettier --write \"**/*.{ts,js,json,md,sol}\""
+  ,
+  "sol:format": "prettier --plugin-search-dir=. --write \"contracts/**/*.sol\"",
+  "sol:lint": "npx solhint 'contracts/**/*.sol'"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +37,8 @@
     "ethers": "^5.8.0",
     "hardhat": "^2.26.3",
     "prettier": "^3.6.2",
+    "prettier-plugin-solidity": "^2.1.0",
+    "solhint": "^6.0.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typechain": "^8.3.2",

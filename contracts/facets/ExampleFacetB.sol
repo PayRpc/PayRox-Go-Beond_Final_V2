@@ -2,7 +2,7 @@
 pragma solidity 0.8.30;
 
 import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
-import { RefactorSafetyLib, RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
+import { RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
 
 /**
  * @title ExampleFacetB
