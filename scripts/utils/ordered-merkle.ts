@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 
 /**
  * Process an ordered Merkle proof using bitfield position encoding (LSB-first)
@@ -7,14 +7,10 @@ import { ethers } from "ethers";
  * @param positionsHex Bitfield hex string (e.g., "0x01") where bit i = 1 means sibling i is on the right
  * @returns Computed root hash
  */
-export function processOrderedProof(
-  leaf: string,
-  proof: string[],
-  positionsHex: string
-): string {
+export function processOrderedProof(leaf: string, proof: string[], positionsHex: string): string {
   let computed = leaf.toLowerCase();
   const positions = BigInt(positionsHex);
-  
+
   for (let i = 0n; i < BigInt(proof.length); i++) {
     const sib = proof[Number(i)].toLowerCase();
     const isRight = ((positions >> i) & 1n) === 1n;
@@ -22,7 +18,7 @@ export function processOrderedProof(
       ? ethers.utils.keccak256(ethers.utils.concat([computed, sib]))
       : ethers.utils.keccak256(ethers.utils.concat([sib, computed]));
   }
-  
+
   return computed;
 }
 
@@ -38,14 +34,16 @@ export function verifyOrderedProof(
   leaf: string,
   proof: string[],
   positionsHex: string,
-  root: string
+  root: string,
 ): boolean {
   // Schema guardrail: assert no high bits beyond proof length
   const positions = BigInt(positionsHex);
-  if ((positions >> BigInt(proof.length)) !== 0n) {
-    throw new Error(`Invalid positions bitfield: extra high bits detected beyond proof.length=${proof.length}`);
+  if (positions >> BigInt(proof.length) !== 0n) {
+    throw new Error(
+      `Invalid positions bitfield: extra high bits detected beyond proof.length=${proof.length}`,
+    );
   }
-  
+
   return processOrderedProof(leaf, proof, positionsHex).toLowerCase() === root.toLowerCase();
 }
 
@@ -56,17 +54,13 @@ export function verifyOrderedProof(
  * @param codehash Expected codehash (0x-prefixed)
  * @returns Leaf hash for Merkle tree
  */
-export function createRouteLeaf(
-  selector: string,
-  facet: string,
-  codehash: string
-): string {
+export function createRouteLeaf(selector: string, facet: string, codehash: string): string {
   // Use proper ABI encoding: bytes4, address, bytes32 (not padded bytes32s)
   return ethers.utils.keccak256(
     ethers.utils.defaultAbiCoder.encode(
-      ["bytes4", "address", "bytes32"],
-      [selector, facet, codehash]
-    )
+      ['bytes4', 'address', 'bytes32'],
+      [selector, facet, codehash],
+    ),
   );
 }
 

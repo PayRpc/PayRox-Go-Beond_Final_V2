@@ -6,16 +6,9 @@ function pairHash(a: string, b: string): string {
 }
 
 /** Leaf encoder: keccak256(abi.encode(bytes4,address,bytes32)) */
-export function encodeLeaf(
-  selector: string,
-  facet: string,
-  codehash: string
-): string {
+export function encodeLeaf(selector: string, facet: string, codehash: string): string {
   const abi = utils.defaultAbiCoder;
-  const enc = abi.encode(
-    ['bytes4', 'address', 'bytes32'],
-    [selector, facet, codehash]
-  );
+  const enc = abi.encode(['bytes4', 'address', 'bytes32'], [selector, facet, codehash]);
   return utils.keccak256(enc);
 }
 
@@ -36,11 +29,9 @@ function proofForIndex(levels: string[][], leafIndex: number): string[] {
 /** Derive function selectors from ABI if not explicitly provided */
 export function deriveSelectorsFromAbi(abi: any[]): string[] {
   const sigs = abi
-    .filter(f => f?.type === 'function')
-    .map(
-      f => `${f.name}(${(f.inputs || []).map((i: any) => i.type).join(',')})`
-    );
-  const sels = sigs.map(sig => utils.keccak256(utils.toUtf8Bytes(sig)).slice(0, 10));
+    .filter((f) => f?.type === 'function')
+    .map((f) => `${f.name}(${(f.inputs || []).map((i: any) => i.type).join(',')})`);
+  const sels = sigs.map((sig) => utils.keccak256(utils.toUtf8Bytes(sig)).slice(0, 10));
   return Array.from(new Set(sels));
 }
 
@@ -57,7 +48,7 @@ export type LibraryAddressMap = Record<string, string>; // { LibraryName: 0xAddr
 export function linkBytecode(
   bytecode: string,
   linkReferences: any,
-  libraryAddresses?: LibraryAddressMap
+  libraryAddresses?: LibraryAddressMap,
 ): string {
   if (!bytecode || bytecode === '0x') return bytecode;
   // If no link refs, return as-is
@@ -107,7 +98,7 @@ export async function generateManifestLeaves(
   manifest: any,
   artifacts: any,
   factoryAddress: string,
-  opts?: { libraryAddresses?: LibraryAddressMap }
+  opts?: { libraryAddresses?: LibraryAddressMap },
 ): Promise<{
   root: string;
   tree: string[][];
@@ -122,7 +113,9 @@ export async function generateManifestLeaves(
       manifest.facets.length > 0 &&
       manifest.facets.every((f: any) => !!f.address);
     if (!allHaveAddresses) {
-      throw new Error('generateManifestLeaves: factoryAddress is required when facets lack explicit addresses');
+      throw new Error(
+        'generateManifestLeaves: factoryAddress is required when facets lack explicit addresses',
+      );
     }
   }
 
@@ -132,11 +125,21 @@ export async function generateManifestLeaves(
   for (const facet of manifest.facets) {
     const art = await artifacts.readArtifact(facet.contract);
     // Link runtime/creation if necessary
-    const runtime = linkBytecode(art.deployedBytecode as string, art.deployedLinkReferences, opts?.libraryAddresses);
-    const creation = linkBytecode(art.bytecode as string, art.linkReferences, opts?.libraryAddresses);
+    const runtime = linkBytecode(
+      art.deployedBytecode as string,
+      art.deployedLinkReferences,
+      opts?.libraryAddresses,
+    );
+    const creation = linkBytecode(
+      art.bytecode as string,
+      art.linkReferences,
+      opts?.libraryAddresses,
+    );
 
     if (!runtime || runtime === '0x') {
-      throw new Error(`Facet ${facet.name} has no runtime bytecode (is it abstract or an interface?).`);
+      throw new Error(
+        `Facet ${facet.name} has no runtime bytecode (is it abstract or an interface?).`,
+      );
     }
 
     const runtimeHash = utils.keccak256(runtime); // == EXTCODEHASH on-chain
@@ -144,7 +147,9 @@ export async function generateManifestLeaves(
 
     // Prefer explicit deployed address when provided on facet entry or manifest.deployment.addresses
     const explicitAddress =
-      facet.address || manifest?.deployment?.addresses?.[facet.name] || manifest?.deployment?.addresses?.[facet.name?.toLowerCase?.() ?? ''];
+      facet.address ||
+      manifest?.deployment?.addresses?.[facet.name] ||
+      manifest?.deployment?.addresses?.[facet.name?.toLowerCase?.() ?? ''];
 
     let facetAddress: string;
     if (explicitAddress) {
@@ -152,7 +157,9 @@ export async function generateManifestLeaves(
     } else {
       // Salt resolution (prefer explicit, else deterministic from name)
       const explicitSalt =
-        manifest?.deployment?.salts?.[facet.name] ?? manifest?.deployment?.[facet.name]?.salt ?? manifest?.deployment?.[facet.name?.toLowerCase?.() ?? '']?.salt;
+        manifest?.deployment?.salts?.[facet.name] ??
+        manifest?.deployment?.[facet.name]?.salt ??
+        manifest?.deployment?.[facet.name?.toLowerCase?.() ?? '']?.salt;
 
       const salt = explicitSalt ?? utils.keccak256(utils.toUtf8Bytes(`PayRox-${facet.name}`));
 
@@ -160,12 +167,20 @@ export async function generateManifestLeaves(
     }
 
     // Use configured selectors if given, else derive from ABI
-    const selectors: string[] = facet.selectors && facet.selectors.length > 0 ? facet.selectors : deriveSelectorsFromAbi(art.abi);
+    const selectors: string[] =
+      facet.selectors && facet.selectors.length > 0
+        ? facet.selectors
+        : deriveSelectorsFromAbi(art.abi);
 
     for (const sel of selectors) {
       const leaf = encodeLeaf(sel, facetAddress, runtimeHash);
       leaves.push(leaf);
-      leafMeta.push({ selector: sel, facet: facetAddress, codehash: runtimeHash, facetName: facet.name });
+      leafMeta.push({
+        selector: sel,
+        facet: facetAddress,
+        codehash: runtimeHash,
+        facetName: facet.name,
+      });
     }
   }
 

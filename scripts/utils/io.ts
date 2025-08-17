@@ -50,7 +50,7 @@ export class FileOperationError extends Error {
     message: string,
     public readonly operation: string,
     public readonly filePath: string,
-    public readonly cause?: Error
+    public readonly cause?: Error,
   ) {
     super(message);
     this.name = 'FileOperationError';
@@ -58,7 +58,10 @@ export class FileOperationError extends Error {
 }
 
 export class SecurityError extends Error {
-  constructor(message: string, public readonly filePath: string) {
+  constructor(
+    message: string,
+    public readonly filePath: string,
+  ) {
     super(message);
     this.name = 'SecurityError';
   }
@@ -117,10 +120,7 @@ export function validatePath(filePath: string, baseDir?: string): void {
     const resolvedBase = path.resolve(baseDir);
 
     if (!resolvedPath.startsWith(resolvedBase)) {
-      throw new SecurityError(
-        `Path outside base directory: ${baseDir}`,
-        filePath
-      );
+      throw new SecurityError(`Path outside base directory: ${baseDir}`, filePath);
     }
   }
 
@@ -139,7 +139,7 @@ export function validatePath(filePath: string, baseDir?: string): void {
 export function validateFileSize(
   size: number,
   maxSize?: number,
-  fileType?: 'json' | 'text' | 'binary'
+  fileType?: 'json' | 'text' | 'binary',
 ): void {
   let limit = maxSize;
 
@@ -160,7 +160,7 @@ export function validateFileSize(
     throw new FileOperationError(
       `File too large: ${size} bytes (max: ${limit})`,
       'size_validation',
-      'unknown'
+      'unknown',
     );
   }
 }
@@ -175,21 +175,14 @@ export function validateFileSize(
  * @param options File operation options
  * @returns Parsed JSON object with proper typing
  */
-export function readJsonFile<T = any>(
-  filePath: string,
-  options: FileOperationOptions = {}
-): T {
+export function readJsonFile<T = any>(filePath: string, options: FileOperationOptions = {}): T {
   try {
     if (options.validatePath !== false) {
       validatePath(filePath);
     }
 
     if (!fs.existsSync(filePath)) {
-      throw new FileOperationError(
-        `File not found: ${filePath}`,
-        'read_json',
-        filePath
-      );
+      throw new FileOperationError(`File not found: ${filePath}`, 'read_json', filePath);
     }
 
     // Check file size before reading
@@ -200,11 +193,7 @@ export function readJsonFile<T = any>(
 
     // Validate JSON content
     if (typeof content !== 'string' || content.trim().length === 0) {
-      throw new FileOperationError(
-        'File is empty or invalid',
-        'read_json',
-        filePath
-      );
+      throw new FileOperationError('File is empty or invalid', 'read_json', filePath);
     }
 
     return JSON.parse(content) as T;
@@ -214,12 +203,10 @@ export function readJsonFile<T = any>(
     }
 
     throw new FileOperationError(
-      `Failed to read JSON file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to read JSON file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'read_json',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -232,7 +219,7 @@ export function readJsonFile<T = any>(
  */
 export async function readJsonFileAsync<T = any>(
   filePath: string,
-  options: FileOperationOptions = {}
+  options: FileOperationOptions = {},
 ): Promise<T> {
   try {
     if (options.validatePath !== false) {
@@ -243,28 +230,17 @@ export async function readJsonFileAsync<T = any>(
     try {
       await fsPromises.access(filePath, fs.constants.F_OK);
     } catch {
-      throw new FileOperationError(
-        `File not found: ${filePath}`,
-        'read_json_async',
-        filePath
-      );
+      throw new FileOperationError(`File not found: ${filePath}`, 'read_json_async', filePath);
     }
 
     // Check file size
     const stats = await fsPromises.stat(filePath);
     validateFileSize(stats.size, options.maxSize, 'json');
 
-    const content = await fsPromises.readFile(
-      filePath,
-      options.encoding || 'utf8'
-    );
+    const content = await fsPromises.readFile(filePath, options.encoding || 'utf8');
 
     if (typeof content !== 'string' || content.trim().length === 0) {
-      throw new FileOperationError(
-        'File is empty or invalid',
-        'read_json_async',
-        filePath
-      );
+      throw new FileOperationError('File is empty or invalid', 'read_json_async', filePath);
     }
 
     return JSON.parse(content) as T;
@@ -279,7 +255,7 @@ export async function readJsonFileAsync<T = any>(
       }`,
       'read_json_async',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -293,7 +269,7 @@ export async function readJsonFileAsync<T = any>(
 export function writeJsonFile<T = any>(
   filePath: string,
   data: T,
-  options: FileOperationOptions & { indent?: number } = {}
+  options: FileOperationOptions & { indent?: number } = {},
 ): void {
   try {
     if (options.validatePath !== false) {
@@ -314,11 +290,7 @@ export function writeJsonFile<T = any>(
     const content = JSON.stringify(data, null, options.indent || 2);
 
     // Validate content size
-    validateFileSize(
-      Buffer.byteLength(content, 'utf8'),
-      options.maxSize,
-      'json'
-    );
+    validateFileSize(Buffer.byteLength(content, 'utf8'), options.maxSize, 'json');
 
     fs.writeFileSync(filePath, content, {
       encoding: options.encoding || 'utf8',
@@ -331,12 +303,10 @@ export function writeJsonFile<T = any>(
     }
 
     throw new FileOperationError(
-      `Failed to write JSON file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to write JSON file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'write_json',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -350,7 +320,7 @@ export function writeJsonFile<T = any>(
 export async function writeJsonFileAsync<T = any>(
   filePath: string,
   data: T,
-  options: FileOperationOptions & { indent?: number } = {}
+  options: FileOperationOptions & { indent?: number } = {},
 ): Promise<void> {
   try {
     if (options.validatePath !== false) {
@@ -373,11 +343,7 @@ export async function writeJsonFileAsync<T = any>(
     const content = JSON.stringify(data, null, options.indent || 2);
 
     // Validate content size
-    validateFileSize(
-      Buffer.byteLength(content, 'utf8'),
-      options.maxSize,
-      'json'
-    );
+    validateFileSize(Buffer.byteLength(content, 'utf8'), options.maxSize, 'json');
 
     await fsPromises.writeFile(filePath, content, {
       encoding: options.encoding || 'utf8',
@@ -395,7 +361,7 @@ export async function writeJsonFileAsync<T = any>(
       }`,
       'write_json_async',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -410,21 +376,14 @@ export async function writeJsonFileAsync<T = any>(
  * @param options File operation options
  * @returns File content as string
  */
-export function readTextFile(
-  filePath: string,
-  options: FileOperationOptions = {}
-): string {
+export function readTextFile(filePath: string, options: FileOperationOptions = {}): string {
   try {
     if (options.validatePath !== false) {
       validatePath(filePath);
     }
 
     if (!fs.existsSync(filePath)) {
-      throw new FileOperationError(
-        `File not found: ${filePath}`,
-        'read_text',
-        filePath
-      );
+      throw new FileOperationError(`File not found: ${filePath}`, 'read_text', filePath);
     }
 
     // Check file size
@@ -438,12 +397,10 @@ export function readTextFile(
     }
 
     throw new FileOperationError(
-      `Failed to read text file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to read text file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'read_text',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -457,7 +414,7 @@ export function readTextFile(
 export function writeTextFile(
   filePath: string,
   content: string,
-  options: FileOperationOptions = {}
+  options: FileOperationOptions = {},
 ): void {
   try {
     if (options.validatePath !== false) {
@@ -479,7 +436,7 @@ export function writeTextFile(
     validateFileSize(
       Buffer.byteLength(content, options.encoding || 'utf8'),
       options.maxSize,
-      'text'
+      'text',
     );
 
     fs.writeFileSync(filePath, content, {
@@ -493,12 +450,10 @@ export function writeTextFile(
     }
 
     throw new FileOperationError(
-      `Failed to write text file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to write text file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'write_text',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -525,7 +480,7 @@ export function readManifestFile(manifestPath: string): {
     throw new FileOperationError(
       'Invalid manifest format: missing required fields',
       'read_manifest',
-      manifestPath
+      manifestPath,
     );
   }
 
@@ -551,7 +506,7 @@ export function readDeploymentArtifact(deploymentPath: string): {
     throw new FileOperationError(
       'Invalid deployment artifact: missing address or transaction hash',
       'read_deployment',
-      deploymentPath
+      deploymentPath,
     );
   }
 
@@ -572,7 +527,7 @@ export function saveDeploymentArtifact(
     gasUsed?: string;
     deployer?: string;
     timestamp?: number;
-  }
+  },
 ): void {
   const enhancedArtifact = {
     ...artifact,
@@ -603,7 +558,7 @@ export function listFiles(
     extension?: string;
     pattern?: RegExp;
     includeMetadata?: boolean;
-  } = {}
+  } = {},
 ): string[] | FileMetadata[] {
   try {
     validatePath(dirPath);
@@ -654,18 +609,16 @@ export function listFiles(
 
     // Return metadata if requested
     if (options.includeMetadata) {
-      return files.map(file => getFileMetadata(file, { validatePath: false }));
+      return files.map((file) => getFileMetadata(file, { validatePath: false }));
     }
 
     return files;
   } catch (error) {
     throw new FileOperationError(
-      `Failed to list files: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to list files: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'list_files',
       dirPath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -677,7 +630,7 @@ export function listFiles(
  */
 export function ensureDirectoryExists(
   dirPath: string,
-  options: { mode?: string | number; validatePath?: boolean } = {}
+  options: { mode?: string | number; validatePath?: boolean } = {},
 ): void {
   try {
     if (options.validatePath !== false) {
@@ -692,12 +645,10 @@ export function ensureDirectoryExists(
     }
   } catch (error) {
     throw new FileOperationError(
-      `Failed to create directory: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to create directory: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'ensure_directory',
       dirPath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -709,7 +660,7 @@ export function ensureDirectoryExists(
  */
 export async function ensureDirectoryExistsAsync(
   dirPath: string,
-  options: { mode?: string | number; validatePath?: boolean } = {}
+  options: { mode?: string | number; validatePath?: boolean } = {},
 ): Promise<void> {
   try {
     if (options.validatePath !== false) {
@@ -731,7 +682,7 @@ export async function ensureDirectoryExistsAsync(
       }`,
       'ensure_directory_async',
       dirPath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -744,7 +695,7 @@ export async function ensureDirectoryExistsAsync(
  */
 export function getFileMetadata(
   filePath: string,
-  options: { validatePath?: boolean; includeChecksum?: boolean } = {}
+  options: { validatePath?: boolean; includeChecksum?: boolean } = {},
 ): FileMetadata {
   try {
     if (options.validatePath !== false) {
@@ -774,12 +725,10 @@ export function getFileMetadata(
     };
   } catch (error) {
     throw new FileOperationError(
-      `Failed to get file metadata: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to get file metadata: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'get_metadata',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -792,7 +741,7 @@ export function getFileMetadata(
  */
 export async function getFileMetadataAsync(
   filePath: string,
-  options: { validatePath?: boolean; includeChecksum?: boolean } = {}
+  options: { validatePath?: boolean; includeChecksum?: boolean } = {},
 ): Promise<FileMetadata> {
   try {
     if (options.validatePath !== false) {
@@ -827,7 +776,7 @@ export async function getFileMetadataAsync(
       }`,
       'get_metadata_async',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -849,7 +798,7 @@ export function copyFile(
     preserveTimestamps?: boolean;
     validatePaths?: boolean;
     backup?: boolean;
-  } = {}
+  } = {},
 ): void {
   try {
     if (options.validatePaths !== false) {
@@ -858,11 +807,7 @@ export function copyFile(
     }
 
     if (!fs.existsSync(sourcePath)) {
-      throw new FileOperationError(
-        `Source file not found: ${sourcePath}`,
-        'copy_file',
-        sourcePath
-      );
+      throw new FileOperationError(`Source file not found: ${sourcePath}`, 'copy_file', sourcePath);
     }
 
     // Create backup if requested and destination exists
@@ -886,12 +831,10 @@ export function copyFile(
     }
 
     throw new FileOperationError(
-      `Failed to copy file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to copy file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'copy_file',
       sourcePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -905,7 +848,7 @@ export function copyFile(
 export function moveFile(
   sourcePath: string,
   destinationPath: string,
-  options: { validatePaths?: boolean } = {}
+  options: { validatePaths?: boolean } = {},
 ): void {
   try {
     if (options.validatePaths !== false) {
@@ -914,11 +857,7 @@ export function moveFile(
     }
 
     if (!fs.existsSync(sourcePath)) {
-      throw new FileOperationError(
-        `Source file not found: ${sourcePath}`,
-        'move_file',
-        sourcePath
-      );
+      throw new FileOperationError(`Source file not found: ${sourcePath}`, 'move_file', sourcePath);
     }
 
     const destDir = path.dirname(destinationPath);
@@ -931,12 +870,10 @@ export function moveFile(
     }
 
     throw new FileOperationError(
-      `Failed to move file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to move file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'move_file',
       sourcePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -952,7 +889,7 @@ export function deleteFile(
     force?: boolean;
     validatePath?: boolean;
     backup?: boolean;
-  } = {}
+  } = {},
 ): void {
   try {
     if (options.validatePath !== false) {
@@ -968,11 +905,7 @@ export function deleteFile(
 
       fs.unlinkSync(filePath);
     } else if (!options.force) {
-      throw new FileOperationError(
-        `File does not exist: ${filePath}`,
-        'delete_file',
-        filePath
-      );
+      throw new FileOperationError(`File does not exist: ${filePath}`, 'delete_file', filePath);
     }
   } catch (error) {
     if (error instanceof FileOperationError || error instanceof SecurityError) {
@@ -980,12 +913,10 @@ export function deleteFile(
     }
 
     throw new FileOperationError(
-      `Failed to delete file: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to delete file: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'delete_file',
       filePath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -1062,7 +993,7 @@ export function isFileReadable(filePath: string): boolean {
  */
 export function getDirectorySize(
   dirPath: string,
-  options: { validatePath?: boolean; maxDepth?: number } = {}
+  options: { validatePath?: boolean; maxDepth?: number } = {},
 ): number {
   try {
     if (options.validatePath !== false) {
@@ -1103,7 +1034,7 @@ export function getDirectorySize(
       }`,
       'directory_size',
       dirPath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }
@@ -1120,7 +1051,7 @@ export function cleanDirectory(
     validatePath?: boolean;
     backup?: boolean;
     pattern?: RegExp;
-  } = {}
+  } = {},
 ): void {
   try {
     if (options.validatePath !== false) {
@@ -1168,12 +1099,10 @@ export function cleanDirectory(
     }
   } catch (error) {
     throw new FileOperationError(
-      `Failed to clean directory: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`,
+      `Failed to clean directory: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'clean_directory',
       dirPath,
-      error instanceof Error ? error : undefined
+      error instanceof Error ? error : undefined,
     );
   }
 }

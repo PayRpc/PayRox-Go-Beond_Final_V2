@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
-  "module": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "declaration": true,
     "strict": true,
@@ -20,9 +20,9 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "exactOptionalPropertyTypes": false,
-  // Only use standard DefinitelyTyped packages; do not treat ./types as a typeRoots package,
-  // otherwise TS will try to load '@openzeppelin', 'contracts', 'factories' as ambient libs.
-  "typeRoots": ["./node_modules/@types"],
+    // Only use standard DefinitelyTyped packages; do not treat ./types as a typeRoots package,
+    // otherwise TS will try to load '@openzeppelin', 'contracts', 'factories' as ambient libs.
+    "typeRoots": ["./node_modules/@types"],
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
