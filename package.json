@@ -17,7 +17,11 @@
     "analyze": "node dist/scripts/cli/analyze.js",
     "analyze:light": "node dist/scripts/cli/analyze.js --light",
     "transform:one": "node scripts/transformers/transform-one.js --file",
-    "transform:sample": "node scripts/transformers/transform-one.js --file contracts/My.sol --contract My"
+    "transform:sample": "node scripts/transformers/transform-one.js --file contracts/My.sol --contract My",
+  "regression:gen": "node scripts/analysis/regression-harness-gen.js --contract",
+  "harness:gen": "node scripts/analysis/regression-harness-gen.js --contract",
+  "plan:strict": "ts-node -P tsconfig.json scripts/cli/plan.ts",
+  "plan": "node dist/scripts/cli/plan.js --input"
   },
   "keywords": [],
   "author": "",

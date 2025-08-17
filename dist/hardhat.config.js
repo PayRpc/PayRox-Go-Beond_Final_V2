@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("@nomicfoundation/hardhat-ethers");
+import '@nomicfoundation/hardhat-ethers';
 const config = {
     solidity: {
         compilers: [
@@ -24,4 +22,4 @@ const config = {
         localhost: { url: 'http://127.0.0.1:8545' },
     },
 };
-exports.default = config;
+export default config;

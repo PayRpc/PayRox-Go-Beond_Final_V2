@@ -109,6 +109,21 @@ class TransformApplyResponse(BaseModel):
     report: Optional[Dict[str, Any]] = None
     stdout: Optional[str] = None
     stderr: Optional[str] = None
+
+# Regression harness generation models
+class RegressionGenRequest(BaseModel):
+    contract: str = Field(..., description="Contract name to probe (e.g., Test)")
+    origArtifactsDir: Optional[str] = Field("artifacts", description="Original artifacts dir")
+    diamondArtifactsDir: Optional[str] = Field("artifacts", description="Diamond artifacts dir")
+    outDir: Optional[str] = Field(None, description="Output dir; defaults to .payrox/generated/analysis/<ts>/harness")
+
+
+class RegressionGenResponse(BaseModel):
+    ok: bool
+    outDir: Optional[str] = None
+    files: List[str] = []
+    warnings: List[str] = []
+    stderr: Optional[str] = None
 # Node binary and repo root defaults (safe, overridable via env)
 NODE_BIN = os.getenv('NODE_BIN', 'node')
 REPO_ROOT = Path(os.getenv('REPO_ROOT', '.')).resolve()
@@ -288,6 +303,34 @@ def transform_apply(body: TransformApplyRequest):
     if rc != 0:
         raise HTTPException(status_code=500, detail={"rc": rc, "stdout": out, "stderr": err})
     return resp
+
+
+@app.post("/regression/generate", response_model=RegressionGenResponse)
+def regression_generate(req: RegressionGenRequest):
+    """Generate a regression harness comparing zero-arg view/pure functions.
+
+    Non-destructive: writes under .payrox/generated/analysis/<ts>/harness.
+    """
+    script = str(Path(REPO_ROOT) / "scripts" / "analysis" / "regression-harness-gen.js")
+    if not Path(script).exists():
+        raise HTTPException(status_code=500, detail=f"Generator not found at {script}")
+    args = [NODE_BIN, script, "--contract", req.contract, "--orig", req.origArtifactsDir or "artifacts", "--diamond", req.diamondArtifactsDir or "artifacts"]
+    if req.outDir:
+        args += ["--out", req.outDir]
+    rc, out, err = run_cmd(args, cwd=REPO_ROOT, timeout=180)
+    if rc != 0 and not out.strip():
+        return RegressionGenResponse(ok=False, stderr=err or None)
+    try:
+        data = json.loads(out or "{}")
+        return RegressionGenResponse(
+            ok=bool(data.get("ok", False)),
+            outDir=data.get("outDir"),
+            files=data.get("files", []),
+            warnings=data.get("warnings", []),
+            stderr=err or None,
+        )
+    except Exception:
+        return RegressionGenResponse(ok=True, outDir=None, files=[], warnings=[], stderr=err or None)
 
 
 # -----------------------------------------------------------------------------

@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const hardhat_1 = __importDefault(require("hardhat"));
-const merkle_1 = require("../utils/merkle");
-const ordered_merkle_1 = require("../utils/ordered-merkle");
+import hre from 'hardhat';
+import { generateManifestLeaves } from '../utils/merkle';
+import { verifyOrderedProof } from '../utils/ordered-merkle';
 async function main() {
     console.log('Starting semi-real merkle simulation...');
-    const artifacts = hardhat_1.default.artifacts;
+    const artifacts = hre.artifacts;
     // Small synthetic manifest using existing compiled contracts (choose a couple of facets present in repo)
     const manifest = {
         facets: [
@@ -30,7 +25,7 @@ async function main() {
                 for (const libName of Object.keys(libs)) {
                     // Provide a deterministic dummy address per library (last 20 hex chars from keccak)
                     if (!libraryAddresses[libName]) {
-                        const ethers = hardhat_1.default.ethers;
+                        const ethers = hre.ethers;
                         const dummy = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(libName)).slice(-40);
                         libraryAddresses[libName] = '0x' + dummy;
                     }
@@ -41,7 +36,7 @@ async function main() {
             // ignore artifact read errors here
         }
     }
-    const { root, proofs, positions, leaves, leafMeta } = await (0, merkle_1.generateManifestLeaves)(manifest, artifacts, factoryAddress, { libraryAddresses });
+    const { root, proofs, positions, leaves, leafMeta } = await generateManifestLeaves(manifest, artifacts, factoryAddress, { libraryAddresses });
     console.log('Computed root:', root);
     console.log('Leaves count:', leaves.length);
     // Verify each proof with ordered-merkle helpers
@@ -52,7 +47,7 @@ async function main() {
         const pos = positions[key] || '0x0';
         let ok = false;
         try {
-            ok = (0, ordered_merkle_1.verifyOrderedProof)(leaves[i], proof, pos, root);
+            ok = verifyOrderedProof(leaves[i], proof, pos, root);
         }
         catch (_e) {
             ok = false;

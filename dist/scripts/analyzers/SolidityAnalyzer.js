@@ -1,49 +1,13 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SolidityAnalyzer = void 0;
-const parser_1 = require("@solidity-parser/parser");
-const solc = __importStar(require("solc"));
-const ethers_1 = require("ethers");
-const crypto = __importStar(require("crypto"));
-const commander_1 = require("commander");
-const fs = __importStar(require("fs"));
-const index_1 = require("../../scripts/types/index");
+import { parse } from '@solidity-parser/parser';
+import * as solc from 'solc';
+import { keccak256 } from 'ethers';
+import * as crypto from 'crypto';
+import { Command } from 'commander';
+import * as fs from 'fs';
+import { CompilationError, AnalysisError, } from '../../scripts/types/index';
 // Canonical zero hash (256-bit)
 const ZERO_HASH = '0x' + '0'.repeat(64);
-class SolidityAnalyzer {
+export class SolidityAnalyzer {
     constructor() {
         // Parser and compiler are used directly
     }
@@ -64,9 +28,9 @@ class SolidityAnalyzer {
     keccakHex(s) {
         try {
             if (typeof s === 'string') {
-                return (0, ethers_1.keccak256)(this.toBytes(s));
+                return keccak256(this.toBytes(s));
             }
-            return (0, ethers_1.keccak256)(s);
+            return keccak256(s);
         }
         catch (err) {
             // Fallback: return zero hash on failure
@@ -101,7 +65,7 @@ class SolidityAnalyzer {
     async parseContract(sourceCode, contractName) {
         try {
             // Parse the AST
-            const ast = (0, parser_1.parse)(sourceCode, {
+            const ast = parse(sourceCode, {
                 loc: true,
                 range: true,
                 tolerant: false,
@@ -118,7 +82,7 @@ class SolidityAnalyzer {
             // Extract contract information
             const contractNode = this.findContractNode(ast, contractName);
             if (!contractNode) {
-                throw new index_1.AnalysisError('Contract not found in source code');
+                throw new AnalysisError('Contract not found in source code');
             }
             const functions = this.extractFunctions(contractNode, sourceCode);
             const variables = this.extractVariables(contractNode, sourceCode);
@@ -156,11 +120,11 @@ class SolidityAnalyzer {
             };
         }
         catch (error) {
-            if (error instanceof index_1.AnalysisError) {
+            if (error instanceof AnalysisError) {
                 throw error;
             }
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            throw new index_1.AnalysisError(`Failed to parse contract: ${errorMessage}`);
+            throw new AnalysisError(`Failed to parse contract: ${errorMessage}`);
         }
     }
     /**
@@ -199,17 +163,17 @@ class SolidityAnalyzer {
             if (output.errors) {
                 const errors = output.errors.filter((err) => err.severity === 'error');
                 if (errors.length > 0) {
-                    throw new index_1.CompilationError('Compilation failed', errors);
+                    throw new CompilationError('Compilation failed', errors);
                 }
             }
             return output;
         }
         catch (error) {
-            if (error instanceof index_1.CompilationError) {
+            if (error instanceof CompilationError) {
                 throw error;
             }
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            throw new index_1.CompilationError(`Compilation failed: ${errorMessage}`);
+            throw new CompilationError(`Compilation failed: ${errorMessage}`);
         }
     }
     /**
@@ -835,7 +799,7 @@ class SolidityAnalyzer {
                     const cleanBytecode = deployedBytecode.startsWith('0x')
                         ? deployedBytecode
                         : `0x${deployedBytecode}`;
-                    return (0, ethers_1.keccak256)(cleanBytecode);
+                    return keccak256(cleanBytecode);
                 }
             }
             return '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -1037,7 +1001,7 @@ class SolidityAnalyzer {
      * Initialize CLI commands
      */
     initializeCLI() {
-        const program = new commander_1.Command();
+        const program = new Command();
         program
             .name('solidity-analyzer')
             .description('PayRox Go Beyond Solidity Analyzer')
@@ -1701,7 +1665,7 @@ class SolidityAnalyzer {
     async parseContractLightweight(sourceCode, contractName) {
         try {
             // Parse the AST with tolerant mode for better performance
-            const ast = (0, parser_1.parse)(sourceCode, {
+            const ast = parse(sourceCode, {
                 loc: true,
                 range: false, // Disable range for performance
                 tolerant: true, // Enable tolerant mode for performance
@@ -1709,7 +1673,7 @@ class SolidityAnalyzer {
             // Extract contract information without full compilation for performance
             const contractNode = this.findContractNode(ast, contractName);
             if (!contractNode) {
-                throw new index_1.AnalysisError('Contract not found in source code');
+                throw new AnalysisError('Contract not found in source code');
             }
             const functions = this.extractFunctions(contractNode, sourceCode);
             const variables = this.extractVariables(contractNode, sourceCode);
@@ -1745,11 +1709,11 @@ class SolidityAnalyzer {
             };
         }
         catch (error) {
-            if (error instanceof index_1.AnalysisError) {
+            if (error instanceof AnalysisError) {
                 throw error;
             }
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            throw new index_1.AnalysisError(`Failed to parse contract: ${errorMessage}`);
+            throw new AnalysisError(`Failed to parse contract: ${errorMessage}`);
         }
     }
     /**
@@ -1984,9 +1948,8 @@ class SolidityAnalyzer {
         }
         catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            throw new index_1.AnalysisError(`Failed to parse contract: ${errorMessage}`);
+            throw new AnalysisError(`Failed to parse contract: ${errorMessage}`);
         }
     }
 }
-exports.SolidityAnalyzer = SolidityAnalyzer;
-exports.default = SolidityAnalyzer;
+export default SolidityAnalyzer;

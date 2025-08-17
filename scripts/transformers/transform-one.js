@@ -58,7 +58,9 @@ function headerOf(source) {
 function buildStorageLib(contractName, stateVars) {
   // Namespaced slot
   const slotKey = `payrox.${contractName}.storage`;
-  const structLines = stateVars.map(v => `        ${v.type} ${v.name};`);
+  const structLines = stateVars
+    .filter(v => !v.dropped)
+    .map(v => `        ${v.type} ${v.name}; // from: ${v.from}`);
   return `library ${contractName}Storage {
     bytes32 internal constant SLOT = keccak256("${slotKey}");
     struct Layout {
@@ -72,19 +74,24 @@ ${structLines.join('\n')}
 `;
 }
 
-function collectStateVars(ast, targetContract) {
-  // Returns { contractName, vars: [{name, type}] }
-  const out = [];
+// ----- Inheritance-aware collection (C3 linearization with safe fallback) -----
+function buildContractIndex(ast) {
+  /** @type {Record<string, {name:string, bases:string[], vars:Array<{name:string,type:string,declRange?:[number,number],raw?:string}>}>} */
+  const idx = {};
   parser.visit(ast, {
     ContractDefinition(node) {
-      if (targetContract && node.name !== targetContract) return;
+      const bases = (node.baseContracts || []).map(b => (b.baseName && (b.baseName.name || b.baseName.namePath)) || '').filter(Boolean);
       const vars = [];
       for (const sub of node.subNodes) {
         if (sub.type === 'StateVariableDeclaration') {
-          // Only simple variables (ignore constants/immutables for now)
           for (const v of sub.variables) {
-            if (!v.name) continue;
-            // Type extraction (best-effort)
+            if (!v || !v.name) continue;
+            // Skip constants/immutables conservatively by peeking raw text if available
+            const slice = (sub.range ? null : null); // parser may not expose raw tokens; fallback below
+            const maybeImmutable = (sub && sub.isImmutable) || /immutable\b/.test(JSON.stringify(sub));
+            const maybeConstant  = (sub && sub.isDeclaredConst) || /constant\b/.test(JSON.stringify(sub));
+            if (maybeImmutable || maybeConstant) continue;
+            // Type extraction
             let ty = 'uint256';
             try {
               const t = v.typeName;
@@ -96,20 +103,74 @@ function collectStateVars(ast, targetContract) {
                              t.baseTypeName.type === 'UserDefinedTypeName' ? t.baseTypeName.namePath : 'bytes';
                 ty = `${base}[]`;
               } else if (t.type === 'Mapping') {
-                // mapping types require full text; fallback to `mapping(bytes32=>bytes32)`
-                ty = 'mapping(bytes32 => bytes32)';
+                ty = 'mapping(bytes32 => bytes32)'; // textual mapping type; safe placeholder
               }
             } catch {}
-            vars.push({ name: v.name, type: ty });
+            vars.push({ name: v.name, type: ty, declRange: v.range });
           }
         }
       }
-      out.push({ contractName: node.name, vars });
+      idx[node.name] = { name: node.name, bases, vars };
     }
   });
-  if (targetContract) return out.find(c => c.contractName === targetContract) || { contractName: targetContract, vars: [] };
-  // Pick first if multiple contracts
-  return out[0] || { contractName: targetContract || 'Contract', vars: [] };
+  return idx;
+}
+
+function c3Linearize(name, idx, memo, stack) {
+  if (memo[name]) return memo[name].slice();
+  if (!idx[name]) return [name];
+  stack = stack || new Set();
+  if (stack.has(name)) return [name]; // cycle guard
+  stack.add(name);
+  const parents = idx[name].bases || [];
+  const seqs = parents.map(p => c3Linearize(p, idx, memo, stack));
+  seqs.push(parents.slice()); // local precedence list
+  const result = [name];
+  // merge
+  const heads = () => seqs.map(s => s[0]).filter(Boolean);
+  const tailsContain = (x) => seqs.some(s => s.slice(1).includes(x));
+  while (seqs.some(s => s.length)) {
+    let candidate = null;
+    for (const h of heads()) {
+      if (!tailsContain(h)) { candidate = h; break; }
+    }
+    if (!candidate) {
+      // fallback: flatten left-to-right DFS
+      const seen = new Set(result);
+      for (const s of seqs) for (const n of s) if (!seen.has(n)) result.push(n), seen.add(n);
+      seqs.forEach(s => s.length = 0);
+      break;
+    }
+    result.push(candidate);
+    for (const s of seqs) if (s[0] === candidate) s.shift();
+  }
+  memo[name] = result.slice();
+  return result;
+}
+
+function collectStateVarsLinearized(ast, targetContract) {
+  const idx = buildContractIndex(ast);
+  const root = targetContract || Object.keys(idx)[0] || 'Contract';
+  const order = c3Linearize(root, idx, {}, new Set());
+  // Solidity layout: bases first (most base to most derived), then root.
+  // Our c3Linearize returns [C, ...bases merged]; reorder to [bases..., C]
+  const linear = order.slice(1).concat([root]).filter((n, i, a) => a.indexOf(n) === i);
+  const acc = [];
+  const seen = new Set();
+  for (const n of linear) {
+    const entry = idx[n];
+    if (!entry) continue;
+    for (const v of entry.vars) {
+      if (seen.has(v.name)) {
+        // drop duplicate field name to keep struct valid; record separately in report
+        acc.push({ name: v.name, type: v.type, from: n, dropped: true });
+        continue;
+      }
+      seen.add(v.name);
+      acc.push({ name: v.name, type: v.type, from: n, dropped: false });
+    }
+  }
+  return { contractName: root, vars: acc, baseOrder: linear.filter(x => x !== root) };
 }
 
 function collectConstructors(ast, targetContract) {
@@ -217,9 +278,9 @@ function makeInitializerStub(constructors, contractName, libName) {
 `;
 }
 
-function addInitializedVar(stateVars) {
+function addInitializedVar(stateVars, contractName) {
   if (!stateVars.find(v => v.name === '__initialized')) {
-    stateVars.unshift({ name: '__initialized', type: 'bool' });
+    stateVars.unshift({ name: '__initialized', type: 'bool', from: contractName || 'Self', dropped: false });
   }
 }
 
@@ -236,15 +297,15 @@ function run() {
     process.exit(1);
   }
 
-  const contractInfo = collectStateVars(ast, contract);
+  const contractInfo = collectStateVarsLinearized(ast, contract);
   const contractName = contract || contractInfo.contractName || 'Contract';
-  const stateVars = contractInfo.vars.slice(); // shallow copy
-  addInitializedVar(stateVars);
+  const stateVars = contractInfo.vars.slice(); // includes base vars with {from, dropped}
+  addInitializedVar(stateVars, contractName);
 
   const libName = `${contractName}Storage`;
   const constructors = collectConstructors(ast, contractName);
 
-  const stateVarNames = new Set(stateVars.map(v => v.name));
+  const stateVarNames = new Set(stateVars.filter(v => !v.dropped).map(v => v.name));
   const { transformed: contractTransformed, patches } =
     computeEditsForContract(source, ast, contractName, stateVarNames, libName);
 
@@ -281,7 +342,9 @@ function run() {
     file: srcPath,
     contract: contractName,
     storageLib: libName,
+    baseOrder: contractInfo.baseOrder,
     stateVars,
+    droppedDuplicates: stateVars.filter(v => v.dropped).map(v => ({ name: v.name, from: v.from })),
     patches,
     outFile,
     patchFile
