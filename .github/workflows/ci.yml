@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Ensure dataset/cache paths are ignored
+      run: |
+        set -e
+        if ! grep -qE '(^|/)datasets/' .gitignore; then
+          echo "ERROR: 'datasets/' is not listed in .gitignore" >&2
+          exit 1
+        fi
+        if ! grep -qE '(^|/)\.rag_cache/' .gitignore; then
+          echo "ERROR: '.rag_cache/' is not listed in .gitignore" >&2
+          exit 1
+        fi
+
+    - name: TypeScript typecheck
+      run: npm run check:ts
+
+    - name: Hardhat compile
+      run: npx hardhat compile
