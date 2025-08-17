@@ -5,9 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "check:ts": "tsc -p tsconfig.hardhat.json --noEmit",
-    "smoke:merkle": "ts-node -P tsconfig.hardhat.json scripts/smoke/smoke-merkle.ts",
-    "lint": "eslint --ext .ts,.js scripts src --fix",
+  "check:ts": "tsc -p tsconfig.hardhat.json --noEmit",
+  "smoke:merkle": "ts-node -P tsconfig.hardhat.json scripts/smoke/smoke-merkle.ts",
+  "lint": "eslint --ext .ts,.js scripts server tests --fix",
     "format": "prettier --write \"**/*.{ts,js,json,md,sol}\""
   ,
   "sol:format": "prettier --plugin-search-dir=. --write \"contracts/**/*.sol\"",
