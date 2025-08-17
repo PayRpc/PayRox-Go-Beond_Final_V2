@@ -60,10 +60,25 @@ print(json.dumps(combined))
 
   $summary = $json | ConvertFrom-Json
   Write-Host (("Split OK → Parts: {0}, Total selectors: {1}" -f $summary.parts, $summary.selectors)) -ForegroundColor Green
+  # Post-process to drop empty parts and rewrite combined.json
+  Write-Host "Post-processing split outputs..." -ForegroundColor Cyan
+  node scripts/postprocess-splits.js --dir $OutDir
+  if ($LASTEXITCODE -ne 0) { throw "postprocess failed" }
 
-  if ($FailOnEmptyParts -and ($summary.by_part | Where-Object { $_.functions -eq 0 })) {
-    Write-Error "One or more parts have zero functions. Failing due to -FailOnEmptyParts."
-    exit 2
+  # Re-read combined.json for updated counts
+  $combined = Get-Content (Join-Path $OutDir 'combined.json') -Raw | ConvertFrom-Json
+  Write-Host (("Postprocessed → Kept parts: {0}, Total selectors: {1}" -f $combined.parts.Count, $combined.selectors.Count)) -ForegroundColor Green
+
+  # Strict check (only fail if any empty parts remain after postprocess)
+  if ($FailOnEmptyParts) {
+    $leftovers = Get-ChildItem -Path $OutDir -Filter "part_*.json" | ForEach-Object {
+      $j = Get-Content $_.FullName -Raw | ConvertFrom-Json
+      if ($j.selectors.Count -eq 0) { $_ }
+    }
+    if ($leftovers) {
+      Write-Error "Empty parts remain after postprocess: $($leftovers | ForEach-Object { $_.Name } -join ', ')"
+      exit 1
+    }
   }
   if ($CiMode -and -not (Test-Path (Join-Path $OutDir 'combined.json'))) {
     Write-Error "combined.json missing in $OutDir"
