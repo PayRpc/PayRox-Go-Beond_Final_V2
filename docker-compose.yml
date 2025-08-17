@@ -1,0 +1,33 @@
+version: '3.8'
+
+networks:
+  payrox-network:
+    driver: bridge
+
+services:
+  payrox-api:
+    # Your existing API service definition should go here (keep unchanged)
+    image: payrox-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - payrox-network
+
+  payrox-manifest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run serve:manifest
+    environment:
+      - PORT=3001
+      - WS_PORT=3002
+    ports:
+      - "3001:3001"
+      - "3002:3002"
+    depends_on:
+      - payrox-api
+    networks:
+      - payrox-network

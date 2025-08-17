@@ -7,13 +7,20 @@ from pathlib import Path
 from typing import Optional, Dict, Any, List
 
 from fastapi import FastAPI, HTTPException
+import httpx
 from pydantic import BaseModel, Field
 import pathlib
 import tempfile
 from typing import Any, Dict, List, Optional
 
-# Path to built JS planner
-PLAN_JS = str(pathlib.Path(os.getenv('REPO_ROOT', '.')).resolve() / 'dist' / 'scripts' / 'cli' / 'plan.js')
+# Repository and CLI runtime constants
+REPO_ROOT = pathlib.Path(os.getenv('REPO_ROOT', '.')).resolve()
+NODE_BIN = os.getenv('NODE_BIN', 'node')
+
+# strict planner CLI (emits PayRox-safe JSON plan)
+PLAN_JS = str(pathlib.Path(REPO_ROOT) / 'dist' / 'scripts' / 'cli' / 'plan.js')
+# Manifest toolkit URL (node service)
+MANIFEST_URL = os.getenv('PAYROX_MANIFEST_URL', 'http://127.0.0.1:3001')
 
 app = FastAPI(title="PayRox Regression Generator", version="0.1.0")
 
@@ -89,26 +96,34 @@ def _oneclick_try_script(rel_path: str, args: List[str]):
 
 
 def _run_strict_plan(analyzer_obj: Dict[str, Any]) -> Dict[str, Any]:
-    repo_root = Path(os.getenv('REPO_ROOT', '.')).resolve()
-    # Prefer built JS in dist, but fall back to executing the TS CLI via ts-node if dist missing.
-    ts_cli = repo_root / 'scripts' / 'cli' / 'plan.ts'
-    use_js = pathlib.Path(PLAN_JS).exists()
-    if not use_js and not ts_cli.exists():
-        raise HTTPException(status_code=500, detail=f"Planner not found. Expected either {PLAN_JS} or {ts_cli}.")
+    """Run the strict planner CLI and return parsed JSON plan.
+
+    This enforces that the compiled JS CLI exists and returns machine-readable JSON.
+    """
+    # Ensure built planner exists
+    if not pathlib.Path(PLAN_JS).exists():
+        raise HTTPException(status_code=500, detail=f"Planner not found at {PLAN_JS}. Run `npm run build`.")
+
+    # Write analyzer blob to temp file for the CLI to consume
     with tempfile.NamedTemporaryFile('w+', delete=False, suffix='.json') as tf:
         tf.write(json.dumps(analyzer_obj))
         tmp = tf.name
-    if use_js:
-        cmd = [os.getenv('NODE_BIN', 'node'), PLAN_JS, '--input', tmp]
-    else:
-        # Run the TS CLI directly using ts-node/register so no build is required.
-        node_bin = os.getenv('NODE_BIN', 'node')
-        cmd = [node_bin, '-r', 'ts-node/register', '-r', 'tsconfig-paths/register', str(ts_cli), '--input', tmp]
-    rc, out, err = run_cmd(cmd, cwd=repo_root)
-    if rc != 0:
-        raise HTTPException(status_code=500, detail=err or out or 'planner failed')
+
+    # Execute CLI
+    res = run_cmd([NODE_BIN, PLAN_JS, '--input', tmp], cwd=REPO_ROOT)
+
+    # run_cmd historically returns {rc, stdout, stderr} — normalize to expected keys
+    code = res.get('code', res.get('rc', None))
+    stdout = res.get('stdout', '')
+    stderr = res.get('stderr', '')
+
+    if code is None:
+        raise HTTPException(status_code=500, detail='planner invocation failed (no exit code)')
+    if code != 0:
+        raise HTTPException(status_code=500, detail=stderr or stdout or 'planner failed')
+
     try:
-        return json.loads(out)
+        return json.loads(stdout)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"planner returned non-JSON: {e}")
 
@@ -200,6 +215,62 @@ def diamond_plan(req: DiamondPlanRequest):
     return DiamondPlanResponse(**plan)
 
 
+### Manifest toolkit proxy endpoints (for convenience)
+@app.get('/manifest/health')
+async def manifest_health():
+    try:
+        async with httpx.AsyncClient() as c:
+            r = await c.get(f"{MANIFEST_URL}/api/health", timeout=10.0)
+            r.raise_for_status()
+            return r.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post('/manifest/selectors')
+async def manifest_selectors(body: Dict[str, Any]):
+    try:
+        async with httpx.AsyncClient() as c:
+            r = await c.post(f"{MANIFEST_URL}/api/selectors", json=body, timeout=20.0)
+            r.raise_for_status()
+            return r.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post('/manifest/chunk')
+async def manifest_chunk(body: Dict[str, Any]):
+    try:
+        async with httpx.AsyncClient() as c:
+            r = await c.post(f"{MANIFEST_URL}/api/chunk", json=body, timeout=30.0)
+            r.raise_for_status()
+            return r.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post('/manifest/manifest')
+async def manifest_build(body: Dict[str, Any]):
+    try:
+        async with httpx.AsyncClient() as c:
+            r = await c.post(f"{MANIFEST_URL}/api/manifest", json=body, timeout=30.0)
+            r.raise_for_status()
+            return r.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post('/manifest/proofs')
+async def manifest_proofs(body: Dict[str, Any]):
+    try:
+        async with httpx.AsyncClient() as c:
+            r = await c.post(f"{MANIFEST_URL}/api/proofs", json=body, timeout=30.0)
+            r.raise_for_status()
+            return r.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
 @app.post('/refactor/oneclick', response_model=OneClickRefactorResponse)
 def refactor_oneclick(req: OneClickRefactorRequest):
     """Minimal one-click refactor orchestration (placeholder) with analysis glue.
@@ -229,5 +300,15 @@ def refactor_oneclick(req: OneClickRefactorRequest):
             warnings.append("event/error parity analysis failed")
     except Exception as e:
         warnings.append(f"analysis integration error: {e}")
+
+    # Use the strict planner (deterministic) to produce a PayRox-compliant plan
+    try:
+        # attempt to read analyzer JSON from earlier analysis step if present
+        analyze_data = steps.get('analysis', {}).get('internal_calls', {}).get('data') if isinstance(steps.get('analysis', {}), dict) else {}
+        strict = _run_strict_plan(analyze_data if isinstance(analyze_data, dict) else {})
+        steps['plan'] = strict
+    except Exception as e:
+        steps['plan_error'] = str(e)
+        warnings.append('strict planner failed; skipping plan stage')
 
     return OneClickRefactorResponse(steps=steps, warnings=warnings)
