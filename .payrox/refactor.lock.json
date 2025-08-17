@@ -1,0 +1,38 @@
+{
+  "schema": "payrox/refactor-lock-1.json",
+  "createdAt": "2025-08-17T00:00:00Z",
+  "tooling": {
+    "node": {
+      "requested": ">=16",
+      "resolved": "",
+      "npm": ""
+    },
+    "npm": {
+      "requested": ">=8",
+      "resolved": ""
+    },
+    "hardhat": {
+      "requested": "^2.26.3",
+      "resolved": "2.26.3"
+    },
+    "solc": {
+      "requested": "^0.8.20",
+      "resolved": "0.8.20"
+    },
+    "ethers": {
+      "requested": "^6.15.0",
+      "resolved": "6.15.0"
+    },
+    "astParser": {
+      "package": "solidity-parser-antlr",
+      "version": "^0.4.14"
+    }
+  },
+  "manifestExpectations": {
+    "maxFacetCode": 24576,
+    "requiresExtcodehashGating": true,
+    "manifestVersionMin": 1,
+    "selectorsMustBeDeterministic": true,
+    "activationDelayMaxSeconds": 31536000
+  }
+}
