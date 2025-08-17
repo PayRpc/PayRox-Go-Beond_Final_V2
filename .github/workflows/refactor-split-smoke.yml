@@ -33,14 +33,18 @@ jobs:
           node -e "const c=require('./artifacts/splits/combined.json'); if(!c.parts||!c.selectors){throw new Error('Empty split manifest: '+JSON.stringify(c))}"
           node scripts/validate-split.js
 
-      - name: ABI Parity Check
-        run: npm run check:abi
+      - name: ABI subset parity
+        run: node scripts/validate-manifest-selectors.js --mode=subset --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: split-manifest-ubuntu
           path: artifacts/splits
+
+      - name: ABI exact parity (strict, release only)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: node scripts/validate-manifest-selectors.js --mode=strict --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json
 
   split-windows:
     runs-on: windows-latest
@@ -69,11 +73,19 @@ jobs:
           node -e "const c=require('./artifacts/splits/combined.json'); if(!c.parts||!c.selectors){throw new Error('Empty split manifest: '+JSON.stringify(c))}"
           node scripts/validate-split.js
 
-      - name: ABI Parity Check
-        run: npm run check:abi
+      - name: ABI subset parity
+        shell: pwsh
+        run: |
+          node scripts/validate-manifest-selectors.js --mode=subset --source contracts\dispacher\ManifestDispacher.sol --combined artifacts\splits\combined.json
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: split-manifest-windows
           path: artifacts/splits
+
+      - name: ABI exact parity (strict, release only)
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          node scripts/validate-manifest-selectors.js --mode=strict --source contracts\dispacher\ManifestDispacher.sol --combined artifacts\splits\combined.json

@@ -41,7 +41,9 @@
     "split:manifest": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1",
     "validate:split": "node scripts/validate-split.js",
     "check:abi": "node scripts/validate-manifest-selectors.js --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json --contract ManifestDispatcher",
-    "postprocess:splits": "node scripts/postprocess-splits.js"
+  "check:abi:subset": "node scripts/validate-manifest-selectors.js --mode=subset --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json",
+  "postprocess:splits": "node scripts/postprocess-splits.js",
+  "split:manifest:full": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1 -Source contracts\\dispacher\\ManifestDispacher.sol -OutDir artifacts/splits -CiMode"
   },
   "keywords": [],
   "author": "",
