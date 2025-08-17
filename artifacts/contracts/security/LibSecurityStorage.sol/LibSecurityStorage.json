@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "LibSecurityStorage",
+  "sourceName": "contracts/security/LibSecurityStorage.sol",
+  "abi": [],
+  "bytecode": "0x6080806040523460175760399081601c823930815050f35b5f80fdfe5f80fdfea26469706673582212207df08d060537a76c9bcd151791dd95e3e177c1dfffe34ce59da4728e851353b964736f6c634300081e0033",
+  "deployedBytecode": "0x5f80fdfea26469706673582212207df08d060537a76c9bcd151791dd95e3e177c1dfffe34ce59da4728e851353b964736f6c634300081e0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
