@@ -41,10 +41,28 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
 
+      - name: Start services (docker compose)
+        run: |
+          # start the local stack declared in docker-compose.yml for smoke tests
+          docker compose up -d --build
+          echo "Waiting for API to become healthy..."
+          for i in $(seq 1 30); do
+            if curl -sSf http://localhost:8000/metrics >/dev/null 2>&1; then
+              echo "API ready"
+              break
+            fi
+            sleep 2
+          done
+
       - name: Run Python smoke tests (pytest)
         run: |
           # run only the lightweight smoke tests introduced for /metrics and API health
-          pytest -q -k test_api_smoke || true
+          pytest -q -k test_api_smoke
+
+      - name: Tear down services
+        if: always()
+        run: |
+          docker compose down -v
 name: CI
 
 on:
