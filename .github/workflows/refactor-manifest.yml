@@ -13,13 +13,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
+
       - name: Split & Manifest
         shell: pwsh
         run: |
           pwsh -File scripts/split-and-manifest.ps1 `
             -Source contracts/dispacher/ManifestDispacher.sol `
             -Expected manifests/expected/ManifestDispatcher.json
+
       - uses: actions/upload-artifact@v4
         with:
           name: manifests

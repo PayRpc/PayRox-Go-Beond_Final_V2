@@ -25,7 +25,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
 
     - name: Run local refactor validator (AI)
       run: npm run refactor:validate -- AI/sample-refactor-output.json || true
@@ -224,7 +224,7 @@ jobs:
         node-version: '18'
         cache: 'npm'
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
     - name: Run Slither analysis
       uses: crytic/slither-action@v0.3.0
       continue-on-error: true
