@@ -808,7 +808,7 @@ def diag_ollama():
         client = Client()  # uses OLLAMA_HOST or defaults to localhost:11434
         listing = client.list()  # {'models': [...]} or similar
         models = [m.get("name") or m.get("model") for m in listing.get("models", [])]
-        return {"ok": True, "models": models}
+        return {"ok": True, "models": models, "provider": "ollama"}
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Cannot reach Ollama: {exc}")
 
