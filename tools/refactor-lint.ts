@@ -65,11 +65,10 @@ interface ManifestData {
 class PayRoxRefactorLinter {
   private readonly EIP170_SIZE_LIMIT = 24576; // 24,576 bytes
   private readonly LOUPE_FUNCTIONS = [
-    'facets()',
-    'facetFunctionSelectors(address)',
-    'facetAddresses()',
-    'facetAddress(bytes4)',
-    'supportsInterface(bytes4)'
+  'facets',
+  'facetFunctionSelectors',
+  'facetAddresses',
+  'facetAddress'
   ];
 
   private errors: LintError[] = [];
@@ -169,11 +168,10 @@ class PayRoxRefactorLinter {
           selectors = this.extractSelectorsFromAbi(artifact.abi || []);
         }
 
-        // Check for loupe functions in source
+        // Check for loupe functions in source by matching function declarations only
         const sourceCode = fs.readFileSync(facetPath, 'utf-8');
-        const hasLoupeFunctions = this.LOUPE_FUNCTIONS.some(func => 
-          sourceCode.includes(func) || 
-          new RegExp(`function\\s+${func.split('(')[0]}\\s*\\(`).test(sourceCode)
+        const hasLoupeFunctions = this.LOUPE_FUNCTIONS.some(funcName => 
+          new RegExp(`function\\s+${funcName}\\s*\\(`, 'm').test(sourceCode)
         );
 
         const facetInfo: FacetInfo = {

@@ -290,4 +290,10 @@ contract SecurityFacet is RefactorSafeFacetBase, ReentrancyGuard, IAntiBotFacet 
     function isSecurityInitialized() external view returns (bool) {
         return _getOwner() != address(0);
     }
+
+    /// @notice Exposed public emergency refactor validation. This consolidates the selector
+    /// so only SecurityFacet owns the public API for the emergency refactor check.
+    function emergencyRefactorValidation() external view returns (bool) {
+        return _emergencyRefactorValidation();
+    }
 }
