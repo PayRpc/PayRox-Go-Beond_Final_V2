@@ -324,54 +324,20 @@ describe("Loupe and Selectors", function () {
 });
 
 // Helper function to get function selectors from a contract
-function getSelectors(contract: Contract): string[] {
-  const selectors: string[] = [];
-  const ifaceAny: any = contract.interface;
+// Helper to compute selectors while excluding loupe functions
+function getSelectors(c: any) {
+  const loupe = new Set([
+    'facets()',
+    'facetFunctionSelectors(bytes4)',
+    'facetAddresses()',
+    'facetAddress(bytes4)'
+  ]);
 
-  // ethers v6 Interface exposes `fragments` array; prefer that when present
-  const frags = ifaceAny?.fragments;
-  if (Array.isArray(frags)) {
-    for (const frag of frags) {
-      try {
-        if (!frag || frag.type !== 'function') continue;
-        let sel: string | undefined;
-        if (typeof ifaceAny.getSighash === 'function') {
-          try { sel = ifaceAny.getSighash(frag); } catch (e) { /* ignore */ }
-        }
-        if (!sel) {
-          const sig = (typeof frag.format === 'function') ? frag.format() : frag.name || '';
-          try { 
-            sel = keccak256(toUtf8Bytes(sig)).slice(0, 10); 
-          } catch (e) { 
-            sel = undefined; 
-          }
-        }
-        if (sel) selectors.push(sel);
-      } catch (e) { /* ignore individual fragment errors */ }
-    }
-    return selectors;
-  }
-
-  const funcs = ifaceAny?.functions;
-  if (!funcs) { return selectors; }
-
-  // functions may be a Map, array, or plain object
-  if (funcs instanceof Map) {
-    for (const f of funcs.values()) {
-      if (f && f.type === 'function' && f.selector) selectors.push(f.selector);
-    }
-  } else if (Array.isArray(funcs)) {
-    for (const f of funcs) {
-      if (f && f.type === 'function' && f.selector) selectors.push(f.selector);
-    }
-  } else if (typeof funcs === 'object') {
-    for (const f of Object.values(funcs)) {
-      const ff: any = f;
-      if (ff && ff.type === 'function' && ff.selector) selectors.push(ff.selector);
-    }
-  }
-
-  return selectors;
+  // Use the contract interface's functions map and prefer the Interface's getSighash
+  const fnKeys = Object.keys((c.interface as any).functions || {});
+  return fnKeys
+    .filter((s) => !loupe.has(s))
+    .map((s) => (c.interface as any).getSighash(s));
 }
 
 // Helper function to compute function selector

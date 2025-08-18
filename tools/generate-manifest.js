@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
+const { keccak256, toUtf8Bytes } = require('ethers').utils || require('ethers');
 
 const facetsDir = path.join(process.cwd(), 'contracts', 'facets');
 const outPath = path.join(process.cwd(), 'payrox-manifest.json');
 
 function computeSelector(signature) {
-  const hash = crypto.createHash('sha256').update(signature).digest('hex');
-  return '0x' + hash.substring(0, 8);
+  // keccak256(signature) -> first 4 bytes (8 hex chars)
+  const hash = keccak256(toUtf8Bytes(signature));
+  return hash.slice(0, 10);
 }
 
 function extractParamTypes(paramStr) {

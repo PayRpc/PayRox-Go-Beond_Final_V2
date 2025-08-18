@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
+const { keccak256, toUtf8Bytes } = require('ethers').utils || require('ethers');
 
 function computeSelector(signature) {
-  const hash = crypto.createHash('sha256').update(signature).digest('hex');
-  return '0x' + hash.slice(0, 8);
+  const hash = keccak256(toUtf8Bytes(signature));
+  return hash.slice(0, 10);
 }
 
 function walk(dir, out = []) {
