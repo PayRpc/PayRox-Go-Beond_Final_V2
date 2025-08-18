@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import "@nomicfoundation/hardhat-chai-matchers";
 import { Contract } from "ethers";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 
@@ -85,7 +86,7 @@ describe("Epoch Rules", function () {
       const currentEpoch = Number(await epochManager.getCurrentEpoch());
       
       await expect(
-        diamond.commitFacetUpdate(facetA.address, ["0x12345678"], currentEpoch)
+        diamond.commitFacetUpdate(facetA.target, ["0x12345678"], currentEpoch)
       ).to.be.revertedWith("Can only commit to next epoch");
     });
 
@@ -93,7 +94,7 @@ describe("Epoch Rules", function () {
       await epochManager.advanceEpoch(); // Move to epoch 1
       
       await expect(
-        diamond.commitFacetUpdate(facetA.address, ["0x12345678"], 0)
+        diamond.commitFacetUpdate(facetA.target, ["0x12345678"], 0)
       ).to.be.revertedWith("Can only commit to next epoch");
     });
 
@@ -102,7 +103,7 @@ describe("Epoch Rules", function () {
       const nextEpoch = currentEpoch + 1;
       
       await expect(
-        diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch)
+        diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch)
       ).to.not.be.reverted;
     });
 
@@ -111,7 +112,7 @@ describe("Epoch Rules", function () {
       const futureEpoch = currentEpoch + 10;
       
       await expect(
-        diamond.commitFacetUpdate(facetA.address, ["0x12345678"], futureEpoch)
+        diamond.commitFacetUpdate(facetA.target, ["0x12345678"], futureEpoch)
       ).to.be.revertedWith("Epoch too far in future");
     });
   });
@@ -121,36 +122,36 @@ describe("Epoch Rules", function () {
       const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
       // First commit
-      await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
+      await diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch);
       
       // Second commit to same epoch should overwrite
-      await diamond.commitFacetUpdate(facetB.address, ["0x12345678"], nextEpoch);
+      await diamond.commitFacetUpdate(facetB.target, ["0x12345678"], nextEpoch);
       
       const commitment = await diamond.getEpochCommitment(nextEpoch, "0x12345678");
-      expect(commitment.facetAddress).to.equal(facetB.address);
+      expect(commitment.facetAddress).to.equal(facetB.target);
     });
 
     it("Should emit CommitmentOverwritten event", async function () {
       const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
-      await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
+      await diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch);
       
       await expect(
-        diamond.commitFacetUpdate(facetB.address, ["0x12345678"], nextEpoch)
+        diamond.commitFacetUpdate(facetB.target, ["0x12345678"], nextEpoch)
       ).to.emit(diamond, "CommitmentOverwritten")
-       .withArgs(nextEpoch, "0x12345678", facetA.address, facetB.address);
+       .withArgs(nextEpoch, "0x12345678", facetA.target, facetB.target);
     });
 
     it("Should track commitment history", async function () {
       const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
-      await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
-      await diamond.commitFacetUpdate(facetB.address, ["0x12345678"], nextEpoch);
+      await diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch);
+      await diamond.commitFacetUpdate(facetB.target, ["0x12345678"], nextEpoch);
       
       const history = await diamond.getCommitmentHistory(nextEpoch, "0x12345678");
       expect(history.length).to.equal(2);
-      expect(history[0].facetAddress).to.equal(facetA.address);
-      expect(history[1].facetAddress).to.equal(facetB.address);
+      expect(history[0].facetAddress).to.equal(facetA.target);
+      expect(history[1].facetAddress).to.equal(facetB.target);
     });
   });
 
@@ -160,7 +161,7 @@ describe("Epoch Rules", function () {
       const nextEpoch = currentEpoch + 1;
       
       // Commit for next epoch
-      await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
+      await diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch);
       
       // Advance epoch
       await epochManager.advanceEpoch();
@@ -168,7 +169,7 @@ describe("Epoch Rules", function () {
       // Check that routing is now active
       const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       const facetAddress = await diamondLoupe.facetAddress("0x12345678");
-      expect(facetAddress).to.equal(facetA.address);
+      expect(facetAddress).to.equal(facetA.target);
     });
 
     it("Should not activate uncommitted changes", async function () {
@@ -190,7 +191,7 @@ describe("Epoch Rules", function () {
       // Commit multiple selectors
       const selectors = ["0x12345678", "0x87654321", "0xabcdefab"];
       for (const selector of selectors) {
-        await diamond.commitFacetUpdate(facetA.address, [selector], nextEpoch);
+        await diamond.commitFacetUpdate(facetA.target, [selector], nextEpoch);
       }
       
       // Advance epoch (should activate all in one transaction)
@@ -203,8 +204,8 @@ describe("Epoch Rules", function () {
       // Verify all selectors are active
       const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       for (const selector of selectors) {
-        const facetAddress = await diamondLoupe.facetAddress(selector);
-        expect(facetAddress).to.equal(facetA.address);
+  const facetAddress = await diamondLoupe.facetAddress(selector);
+  expect(facetAddress).to.equal(facetA.target);
       }
     });
   });
@@ -232,7 +233,7 @@ describe("Epoch Rules", function () {
       const maxJump = await diamond.MAX_EPOCH_JUMP();
       
       await expect(
-        epochManager.setEpoch(currentEpoch + maxJump + 1)
+        epochManager.setEpoch(Number(currentEpoch) + Number(maxJump) + 1)
       ).to.be.revertedWith("Epoch jump too large");
     });
 
@@ -249,22 +250,22 @@ describe("Epoch Rules", function () {
       const currentEpoch = Number(await epochManager.getCurrentEpoch());
       const nextEpoch = currentEpoch + 1;
       
-      // Initially route to facetA
-      await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
-      await epochManager.advanceEpoch();
+  // Initially route to facetA
+  await diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch);
+  await epochManager.advanceEpoch();
       
       // Verify routing
       let diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
-      expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetA.address);
+  expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetA.target);
       
       // Plan transition to facetB for next epoch
       const newNextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
-      await diamond.commitFacetUpdate(facetB.address, ["0x12345678"], newNextEpoch);
+  await diamond.commitFacetUpdate(facetB.target, ["0x12345678"], newNextEpoch);
       await epochManager.advanceEpoch();
       
       // Verify transition
       diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
-      expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetB.address);
+  expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetB.target);
     });
 
     it("Should maintain routing history", async function () {
@@ -273,17 +274,17 @@ describe("Epoch Rules", function () {
       // Route through multiple facets across epochs
       let currentEpoch = Number(await epochManager.getCurrentEpoch());
       
-      await diamond.commitFacetUpdate(facetA.address, [selector], currentEpoch + 1);
+  await diamond.commitFacetUpdate(facetA.target, [selector], currentEpoch + 1);
       await epochManager.advanceEpoch();
       
-      await diamond.commitFacetUpdate(facetB.address, [selector], currentEpoch + 2);
+  await diamond.commitFacetUpdate(facetB.target, [selector], currentEpoch + 2);
       await epochManager.advanceEpoch();
       
       // Check routing history
       const history = await diamond.getRoutingHistory(selector);
       expect(history.length).to.equal(2);
-      expect(history[0].facetAddress).to.equal(facetA.address);
-      expect(history[1].facetAddress).to.equal(facetB.address);
+  expect(history[0].facetAddress).to.equal(facetA.target);
+  expect(history[1].facetAddress).to.equal(facetB.target);
     });
   });
 
@@ -293,7 +294,7 @@ describe("Epoch Rules", function () {
       
       const currentEpoch = Number(await epochManager.getCurrentEpoch());
       await expect(
-        diamond.commitFacetUpdate(facetA.address, ["0x12345678"], currentEpoch + 1)
+        diamond.commitFacetUpdate(facetA.target, ["0x12345678"], currentEpoch + 1)
       ).to.be.revertedWith("System paused");
     });
 
@@ -307,11 +308,11 @@ describe("Epoch Rules", function () {
     it("Should clear pending commitments on reset", async function () {
       const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
-      await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
+  await diamond.commitFacetUpdate(facetA.target, ["0x12345678"], nextEpoch);
       await diamond.emergencyEpochReset();
       
-      const commitment = await diamond.getEpochCommitment(nextEpoch, "0x12345678");
-      expect(commitment.facetAddress).to.equal(ethers.ZeroAddress);
+  const commitment = await diamond.getEpochCommitment(nextEpoch, "0x12345678");
+  expect(commitment.facetAddress).to.equal(ethers.ZeroAddress);
     });
   });
 });
