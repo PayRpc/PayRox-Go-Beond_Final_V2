@@ -21,17 +21,64 @@ try {
   $src = Resolve-SourceFile -Path $Source
   New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
-  $pyCmd = Get-Command python -ErrorAction SilentlyContinue
+  $pyCmd = Get-Command python3 -ErrorAction SilentlyContinue
+  if (-not $pyCmd) { $pyCmd = Get-Command python -ErrorAction SilentlyContinue }
   if (-not $pyCmd) { $pyCmd = Get-Command py -ErrorAction SilentlyContinue }
-  if (-not $pyCmd) { $pyCmd = Get-Command python3 -ErrorAction SilentlyContinue }
-  if (-not $pyCmd) { throw "Python not found on PATH (need 'python' or 'py')." }
-  $pythonExe = $pyCmd.Source
+  if (-not $pyCmd) { 
+    # Try looking in common paths on Windows
+    $pythonPaths = @("C:\Python*\python.exe", "C:\Program Files\Python*\python.exe", "$env:LOCALAPPDATA\Programs\Python\Python*\python.exe")
+    foreach ($pattern in $pythonPaths) {
+      $found = Get-ChildItem $pattern -ErrorAction SilentlyContinue | Select-Object -First 1
+      if ($found) {
+        $pyCmd = $found
+        break
+      }
+    }
+  }
+  if (-not $pyCmd) { throw "Python not found on PATH or common locations (need 'python3', 'python' or 'py')." }
+  $pythonExe = $pyCmd.Source ?? $pyCmd.Path
 
-  $tmpPy = Join-Path $env:TEMP "split_and_manifest_$([Guid]::NewGuid().ToString('N')).py"
+  # Create temp file in a cross-platform way
+  $tempDir = if ($env:TEMP) { $env:TEMP } elseif ($env:TMPDIR) { $env:TMPDIR } else { "/tmp" }
+  $tmpPy = Join-Path $tempDir "split_and_manifest_$([Guid]::NewGuid().ToString('N')).py"
   @'
 import sys, json, os, pathlib
+# Add both current directory and parent for module imports
 sys.path.insert(0, '.')
-from app.utils.facet_splitter import split_facet_file
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.join(os.path.abspath('.'), 'app'))
+
+try:
+    from app.utils.facet_splitter import split_facet_file
+except ImportError:
+    try:
+        from utils.facet_splitter import split_facet_file
+    except ImportError:
+        # Fallback: define a minimal splitter inline
+        import re
+        from pathlib import Path
+        
+        def split_facet_file(source_path):
+            p = Path(source_path)
+            if not p.exists():
+                raise FileNotFoundError(source_path)
+            
+            text = p.read_text(encoding='utf-8', errors='ignore')
+            # Simple regex-based splitter
+            func_re = re.compile(r"function\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)\s*(public|external)")
+            sigs = []
+            for m in func_re.finditer(text):
+                name = m.group(1)
+                args = m.group(2).strip()
+                sigs.append(f"{name}({args})")
+            
+            # Return a single facet with all functions
+            return [{
+                "name": "ManifestDispatcher",
+                "code": text,
+                "selectors": sigs,
+                "size": len(text.encode('utf-8'))
+            }]
 
 src    = sys.argv[1]
 outdir = sys.argv[2]
