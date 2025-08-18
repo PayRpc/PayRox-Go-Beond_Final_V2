@@ -226,13 +226,13 @@ abstract contract RefactorSafeFacetBase {
         );
     }
 
-    // ─────────────── External convenience (read-only) ───────────────
+    // ─────────────── Internal convenience (read-only) ───────────────
     /**
-     * @notice Shallow, read-only “am I what you think I am” check.
-     * @dev Returns true if `_getExpectedCodeHash()` is zero or matches `address(this).codehash`.
-     *      In a real diamond call, this will compare the dispatcher’s codehash.
+     * @notice Internal shallow “am I what you think I am” check.
+     * @dev Converted to `internal` so only chosen facets expose the public selector.
+     *      Returns true if `_getExpectedCodeHash()` is zero or matches `address(this).codehash`.
      */
-    function emergencyRefactorValidation() external view returns (bool) {
+    function _emergencyRefactorValidation() internal view returns (bool) {
         return RefactorSafetyLib.performRefactorSafetyCheck(
             address(this),
             _getExpectedCodeHash(),

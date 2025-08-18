@@ -76,9 +76,7 @@
         "0xd0ce0a66"
       ]
     },
-    "IAntiBotFacet": {
-  "selectors": []
-    },
+    
     "MaliciousFacet": {
       "selectors": [
         "0x99a2a603"

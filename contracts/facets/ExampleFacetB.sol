@@ -646,7 +646,7 @@ contract ExampleFacetB is RefactorSafeFacetBase {
         name = "ExampleFacetB";
         version = "1.2.0"; // Updated version for enhanced features
 
-        selectors = new bytes4[](17); // Increased from 15 to 17 for rotation functions
+    selectors = new bytes4[](16); // Removed emergencyRefactorValidation selector
         selectors[0] = this.initializeFacetB.selector;
         selectors[1] = this.setPaused.selector;
         selectors[2] = this.rotateGovernance.selector;
@@ -663,7 +663,7 @@ contract ExampleFacetB is RefactorSafeFacetBase {
         selectors[12] = this.getUserStatistics.selector;
         selectors[13] = this.validateOperation.selector;
         selectors[14] = this.simulateOperation.selector;
-        selectors[15] = this.getInitNonce.selector;
-        selectors[16] = this.getGovernance.selector;
+    selectors[15] = this.getInitNonce.selector;
+    selectors[16] = this.getGovernance.selector;
     }
 }
