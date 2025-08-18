@@ -143,7 +143,8 @@ except Exception as e:
 
   # Re-read combined.json for updated counts
   $combined = Get-Content (Join-Path $OutDir 'combined.json') -Raw | ConvertFrom-Json
-  Write-Host (("Postprocessed → Kept parts: {0}, Total selectors: {1}" -f $combined.parts.Count, $combined.selectors.Count)) -ForegroundColor Green
+  # combined.json now stores numeric 'parts' and 'selectors' fields after postprocess
+  Write-Host (("Postprocessed → Kept parts: {0}, Total selectors: {1}" -f $combined.parts, $combined.selectors)) -ForegroundColor Green
 
   # Strict check (only fail if any empty parts remain after postprocess)
   if ($FailOnEmptyParts) {
