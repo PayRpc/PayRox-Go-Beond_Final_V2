@@ -1,0 +1,22 @@
+{
+  "name": "payrox-splitter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+  "start": "ts-node split-facet.ts",
+  "split-all": "ts-node split-all.ts",
+  "build": "tsc"
+  },
+  "dependencies": {
+    "solidity-parser-antlr": "^0.4.14",
+    "fs-extra": "^11.1.1",
+  "fast-glob": "^3.2.12",
+  "ethers": "^6.8.0",
+    "yargs": "^17.7.2",
+    "execa": "^7.1.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.4.2"
+  }
+}
