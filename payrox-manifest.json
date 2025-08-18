@@ -37,8 +37,7 @@
         "0x364db2eb",
         "0x0104a957",
         "0x3cfd83ff",
-        "0x0e2b7fe2",
-        "0x57191e6c"
+        "0x0e2b7fe2"
       ]
     },
     "ExampleFacetA": {
@@ -76,7 +75,14 @@
         "0xd0ce0a66"
       ]
     },
-    
+    "IAntiBotFacet": {
+      "selectors": []
+    },
+    "LoupeFacet": {
+      "selectors": [
+        "0x57191e6c"
+      ]
+    },
     "MaliciousFacet": {
       "selectors": [
         "0x99a2a603"
@@ -101,7 +107,8 @@
         "0x41122a35",
         "0x165a6a83",
         "0x1db9fd07",
-        "0x6b348222"
+        "0x6b348222",
+        "0x8464a34e"
       ]
     }
   }
