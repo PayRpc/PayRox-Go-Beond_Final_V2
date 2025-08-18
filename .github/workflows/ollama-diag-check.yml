@@ -72,16 +72,16 @@ jobs:
           echo "Response: $RESP"
           echo "$RESP" > diag_response.json
           python - <<'PY'
-import json, sys
-data = json.loads(open('diag_response.json','r').read())
-assert data.get('ok') is True, f"ok != true: {data!r}"
-models = data.get('models')
-assert isinstance(models, list) and len(models) >= 1, f"models missing/empty: {data!r}"
-prov = data.get('provider')
-if prov is not None:
-    assert prov.lower() == 'ollama', f"provider mismatch: {prov!r}"
-print('diag validated')
-PY
+          import json, sys
+          data = json.loads(open('diag_response.json','r').read())
+          assert data.get('ok') is True, f"ok != true: {data!r}"
+          models = data.get('models')
+          assert isinstance(models, list) and len(models) >= 1, f"models missing/empty: {data!r}"
+          prov = data.get('provider')
+          if prov is not None:
+              assert prov.lower() == 'ollama', f"provider mismatch: {prov!r}"
+          print('diag validated')
+          PY
 
       - name: Upload logs (always)
         if: always()
