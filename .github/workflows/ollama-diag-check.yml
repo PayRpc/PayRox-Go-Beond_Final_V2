@@ -23,36 +23,36 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-    - name: Start mock Ollama (list models)
-    run: |
-      cat > mock_ollama.py <<'PY'
-      from http.server import BaseHTTPRequestHandler, HTTPServer
-      import json
+      - name: Start mock Ollama (list models)
+        run: |
+          cat > mock_ollama.py <<'PY'
+          from http.server import BaseHTTPRequestHandler, HTTPServer
+          import json
 
-      class H(BaseHTTPRequestHandler):
-        def do_GET(self):
-          if self.path in ("/api/tags", "/api/models"):
-            resp = {"models": [{"name":"dummy:latest","size":123,"modified_at":"1970-01-01T00:00:00Z"}], "provider": "ollama"}
-            self.send_response(200)
-            self.send_header("Content-Type","application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps(resp).encode())
-            return
-          if self.path in ("/", "/health"):
-            self.send_response(200)
-            self.send_header("Content-Type","application/json")
-            self.end_headers()
-            self.wfile.write(b'{"ok":true}')
-            return
-          self.send_response(404)
-          self.end_headers()
-        def log_message(self, *args, **kwargs):
-          return
+          class H(BaseHTTPRequestHandler):
+            def do_GET(self):
+              if self.path in ("/api/tags", "/api/models"):
+                resp = {"models": [{"name":"dummy:latest","size":123,"modified_at":"1970-01-01T00:00:00Z"}], "provider": "ollama"}
+                self.send_response(200)
+                self.send_header("Content-Type","application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(resp).encode())
+                return
+              if self.path in ("/", "/health"):
+                self.send_response(200)
+                self.send_header("Content-Type","application/json")
+                self.end_headers()
+                self.wfile.write(b'{"ok":true}')
+                return
+              self.send_response(404)
+              self.end_headers()
+            def log_message(self, *args, **kwargs):
+              return
 
-      if __name__ == "__main__":
-        HTTPServer(("127.0.0.1", 11434), H).serve_forever()
-      PY
-      nohup python mock_ollama.py > mock.log 2>&1 & echo $! > mock.pid
+          if __name__ == "__main__":
+            HTTPServer(("127.0.0.1", 11434), H).serve_forever()
+          PY
+          nohup python mock_ollama.py > mock.log 2>&1 & echo $! > mock.pid
 
       - name: Export OLLAMA_HOST
         run: echo "PRX_OLLAMA_HOST=http://127.0.0.1:11434" >> $GITHUB_ENV
@@ -72,16 +72,16 @@ jobs:
           echo "Response: $RESP"
           echo "$RESP" > diag_response.json
           python - <<'PY'
-import json, sys
-data = json.loads(open('diag_response.json','r').read())
-assert data.get('ok') is True, f"ok != true: {data!r}"
-models = data.get('models')
-assert isinstance(models, list) and len(models) >= 1, f"models missing/empty: {data!r}"
-prov = data.get('provider')
-if prov is not None:
-    assert prov.lower() == 'ollama', f"provider mismatch: {prov!r}"
-print('diag validated')
-PY
+          import json, sys
+          data = json.loads(open('diag_response.json','r').read())
+          assert data.get('ok') is True, f"ok != true: {data!r}"
+          models = data.get('models')
+          assert isinstance(models, list) and len(models) >= 1, f"models missing/empty: {data!r}"
+          prov = data.get('provider')
+          if prov is not None:
+              assert prov.lower() == 'ollama', f"provider mismatch: {prov!r}"
+          print('diag validated')
+          PY
 
       - name: Upload logs (always)
         if: always()

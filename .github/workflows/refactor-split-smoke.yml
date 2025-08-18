@@ -20,13 +20,8 @@ jobs:
         run: npm install
 
       - name: Run splitter (non-interactive)
-        shell: pwsh
-        run: |
-          ./scripts/split-and-manifest.ps1 `
-            -Source 'contracts/dispacher/ManifestDispacher.sol' `
-            -OutDir 'artifacts/splits' `
-            -CiMode `
-            -FailOnEmptyParts
+        # Run pwsh from bash to avoid multi-line pwsh wrapper/argument parsing issues on ubuntu runners
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1 -Source 'contracts/dispacher/ManifestDispacher.sol' -OutDir 'artifacts/splits' -CiMode -FailOnEmptyParts
 
       - name: Sanity checks
         run: |
