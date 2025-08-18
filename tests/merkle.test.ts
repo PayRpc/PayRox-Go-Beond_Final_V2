@@ -1,6 +1,6 @@
 import { encodeLeaf } from '../scripts/utils/merkle';
 import { processOrderedProof } from '../scripts/utils/ordered-merkle';
-import { expect } from '@jest/globals';
+import { expect } from 'chai';
 
 // Minimal synthetic roundtrip: build a tiny ordered tree of 2 leaves and verify root matches.
 
@@ -28,6 +28,6 @@ describe('Ordered Merkle (2-leaf) roundtrip', () => {
     const positionsHex = '0x01';
 
     const recomputed = processOrderedProof(leafHashA, proof, positionsHex);
-    expect(recomputed.toLowerCase()).toBe(root.toLowerCase());
+  expect(recomputed.toLowerCase()).to.equal(root.toLowerCase());
   });
 });
