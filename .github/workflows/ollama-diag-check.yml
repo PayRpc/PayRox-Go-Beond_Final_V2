@@ -9,14 +9,15 @@ on:
 jobs:
   ollama-diag:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -28,58 +29,54 @@ jobs:
           cat > mock_ollama.py <<'PY'
           from http.server import BaseHTTPRequestHandler, HTTPServer
           import json
-
           class H(BaseHTTPRequestHandler):
             def do_GET(self):
               if self.path in ("/api/tags", "/api/models"):
                 resp = {"models": [{"name":"dummy:latest","size":123,"modified_at":"1970-01-01T00:00:00Z"}], "provider": "ollama"}
-                self.send_response(200)
-                self.send_header("Content-Type","application/json")
-                self.end_headers()
-                self.wfile.write(json.dumps(resp).encode())
-                return
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(json.dumps(resp).encode()); return
               if self.path in ("/", "/health"):
-                self.send_response(200)
-                self.send_header("Content-Type","application/json")
-                self.end_headers()
-                self.wfile.write(b'{"ok":true}')
-                return
-              self.send_response(404)
-              self.end_headers()
-            def log_message(self, *args, **kwargs):
-              return
-
+                self.send_response(200); self.send_header("Content-Type","application/json"); self.end_headers()
+                self.wfile.write(b'{"ok":true}'); return
+              self.send_response(404); self.end_headers()
+            def log_message(self, *args, **kwargs): return
           if __name__ == "__main__":
             HTTPServer(("127.0.0.1", 11434), H).serve_forever()
           PY
           nohup python mock_ollama.py > mock.log 2>&1 & echo $! > mock.pid
+          sleep 1
 
-      - name: Export OLLAMA_HOST
+      - name: Export PRX_OLLAMA_HOST
         run: echo "PRX_OLLAMA_HOST=http://127.0.0.1:11434" >> $GITHUB_ENV
 
       - name: Start FastAPI app (background)
         run: |
           nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > api.log 2>&1 & echo $! > api.pid
-          sleep 3
+          sleep 2
 
       - name: Call /diag/ollama and assert response
         run: |
           set -e
           echo "Hitting diag endpoint..."
+          RESP=""
           for i in {1..20}; do
-            RESP="$(curl -sSf http://127.0.0.1:8000/diag/ollama || true)" && break || sleep 0.5
+            if RESP="$(curl -sSf http://127.0.0.1:8000/diag/ollama)"; then
+              break
+            fi
+            sleep 0.5
           done
+          test -n "$RESP"
           echo "Response: $RESP"
-          echo "$RESP" > diag_response.json
+          printf '%s' "$RESP" > diag_response.json
           python - <<'PY'
           import json, sys
-          data = json.loads(open('diag_response.json','r').read())
+          data = json.load(open('diag_response.json','r'))
           assert data.get('ok') is True, f"ok != true: {data!r}"
           models = data.get('models')
           assert isinstance(models, list) and len(models) >= 1, f"models missing/empty: {data!r}"
           prov = data.get('provider')
           if prov is not None:
-              assert prov.lower() == 'ollama', f"provider mismatch: {prov!r}"
+              assert str(prov).lower() == 'ollama', f"provider mismatch: {prov!r}"
           print('diag validated')
           PY
 
@@ -94,3 +91,9 @@ jobs:
             mock.pid
             api.pid
             diag_response.json
+
+      - name: Cleanup (always)
+        if: always()
+        run: |
+          [[ -f mock.pid ]] && kill $(cat mock.pid) || true
+          [[ -f api.pid  ]] && kill $(cat api.pid)  || true
