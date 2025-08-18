@@ -22,11 +22,7 @@ jobs:
       - name: Run splitter (non-interactive)
         shell: pwsh
         run: |
-          ./scripts/split-and-manifest.ps1 `
-            -Source 'contracts/dispacher/ManifestDispacher.sol' `
-            -OutDir 'artifacts/splits' `
-            -CiMode `
-            -FailOnEmptyParts
+          ./scripts/split-and-manifest.ps1 -Source 'contracts/dispacher/ManifestDispacher.sol' -OutDir 'artifacts/splits' -CiMode -FailOnEmptyParts
 
       - name: Sanity checks
         run: |

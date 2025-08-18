@@ -61,10 +61,13 @@ for (const jsonFile of parts) {
 
 // rewrite combined.json
 const combined = JSON.parse(fs.readFileSync(combinedPath, 'utf8'));
+// Preserve numeric summary fields expected by validation scripts
 const rewritten = {
   ...(typeof combined === 'object' ? combined : {}),
-  parts: kept,
-  selectors: [...allSelectors],
+  parts: kept.length,
+  selectors: allSelectors.size,
+  parts_list: kept,
+  selectors_list: [...allSelectors],
 };
 
 fs.writeFileSync(combinedPath, JSON.stringify(rewritten, null, 2));
