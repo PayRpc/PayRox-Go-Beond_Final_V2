@@ -21,7 +21,7 @@ jobs:
 
       - name: Run splitter (non-interactive)
         # Run pwsh from bash to avoid multi-line pwsh wrapper/argument parsing issues on ubuntu runners
-        run: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1 -Source 'contracts/dispacher/ManifestDispacher.sol' -OutDir 'artifacts/splits' -CiMode -FailOnEmptyParts
+  run: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1 -Source 'contracts/dispacher/ManifestDispatcher.sol' -OutDir 'artifacts/splits' -CiMode -FailOnEmptyParts
 
       - name: Sanity checks
         run: |
@@ -29,7 +29,7 @@ jobs:
           node scripts/validate-split.js
 
       - name: ABI subset parity
-        run: node scripts/validate-manifest-selectors.js --mode=subset --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json
+  run: node scripts/validate-manifest-selectors.js --mode=subset --source contracts/dispacher/ManifestDispatcher.sol --combined artifacts/splits/combined.json
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -39,7 +39,7 @@ jobs:
 
       - name: ABI exact parity (strict, release only)
         if: startsWith(github.ref, 'refs/tags/')
-        run: node scripts/validate-manifest-selectors.js --mode=strict --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json
+  run: node scripts/validate-manifest-selectors.js --mode=strict --source contracts/dispacher/ManifestDispatcher.sol --combined artifacts/splits/combined.json
 
   split-windows:
     runs-on: windows-latest
@@ -57,7 +57,7 @@ jobs:
       - name: Run splitter (Windows)
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File scripts\split-and-manifest.ps1 `
-            -Source contracts\dispacher\ManifestDispacher.sol `
+            -Source contracts\dispacher\ManifestDispatcher.sol `
             -OutDir artifacts\splits `
             -CiMode `
             -FailOnEmptyParts
@@ -71,7 +71,7 @@ jobs:
       - name: ABI subset parity
         shell: pwsh
         run: |
-          node scripts/validate-manifest-selectors.js --mode=subset --source contracts\dispacher\ManifestDispacher.sol --combined artifacts\splits\combined.json
+          node scripts/validate-manifest-selectors.js --mode=subset --source contracts\dispacher\ManifestDispatcher.sol --combined artifacts\splits\combined.json
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -83,4 +83,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
         run: |
-          node scripts/validate-manifest-selectors.js --mode=strict --source contracts\dispacher\ManifestDispacher.sol --combined artifacts\splits\combined.json
+          node scripts/validate-manifest-selectors.js --mode=strict --source contracts\dispacher\ManifestDispatcher.sol --combined artifacts\splits\combined.json

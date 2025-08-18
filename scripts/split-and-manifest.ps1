@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string]$Source,                         # e.g. contracts\dispacher\ManifestDispacher.sol
+  [string]$Source,                         # e.g. contracts\dispacher\ManifestDispatcher.sol
   [string]$OutDir = "build\split",         # where to write parts + manifest JSON
   [switch]$FailOnEmptyParts,               # exit non-zero if any part has 0 selectors
   [switch]$CiMode                          # extra checks for CI
@@ -10,7 +10,7 @@ function Resolve-SourceFile {
   param([string]$Path)
   if ($Path -and (Test-Path $Path)) { return (Resolve-Path $Path).Path }
   $candidates = Get-ChildItem -Recurse -File -Include `
-    'Manifest*Dispatcher*.sol','*ManifestDispacher*.sol','*ManifestDispatcher*.sol' `
+  'Manifest*Dispatcher*.sol','*ManifestDispatcher*.sol' `
     -ErrorAction SilentlyContinue
   if ($candidates.Count -eq 1) { return $candidates[0].FullName }
   $list = ($candidates | ForEach-Object { "  - " + $_.FullName }) -join "`n"
@@ -171,7 +171,7 @@ catch {
 <#
 Example usage:
   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\split-and-manifest.ps1 \
-    -Source contracts\dispacher\ManifestDispacher.sol \
+    -Source contracts\dispacher\ManifestDispatcher.sol \
     -OutDir build\split
 
 Optional flags:

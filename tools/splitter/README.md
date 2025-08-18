@@ -12,7 +12,7 @@ Quick start
 
 2. Run splitter (example):
 
-   npx ts-node split-facet.ts --source ../../contracts/dispacher/ManifestDispacher.sol --contract ManifestDispatcher --out ../../artifacts/splits --softLimit 22000
+   npx ts-node split-facet.ts --source ../../contracts/dispacher/ManifestDispatcher.sol --contract ManifestDispatcher --out ../../artifacts/splits --softLimit 22000
 
 3. Optional: enable compile-in-loop (needs hardhat available):
 

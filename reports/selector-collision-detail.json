@@ -239,7 +239,7 @@
           "signature": "grantRole(bytes32,address)"
         },
         {
-          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispacher.sol\\ManifestDispatcher.json",
+          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispatcher.sol\\ManifestDispatcher.json",
           "contractName": "ManifestDispatcher",
           "signature": "grantRole(bytes32,address)"
         },
@@ -297,7 +297,7 @@
           "signature": "revokeRole(bytes32,address)"
         },
         {
-          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispacher.sol\\ManifestDispatcher.json",
+          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispatcher.sol\\ManifestDispatcher.json",
           "contractName": "ManifestDispatcher",
           "signature": "revokeRole(bytes32,address)"
         },
@@ -355,7 +355,7 @@
           "signature": "hasRole(bytes32,address)"
         },
         {
-          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispacher.sol\\ManifestDispatcher.json",
+          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispatcher.sol\\ManifestDispatcher.json",
           "contractName": "ManifestDispatcher",
           "signature": "hasRole(bytes32,address)"
         },

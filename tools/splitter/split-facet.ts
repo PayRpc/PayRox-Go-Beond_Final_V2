@@ -11,7 +11,7 @@
   Usage (from repo root):
     cd tools/splitter
     npm install
-    npx ts-node split-facet.ts --source ../../contracts/dispacher/ManifestDispacher.sol --contract ManifestDispatcher --out ../../artifacts/splits --softLimit 22000 [--compile]
+  npx ts-node split-facet.ts --source ../../contracts/dispacher/ManifestDispatcher.sol --contract ManifestDispatcher --out ../../artifacts/splits --softLimit 22000 [--compile]
 */
 
 import fs from 'fs-extra';

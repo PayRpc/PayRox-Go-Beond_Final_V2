@@ -156,7 +156,7 @@ contract ManifestDispatcher is
     function pendingEpoch()    external view override returns (uint64)  { return manifest.activeEpoch + 1; }
     function pendingSince()    external view override returns (uint64)  { return manifest.committedAt; }
     function activeRoot()      external view override returns (bytes32) { return manifest.activeRoot; }
-    function activeEpoch()     external view override returns (uint64)  { return manifest.activeEpoch; }
+    function activeEpoch()     external view override returns (uint64)  { return manifest.manifestVersion; }
     function activationDelay() external view override returns (uint64)  { return manifest.activationDelay; }
     function frozen()          external view override returns (bool)    { return manifest.frozen; }
 
