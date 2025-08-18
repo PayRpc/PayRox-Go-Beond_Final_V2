@@ -37,6 +37,8 @@ try {
   }
   if (-not $pyCmd) { throw "Python not found on PATH or common locations (need 'python3', 'python' or 'py')." }
   $pythonExe = $pyCmd.Source ?? $pyCmd.Path
+  
+  Write-Host "DEBUG: Using Python executable: $pythonExe" -ForegroundColor Cyan
 
   # Create temp file in a cross-platform way
   $tempDir = if ($env:TEMP) { $env:TEMP } elseif ($env:TMPDIR) { $env:TMPDIR } else { "/tmp" }
@@ -50,15 +52,20 @@ sys.path.insert(0, os.path.join(os.path.abspath('.'), 'app'))
 
 try:
     from app.utils.facet_splitter import split_facet_file
-except ImportError:
+    print(f"DEBUG: Successfully imported from app.utils.facet_splitter", file=sys.stderr)
+except ImportError as e1:
+    print(f"DEBUG: Failed to import from app.utils.facet_splitter: {e1}", file=sys.stderr)
     try:
         from utils.facet_splitter import split_facet_file
-    except ImportError:
+        print(f"DEBUG: Successfully imported from utils.facet_splitter", file=sys.stderr)
+    except ImportError as e2:
+        print(f"DEBUG: Failed to import from utils.facet_splitter: {e2}", file=sys.stderr)
         # Fallback: define a minimal splitter inline
         import re
         from pathlib import Path
         
         def split_facet_file(source_path):
+            print(f"DEBUG: Using fallback splitter for {source_path}", file=sys.stderr)
             p = Path(source_path)
             if not p.exists():
                 raise FileNotFoundError(source_path)
@@ -80,33 +87,54 @@ except ImportError:
                 "size": len(text.encode('utf-8'))
             }]
 
-src    = sys.argv[1]
-outdir = sys.argv[2]
-parts  = split_facet_file(src)
+try:
+    src    = sys.argv[1]
+    outdir = sys.argv[2]
+    print(f"DEBUG: Processing {src} -> {outdir}", file=sys.stderr)
+    parts  = split_facet_file(src)
+    print(f"DEBUG: Got {len(parts)} parts", file=sys.stderr)
 
-pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
-for i, part in enumerate(parts):
-    with open(os.path.join(outdir, f"part_{i}.sol"), "w", encoding="utf-8") as f:
-        f.write(part.get("code",""))
-    with open(os.path.join(outdir, f"part_{i}.json"), "w", encoding="utf-8") as f:
-        json.dump(part, f, indent=2)
+    pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
+    for i, part in enumerate(parts):
+        with open(os.path.join(outdir, f"part_{i}.sol"), "w", encoding="utf-8") as f:
+            f.write(part.get("code",""))
+        with open(os.path.join(outdir, f"part_{i}.json"), "w", encoding="utf-8") as f:
+            json.dump(part, f, indent=2)
 
-combined = {
-    "file": src,
-    "parts": len(parts),
-    "selectors": sum(len(p.get("selectors", [])) for p in parts),
-    "by_part": [{"file": f"part_{i}.sol", "functions": len(p.get("selectors", []))} for i,p in enumerate(parts)]
-}
-with open(os.path.join(outdir, "combined.json"), "w", encoding="utf-8") as f:
-    json.dump(combined, f, indent=2)
+    combined = {
+        "file": src,
+        "parts": len(parts),
+        "selectors": sum(len(p.get("selectors", [])) for p in parts),
+        "by_part": [{"file": f"part_{i}.sol", "functions": len(p.get("selectors", []))} for i,p in enumerate(parts)]
+    }
+    with open(os.path.join(outdir, "combined.json"), "w", encoding="utf-8") as f:
+        json.dump(combined, f, indent=2)
 
-print(json.dumps(combined))
+    print(json.dumps(combined))
+except Exception as e:
+    print(f"ERROR: {e}", file=sys.stderr)
+    import traceback
+    traceback.print_exc(file=sys.stderr)
+    sys.exit(1)
 '@ | Set-Content -Path $tmpPy -Encoding UTF8
 
-  $json = & $pythonExe $tmpPy $src $OutDir
+  $json = & $pythonExe $tmpPy $src $OutDir 2>&1
+  $exitCode = $LASTEXITCODE
+  
+  # Always clean up temp file
   Remove-Item $tmpPy -Force -ErrorAction SilentlyContinue
+  
+  # Check for Python execution errors
+  if ($exitCode -ne 0) {
+    Write-Error "Python splitter failed with exit code $exitCode. Output: $json"
+    exit 1
+  }
+  
+  # Parse the JSON output (last line should be the JSON)
+  $jsonLines = $json -split "`n" | Where-Object { $_.Trim() -ne "" }
+  $jsonOutput = $jsonLines[-1]  # Last non-empty line should be JSON
 
-  $summary = $json | ConvertFrom-Json
+  $summary = $jsonOutput | ConvertFrom-Json
   Write-Host (("Split OK → Parts: {0}, Total selectors: {1}" -f $summary.parts, $summary.selectors)) -ForegroundColor Green
   # Post-process to drop empty parts and rewrite combined.json
   Write-Host "Post-processing split outputs..." -ForegroundColor Cyan
