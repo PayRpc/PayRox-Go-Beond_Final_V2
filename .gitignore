@@ -68,3 +68,11 @@ yarn.lock
 
 # Ignore locally committed split test artifacts
 build/split-test-enhanced/
+
+# Local test/validator artifacts
+mock_ollama.py
+mock.log
+api.log
+mock.pid
+api.pid
+validation-report.md
