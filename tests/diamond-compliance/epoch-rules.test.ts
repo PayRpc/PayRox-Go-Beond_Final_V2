@@ -25,18 +25,22 @@ describe("Epoch Rules", function () {
 
     // Deploy epoch manager
     const EpochManager = await ethers.getContractFactory("EpochManager");
-    const epochManager = await EpochManager.deploy();
+  const epochManager = await EpochManager.deploy();
+  await epochManager.waitForDeployment();
 
     // Deploy facets
     const FacetA = await ethers.getContractFactory("FacetA");
     const FacetB = await ethers.getContractFactory("FacetB");
     
-    const facetA = await FacetA.deploy();
-    const facetB = await FacetB.deploy();
+  const facetA = await FacetA.deploy();
+  await facetA.waitForDeployment();
+  const facetB = await FacetB.deploy();
+  await facetB.waitForDeployment();
 
     // Deploy diamond with epoch support
     const DiamondWithEpoch = await ethers.getContractFactory("DiamondWithEpoch");
-    const diamond = await DiamondWithEpoch.deploy(owner.address, epochManager.address);
+  const diamond = await DiamondWithEpoch.deploy(await owner.getAddress(), epochManager.target ?? epochManager.address);
+  await diamond.waitForDeployment();
 
     return { diamond, epochManager, facetA, facetB, owner, addr1 };
   }
@@ -53,13 +57,13 @@ describe("Epoch Rules", function () {
 
   describe("Epoch Management", function () {
     it("Should start at epoch 0", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       expect(currentEpoch).to.equal(0);
     });
 
     it("Should allow epoch advancement by authorized accounts", async function () {
       await epochManager.advanceEpoch();
-      const newEpoch = await epochManager.getCurrentEpoch();
+      const newEpoch = Number(await epochManager.getCurrentEpoch());
       expect(newEpoch).to.equal(1);
     });
 
@@ -78,7 +82,7 @@ describe("Epoch Rules", function () {
 
   describe("Next Epoch Only Rule", function () {
     it("Should reject commits for current epoch", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       
       await expect(
         diamond.commitFacetUpdate(facetA.address, ["0x12345678"], currentEpoch)
@@ -94,7 +98,7 @@ describe("Epoch Rules", function () {
     });
 
     it("Should accept commits for next epoch", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       const nextEpoch = currentEpoch + 1;
       
       await expect(
@@ -103,7 +107,7 @@ describe("Epoch Rules", function () {
     });
 
     it("Should reject commits too far in future", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       const futureEpoch = currentEpoch + 10;
       
       await expect(
@@ -114,7 +118,7 @@ describe("Epoch Rules", function () {
 
   describe("Last-Write-Wins for Same Epoch", function () {
     it("Should allow multiple commits to same epoch", async function () {
-      const nextEpoch = (await epochManager.getCurrentEpoch()) + 1;
+      const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
       // First commit
       await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
@@ -127,7 +131,7 @@ describe("Epoch Rules", function () {
     });
 
     it("Should emit CommitmentOverwritten event", async function () {
-      const nextEpoch = (await epochManager.getCurrentEpoch()) + 1;
+      const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
       await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
       
@@ -138,7 +142,7 @@ describe("Epoch Rules", function () {
     });
 
     it("Should track commitment history", async function () {
-      const nextEpoch = (await epochManager.getCurrentEpoch()) + 1;
+      const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
       await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
       await diamond.commitFacetUpdate(facetB.address, ["0x12345678"], nextEpoch);
@@ -152,7 +156,7 @@ describe("Epoch Rules", function () {
 
   describe("Epoch Activation", function () {
     it("Should activate committed changes when epoch advances", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       const nextEpoch = currentEpoch + 1;
       
       // Commit for next epoch
@@ -162,25 +166,25 @@ describe("Epoch Rules", function () {
       await epochManager.advanceEpoch();
       
       // Check that routing is now active
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.address);
+      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       const facetAddress = await diamondLoupe.facetAddress("0x12345678");
       expect(facetAddress).to.equal(facetA.address);
     });
 
     it("Should not activate uncommitted changes", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       
       // Advance epoch without any commits
       await epochManager.advanceEpoch();
       
       // Routing should remain unchanged
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.address);
+      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       const facetAddress = await diamondLoupe.facetAddress("0x12345678");
-      expect(facetAddress).to.equal(ethers.constants.AddressZero);
+      expect(facetAddress).to.equal(ethers.ZeroAddress);
     });
 
     it("Should handle batch activation efficiently", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       const nextEpoch = currentEpoch + 1;
       
       // Commit multiple selectors
@@ -194,10 +198,10 @@ describe("Epoch Rules", function () {
       const receipt = await tx.wait();
       
       // Check gas usage is reasonable for batch activation
-      expect(receipt.gasUsed).to.be.lt(ethers.utils.parseUnits("500000", "wei"));
+      expect(Number(receipt.gasUsed)).to.be.lt(500000);
       
       // Verify all selectors are active
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.address);
+      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       for (const selector of selectors) {
         const facetAddress = await diamondLoupe.facetAddress(selector);
         expect(facetAddress).to.equal(facetA.address);
@@ -242,7 +246,7 @@ describe("Epoch Rules", function () {
 
   describe("Routing Transition", function () {
     it("Should handle smooth selector transitions", async function () {
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       const nextEpoch = currentEpoch + 1;
       
       // Initially route to facetA
@@ -250,16 +254,16 @@ describe("Epoch Rules", function () {
       await epochManager.advanceEpoch();
       
       // Verify routing
-      let diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.address);
+      let diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetA.address);
       
       // Plan transition to facetB for next epoch
-      const newNextEpoch = (await epochManager.getCurrentEpoch()) + 1;
+      const newNextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       await diamond.commitFacetUpdate(facetB.address, ["0x12345678"], newNextEpoch);
       await epochManager.advanceEpoch();
       
       // Verify transition
-      diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.address);
+      diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
       expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetB.address);
     });
 
@@ -267,7 +271,7 @@ describe("Epoch Rules", function () {
       const selector = "0x12345678";
       
       // Route through multiple facets across epochs
-      let currentEpoch = await epochManager.getCurrentEpoch();
+      let currentEpoch = Number(await epochManager.getCurrentEpoch());
       
       await diamond.commitFacetUpdate(facetA.address, [selector], currentEpoch + 1);
       await epochManager.advanceEpoch();
@@ -287,7 +291,7 @@ describe("Epoch Rules", function () {
     it("Should allow emergency epoch pause", async function () {
       await diamond.emergencyPause();
       
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       await expect(
         diamond.commitFacetUpdate(facetA.address, ["0x12345678"], currentEpoch + 1)
       ).to.be.revertedWith("System paused");
@@ -296,18 +300,18 @@ describe("Epoch Rules", function () {
     it("Should allow emergency epoch reset by dispatcher", async function () {
       await diamond.emergencyEpochReset();
       
-      const currentEpoch = await epochManager.getCurrentEpoch();
+      const currentEpoch = Number(await epochManager.getCurrentEpoch());
       expect(currentEpoch).to.equal(0);
     });
 
     it("Should clear pending commitments on reset", async function () {
-      const nextEpoch = (await epochManager.getCurrentEpoch()) + 1;
+      const nextEpoch = Number(await epochManager.getCurrentEpoch()) + 1;
       
       await diamond.commitFacetUpdate(facetA.address, ["0x12345678"], nextEpoch);
       await diamond.emergencyEpochReset();
       
       const commitment = await diamond.getEpochCommitment(nextEpoch, "0x12345678");
-      expect(commitment.facetAddress).to.equal(ethers.constants.AddressZero);
+      expect(commitment.facetAddress).to.equal(ethers.ZeroAddress);
     });
   });
 });
