@@ -27,7 +27,7 @@ jobs:
             node-modules-${{ runner.os }}-node-18-
 
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Compile Solidity
         run: npx hardhat compile
@@ -95,7 +95,7 @@ jobs:
           node-version: '18'
 
       - name: Install Node deps
-        run: npm ci
+        run: npm install
 
       - name: Run JS lint (if configured)
         run: |

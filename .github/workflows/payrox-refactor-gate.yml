@@ -25,7 +25,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Setup Hardhat
       run: npx hardhat --version
@@ -277,7 +277,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Run Slither analysis
       uses: crytic/slither-action@v0.3.0
