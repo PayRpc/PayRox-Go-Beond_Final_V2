@@ -1747,8 +1747,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond.sol": {
-      "lastModificationDate": 1755477315321,
-      "contentHash": "61b13c32b41e724bb4f17d6f68c8ceb3",
+      "lastModificationDate": 1755480492760,
+      "contentHash": "9239b1cf6de870c01a3e88a383023226",
       "sourceName": "contracts/test/Diamond.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1776,7 +1776,9 @@
         }
       },
       "imports": [
-        "../interfaces/IDiamondLoupe.sol"
+        "../interfaces/IDiamondLoupe.sol",
+        "./interfaces/IDiamondCut.sol",
+        "@openzeppelin/contracts/utils/introspection/IERC165.sol"
       ],
       "versionPragmas": [
         "0.8.30"
@@ -1934,6 +1936,43 @@
       ],
       "artifacts": [
         "FacetB"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\interfaces\\IDiamondCut.sol": {
+      "lastModificationDate": 1755479079777,
+      "contentHash": "b58d32344c7062824ced0253211028e1",
+      "sourceName": "contracts/test/interfaces/IDiamondCut.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "IDiamondCut"
       ]
     }
   }
