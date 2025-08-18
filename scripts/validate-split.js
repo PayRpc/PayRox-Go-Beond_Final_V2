@@ -5,33 +5,11 @@ const path = require('path');
 const OUT = path.resolve('artifacts/splits');
 const combined = JSON.parse(fs.readFileSync(path.join(OUT, 'combined.json'), 'utf8'));
 
-// Normalize legacy/alternate shapes: some manifests may store 'parts' as an array of part objects
-// and 'selectors' as an array of selector strings. Normalize to numeric counts so validation is stable.
-let partsCount = null;
-let selectorsCount = null;
-if (Array.isArray(combined.parts)) {
-  partsCount = combined.parts.length;
-} else if (Number.isInteger(combined.parts)) {
-  partsCount = combined.parts;
-}
-if (Array.isArray(combined.selectors)) {
-  selectorsCount = combined.selectors.length;
-} else if (Number.isInteger(combined.selectors)) {
-  selectorsCount = combined.selectors;
-}
-// If still null, try to derive from by_part or parts_list
-if ((partsCount === null || partsCount === 0) && Array.isArray(combined.by_part)) {
-  partsCount = combined.by_part.length;
-}
-if ((selectorsCount === null || selectorsCount === 0) && Array.isArray(combined.selectors_list)) {
-  selectorsCount = combined.selectors_list.length;
-}
-
 // Basic invariants
-if (!Number.isInteger(partsCount) || partsCount < 1) {
+if (!Number.isInteger(combined.parts) || combined.parts < 1) {
   throw new Error('No parts produced');
 }
-if (!Number.isInteger(selectorsCount) || selectorsCount < 1) {
+if (!Number.isInteger(combined.selectors) || combined.selectors < 1) {
   throw new Error('No selectors extracted');
 }
 

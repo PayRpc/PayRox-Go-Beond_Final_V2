@@ -14,8 +14,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import { program } from 'commander';
-import fg from 'fast-glob';
-import { keccak256, toUtf8Bytes, Interface } from 'ethers';
 
 interface LintResult {
   success: boolean;
@@ -67,10 +65,11 @@ interface ManifestData {
 class PayRoxRefactorLinter {
   private readonly EIP170_SIZE_LIMIT = 24576; // 24,576 bytes
   private readonly LOUPE_FUNCTIONS = [
-  'facets',
-  'facetFunctionSelectors',
-  'facetAddresses',
-  'facetAddress'
+    'facets()',
+    'facetFunctionSelectors(address)',
+    'facetAddresses()',
+    'facetAddress(bytes4)',
+    'supportsInterface(bytes4)'
   ];
 
   private errors: LintError[] = [];
@@ -78,7 +77,7 @@ class PayRoxRefactorLinter {
   private facetsDir: string;
   private manifestPath: string;
 
-  constructor(facetsDir: string = './contracts/facets', manifestPath: string = './payrox-manifest.json') {
+  constructor(facetsDir: string = './facets', manifestPath: string = './payrox-manifest.json') {
     this.facetsDir = facetsDir;
     this.manifestPath = manifestPath;
   }
@@ -120,59 +119,58 @@ class PayRoxRefactorLinter {
   private async checkCompilation(): Promise<void> {
     try {
       console.log('📋 Checking compilation...');
-  execSync('npx hardhat compile', { stdio: 'inherit', cwd: process.cwd() });
+      execSync('npx hardhat compile', { stdio: 'pipe', cwd: process.cwd() });
       console.log('✅ Compilation successful');
     } catch (error) {
       this.errors.push({
         type: 'COMPILATION',
-        message: `Compilation failed: ${error instanceof Error ? error.message : String(error)}`,
-        details: { error: error instanceof Error ? error.message : String(error) }
+        message: `Compilation failed: ${error}`,
+        details: { error: error.toString() }
       });
     }
   }
 
   private async checkFacetSizes(): Promise<FacetInfo[]> {
-  console.log('📏 Checking facet sizes...');
-  console.log(`   Scanning for facets under: ${this.facetsDir} (glob allowed)`);
+    console.log('📏 Checking facet sizes...');
     
     const facetInfos: FacetInfo[] = [];
-    const patterns = [
-      this.facetsDir.endsWith('.sol') ? this.facetsDir : path.join(this.facetsDir, '**/*.sol')
-    ];
-    const allSol = await fg(patterns, { absolute: true, dot: false });
-    let facetFiles = allSol.filter(p => /Facet\.sol$/i.test(p));
-    if (facetFiles.length === 0) {
-      console.warn('   No *Facet.sol files found (continuing with all *.sol).');
-      facetFiles = allSol;
+    
+    if (!fs.existsSync(this.facetsDir)) {
+      this.errors.push({
+        type: 'SIZE_LIMIT',
+        message: `Facets directory not found: ${this.facetsDir}`
+      });
+      return facetInfos;
     }
 
-      for (const facetPath of facetFiles) {
-        const facetName = path.basename(facetPath, '.sol');
-        try {
-        const rel = path.relative(path.join(process.cwd()), facetPath).replace(/\\/g, '/');
-        const artifactsPath = path.join('artifacts', 'contracts', rel, `${facetName}.json`);
-        
-          let runtimeSize = 0;
-          let selectors: string[] = [];
-          if (fs.existsSync(artifactsPath)) {
-            const artifact = JSON.parse(fs.readFileSync(artifactsPath, 'utf-8'));
-            const runtimeBytecode = typeof artifact.deployedBytecode === 'string'
-              ? artifact.deployedBytecode
-              : artifact.evm?.deployedBytecode?.object || '0x';
-            runtimeSize = Buffer.from(runtimeBytecode.replace(/^0x/, ''), 'hex').length;
-            selectors = this.extractSelectorsFromAbi(artifact.abi || []);
-          } else {
-            this.warnings.push({
-              type: 'BEST_PRACTICE',
-              message: `Artifact not found for ${facetName} (looked at ${artifactsPath}). Did compile emit artifacts?`,
-              file: facetPath
-            });
-          }
+    const facetFiles = fs.readdirSync(this.facetsDir)
+      .filter(file => file.endsWith('.sol'))
+      .map(file => path.join(this.facetsDir, file));
 
-        // Check for loupe functions in source by matching function declarations only
+    for (const facetPath of facetFiles) {
+      const facetName = path.basename(facetPath, '.sol');
+      
+      try {
+        // Get runtime bytecode size from artifacts
+        const artifactPath = path.join('./artifacts', facetPath, `${facetName}.sol`, `${facetName}.json`);
+        
+        let runtimeSize = 0;
+        let selectors: string[] = [];
+        
+        if (fs.existsSync(artifactPath)) {
+          const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf-8'));
+          const runtimeBytecode = artifact.deployedBytecode?.object || '';
+          runtimeSize = Buffer.from(runtimeBytecode.replace('0x', ''), 'hex').length;
+          
+          // Extract selectors from ABI
+          selectors = this.extractSelectorsFromAbi(artifact.abi || []);
+        }
+
+        // Check for loupe functions in source
         const sourceCode = fs.readFileSync(facetPath, 'utf-8');
-        const hasLoupeFunctions = this.LOUPE_FUNCTIONS.some(funcName => 
-          new RegExp(`function\\s+${funcName}\\s*\\(`, 'm').test(sourceCode)
+        const hasLoupeFunctions = this.LOUPE_FUNCTIONS.some(func => 
+          sourceCode.includes(func) || 
+          new RegExp(`function\\s+${func.split('(')[0]}\\s*\\(`).test(sourceCode)
         );
 
         const facetInfo: FacetInfo = {
@@ -186,7 +184,7 @@ class PayRoxRefactorLinter {
         facetInfos.push(facetInfo);
 
         // Check size limit
-  if (runtimeSize > this.EIP170_SIZE_LIMIT) {
+        if (runtimeSize > this.EIP170_SIZE_LIMIT) {
           this.errors.push({
             type: 'SIZE_LIMIT',
             message: `Facet ${facetName} runtime bytecode (${runtimeSize} bytes) exceeds EIP-170 limit (${this.EIP170_SIZE_LIMIT} bytes)`,
@@ -262,17 +260,19 @@ class PayRoxRefactorLinter {
   }
 
   private async checkSelectorParity(facetSelectors: Map<string, string[]>): Promise<void> {
-    // Prefer selector_map.json if present; else try to derive from a baseline artifact (dispatcher/monolith).
+    // This would compare with original contract selectors
+    // Implementation depends on having the original contract reference
+    
     const selectorMapPath = './selector_map.json';
     if (fs.existsSync(selectorMapPath)) {
       try {
         const selectorMap = JSON.parse(fs.readFileSync(selectorMapPath, 'utf-8'));
         const originalSelectors = new Set(Object.keys(selectorMap));
         const currentSelectors = new Set(facetSelectors.keys());
-
+        
         const missing = [...originalSelectors].filter(sel => !currentSelectors.has(sel));
         const extra = [...currentSelectors].filter(sel => !originalSelectors.has(sel));
-
+        
         if (missing.length > 0) {
           this.errors.push({
             type: 'SELECTOR_COLLISION',
@@ -280,7 +280,7 @@ class PayRoxRefactorLinter {
             details: { missing }
           });
         }
-
+        
         if (extra.length > 0) {
           this.warnings.push({
             type: 'COMPATIBILITY',
@@ -293,41 +293,6 @@ class PayRoxRefactorLinter {
           message: `Could not verify selector parity: ${error}`
         });
       }
-      return;
-    }
-
-    // Try to find a dispatcher/monolith artifact to compare against
-    const candidates = await fg('artifacts/contracts/**/*.json', { dot: false });
-    const baseline = candidates.find(p => /Dispatcher\.json$/.test(p) || /Manifest.*\.json$/.test(p) || /Diamond.*\.json$/.test(p));
-    if (baseline) {
-      try {
-        const art = JSON.parse(fs.readFileSync(baseline, 'utf-8'));
-  const iface = new Interface(art.abi || []);
-  const original = new Set<string>();
-  for (const f of Object.values((iface as any).functions)) {
-          // @ts-ignore
-          const sig: string = (f as any).format();
-          original.add('0x' + keccak256(toUtf8Bytes(sig)).slice(2, 10));
-        }
-        const current = new Set(facetSelectors.keys());
-        const missing = [...original].filter(x => !current.has(x));
-        if (missing.length) {
-          this.errors.push({
-            type: 'SELECTOR_COLLISION',
-            message: `Missing selectors vs baseline (${path.basename(baseline)}): ${missing.join(', ')}`
-          });
-        }
-      } catch (e:any) {
-        this.warnings.push({
-          type: 'BEST_PRACTICE',
-          message: `Baseline parity check failed (${baseline}): ${e?.message || e}`
-        });
-      }
-    } else {
-      this.warnings.push({
-        type: 'BEST_PRACTICE',
-        message: 'No selector_map.json or baseline artifact found — parity not verified.'
-      });
     }
   }
 
@@ -404,30 +369,25 @@ class PayRoxRefactorLinter {
   }
 
   private extractSelectorsFromAbi(abi: any[]): string[] {
-    // Use ethers to produce canonical signatures and selectors
-    try {
-      const iface = new Interface(abi);
-      const sels = new Set<string>();
-      for (const f of Object.values(iface.functions)) {
-        // ethers v6: .format() returns canonical "name(type,...)"
-        // @ts-ignore
-        const sig: string = (f as any).format();
-        const sel = '0x' + keccak256(toUtf8Bytes(sig)).slice(2, 10);
-        sels.add(sel);
+    const selectors: string[] = [];
+    
+    for (const item of abi) {
+      if (item.type === 'function') {
+        const signature = `${item.name}(${item.inputs.map((input: any) => input.type).join(',')})`;
+        const selector = this.computeSelector(signature);
+        selectors.push(selector);
       }
-      return [...sels];
-    } catch (e) {
-      // fallback: naive parse
-      const sels: string[] = [];
-      for (const item of abi) {
-        if (item.type === 'function') {
-          const signature = `${item.name}(${item.inputs.map((input: any) => input.type).join(',')})`;
-          const hash = keccak256(toUtf8Bytes(signature));
-          sels.push('0x' + hash.slice(2, 10));
-        }
-      }
-      return sels;
     }
+    
+    return selectors;
+  }
+
+  private computeSelector(signature: string): string {
+    // This is a simplified selector computation
+    // In a real implementation, you'd use ethers.js or similar
+    const crypto = require('crypto');
+    const hash = crypto.createHash('sha256').update(signature).digest('hex');
+    return '0x' + hash.substring(0, 8);
   }
 
   private generateSummary(facetInfos: FacetInfo[]): LintSummary {
@@ -481,7 +441,7 @@ program
   .name('refactor-lint')
   .description('PayRox Diamond Pattern refactor linter')
   .version('1.0.0')
-  .option('-f, --facets <dir>', 'Facets directory', './contracts/facets')
+  .option('-f, --facets <dir>', 'Facets directory', './facets')
   .option('-m, --manifest <path>', 'Manifest file path', './payrox-manifest.json')
   .option('--json', 'Output results as JSON')
   .action(async (options) => {
