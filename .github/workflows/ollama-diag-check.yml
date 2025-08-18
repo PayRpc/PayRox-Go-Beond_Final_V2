@@ -1,6 +1,6 @@
 name: Ollama diag smoke check
 
-on:
+"on":
   pull_request:
     types: [opened, synchronize, reopened]
   merge_group:
