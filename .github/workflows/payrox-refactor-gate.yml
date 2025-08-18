@@ -34,6 +34,13 @@ jobs:
       id: compile
       run: npx hardhat compile
 
+    - name: Generate payrox manifest
+      if: always()
+      run: |
+        echo "🔧 Generating payrox-manifest.json from contracts/facets"
+        node tools/generate-manifest.js
+      shell: bash
+
     - name: Run refactor linter
       run: npm run ai:lint
       continue-on-error: true

@@ -1,0 +1,395 @@
+{
+  "generated": "2025-08-18T02:18:51.717Z",
+  "collidingSelectors": {
+    "0xcc7bc94d": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "GOVERNANCE_ROLE()"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "GOVERNANCE_ROLE()"
+        }
+      ]
+    },
+    "0x2c08d659": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "MONITOR_ROLE()"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "MONITOR_ROLE()"
+        }
+      ]
+    },
+    "0xc1c4716b": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "validateTransaction(address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "validateTransaction(address)"
+        }
+      ]
+    },
+    "0xd01ce46a": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "ensureBuybackAllowed()"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "ensureBuybackAllowed()"
+        }
+      ]
+    },
+    "0xfdc615e7": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "reportMarketMove(int256)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "reportMarketMove(int256)"
+        }
+      ]
+    },
+    "0x69c7608b": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "setEnabled(bool)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "setEnabled(bool)"
+        }
+      ]
+    },
+    "0xd9ceede0": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "setThrottleBlocks(uint256)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "setThrottleBlocks(uint256)"
+        }
+      ]
+    },
+    "0x6bd8007f": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "setThresholds(uint256,uint256)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "setThresholds(uint256,uint256)"
+        }
+      ]
+    },
+    "0xecac993e": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "setBuybackPaused(bool)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "setBuybackPaused(bool)"
+        }
+      ]
+    },
+    "0xbbf2edb0": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "resetCircuitBreaker()"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "resetCircuitBreaker()"
+        }
+      ]
+    },
+    "0xe3eb766a": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "addTrusted(address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "addTrusted(address)"
+        }
+      ]
+    },
+    "0xf27b2396": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "removeTrusted(address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "removeTrusted(address)"
+        }
+      ]
+    },
+    "0x3007383b": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\@openzeppelin\\contracts\\access\\AccessControl.sol\\AccessControl.json",
+          "contractName": "AccessControl",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\@openzeppelin\\contracts\\access\\IAccessControl.sol\\IAccessControl.json",
+          "contractName": "IAccessControl",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\audit\\AuditRegistry.sol\\AuditRegistry.json",
+          "contractName": "AuditRegistry",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispacher.sol\\ManifestDispatcher.json",
+          "contractName": "ManifestDispatcher",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\factory\\DeterministicChunkFactory.sol\\DeterministicChunkFactory.json",
+          "contractName": "DeterministicChunkFactory",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\governance\\GovernanceOrchestrator.sol\\GovernanceOrchestrator.json",
+          "contractName": "GovernanceOrchestrator",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\interfaces\\IManifestDispatcher.sol\\IManifestDispatcher.json",
+          "contractName": "IManifestDispatcher",
+          "signature": "grantRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\Tests\\MockManifestDispatcher.sol\\MockManifestDispatcher.json",
+          "contractName": "MockManifestDispatcher",
+          "signature": "grantRole(bytes32,address)"
+        }
+      ]
+    },
+    "0x41122a35": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\@openzeppelin\\contracts\\access\\AccessControl.sol\\AccessControl.json",
+          "contractName": "AccessControl",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\@openzeppelin\\contracts\\access\\IAccessControl.sol\\IAccessControl.json",
+          "contractName": "IAccessControl",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\audit\\AuditRegistry.sol\\AuditRegistry.json",
+          "contractName": "AuditRegistry",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispacher.sol\\ManifestDispatcher.json",
+          "contractName": "ManifestDispatcher",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\factory\\DeterministicChunkFactory.sol\\DeterministicChunkFactory.json",
+          "contractName": "DeterministicChunkFactory",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\governance\\GovernanceOrchestrator.sol\\GovernanceOrchestrator.json",
+          "contractName": "GovernanceOrchestrator",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\interfaces\\IManifestDispatcher.sol\\IManifestDispatcher.json",
+          "contractName": "IManifestDispatcher",
+          "signature": "revokeRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\Tests\\MockManifestDispatcher.sol\\MockManifestDispatcher.json",
+          "contractName": "MockManifestDispatcher",
+          "signature": "revokeRole(bytes32,address)"
+        }
+      ]
+    },
+    "0x165a6a83": {
+      "facets": [
+        "IAntiBotFacet",
+        "SecurityFacet"
+      ],
+      "occurrences": [
+        {
+          "artifact": "artifacts\\@openzeppelin\\contracts\\access\\AccessControl.sol\\AccessControl.json",
+          "contractName": "AccessControl",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\@openzeppelin\\contracts\\access\\IAccessControl.sol\\IAccessControl.json",
+          "contractName": "IAccessControl",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\audit\\AuditRegistry.sol\\AuditRegistry.json",
+          "contractName": "AuditRegistry",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\dispacher\\ManifestDispacher.sol\\ManifestDispatcher.json",
+          "contractName": "ManifestDispatcher",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
+          "contractName": "IAntiBotFacet",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\facets\\SecurityFacet.sol\\SecurityFacet.json",
+          "contractName": "SecurityFacet",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\factory\\DeterministicChunkFactory.sol\\DeterministicChunkFactory.json",
+          "contractName": "DeterministicChunkFactory",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\governance\\GovernanceOrchestrator.sol\\GovernanceOrchestrator.json",
+          "contractName": "GovernanceOrchestrator",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\interfaces\\IManifestDispatcher.sol\\IManifestDispatcher.json",
+          "contractName": "IManifestDispatcher",
+          "signature": "hasRole(bytes32,address)"
+        },
+        {
+          "artifact": "artifacts\\contracts\\Tests\\MockManifestDispatcher.sol\\MockManifestDispatcher.json",
+          "contractName": "MockManifestDispatcher",
+          "signature": "hasRole(bytes32,address)"
+        }
+      ]
+    }
+  }
+}

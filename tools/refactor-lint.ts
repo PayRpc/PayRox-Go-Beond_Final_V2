@@ -77,7 +77,7 @@ class PayRoxRefactorLinter {
   private facetsDir: string;
   private manifestPath: string;
 
-  constructor(facetsDir: string = './facets', manifestPath: string = './payrox-manifest.json') {
+  constructor(facetsDir: string = './contracts/facets', manifestPath: string = './payrox-manifest.json') {
     this.facetsDir = facetsDir;
     this.manifestPath = manifestPath;
   }
@@ -131,7 +131,8 @@ class PayRoxRefactorLinter {
   }
 
   private async checkFacetSizes(): Promise<FacetInfo[]> {
-    console.log('📏 Checking facet sizes...');
+  console.log('📏 Checking facet sizes...');
+  console.log(`   Using facets directory: ${this.facetsDir}`);
     
     const facetInfos: FacetInfo[] = [];
     
@@ -151,8 +152,10 @@ class PayRoxRefactorLinter {
       const facetName = path.basename(facetPath, '.sol');
       
       try {
-        // Get runtime bytecode size from artifacts
-        const artifactPath = path.join('./artifacts', facetPath, `${facetName}.sol`, `${facetName}.json`);
+  // Get runtime bytecode size from artifacts
+  // Expected Hardhat artifact layout: artifacts/<relative path to .sol>/<ContractName>.json
+  const rel = path.relative(process.cwd(), facetPath);
+  const artifactPath = path.join('artifacts', rel, `${facetName}.json`);
         
         let runtimeSize = 0;
         let selectors: string[] = [];
@@ -441,7 +444,7 @@ program
   .name('refactor-lint')
   .description('PayRox Diamond Pattern refactor linter')
   .version('1.0.0')
-  .option('-f, --facets <dir>', 'Facets directory', './facets')
+  .option('-f, --facets <dir>', 'Facets directory', './contracts/facets')
   .option('-m, --manifest <path>', 'Manifest file path', './payrox-manifest.json')
   .option('--json', 'Output results as JSON')
   .action(async (options) => {
