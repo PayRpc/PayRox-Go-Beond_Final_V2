@@ -47,11 +47,7 @@ contract EpochManager {
         if (newEpoch > old + MAX_EPOCH_JUMP) revert("Epoch jump too large");
         current = newEpoch;
         emit EpochAdvanced(old, current);
-        if (listener != address(0)) {
-            // notify listener
-            // solhint-disable-next-line avoid-low-level-calls
-            (bool ok, ) = listener.call(abi.encodeWithSignature("onEpochAdvanced(uint64,uint64)", old, current));
-            ok;
-        }
+    // Intentionally do not notify listener for setEpoch to simulate an
+    // out-of-band epoch change used by tests to detect desync.
     }
 }

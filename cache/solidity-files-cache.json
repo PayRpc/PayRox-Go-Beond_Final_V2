@@ -1745,6 +1745,196 @@
       "artifacts": [
         "MockManifestDispatcher"
       ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond.sol": {
+      "lastModificationDate": 1755477315321,
+      "contentHash": "61b13c32b41e724bb4f17d6f68c8ceb3",
+      "sourceName": "contracts/test/Diamond.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IDiamondLoupe.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "Diamond"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\DiamondWithEpoch.sol": {
+      "lastModificationDate": 1755478313936,
+      "contentHash": "61244332753dce5df01b7e7fcc84e081",
+      "sourceName": "contracts/test/DiamondWithEpoch.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./EpochManager.sol",
+        "../interfaces/IDiamondLoupe.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "DiamondWithEpoch"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\EpochManager.sol": {
+      "lastModificationDate": 1755478144096,
+      "contentHash": "2c846cb39c612d83aee088374f59c254",
+      "sourceName": "contracts/test/EpochManager.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "EpochManager"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\FacetA.sol": {
+      "lastModificationDate": 1755476252356,
+      "contentHash": "765f1508d713d7a2b399e0b98d446ea2",
+      "sourceName": "contracts/test/FacetA.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "FacetA"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\FacetB.sol": {
+      "lastModificationDate": 1755476345442,
+      "contentHash": "ded19b828f6fd9aa24b907b358762ec2",
+      "sourceName": "contracts/test/FacetB.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "FacetB"
+      ]
     }
   }
 }

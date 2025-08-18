@@ -207,6 +207,18 @@ PORT=8000
 CORS_ORIGINS=http://localhost:3000
 ```
 
+### Run API (Windows)
+```powershell
+Set-Location 'C:\\PayRox-Go-Beyond-Ollama'
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload --log-level debug
+
+# Quick smoke (separate terminal)
+Invoke-RestMethod http://127.0.0.1:8000/arch/facts
+
+# Offline smoke (no server)
+python scripts\smoke_api.py
+```
+
 ### Facts Configuration
 Enhanced configuration management:
 ```bash
