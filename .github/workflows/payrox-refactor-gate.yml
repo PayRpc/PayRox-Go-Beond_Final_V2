@@ -31,6 +31,7 @@ jobs:
       run: npx hardhat --version
 
     - name: Compile contracts
+      id: compile
       run: npx hardhat compile
 
     - name: Run refactor linter
