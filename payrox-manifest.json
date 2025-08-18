@@ -77,24 +77,7 @@
       ]
     },
     "IAntiBotFacet": {
-      "selectors": [
-        "0xcc7bc94d",
-        "0x2c08d659",
-        "0xc1c4716b",
-        "0xd01ce46a",
-        "0xfdc615e7",
-        "0x69c7608b",
-        "0xd9ceede0",
-        "0x6bd8007f",
-        "0xecac993e",
-        "0xbbf2edb0",
-        "0xe3eb766a",
-        "0xf27b2396",
-        "0x3007383b",
-        "0x41122a35",
-        "0x165a6a83",
-        "0x459bf204"
-      ]
+  "selectors": []
     },
     "MaliciousFacet": {
       "selectors": [
