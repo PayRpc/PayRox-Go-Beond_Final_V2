@@ -23,6 +23,7 @@ try {
 
   $pyCmd = Get-Command python -ErrorAction SilentlyContinue
   if (-not $pyCmd) { $pyCmd = Get-Command py -ErrorAction SilentlyContinue }
+  if (-not $pyCmd) { $pyCmd = Get-Command python3 -ErrorAction SilentlyContinue }
   if (-not $pyCmd) { throw "Python not found on PATH (need 'python' or 'py')." }
   $pythonExe = $pyCmd.Source
 
