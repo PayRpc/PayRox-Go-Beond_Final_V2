@@ -2,20 +2,49 @@ name: CI - Manifest
 
 on:
   push:
+    branches: ['main', 'develop', 'fix/**']
   pull_request:
+    branches: ['main']
+
+concurrency:
+  group: manifest-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   manifest:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install deps
+          cache: 'npm'
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
         run: npm ci
-      - name: Compile
+
+      - name: Compile contracts
+        env:
+          CI: true
         run: npm run compile
+
       - name: Run manifest test
-        run: node tools/tests/generate-manifest.test.js
+        env:
+          CI: true
+        run: npm run test:manifest

@@ -46,6 +46,7 @@
     "postprocess:splits": "node scripts/postprocess-splits.js",
     "split:manifest:full": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1 -Source contracts\\dispacher\\ManifestDispacher.sol -OutDir artifacts/splits -CiMode",
   "manifest:canonical": "node scripts/generate-canonical-manifest.js",
+  "test:manifest": "node tools/tests/generate-manifest.test.js",
     "check:create2": "node scripts/check-create2-determinism.js"
   },
   "keywords": [],
