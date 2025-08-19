@@ -39,11 +39,16 @@ jobs:
       - name: ABI subset parity
         run: node scripts/validate-manifest-selectors.js --mode=subset --source contracts/dispacher/ManifestDispacher.sol --combined artifacts/splits/combined.json
 
+      - name: Generate canonical manifest
+        run: node scripts/generate-canonical-manifest.js --combined artifacts/splits/combined.json --out payrox-manifest.json
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: split-manifest-ubuntu
-          path: artifacts/splits
+          path: |
+            artifacts/splits
+            payrox-manifest.json
 
       - name: ABI exact parity (strict, release only)
         if: startsWith(github.ref, 'refs/tags/')
@@ -84,11 +89,18 @@ jobs:
         run: |
           node scripts/validate-manifest-selectors.js --mode=subset --source contracts\dispacher\ManifestDispacher.sol --combined artifacts\splits\combined.json
 
+      - name: Generate canonical manifest
+        shell: pwsh
+        run: |
+          node scripts/generate-canonical-manifest.js --combined artifacts/splits/combined.json --out payrox-manifest.json
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: split-manifest-windows
-          path: artifacts/splits
+          path: |
+            artifacts/splits
+            payrox-manifest.json
 
       - name: ABI exact parity (strict, release only)
         if: startsWith(github.ref, 'refs/tags/')
