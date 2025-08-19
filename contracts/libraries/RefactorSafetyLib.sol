@@ -21,6 +21,9 @@ library RefactorSafetyLib {
     error IncompatibleStorageLayout(bytes32 expected, bytes32 actual);
     error SelectorMismatch(bytes4 expected, bytes4 actual);
     error RefactorSafetyFailed(string reason);
+    error BaselineGasZero();
+    error RefSafetyVersionIncompatible(uint256 have, uint256 minRequired);
+    error RefSafetyNonIncrementing(uint256 fromVersion, uint256 toVersion);
 
     // ───────────────── Storage Layout Safety ─────────────────
     /**
@@ -109,7 +112,7 @@ library RefactorSafetyLib {
         uint256 actualGas,
         uint256 maxDeviationBps
     ) internal pure {
-        require(baselineGas > 0, "baselineGas=0");
+        if (baselineGas == 0) revert BaselineGasZero();
         if (actualGas > baselineGas) {
             uint256 increaseBps = ((actualGas - baselineGas) * 10_000) / baselineGas;
             if (increaseBps > maxDeviationBps) {
@@ -164,79 +167,5 @@ library RefactorSafetyLib {
         }
         return true;
     }
-}
 
-/**
- * @title RefactorSafeFacetBase
- * @notice Optional base for facets. **Do NOT** rely on codehash checks under delegatecall:
- *         inside a dispatcher/diamond, `address(this)` is the dispatcher, not the facet.
- *         Use this base in tests or set `_getExpectedCodeHash()` to `bytes32(0)` in production
- *         to effectively disable the local codehash check.
- */
-abstract contract RefactorSafeFacetBase {
-    using RefactorSafetyLib for *;
-
-    // ───────────────────── Events ─────────────────────
-    event RefactorSafetyInitialized(uint256 version, bytes32 codeHash);
-    event RefactorValidationPassed(bytes32 indexed checkId, string checkType);
-
-    // ───────────────────── Modifiers ──────────────────
-    modifier refactorSafe() {
-        _validateRefactorSafety();
-        _;
-    }
-
-    modifier versionCompatible(uint256 minVersion) {
-        require(_getVersion() >= minVersion, "Version incompatible");
-        _;
-    }
-
-    // ─────────────── Abstract hooks (implement) ───────────────
-    function _getVersion() internal view virtual returns (uint256);
-    function _getStorageNamespace() internal pure virtual returns (bytes32);
-    function _getExpectedCodeHash() internal pure virtual returns (bytes32);
-
-    // ─────────────── Internal safety helpers ───────────────
-    function _validateRefactorSafety() internal view {
-        // WARNING: under delegatecall this is dispatcher code.
-        bytes32 expected = _getExpectedCodeHash();
-        if (expected == bytes32(0)) {
-            // enforcement disabled
-            return;
-        }
-        bytes32 actual = address(this).codehash;
-        if (actual != expected) {
-            revert RefactorSafetyLib.RefactorSafetyFailed("Code hash mismatch (delegatecall?)");
-        }
-    }
-
-    /**
-     * @notice Example migration guard; emits an audit trail.
-     */
-    function _performMigrationSafety(
-        uint256 fromVersion,
-        uint256 toVersion,
-        bytes32 dataHash
-    ) internal {
-        // Basic monotonic progression check (minor/patch semantics live off-chain)
-        require(toVersion > fromVersion, "Non-incrementing version");
-        emit RefactorValidationPassed(
-            keccak256(abi.encodePacked("MIGRATION", fromVersion, toVersion, dataHash)),
-            "migration"
-        );
-    }
-
-    // ─────────────── External convenience (read-only) ───────────────
-    /**
-     * @notice Shallow, read-only “am I what you think I am” check.
-     * @dev Returns true if `_getExpectedCodeHash()` is zero or matches `address(this).codehash`.
-     *      In a real diamond call, this will compare the dispatcher’s codehash.
-     */
-    function emergencyRefactorValidation() external view returns (bool) {
-        return RefactorSafetyLib.performRefactorSafetyCheck(
-            address(this),
-            _getExpectedCodeHash(),
-            _getVersion()
-        );
-    }
 }

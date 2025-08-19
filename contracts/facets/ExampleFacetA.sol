@@ -4,7 +4,7 @@ pragma solidity 0.8.30;
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 import {GasOptimizationUtils} from "../utils/GasOptimizationUtils.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
+import { RefactorSafeFacetBase } from "../libraries/RefactorSafeFacetBase.sol";
 
 /**
  * @title ExampleFacetA

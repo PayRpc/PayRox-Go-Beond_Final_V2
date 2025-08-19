@@ -19,6 +19,9 @@ jobs:
       - name: Install deps
         run: npm ci --legacy-peer-deps
 
+      - name: Compile contracts
+        run: npx hardhat compile --network hardhat
+
       - name: Run splitter (non-interactive)
         shell: pwsh
         run: |
@@ -58,6 +61,9 @@ jobs:
 
       - name: Install deps
         run: npm ci --legacy-peer-deps
+      # IMPORTANT: compile first so facet splitter can derive selectors from compiled artifacts
+      - name: Compile contracts
+        run: npx hardhat compile --network hardhat
 
       - name: Run splitter (Windows)
         run: |
@@ -68,7 +74,7 @@ jobs:
             -FailOnEmptyParts
 
       - name: Sanity checks
-        shell: bash
+        shell: pwsh
         run: |
           node -e "const c=require('./artifacts/splits/combined.json'); if(!c.parts||!c.selectors){throw new Error('Empty split manifest: '+JSON.stringify(c))}"
           node scripts/validate-split.js
