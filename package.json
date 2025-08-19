@@ -39,6 +39,7 @@
   "test:diamond": "node scripts/run-diamond-tests.js",
     "test:loupe": "npx hardhat test --grep \"(loupe|selectors)\"",
     "test:refactor": "npx hardhat test tests/refactor-safety.test.ts",
+  "test:transformer": "jest tests/transformer.test.js --runInBand",
     "test:epoch": "npx hardhat test --grep \"epoch\"",
     "test:roles": "npx hardhat test --grep \"(roles|delegatecall|access)\"",
     "test:size": "npx hardhat test --grep \"(size|gas|limit)\"",

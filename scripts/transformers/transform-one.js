@@ -20,10 +20,11 @@ const { execSync } = require('child_process');
 
 function args() {
   const a = process.argv.slice(2);
-  const out = { file: null, contract: null };
+  const out = { file: null, contract: null, noCompile: false };
   for (let i = 0; i < a.length; i++) {
     if (a[i] === '--file') out.file = a[++i];
     else if (a[i] === '--contract') out.contract = a[++i];
+    else if (a[i] === '--no-compile') out.noCompile = true;
   }
   if (!out.file) throw new Error('Missing --file <path/to.sol>');
   return out;
@@ -313,7 +314,7 @@ function addInitializedVar(stateVars, contractName) {
 }
 
 function run() {
-  const { file, contract } = args();
+  const { file, contract, noCompile } = args();
   const srcPath = path.resolve(process.cwd(), file);
   const source = read(srcPath);
 
@@ -381,12 +382,16 @@ function run() {
     mkdirp(compileDir);
     const compilePath = path.join(compileDir, `${baseName}_Transformed.sol`);
     write(compilePath, finalOutput);
-    // Run a compile to validate output. If hardhat isn't present or compile fails, we fail.
-    try {
-      execSync('npx hardhat compile', { stdio: 'inherit' });
-    } catch (e) {
-      console.error('❌ Transformed code did not compile. See generated files for context.');
-      process.exit(3);
+    // Optionally run a compile to validate output. Skip when --no-compile is passed.
+    if (!noCompile) {
+      try {
+        execSync('npx hardhat compile', { stdio: 'inherit' });
+      } catch (e) {
+        console.error('❌ Transformed code did not compile. See generated files for context.');
+        process.exit(3);
+      }
+    } else {
+      console.log('ℹ️ --no-compile provided; skipping Hardhat compile check.');
     }
   } catch (e) {
     console.error('⚠️ Could not run compile check:', String(e));

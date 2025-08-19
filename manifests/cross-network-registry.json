@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-19T04:50:04.543Z",
+  "timestamp": "2025-08-19T10:04:25.523Z",
   "version": "1.0.0",
   "content": "PayRoxUniversalContract",
   "crossChainNonce": 1000,
@@ -8,8 +8,8 @@
     "universalSalt": "0x2abf91916c359903154c3fd691d0d9b651d00f152afd01f93481c99f313e5fd7"
   },
   "initCodeHashes": {
-    "factoryInitCodeHash": "0xdea8d5b42a68426251677400aba197e00070a36bef406b61d5440fa11f635886",
-    "targetInitCodeHash": "0x3a8d7d584daf1e37aa3bfe72a4e4853c44f94e8a603b9af7d31454117756c2a5"
+    "factoryInitCodeHash": "0xcdde02cf6a7f0482dbb6359860ba0d85d60deb51af388f964fe2f817f9a96bea",
+    "targetInitCodeHash": "0x65ef5d4c9d45e08ea43b88409166862e110dd241782dc42debf4c8e89170a9a3"
   },
   "deployers": {
     "eip2470": "0x4e59b44847b379578588920cA78FbF26c0B4956C"
@@ -21,8 +21,8 @@
       "explorerUrl": "https://etherscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Polygon",
@@ -30,8 +30,8 @@
       "explorerUrl": "https://polygonscan.com",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Arbitrum One",
@@ -39,8 +39,8 @@
       "explorerUrl": "https://arbiscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Optimism",
@@ -48,8 +48,8 @@
       "explorerUrl": "https://optimistic.etherscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Base",
@@ -57,8 +57,8 @@
       "explorerUrl": "https://basescan.org",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "BNB Smart Chain",
@@ -66,8 +66,8 @@
       "explorerUrl": "https://bscscan.com",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Avalanche C-Chain",
@@ -75,8 +75,8 @@
       "explorerUrl": "https://snowtrace.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Fantom Opera",
@@ -84,8 +84,8 @@
       "explorerUrl": "https://ftmscan.com",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Gnosis Chain",
@@ -93,8 +93,8 @@
       "explorerUrl": "https://gnosisscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Celo",
@@ -102,8 +102,8 @@
       "explorerUrl": "https://celoscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Moonbeam",
@@ -111,8 +111,8 @@
       "explorerUrl": "https://moonbeam.moonscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Cronos",
@@ -120,8 +120,8 @@
       "explorerUrl": "https://cronoscan.com",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Aurora",
@@ -129,8 +129,8 @@
       "explorerUrl": "https://aurorascan.dev",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Metis Andromeda",
@@ -138,8 +138,8 @@
       "explorerUrl": "https://explorer.metis.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Boba Network",
@@ -147,8 +147,8 @@
       "explorerUrl": "https://bobascan.com",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Moonriver",
@@ -156,8 +156,8 @@
       "explorerUrl": "https://moonriver.moonscan.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Fuse",
@@ -165,8 +165,8 @@
       "explorerUrl": "https://explorer.fuse.io",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Harmony One",
@@ -174,8 +174,8 @@
       "explorerUrl": "https://explorer.harmony.one",
       "status": "production",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Ethereum Sepolia",
@@ -183,8 +183,8 @@
       "explorerUrl": "https://sepolia.etherscan.io",
       "status": "testnet",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Polygon Amoy",
@@ -192,8 +192,8 @@
       "explorerUrl": "https://www.oklink.com/amoy",
       "status": "testnet",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Arbitrum Sepolia",
@@ -201,8 +201,8 @@
       "explorerUrl": "https://sepolia.arbiscan.io",
       "status": "testnet",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Base Sepolia",
@@ -210,8 +210,8 @@
       "explorerUrl": "https://sepolia.basescan.org",
       "status": "testnet",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Optimism Sepolia",
@@ -219,8 +219,8 @@
       "explorerUrl": "https://sepolia-optimism.etherscan.io",
       "status": "testnet",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     },
     {
       "network": "Hardhat Local",
@@ -228,8 +228,8 @@
       "explorerUrl": "http://localhost:8545",
       "status": "local",
       "create2Deployer": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
-      "predictedFactoryAddress": "0x5Cf066b132f5721f1AbaD2c75Df0B7210eaa08E3",
-      "predictedTargetAddress": "0xc55902cE0FA386f1fd49262e6527BA4724ff10e6"
+      "predictedFactoryAddress": "0xd4a49FC05494C15c7829F9EaA0C20A91Cbe9125f",
+      "predictedTargetAddress": "0x8471C7B39491D8561D39772065A2505bcE6fcca4"
     }
   ],
   "statistics": {
@@ -239,5 +239,6 @@
     "local": 1,
     "consistentTarget": true,
     "consistentFactory": true
-  }
+  },
+  "manifestFallbackUsed": true
 }

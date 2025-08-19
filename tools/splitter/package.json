@@ -1,0 +1,12 @@
+{
+	"name": "payrox-splitter",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"split": "ts-node split-facet.ts"
+	},
+	"devDependencies": {
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.2"
+	}
+}
