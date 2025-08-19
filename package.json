@@ -34,6 +34,8 @@
   "refactor:gate": "npm run split:combined && node scripts/generate-canonical-manifest.js --combined artifacts/splits/combined.json --out payrox-manifest.json --map selector_map.json --report validation-report.md",
   "manifest:soft": "node scripts/generate-canonical-manifest.js --combined artifacts/splits/combined.json --out payrox-manifest.json --map selector_map.json --report validation-report.md --soft || true",
   "manifest:diff": "node scripts/diff-manifests.js --strict strict-artifacts/payrox-manifest.json --canary payrox-manifest.json",
+  "security:analyze": "ts-node scripts/payrox-security.ts --out-dir security",
+  "security:analyze:strict": "ts-node scripts/payrox-security.ts --out-dir security --fail-on-high",
   "test:diamond": "node scripts/run-diamond-tests.js",
     "test:loupe": "npx hardhat test --grep \"(loupe|selectors)\"",
     "test:refactor": "npx hardhat test tests/refactor-safety.test.ts",

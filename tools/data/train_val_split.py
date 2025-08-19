@@ -17,6 +17,11 @@ try:
 except Exception:
     TOKENIZER_AVAILABLE = False
 
+# Stable bucket scheme (ordered, used in stats & stratification)
+BUCKET_BOUNDS = [32, 64, 128, 256, 512, 1024]
+BUCKET_LABELS = [f"{BUCKET_BOUNDS[i-1]+1 if i>0 else 0}-{b}"
+                 for i, b in enumerate(BUCKET_BOUNDS)] + ["1025+"]
+
 # --------------- IO -----------------
 def load_jsonl(path: Path):
     with path.open('r', encoding='utf-8') as f:
@@ -51,13 +56,11 @@ def count_tokens(text: str, enc=None) -> int:
     return max(1, len(text) // 4)
 
 def bucket_token_count(tok_len: int) -> str:
-    if tok_len <= 32:   return '0-32'
-    if tok_len <= 64:   return '33-64'
-    if tok_len <= 128:  return '65-128'
-    if tok_len <= 256:  return '129-256'
-    if tok_len <= 512:  return '257-512'
-    if tok_len <= 1024: return '513-1024'
-    return '1025+'
+    for b in BUCKET_BOUNDS:
+        if tok_len <= b:
+            idx = BUCKET_BOUNDS.index(b)
+            return BUCKET_LABELS[idx]
+    return BUCKET_LABELS[-1]
 
 # --------------- Preprocessing -----------------
 def normalize_key(s: str) -> str:
@@ -103,8 +106,9 @@ def filter_and_dedupe(records: List[Dict[str, Any]],
         "dropped_short": dropped_short,
         "dropped_long": dropped_long,
         "dropped_dupe": dropped_dupe,
-        "prompt_bucket_histogram": dict(sorted(buckets.items(),
-                                     key=lambda kv: (len(kv[0]), kv[0]))),
+        # keep the declared order for readability/comparability
+        "prompt_bucket_histogram": {lbl: buckets.get(lbl, 0) for lbl in BUCKET_LABELS},
+        "bucket_order": BUCKET_LABELS,
     }
     return kept, stats
 
@@ -114,6 +118,10 @@ def split_dataset(input_path: Path, train_path: Path, val_path: Path,
                   min_tokens: int | None = None, max_tokens: int | None = None,
                   dedupe: bool = False, stats_out: Path | None = None,
                   model_for_tokens: str = 'gpt-3.5-turbo'):
+    if not (0.0 < ratio < 1.0):
+        raise ValueError(f"--ratio must be between 0 and 1 (exclusive), got {ratio}")
+    if not input_path.exists():
+        raise FileNotFoundError(f"input file not found: {input_path}")
     enc = get_encoder(model_for_tokens)
     raw = list(load_jsonl(input_path))
     # filter + dedupe first (prevents leaking duplicates across splits)
@@ -135,11 +143,27 @@ def split_dataset(input_path: Path, train_path: Path, val_path: Path,
             b = bucket_token_count(tok)
             groups.setdefault(b, []).append(r)
         train, val = [], []
-        bucket_stats = { "train": {}, "val": {} }
-        for b, items in groups.items():
+        bucket_stats = { "train": {}, "val": {} }  # preserve declared order in reporting
+        for b in BUCKET_LABELS:
+            items = groups.get(b, [])
+            if not items:
+                bucket_stats["train"][b] = 0
+                bucket_stats["val"][b] = 0
+                continue
             rnd.shuffle(items)
-            cutoff = int(len(items) * ratio)
-            t, v = items[:cutoff], items[cutoff:]
+            n = len(items)
+            # robust cut for tiny buckets: ensure at least 1 item lands on either side when possible
+            cutoff = int(n * ratio)
+            if n == 1:
+                # probabilistic assignment honoring ratio but deterministic via seed
+                if rnd.random() < ratio:
+                    t, v = items, []
+                else:
+                    t, v = [], items
+            else:
+                if cutoff == 0: cutoff = 1
+                if cutoff == n: cutoff = n - 1
+                t, v = items[:cutoff], items[cutoff:]
             train.extend(t); val.extend(v)
             bucket_stats["train"][b] = len(t)
             bucket_stats["val"][b] = len(v)

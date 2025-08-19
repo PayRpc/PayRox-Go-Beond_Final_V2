@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-08-19T08:45:47.063Z",
+  "tools": {
+    "slither": false,
+    "mythril": false
+  },
+  "summary": {
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 0,
+    "total": 0
+  },
+  "issues": []
+}

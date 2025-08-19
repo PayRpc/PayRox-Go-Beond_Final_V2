@@ -86,6 +86,22 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Setup Python for security tools
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Slither & Mythril (best-effort)
+        shell: bash
+        run: |
+          set -e
+          echo "🔧 Installing Slither and Mythril (best-effort)"
+          # upgrade pip and install; allow failures so canary remains non-fatal
+          python -m pip install --upgrade pip setuptools wheel || true
+          python -m pip install slither-analyzer mythril || true
+          # ensure user-level bin directory is on PATH for subsequent steps
+          echo "PATH=${HOME}/.local/bin:${PATH}" >> $GITHUB_ENV || true
+
       - name: Generate VersionFacet (from package.json/CI)
         run: node scripts/gen-version-facet.ts
 
@@ -346,30 +362,21 @@ jobs:
         shell: bash
         run: |
           set -e
-          echo "🔐 Running non-fatal security checks (Slither + Mythril)"
-          # Slither via GitHub Action is faster; run as best-effort
-          echo "::group::Slither"
-          if command -v slither >/dev/null 2>&1; then
-            slither --version || true
-            slither contracts || true
-          else
-            echo "Slither not installed in runner; skipping"
-          fi
-          echo "::endgroup::"
+          echo "🔐 Running PayRox security analysis (ts-node)"
+          # Run the TypeScript security analyzer; non-fatal by default
+          npx ts-node scripts/payrox-security.ts --out-dir security || true
 
-          echo "::group::Mythril"
-          if command -v myth >/dev/null 2>&1; then
-            mkdir -p security/mythril-reports
-            # Run mythril in a non-fatal way for each facet file
-            for f in $(git ls-files 'contracts/facets/**.sol'); do
-              base=$(basename "$f" .sol)
-              myth analyze -o json "$f" > "security/mythril-reports/mythril-${base}.json" || echo "Mythril failed for $f"
-            done
-            python3 security/process-mythril.py security/mythril-reports || echo "Mythril processor failed"
-          else
-            echo "Mythril not installed in runner; skipping"
-          fi
-          echo "::endgroup::"
+      - name: Upload security artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-artifacts
+          path: |
+            security/SECURITY_ANALYSIS_REPORT.md
+            security/security-summary.json
+            security/slither-*.json
+            security/mythril-*.json
+          if-no-files-found: warn
 
       - name: Verify & summarize
         shell: bash
