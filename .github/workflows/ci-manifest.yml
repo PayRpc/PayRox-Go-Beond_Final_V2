@@ -1,0 +1,21 @@
+name: CI - Manifest
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm ci
+      - name: Compile
+        run: npm run compile
+      - name: Run manifest test
+        run: node tools/tests/generate-manifest.test.js

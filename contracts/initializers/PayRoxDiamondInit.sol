@@ -35,21 +35,32 @@ interface IPausable {
  * @notice Called via diamondCut(..., _init, _calldata) to register interface IDs.
  *         Keep this as the only place you "turn on" interface IDs.
  */
+import {PayRoxAccessControlStorage as ACS} from "../libraries/PayRoxAccessControlStorage.sol";
+import {PayRoxPauseStorage as PS} from "../libraries/PayRoxPauseStorage.sol";
+
 contract PayRoxDiamondInit {
-    function init(bytes memory /*data*/) external {
+    /// @param data abi.encode(address admin, address pauser)
+    function init(bytes memory data) external {
+        (address admin, address pauser) = abi.decode(data, (address, address));
+
         // Register ERC165 (redundant but harmless — supportsInterface handles it)
         PayRoxERC165Storage.layout().supported[type(IERC165).interfaceId] = true;
 
         // Common PayRox / diamond interfaces — enable the ones you actually use.
         PayRoxERC165Storage.layout().supported[type(IDiamondLoupe).interfaceId] = true; // EIP-2535 Loupe
         PayRoxERC165Storage.layout().supported[type(IERC173).interfaceId]      = true; // Ownership (EIP-173)
+        PayRoxERC165Storage.layout().supported[type(IAccessControl).interfaceId] = true;
+        PayRoxERC165Storage.layout().supported[type(IPausable).interfaceId]      = true;
 
-        // Optional (uncomment if present in your codebase):
-        // PayRoxERC165Storage.layout().supported[type(IAccessControl).interfaceId] = true;
-        // PayRoxERC165Storage.layout().supported[type(IPausable).interfaceId]      = true;
+        // Seed roles: give admin the DEFAULT_ADMIN_ROLE and make pauser a PAUSER_ROLE holder
+        ACS.Layout storage a = ACS.layout();
+        a.roles[ACS.DEFAULT_ADMIN_ROLE][admin] = true;
 
-        // If you have custom PayRox interfaces, add them here as well:
-        // PayRoxERC165Storage.layout().supported[type(IPayRoxEpochRules).interfaceId] = true;
-        // PayRoxERC165Storage.layout().supported[type(IPayRoxTreasury).interfaceId]   = true;
+        // PAUSER_ROLE constant from PauseFacet: use the same hard-coded value
+        bytes32 PAUSER_ROLE = 0xf1d6b5c02d3d7f2e5f7acb9c5c273942a5b9e2f5c22e8c4e3c8a7b8c6d4a1234;
+        a.roles[PAUSER_ROLE][pauser] = true;
+
+        // Ensure pause default is false
+        PS.layout().paused = false;
     }
 }

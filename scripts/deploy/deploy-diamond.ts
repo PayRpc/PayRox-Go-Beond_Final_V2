@@ -32,7 +32,7 @@ interface ManifestData {
 
 class DiamondDeployer {
   private config: DeploymentConfig;
-  private manifest: ManifestData;
+  private manifest!: ManifestData; // loaded in constructor
   private deployedFacets: Map<string, Contract> = new Map();
 
   constructor(config: DeploymentConfig) {

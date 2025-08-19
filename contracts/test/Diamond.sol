@@ -62,7 +62,5 @@ contract Diamond is IDiamondLoupe {
     }
 
     // Minimal ERC-165 support for tests
-    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
-        return interfaceId == type(IDiamondLoupe).interfaceId || interfaceId == 0x01ffc9a7;
-    }
+    // ERC165 handled by ERC165Facet; test diamond does not implement supportsInterface here to avoid collisions.
 }

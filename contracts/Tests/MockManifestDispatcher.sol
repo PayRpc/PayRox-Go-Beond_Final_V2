@@ -124,5 +124,5 @@ contract MockManifestDispatcher is IManifestDispatcher {
         return ManifestInfo(bytes32(0), 0, 0, 0);
     }
 
-    // supportsInterface centralized in ERC165Facet; mock intentionally minimal to avoid selector collisions.
+        // supportsInterface is centralized in ERC165Facet for canonical reporting; keep mock minimal.
 }

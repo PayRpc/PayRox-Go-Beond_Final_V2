@@ -16,10 +16,9 @@ library PayRoxStorage {
 
     struct Layout {
         // admin/config
-        address owner;
-        address treasury;
-        uint16  feeBps;      // protocol fee in bps (<= 10_000)
-        bool    paused;
+    address owner;
+    address treasury;
+    uint16  feeBps;      // protocol fee in bps (<= 10_000)
 
         // simple nonReentrant guard
         bool    reentrancy;

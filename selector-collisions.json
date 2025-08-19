@@ -1,0 +1,1656 @@
+[
+  {
+    "selector": "0x20df4359",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "EMERGENCY_ROLE()"
+      },
+      {
+        "facet": "GovernanceOrchestrator",
+        "sig": "EMERGENCY_ROLE()"
+      }
+    ]
+  },
+  {
+    "selector": "0xadc6c3b2",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "activateCommittedRoot()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activateCommittedRoot()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activateCommittedRoot()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activateCommittedRoot()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activateCommittedRoot()"
+      }
+    ]
+  },
+  {
+    "selector": "0x3a8c0786",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "activationDelay()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activationDelay()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activationDelay()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activationDelay()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activationDelay()"
+      }
+    ]
+  },
+  {
+    "selector": "0x9f6b4a3b",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "activeEpoch()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activeEpoch()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activeEpoch()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activeEpoch()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activeEpoch()"
+      }
+    ]
+  },
+  {
+    "selector": "0xabb2efdf",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "activeRoot()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activeRoot()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "activeRoot()"
+      },
+      {
+        "facet": "IManifestDispatcherView",
+        "sig": "activeRoot()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activeRoot()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "activeRoot()"
+      }
+    ]
+  },
+  {
+    "selector": "0x575d7487",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "applyRoutes(bytes4[],address[],bytes32[],bytes32[][],bool[][])"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "applyRoutes(bytes4[],address[],bytes32[],bytes32[][],bool[][])"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "applyRoutes(bytes4[],address[],bytes32[],bytes32[][],bool[][])"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "applyRoutes(bytes4[],address[],bytes32[],bytes32[][],bool[][])"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "applyRoutes(bytes4[],address[],bytes32[],bytes32[][],bool[][])"
+      }
+    ]
+  },
+  {
+    "selector": "0x129fe8c1",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "checkStorageConflicts(address)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "checkStorageConflicts(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x00ebb5f0",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "commitRoot(bytes32,uint64)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "commitRoot(bytes32,uint64)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "commitRoot(bytes32,uint64)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "commitRoot(bytes32,uint64)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "commitRoot(bytes32,uint64)"
+      }
+    ]
+  },
+  {
+    "selector": "0xcdffacc6",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetAddress(bytes4)"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facetAddress(bytes4)"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facetAddress(bytes4)"
+      },
+      {
+        "facet": "Diamond",
+        "sig": "facetAddress(bytes4)"
+      },
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "facetAddress(bytes4)"
+      }
+    ]
+  },
+  {
+    "selector": "0x44615bd5",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetAddressEx(bytes4,bytes32)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetAddressEx(bytes4,bytes32)"
+      }
+    ]
+  },
+  {
+    "selector": "0x52ef6b2c",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetAddresses()"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facetAddresses()"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facetAddresses()"
+      },
+      {
+        "facet": "Diamond",
+        "sig": "facetAddresses()"
+      },
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "facetAddresses()"
+      }
+    ]
+  },
+  {
+    "selector": "0x4c556851",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetAddressesBatchEx(bytes4[])"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetAddressesBatchEx(bytes4[])"
+      }
+    ]
+  },
+  {
+    "selector": "0xcf25dff3",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetAddressesEx(bool)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetAddressesEx(bool)"
+      }
+    ]
+  },
+  {
+    "selector": "0xadfca15e",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetFunctionSelectors(address)"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facetFunctionSelectors(address)"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facetFunctionSelectors(address)"
+      },
+      {
+        "facet": "Diamond",
+        "sig": "facetFunctionSelectors(address)"
+      },
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "facetFunctionSelectors(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x08e59920",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetFunctionSelectorsEx(address,uint8)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetFunctionSelectorsEx(address,uint8)"
+      }
+    ]
+  },
+  {
+    "selector": "0xb74a7d3d",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetHash(address)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetHash(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x1e580ed1",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetImplementation(address)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetImplementation(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x1aca7810",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetMetadata(address)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetMetadata(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x889c9376",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetProvenance(address)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetProvenance(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x7a0ed627",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facets()"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facets()"
+      },
+      {
+        "facet": "IDiamondLoupe",
+        "sig": "facets()"
+      },
+      {
+        "facet": "Diamond",
+        "sig": "facets()"
+      },
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "facets()"
+      }
+    ]
+  },
+  {
+    "selector": "0x45be02b5",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "facetsEx(bool)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "facetsEx(bool)"
+      }
+    ]
+  },
+  {
+    "selector": "0x62a5af3b",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "freeze()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "freeze()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "freeze()"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "freeze()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "freeze()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "freeze()"
+      }
+    ]
+  },
+  {
+    "selector": "0x054f7d9c",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "frozen()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "frozen()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "frozen()"
+      },
+      {
+        "facet": "IManifestDispatcherView",
+        "sig": "frozen()"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "frozen()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "frozen()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "frozen()"
+      }
+    ]
+  },
+  {
+    "selector": "0x062576b2",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "getManifestInfo()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "getManifestInfo()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "getManifestInfo()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "getManifestInfo()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "getManifestInfo()"
+      }
+    ]
+  },
+  {
+    "selector": "0x1a6e649e",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "getRoute(bytes4)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "getRoute(bytes4)"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "getRoute(bytes4)"
+      }
+    ]
+  },
+  {
+    "selector": "0x32252057",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "getRouteCount()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "getRouteCount()"
+      }
+    ]
+  },
+  {
+    "selector": "0xf552501a",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "pendingEpoch()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pendingEpoch()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pendingEpoch()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pendingEpoch()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pendingEpoch()"
+      }
+    ]
+  },
+  {
+    "selector": "0x750588cf",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "pendingRoot()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pendingRoot()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pendingRoot()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pendingRoot()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pendingRoot()"
+      }
+    ]
+  },
+  {
+    "selector": "0x7d979a4f",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "pendingSince()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pendingSince()"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pendingSince()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pendingSince()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pendingSince()"
+      }
+    ]
+  },
+  {
+    "selector": "0xb782ba50",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "removeRoutes(bytes4[])"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "removeRoutes(bytes4[])"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "removeRoutes(bytes4[])"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "removeRoutes(bytes4[])"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "removeRoutes(bytes4[])"
+      }
+    ]
+  },
+  {
+    "selector": "0x51c7094f",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "routes(bytes4)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "routes(bytes4)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "routes(bytes4)"
+      },
+      {
+        "facet": "IManifestDispatcherView",
+        "sig": "routes(bytes4)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "routes(bytes4)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "routes(bytes4)"
+      }
+    ]
+  },
+  {
+    "selector": "0x02128389",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "selectorHash(address)"
+      },
+      {
+        "facet": "IDiamondLoupeEx",
+        "sig": "selectorHash(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x96b896eb",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "setActivationDelay(uint64)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "setActivationDelay(uint64)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "setActivationDelay(uint64)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setActivationDelay(uint64)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setActivationDelay(uint64)"
+      }
+    ]
+  },
+  {
+    "selector": "0x991c8165",
+    "owners": [
+      {
+        "facet": "ManifestDispatcher",
+        "sig": "verifyManifest(bytes32)"
+      },
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "verifyManifest(bytes32)"
+      }
+    ]
+  },
+  {
+    "selector": "0x8456cb59",
+    "owners": [
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "pause()"
+      },
+      {
+        "facet": "PauseFacet",
+        "sig": "pause()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pause()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "pause()"
+      }
+    ]
+  },
+  {
+    "selector": "0x3f4ba83a",
+    "owners": [
+      {
+        "facet": "IManifestDispatcher",
+        "sig": "unpause()"
+      },
+      {
+        "facet": "PauseFacet",
+        "sig": "unpause()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "unpause()"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "unpause()"
+      }
+    ]
+  },
+  {
+    "selector": "0x248a9ca3",
+    "owners": [
+      {
+        "facet": "AccessControlFacet",
+        "sig": "getRoleAdmin(bytes32)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "getRoleAdmin(bytes32)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "getRoleAdmin(bytes32)"
+      }
+    ]
+  },
+  {
+    "selector": "0x2f2ff15d",
+    "owners": [
+      {
+        "facet": "AccessControlFacet",
+        "sig": "grantRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "grantRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "grantRole(bytes32,address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x91d14854",
+    "owners": [
+      {
+        "facet": "AccessControlFacet",
+        "sig": "hasRole(bytes32,address)"
+      },
+      {
+        "facet": "IAccessControl",
+        "sig": "hasRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "hasRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "hasRole(bytes32,address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xd547741f",
+    "owners": [
+      {
+        "facet": "AccessControlFacet",
+        "sig": "revokeRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "revokeRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "revokeRole(bytes32,address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x79189d61",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "addAuthorizedRecipient(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "addAuthorizedRecipient(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "addAuthorizedRecipient(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xee05163a",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "deployDeterministic(bytes32,bytes,bytes)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "deployDeterministic(bytes32,bytes,bytes)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "deployDeterministic(bytes32,bytes,bytes)"
+      }
+    ]
+  },
+  {
+    "selector": "0xc2c8e21a",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "deployDeterministicBatch(bytes32[],bytes[],bytes[])"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "deployDeterministicBatch(bytes32[],bytes[],bytes[])"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "deployDeterministicBatch(bytes32[],bytes[],bytes[])"
+      }
+    ]
+  },
+  {
+    "selector": "0x4c36f10d",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "deploymentCount()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "deploymentCount()"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "deploymentCount()"
+      }
+    ]
+  },
+  {
+    "selector": "0x38a699a4",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "exists(bytes32)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "exists(bytes32)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "exists(bytes32)"
+      }
+    ]
+  },
+  {
+    "selector": "0x7ed1cd47",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "getExpectedFactoryBytecodeHash()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "getExpectedFactoryBytecodeHash()"
+      }
+    ]
+  },
+  {
+    "selector": "0xbc2e51df",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "getExpectedManifestHash()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "getExpectedManifestHash()"
+      }
+    ]
+  },
+  {
+    "selector": "0xee9d1ef5",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "getManifestDispatcher()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "getManifestDispatcher()"
+      }
+    ]
+  },
+  {
+    "selector": "0x6290caec",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "isDeployedContract(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "isDeployedContract(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "isDeployedContract(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x8da5cb5b",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "owner()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "owner()"
+      },
+      {
+        "facet": "IERC173",
+        "sig": "owner()"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "owner()"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "owner()"
+      },
+      {
+        "facet": "Diamond",
+        "sig": "owner()"
+      },
+      {
+        "facet": "EpochManager",
+        "sig": "owner()"
+      }
+    ]
+  },
+  {
+    "selector": "0xa64139fa",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "predict(bytes)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "predict(bytes)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "predict(bytes)"
+      }
+    ]
+  },
+  {
+    "selector": "0x10a93528",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "predictAddress(bytes32,bytes32)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "predictAddress(bytes32,bytes32)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "predictAddress(bytes32,bytes32)"
+      }
+    ]
+  },
+  {
+    "selector": "0x8e7163c2",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "predictAddressBatch(bytes32[],bytes32[])"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "predictAddressBatch(bytes32[],bytes32[])"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "predictAddressBatch(bytes32[],bytes32[])"
+      }
+    ]
+  },
+  {
+    "selector": "0xa087a87e",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "read(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "read(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "read(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x8061c715",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "removeAuthorizedRecipient(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "removeAuthorizedRecipient(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "removeAuthorizedRecipient(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xc97237be",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setBaseFeeWei(uint256)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setBaseFeeWei(uint256)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setBaseFeeWei(uint256)"
+      }
+    ]
+  },
+  {
+    "selector": "0xe74b981b",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setFeeRecipient(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setFeeRecipient(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setFeeRecipient(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xa901dd92",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setFeesEnabled(bool)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setFeesEnabled(bool)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setFeesEnabled(bool)"
+      }
+    ]
+  },
+  {
+    "selector": "0x40fca008",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setIdempotentMode(bool)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setIdempotentMode(bool)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setIdempotentMode(bool)"
+      }
+    ]
+  },
+  {
+    "selector": "0x63221490",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setMaxSingleTransfer(uint256)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setMaxSingleTransfer(uint256)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setMaxSingleTransfer(uint256)"
+      }
+    ]
+  },
+  {
+    "selector": "0x0bfde0da",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setTierFee(uint8,uint256)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setTierFee(uint8,uint256)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setTierFee(uint8,uint256)"
+      }
+    ]
+  },
+  {
+    "selector": "0xa04725c6",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "setUserTier(address,uint8)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "setUserTier(address,uint8)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "setUserTier(address,uint8)"
+      }
+    ]
+  },
+  {
+    "selector": "0xfa8c96ef",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "stage(bytes)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "stage(bytes)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "stage(bytes)"
+      }
+    ]
+  },
+  {
+    "selector": "0x1d513465",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "stageBatch(bytes[])"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "stageBatch(bytes[])"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "stageBatch(bytes[])"
+      }
+    ]
+  },
+  {
+    "selector": "0x7f4aedfe",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "stageMany(bytes[])"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "stageMany(bytes[])"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "stageMany(bytes[])"
+      }
+    ]
+  },
+  {
+    "selector": "0x5ea31b98",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "transferDefaultAdmin(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "transferDefaultAdmin(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "transferDefaultAdmin(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x24063c82",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "userTiers(address)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "userTiers(address)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "userTiers(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xb697ff8a",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "validateBytecodeSize(bytes)"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "validateBytecodeSize(bytes)"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "validateBytecodeSize(bytes)"
+      }
+    ]
+  },
+  {
+    "selector": "0x939e255c",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "verifySystemIntegrity()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "verifySystemIntegrity()"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "verifySystemIntegrity()"
+      }
+    ]
+  },
+  {
+    "selector": "0x476343ee",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "withdrawFees()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "withdrawFees()"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "withdrawFees()"
+      }
+    ]
+  },
+  {
+    "selector": "0x110f8874",
+    "owners": [
+      {
+        "facet": "ChunkFactoryFacet",
+        "sig": "withdrawRefund()"
+      },
+      {
+        "facet": "DeterministicChunkFactory",
+        "sig": "withdrawRefund()"
+      },
+      {
+        "facet": "IChunkFactory",
+        "sig": "withdrawRefund()"
+      }
+    ]
+  },
+  {
+    "selector": "0x01ffc9a7",
+    "owners": [
+      {
+        "facet": "ERC165Facet",
+        "sig": "supportsInterface(bytes4)"
+      },
+      {
+        "facet": "IERC165",
+        "sig": "supportsInterface(bytes4)"
+      },
+      {
+        "facet": "IERC165",
+        "sig": "supportsInterface(bytes4)"
+      }
+    ]
+  },
+  {
+    "selector": "0xf36c8f5c",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "GOVERNANCE_ROLE()"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "GOVERNANCE_ROLE()"
+      }
+    ]
+  },
+  {
+    "selector": "0x4d9b47e2",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "MONITOR_ROLE()"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "MONITOR_ROLE()"
+      }
+    ]
+  },
+  {
+    "selector": "0xd4d0d6e6",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "addTrusted(address)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "addTrusted(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x0d2644d2",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "ensureBuybackAllowed()"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "ensureBuybackAllowed()"
+      }
+    ]
+  },
+  {
+    "selector": "0x96d64879",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "isTrusted(address)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "isTrusted(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xd55e62a0",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "removeTrusted(address)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "removeTrusted(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x88ded880",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "reportMarketMove(int256)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "reportMarketMove(int256)"
+      }
+    ]
+  },
+  {
+    "selector": "0xde5f8d93",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "resetCircuitBreaker()"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "resetCircuitBreaker()"
+      }
+    ]
+  },
+  {
+    "selector": "0x527555da",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "setBuybackPaused(bool)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "setBuybackPaused(bool)"
+      }
+    ]
+  },
+  {
+    "selector": "0x328d8f72",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "setEnabled(bool)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "setEnabled(bool)"
+      }
+    ]
+  },
+  {
+    "selector": "0xe3064a77",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "setThresholds(uint256,uint256)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "setThresholds(uint256,uint256)"
+      }
+    ]
+  },
+  {
+    "selector": "0x75b9f5b2",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "setThrottleBlocks(uint256)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "setThrottleBlocks(uint256)"
+      }
+    ]
+  },
+  {
+    "selector": "0x8fa3a84c",
+    "owners": [
+      {
+        "facet": "IAntiBotFacet",
+        "sig": "validateTransaction(address)"
+      },
+      {
+        "facet": "SecurityFacet",
+        "sig": "validateTransaction(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0x5c975abb",
+    "owners": [
+      {
+        "facet": "PauseFacet",
+        "sig": "paused()"
+      },
+      {
+        "facet": "IPausable",
+        "sig": "paused()"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "paused()"
+      },
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "paused()"
+      }
+    ]
+  },
+  {
+    "selector": "0xe623a87c",
+    "owners": [
+      {
+        "facet": "RefactorSafetyFacet",
+        "sig": "emergencyRefactorValidation()"
+      },
+      {
+        "facet": "RefactorSafeFacetBase",
+        "sig": "emergencyRefactorValidation()"
+      }
+    ]
+  },
+  {
+    "selector": "0xf2fde38b",
+    "owners": [
+      {
+        "facet": "IERC173",
+        "sig": "transferOwnership(address)"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "transferOwnership(address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xcb7e9057",
+    "owners": [
+      {
+        "facet": "Orchestrator",
+        "sig": "dispatcher()"
+      },
+      {
+        "facet": "PayRoxProxyRouter",
+        "sig": "dispatcher()"
+      },
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "dispatcher()"
+      }
+    ]
+  },
+  {
+    "selector": "0x096f5be2",
+    "owners": [
+      {
+        "facet": "DiamondWithEpoch",
+        "sig": "MAX_EPOCH_JUMP()"
+      },
+      {
+        "facet": "EpochManager",
+        "sig": "MAX_EPOCH_JUMP()"
+      }
+    ]
+  },
+  {
+    "selector": "0x36568abe",
+    "owners": [
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "renounceRole(bytes32,address)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "renounceRole(bytes32,address)"
+      }
+    ]
+  },
+  {
+    "selector": "0xb416a8d4",
+    "owners": [
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setActiveEpoch(uint64)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setActiveEpoch(uint64)"
+      }
+    ]
+  },
+  {
+    "selector": "0xec876c39",
+    "owners": [
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setActiveRoot(bytes32)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setActiveRoot(bytes32)"
+      }
+    ]
+  },
+  {
+    "selector": "0x7e932d32",
+    "owners": [
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setFrozen(bool)"
+      },
+      {
+        "facet": "MockManifestDispatcher",
+        "sig": "setFrozen(bool)"
+      }
+    ]
+  }
+]

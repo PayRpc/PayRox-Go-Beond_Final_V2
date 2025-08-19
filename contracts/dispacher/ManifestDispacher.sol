@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import {AccessControl}   from "@openzeppelin/contracts/access/AccessControl.sol";
-import {Pausable}        from "@openzeppelin/contracts/utils/Pausable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {PayRoxAccessControlStorage as ACS} from "../libraries/PayRoxAccessControlStorage.sol";
+import {PayRoxPauseStorage as PS} from "../libraries/PayRoxPauseStorage.sol";
 
 // Updated, explicit interface paths
 import {IManifestDispatcher} from "../interfaces/IManifestDispatcher.sol";
@@ -22,8 +22,6 @@ contract ManifestDispatcher is
     IManifestDispatcher,
     IDiamondLoupe,   // standard EIP-2535 loupe
     IDiamondLoupeEx, // enhanced loupe (Ex)
-    AccessControl,
-    Pausable,
     ReentrancyGuard
 {
     // ───────────────────────────────────────────────────────────────────────────
@@ -110,10 +108,11 @@ contract ManifestDispatcher is
         // Enforce reasonable upper bound at deploy time
         if (activationDelaySeconds > MAX_ACTIVATION_DELAY) revert ActivationDelayOutOfRange(activationDelaySeconds);
 
-        _grantRole(DEFAULT_ADMIN_ROLE, admin);
-        _grantRole(COMMIT_ROLE, admin);
-        _grantRole(APPLY_ROLE, admin);
-        _grantRole(EMERGENCY_ROLE, admin);
+    // Seed canonical roles
+    ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][admin] = true;
+    ACS.layout().roles[COMMIT_ROLE][admin] = true;
+    ACS.layout().roles[APPLY_ROLE][admin] = true;
+    ACS.layout().roles[EMERGENCY_ROLE][admin] = true;
 
         manifest.activationDelay = activationDelaySeconds;
         manifest.manifestVersion = 1;
@@ -124,7 +123,8 @@ contract ManifestDispatcher is
     // ───────────────────────────────────────────────────────────────────────────
     receive() external payable {}
 
-    fallback() external payable whenNotPaused {
+    fallback() external payable {
+        require(!PS.layout().paused, "Pausable: paused");
         bytes4 selector = msg.sig;
         IManifestDispatcher.Route storage r = _routes[selector];
         address facet = r.facet;
@@ -203,9 +203,9 @@ contract ManifestDispatcher is
     function commitRoot(bytes32 newRoot, uint64 newEpoch)
         external
         override
-        onlyRole(COMMIT_ROLE)
-        whenNotPaused
     {
+        require(ACS.layout().roles[COMMIT_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         if (manifest.frozen) revert FrozenContract();
         if (newRoot == bytes32(0)) revert RootZero();
         if (newEpoch != manifest.activeEpoch + 1) revert BadEpoch();
@@ -226,10 +226,10 @@ contract ManifestDispatcher is
     )
         external
         override
-        onlyRole(APPLY_ROLE)
-        whenNotPaused
         nonReentrant
     {
+        require(ACS.layout().roles[APPLY_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         if (manifest.frozen) revert FrozenContract();
         if (manifest.pendingRoot == bytes32(0)) revert NoPendingRoot();
         uint256 n = selectors.length;
@@ -271,9 +271,9 @@ contract ManifestDispatcher is
     function activateCommittedRoot()
         external
         override
-        onlyRole(APPLY_ROLE)
-        whenNotPaused
     {
+        require(ACS.layout().roles[APPLY_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         if (manifest.frozen) revert FrozenContract();
         bytes32 pending = manifest.pendingRoot;
         if (pending == bytes32(0)) revert NoPendingRoot();
@@ -298,9 +298,9 @@ contract ManifestDispatcher is
     function removeRoutes(bytes4[] calldata selectors)
         external
         override
-        onlyRole(EMERGENCY_ROLE)
-        whenNotPaused
     {
+        require(ACS.layout().roles[EMERGENCY_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         uint256 n = selectors.length;
         if (n > MAX_BATCH) revert BatchTooLarge(n);
         bool changed;
@@ -331,8 +331,8 @@ contract ManifestDispatcher is
     function setActivationDelay(uint64 newDelay)
         external
         override
-        onlyRole(DEFAULT_ADMIN_ROLE)
     {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (manifest.frozen) revert FrozenContract();
         if (newDelay > MAX_ACTIVATION_DELAY) revert ActivationDelayOutOfRange(newDelay);
         uint64 old = manifest.activationDelay;
@@ -344,16 +344,14 @@ contract ManifestDispatcher is
     function freeze()
         external
         override
-        onlyRole(DEFAULT_ADMIN_ROLE)
     {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (manifest.frozen) revert FrozenContract();
         manifest.frozen = true;
         emit Frozen();
     }
 
-    /// @notice Pause/unpause routing (emergency role).
-    function pause()  external override onlyRole(EMERGENCY_ROLE) { _pause(); }
-    function unpause() external override onlyRole(EMERGENCY_ROLE) { _unpause(); }
+    // Pause/unpause provided by PauseFacet to avoid selector duplication
 
     // ───────────────────────────────────────────────────────────────────────────
     // EIP-2535 Loupe (standard)
@@ -379,22 +377,7 @@ contract ManifestDispatcher is
         }
     }
 
-    // ───────────────────────────────────────────────────────────────────────────
-    // ERC165: advertise supported interfaces
-    // ───────────────────────────────────────────────────────────────────────────
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(AccessControl)
-        returns (bool)
-    {
-        return
-            interfaceId == type(IDiamondLoupe).interfaceId ||
-            interfaceId == type(IDiamondLoupeEx).interfaceId ||
-            interfaceId == type(IManifestDispatcher).interfaceId ||
-            super.supportsInterface(interfaceId);
-    }
+    // ERC165 is provided by the canonical ERC165Facet; do not implement here to avoid selector collisions.
 
     // ───────────────────────────────────────────────────────────────────────────
     // Enhanced Loupe (Ex)
@@ -673,9 +656,9 @@ contract ManifestDispatcher is
     /// @param selectors_ Parallel list of selector arrays corresponding to each facet
     function adminRegisterUnsafe(address[] calldata facets_, bytes4[][] calldata selectors_)
         external
-        onlyRole(APPLY_ROLE)
-        whenNotPaused
     {
+        require(ACS.layout().roles[APPLY_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         uint256 n = facets_.length;
         if (n == 0) return;
         if (n != selectors_.length) revert LenMismatch();
@@ -710,7 +693,9 @@ contract ManifestDispatcher is
         bytes32 codehash,
         bytes32[] calldata proof,
         bool[] calldata isRight_
-    ) external onlyRole(APPLY_ROLE) whenNotPaused {
+    ) external {
+        require(ACS.layout().roles[APPLY_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         bytes4[] memory selectors = new bytes4[](1);
         address[] memory facets_ = new address[](1);
         bytes32[] memory codehashes = new bytes32[](1);
@@ -729,8 +714,8 @@ contract ManifestDispatcher is
     // ───────────────────────────────────────────────────────────────────────────
     function setFacetSecurityLevel(address facet, uint8 level)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
     {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (manifest.frozen) revert FrozenContract();
         // Require known facet (provenance set on first registration)
         if (_facetDeployer[facet] == address(0)) revert FacetUnknown(facet);
@@ -742,8 +727,8 @@ contract ManifestDispatcher is
 
     function setFacetVersionTag(address facet, bytes32 tag)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
     {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (manifest.frozen) revert FrozenContract();
         if (_facetDeployer[facet] == address(0)) revert FacetUnknown(facet);
         _facetVersionTag[facet] = tag;

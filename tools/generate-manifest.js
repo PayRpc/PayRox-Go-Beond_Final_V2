@@ -15,7 +15,16 @@ function readJSON(p) {
 function isFacetArtifact(art) {
   const src = art?.sourceName || '';
   const name = art?.contractName || '';
-  return src.includes('/facets/') || /Facet$/.test(name);
+  // Only consider artifacts whose source file is under contracts/facets/
+  const inFacetsFolder = src.startsWith('contracts/facets/') || src.includes('/facets/');
+  // Try multiple artifact shapes for runtime bytecode
+  const deployedA = art?.deployedBytecode; // some artifacts have a string here
+  const deployedB = art?.deployedBytecode?.object; // some have object wrapper
+  const deployedC = art?.evm?.deployedBytecode?.object; // older hh format
+  const deployed = deployedA || deployedB || deployedC || '';
+  const hasRuntime = typeof deployed === 'string' && deployed.length > 2 && deployed !== '0x';
+  // Only include real, deployable facet contracts (skip interfaces, abstract contracts, libraries)
+  return inFacetsFolder && hasRuntime && /Facet$/.test(name);
 }
 
 function typeFromAbi(input) {

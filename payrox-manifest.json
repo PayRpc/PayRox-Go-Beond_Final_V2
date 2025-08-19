@@ -1,105 +1,107 @@
 {
   "version": "1.0.0",
   "facets": {
-    "PlaceholderFacet": {
-      "selectors": []
-    }
-  }
-}
-{
-  "version": "1.0.0",
-  "facets": {
-    "part_2_split_0": {
+    "AccessControlFacet": {
       "selectors": [
-        "0x750588cf",
-        "0x7d979a4f",
-        "0xac5eac0f",
-        "0xf552501a"
+        "0x248a9ca3",
+        "0x2f2ff15d",
+        "0x91d14854",
+        "0xd547741f"
       ]
     },
-    "part_2_split_1": {
+    "ChunkFactoryFacet": {
       "selectors": [
-        "0x054f7d9c",
-        "0x3a8c0786",
-        "0x9f6b4a3b",
-        "0xabb2efdf"
+        "0x79189d61",
+        "0xee05163a",
+        "0xc2c8e21a",
+        "0x4c36f10d",
+        "0x38a699a4",
+        "0x966dae0e",
+        "0x7ed1cd47",
+        "0xbc2e51df",
+        "0x699ffc7e",
+        "0xa9c2e36c",
+        "0xee9d1ef5",
+        "0x6290caec",
+        "0x8da5cb5b",
+        "0xa64139fa",
+        "0x10a93528",
+        "0x8e7163c2",
+        "0xa087a87e",
+        "0x8061c715",
+        "0xc97237be",
+        "0xe74b981b",
+        "0xa901dd92",
+        "0x40fca008",
+        "0x63221490",
+        "0x0bfde0da",
+        "0xa04725c6",
+        "0xfa8c96ef",
+        "0x1d513465",
+        "0x7f4aedfe",
+        "0x5ea31b98",
+        "0x24063c82",
+        "0xb697ff8a",
+        "0x939e255c",
+        "0x476343ee",
+        "0x110f8874"
       ]
     },
-    "part_2_split_10": {
+    "ERC165Facet": {
       "selectors": [
-        "0x2d2eebfa",
-        "0x6c257d57",
-        "0xed8f85cd",
-        "0xf7c976f6"
+        "0x01ffc9a7"
       ]
     },
-    "part_2_split_11": {
+    "MaliciousFacet": {
       "selectors": [
-        "0xa5863f6a"
+        "0xd018db3e"
       ]
     },
-    "part_2_split_2": {
+    "PauseFacet": {
       "selectors": [
-        "0x32252057",
-        "0x53d5aa81",
-        "0xc8500474",
-        "0xebce7a75"
-      ]
-    },
-    "part_2_split_3": {
-      "selectors": [
-        "0x062576b2",
-        "0x6f89e409",
-        "0x863fbff9",
-        "0x9a3b4b20"
-      ]
-    },
-    "part_2_split_4": {
-      "selectors": [
-        "0x674e1b02",
-        "0xadc6c3b2",
-        "0xdf3a56b5",
-        "0xf8187e51"
-      ]
-    },
-    "part_2_split_5": {
-      "selectors": [
-        "0x3f4ba83a",
-        "0x62a5af3b",
         "0x8456cb59",
-        "0xe4b8919f"
+        "0x5c975abb",
+        "0x3f4ba83a"
       ]
     },
-    "part_2_split_6": {
+    "PayRoxAdminFacet": {
       "selectors": [
-        "0x52ef6b2c",
-        "0x7a0ed627",
-        "0x82373003",
-        "0xec665a30"
+        "0xc3f909d4",
+        "0x9159aba8",
+        "0x8e005553"
       ]
     },
-    "part_2_split_7": {
+    "PayRoxPaymentsFacet": {
       "selectors": [
-        "0x4588279e",
-        "0x4b8f2c06",
-        "0x59bd24ab",
-        "0xb8763bb2"
+        "0x498ae704",
+        "0xe66eefc8",
+        "0x325fda8a"
       ]
     },
-    "part_2_split_8": {
+    "RefactorSafetyFacet": {
       "selectors": [
-        "0x8226e95a",
-        "0xa0df852b",
-        "0xa4d43189",
-        "0xbe64cdd4"
+        "0xe623a87c",
+        "0xc34c492f"
       ]
     },
-    "part_2_split_9": {
+    "SecurityFacet": {
       "selectors": [
-        "0x15d2dd54",
-        "0x1ad7a8d6",
-        "0x3f05b72d",
-        "0x715f2029"
+        "0xf36c8f5c",
+        "0x4d9b47e2",
+        "0xd4d0d6e6",
+        "0x0d2644d2",
+        "0x9f8e6da1",
+        "0x94e096e4",
+        "0x3ea6b343",
+        "0x96d64879",
+        "0xd55e62a0",
+        "0x88ded880",
+        "0xde5f8d93",
+        "0x527555da",
+        "0x328d8f72",
+        "0xe3064a77",
+        "0x75b9f5b2",
+        "0x8fa3a84c"
       ]
     }
   }

@@ -23,6 +23,14 @@ const owners = new Map(); // selector -> [{facet, sig}]
 for(const f of files){
   let art; try{ art=readJSON(f);}catch{continue;}
   if(!art?.abi || !art?.contractName) continue;
+  const src = art.sourceName || art.source || '';
+  const inFacetsFolder = src.startsWith('contracts/facets/') || src.includes('/facets/');
+  const deployedA = art?.deployedBytecode;
+  const deployedB = art?.deployedBytecode?.object;
+  const deployedC = art?.evm?.deployedBytecode?.object;
+  const deployed = deployedA || deployedB || deployedC || '';
+  const hasRuntime = typeof deployed === 'string' && deployed.length > 2 && deployed !== '0x';
+  if(!inFacetsFolder || !hasRuntime || !/Facet$/.test(art.contractName)) continue;
   const facet = art.contractName;
   for(const fn of art.abi.filter(i=>i.type==='function')){
     const sig = sigOf(fn);

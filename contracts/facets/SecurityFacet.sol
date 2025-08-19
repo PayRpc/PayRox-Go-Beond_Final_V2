@@ -2,7 +2,6 @@
 pragma solidity 0.8.30;
 
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {RefactorSafeFacetBase} from "../libraries/RefactorSafeFacetBase.sol";
 import {LibSecurityStorage as Sec} from "../security/LibSecurityStorage.sol";
 import {IAntiBotFacet} from "./IAntiBotFacet.sol";
 
@@ -11,7 +10,7 @@ import {IAntiBotFacet} from "./IAntiBotFacet.sol";
  * @notice Throttling + buyback pause + circuit breaker, driven by an off-chain monitor.
  *         Call validateTransaction() in sensitive paths. No on-chain oracle dependency.
  */
-contract SecurityFacet is RefactorSafeFacetBase, ReentrancyGuard, IAntiBotFacet {
+contract SecurityFacet is ReentrancyGuard, IAntiBotFacet {
     // ---- Errors ----
     error AuthDenied();
     
@@ -238,34 +237,11 @@ contract SecurityFacet is RefactorSafeFacetBase, ReentrancyGuard, IAntiBotFacet 
         }
     }
 
-    function grantRole(bytes32 role, address account) external override onlyGovOrOwner {
-        Sec.Layout storage L = Sec.layout();
-        if (!L.roles[role][account]) {
-            L.roles[role][account] = true;
-            emit RoleGranted(role, account);
-        }
-    }
-
-    function revokeRole(bytes32 role, address account) external override onlyGovOrOwner {
-        Sec.Layout storage L = Sec.layout();
-        if (L.roles[role][account]) {
-            L.roles[role][account] = false;
-            emit RoleRevoked(role, account);
-        }
-    }
-
-    function hasRole(bytes32 role, address account) external view override returns (bool) {
-        return Sec.layout().roles[role][account] || _isOwner(account);
-    }
+    // Access control functions are provided by the canonical AccessControlFacet to avoid selector collisions
 
     function isTrusted(address a) external view override returns (bool) {
         return Sec.layout().trusted[a];
     }
-
-    // ===== Refactor safety hooks =====
-    function _getVersion() internal pure override returns (uint256) { return 100; }
-    function _getStorageNamespace() internal pure override returns (bytes32) { return _SEC_SLOT; }
-    function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }
 
     // ===== Read-only helpers for ops/CLI =====
     struct SecurityConfig {

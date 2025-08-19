@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("@nomicfoundation/hardhat-ethers");
+require("@nomicfoundation/hardhat-chai-matchers");
 const config = {
     solidity: {
         compilers: [
@@ -16,7 +17,7 @@ const config = {
     },
     paths: {
         sources: './contracts',
-        tests: './test',
+        tests: './tests',
         cache: './cache',
         artifacts: './artifacts',
     },

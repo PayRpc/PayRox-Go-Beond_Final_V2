@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
-
-interface IManifestDispatcher is IAccessControl {
+interface IManifestDispatcher {
     // ─────────────────────── Data types ───────────────────────
     struct Route {
         address facet;
@@ -65,10 +63,6 @@ interface IManifestDispatcher is IAccessControl {
     function removeRoutes(bytes4[] calldata selectors) external;
     function setActivationDelay(uint64 newDelay) external;
     function freeze() external;
-
-    // ────────────────── Operational control ───────────────────
-    function pause() external;
-    function unpause() external;
 
     // ─────────────────── Manifest info ────────────────────
     function getManifestInfo() external view returns (ManifestInfo memory info);

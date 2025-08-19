@@ -247,16 +247,7 @@ contract ChunkFactoryFacet is IChunkFactory {
     /**
      * @notice Emergency pause mechanism
      */
-    function pause() external override {
-        DeterministicChunkFactory(factoryAddress).pause();
-    }
-
-    /**
-     * @notice Resume operations
-     */
-    function unpause() external override {
-        DeterministicChunkFactory(factoryAddress).unpause();
-    }
+    // Pause/unpause are handled by the canonical PauseFacet; remove passthroughs to avoid selector duplication.
 
     /**
      * @notice Set fee for specific tier (admin only) - delegates to factory
@@ -384,13 +375,7 @@ contract ChunkFactoryFacet is IChunkFactory {
         return factoryAddress;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────────
-    // ERC165 SUPPORTS-INTERFACE
-    // ─────────────────────────────────────────────────────────────────────────────
-
-    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
-        return interfaceId == type(IChunkFactory).interfaceId || interfaceId == 0x01ffc9a7; // ERC165
-    }
+    // ERC165 is provided by the canonical ERC165Facet; this facet must not implement supportsInterface
 
     // ─────────────────────────────────────────────────────────────────────────────
     // DIAMOND LOUPE COMPATIBILITY (selectors list)
@@ -398,7 +383,7 @@ contract ChunkFactoryFacet is IChunkFactory {
 
     function getFacetFunctionSelectors() external pure returns (bytes4[] memory selectors) {
         // Update this list to match EXACTLY what the facet exposes
-        selectors = new bytes4[](34);
+    selectors = new bytes4[](32);
         uint256 i;
         // IChunkFactory interface functions
         selectors[i++] = IChunkFactory.stage.selector;
@@ -418,9 +403,7 @@ contract ChunkFactoryFacet is IChunkFactory {
         selectors[i++] = IChunkFactory.userTiers.selector;
         selectors[i++] = IChunkFactory.owner.selector;
         selectors[i++] = IChunkFactory.withdrawFees.selector;
-        selectors[i++] = IChunkFactory.withdrawRefund.selector;
-        selectors[i++] = IChunkFactory.pause.selector;
-        selectors[i++] = IChunkFactory.unpause.selector;
+    selectors[i++] = IChunkFactory.withdrawRefund.selector;
         selectors[i++] = IChunkFactory.setTierFee.selector;
         selectors[i++] = IChunkFactory.setUserTier.selector;
         selectors[i++] = IChunkFactory.setIdempotentMode.selector;
@@ -429,8 +412,8 @@ contract ChunkFactoryFacet is IChunkFactory {
         selectors[i++] = IChunkFactory.setFeesEnabled.selector;
         selectors[i++] = IChunkFactory.setMaxSingleTransfer.selector;
         selectors[i++] = IChunkFactory.transferDefaultAdmin.selector;
-        selectors[i++] = IChunkFactory.addAuthorizedRecipient.selector;
-        selectors[i++] = IChunkFactory.removeAuthorizedRecipient.selector;
+    selectors[i++] = IChunkFactory.addAuthorizedRecipient.selector;
+    selectors[i++] = IChunkFactory.removeAuthorizedRecipient.selector;
 
         // PayRox helpers from this facet
         selectors[i++] = this.getExpectedManifestHash.selector;
