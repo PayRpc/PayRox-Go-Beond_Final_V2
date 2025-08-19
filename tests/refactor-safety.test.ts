@@ -1,21 +1,46 @@
-import { expect } from 'chai';
-import { ethers } from 'hardhat';
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 
-/**
- * Tests for RefactorSafeFacetBase + RefactorSafetyLib integration using SampleFacet.
- */
-
-describe('Refactor safety (SampleFacet)', function () {
-  it('enforces versionCompatible via centralized RefactorSafetyFacet', async () => {
-    const Facet = await ethers.getContractFactory('RefactorSafetyFacet');
+describe("RefactorSafetyFacet", function () {
+  async function deployFacet() {
+    const Facet = await ethers.getContractFactory("RefactorSafetyFacet");
     const facet = await Facet.deploy();
     await facet.waitForDeployment();
+    return { facet };
+  }
 
-    const ok = await facet.emergencyRefactorValidation();
-    expect(ok).to.equal(true);
+  it("emergencyRefactorValidation() returns true", async () => {
+    const { facet } = await loadFixture(deployFacet);
+    expect(await facet.emergencyRefactorValidation()).to.equal(true);
   });
 
-  it.skip('migration safety tests are skipped: migrate() not implemented in this repo', async () => {
-    // skipped
+  it("does NOT expose ERC-165 or loupe functions (policy: centralized only)", async () => {
+    const { facet } = await loadFixture(deployFacet);
+
+  // 1) No supportsInterface(bytes4) on the facet (check fragments rather than relying on getFunction()
+  const hasSupports = facet.interface.fragments.some((fr: any) => fr.type === "function" && fr.name === "supportsInterface");
+  expect(hasSupports).to.equal(false);
+
+    // 2) No DiamondLoupe / admin functions on the facet ABI (check names)
+    const bannedNames = new Set<string>([
+      "diamondCut", // admin
+      "facets", // loupe
+      "facetFunctionSelectors",
+      "facetAddresses",
+      "facetAddress",
+    ]);
+
+    const facetFunctionNames = facet.interface.fragments
+      .filter((fr: any) => fr.type === "function")
+      .map((fr: any) => fr.name);
+
+    for (const name of facetFunctionNames) {
+      expect(bannedNames.has(name)).to.equal(false, `Facet leaks loupe/admin function ${name}`);
+    }
+  });
+
+  it.skip("migration safety: to be added when migrate() exists", async () => {
+    // Placeholder for future negative-path checks (storage parity, etc.)
   });
 });
