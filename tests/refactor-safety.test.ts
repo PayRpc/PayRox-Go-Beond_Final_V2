@@ -18,9 +18,34 @@ describe("RefactorSafetyFacet", function () {
   it("does NOT expose ERC-165 or loupe functions (policy: centralized only)", async () => {
     const { facet } = await loadFixture(deployFacet);
 
-  // 1) No supportsInterface(bytes4) on the facet (check fragments rather than relying on getFunction()
-  const hasSupports = facet.interface.fragments.some((fr: any) => fr.type === "function" && fr.name === "supportsInterface");
-  expect(hasSupports).to.equal(false);
+    // 1) No supportsInterface(bytes4) on the facet (check fragments rather than relying on getFunction())
+    const hasSupports = facet.interface.fragments.some((fr: any) => fr.type === "function" && fr.name === "supportsInterface");
+    expect(hasSupports).to.equal(false);
+
+    // 1b) Also check by selector to avoid name obfuscation/overloads
+    const selectorOf = (sig: string) => ethers.keccak256(ethers.toUtf8Bytes(sig)).slice(0, 10);
+    const bannedSignatures = [
+      "supportsInterface(bytes4)",
+      // Common DiamondLoupe / admin signatures we disallow on facets
+      "diamondCut(tuple(address,uint8,bytes4[])[],address,bytes)",
+      "facets()",
+      "facetFunctionSelectors(address)",
+      "facetAddresses()",
+      "facetAddress(bytes4)",
+    ];
+    const bannedSelectors = new Set(bannedSignatures.map(selectorOf));
+
+    const facetSelectors = facet.interface.fragments
+      .filter((fr: any) => fr.type === "function")
+      .map((fr: any) => {
+        const inputs = (fr.inputs || []).map((i: any) => i.type).join(",");
+        const sig = `${fr.name}(${inputs})`;
+        return selectorOf(sig);
+      });
+
+    for (const s of facetSelectors) {
+      expect(bannedSelectors.has(s)).to.equal(false, `Facet exposes banned selector ${s}`);
+    }
 
     // 2) No DiamondLoupe / admin functions on the facet ABI (check names)
     const bannedNames = new Set<string>([

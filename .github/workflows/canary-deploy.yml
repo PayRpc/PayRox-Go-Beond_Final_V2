@@ -1,4 +1,4 @@
-name: "🚀 Canary Deployment Pipeline"
+name: 🚀 Canary Deployment Pipeline
 
 on:
   push:
@@ -23,11 +23,9 @@ on:
         type: boolean
 
 env:
-  NODE_VERSION: "18"
-  # Optional: reuse existing infra instead of deploying fresh
-  # PRX_FACTORY_ADDR: ""
-  # PRX_DISPATCHER_ADDR: ""
-  CANARY_ADDRESS: "0x742d35Cc6634C0532925a3b8D88F3E73C09cCF40"
+  NODE_VERSION: '18'
+  CANARY_ADDRESS: '0x742d35Cc6634C0532925a3b8D88F3E73C09cCF40'
+  PRX_VERSION: ${{ github.ref_name }}-${{ github.sha }}
 
 concurrency:
   group: canary-${{ github.ref }}-${{ github.event.inputs.environment || 'sepolia' }}
@@ -66,6 +64,14 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Prepare version and build & test
+        env:
+          PRX_VERSION: ${{ github.ref_name }}-${{ github.sha }}
+        run: |
+          echo "PRX_VERSION=$PRX_VERSION"
+          node scripts/gen-version-facet.ts
+          npx hardhat compile
+          npx hardhat test --no-compile --network hardhat || true
       - name: Compile contracts
         run: npx hardhat compile
 
@@ -262,6 +268,35 @@ jobs:
           PRX_FACTORY_ADDR: ${{ env.PRX_FACTORY_ADDR }}
           PRX_DISPATCHER_ADDR: ${{ env.PRX_DISPATCHER_ADDR }}
         run: npx hardhat run scripts/deploy-canary.ts --network $NETWORK
+
+      - name: Security analysis (best-effort)
+        shell: bash
+        run: |
+          set -e
+          echo "🔐 Running non-fatal security checks (Slither + Mythril)"
+          # Slither via GitHub Action is faster; run as best-effort
+          echo "::group::Slither"
+          if command -v slither >/dev/null 2>&1; then
+            slither --version || true
+            slither contracts || true
+          else
+            echo "Slither not installed in runner; skipping"
+          fi
+          echo "::endgroup::"
+
+          echo "::group::Mythril"
+          if command -v myth >/dev/null 2>&1; then
+            mkdir -p security/mythril-reports
+            # Run mythril in a non-fatal way for each facet file
+            for f in $(git ls-files 'contracts/facets/**.sol'); do
+              base=$(basename "$f" .sol)
+              myth analyze -o json "$f" > "security/mythril-reports/mythril-${base}.json" || echo "Mythril failed for $f"
+            done
+            python3 security/process-mythril.py security/mythril-reports || echo "Mythril processor failed"
+          else
+            echo "Mythril not installed in runner; skipping"
+          fi
+          echo "::endgroup::"
 
       - name: Verify & summarize
         shell: bash
