@@ -1,6 +1,10 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-ethers';
 import '@nomicfoundation/hardhat-chai-matchers';
+import '@typechain/hardhat';
+
+// Import tasks
+import './tasks/prx.chunk';
 
 const config: HardhatUserConfig = {
   solidity: {

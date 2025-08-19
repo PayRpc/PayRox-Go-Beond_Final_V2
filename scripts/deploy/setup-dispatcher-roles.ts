@@ -1,53 +1,44 @@
 // SPDX-License-Identifier: MIT
 // scripts/deploy/setup-dispatcher-roles.ts
-import { ethers } from "hardhat";
+// SPDX-License-Identifier: MIT
+import { ethers } from 'hardhat';
+import type { Contract } from 'ethers';
+import { utils } from '../utils/ethers-compat';
+
+type Address = string;
+
+const ROLE = {
+    COMMIT: utils.keccak256(utils.toUtf8Bytes('COMMIT_ROLE')),
+    APPLY: utils.keccak256(utils.toUtf8Bytes('APPLY_ROLE')),
+    EMERGENCY: utils.keccak256(utils.toUtf8Bytes('EMERGENCY_ROLE')),
+};
 
 async function main() {
-    const [deployer] = await ethers.getSigners();
-    console.log("Setting up dispatcher roles with deployer:", deployer.address);
+    const [ops] = await ethers.getSigners();
 
-    // Read addresses from environment or deployment artifacts
-    const FACTORY_ADDRESS = process.env.FACTORY_ADDRESS || "0x...";
-    const DISPATCHER_ADDRESS = process.env.DISPATCHER_ADDRESS || "0x...";
+    const dispatcherAddr = process.env.DISPATCHER as Address;
+    const orchestratorAddr = process.env.ORCHESTRATOR as Address;
 
-    if (!FACTORY_ADDRESS || !DISPATCHER_ADDRESS) {
-        throw new Error("FACTORY_ADDRESS and DISPATCHER_ADDRESS must be set");
+    if (!dispatcherAddr || !orchestratorAddr) {
+        throw new Error('Set DISPATCHER and ORCHESTRATOR env vars');
     }
 
-    // Connect to factory
-    const Factory = await ethers.getContractFactory("DeterministicChunkFactory");
-    const factory = Factory.attach(FACTORY_ADDRESS);
+    // If your AccessControl lives on the dispatcher, use its interface here.
+        const access: any = await ethers.getContractAt('IAccessControl', dispatcherAddr, ops);
 
-    // Grant roles to dispatcher
-    console.log("Granting OPERATOR_ROLE to dispatcher...");
-    const operatorRole = await factory.OPERATOR_ROLE();
-    let tx = await factory.grantRole(operatorRole, DISPATCHER_ADDRESS);
-    await tx.wait();
-    console.log("✓ OPERATOR_ROLE granted");
+    console.log('🔐 Granting roles on dispatcher:', dispatcherAddr);
+    await (await access.grantRole(ROLE.COMMIT, orchestratorAddr)).wait();
+    await (await access.grantRole(ROLE.APPLY, orchestratorAddr)).wait();
+    await (await access.grantRole(ROLE.EMERGENCY, orchestratorAddr)).wait();
 
-    console.log("Granting FEE_ROLE to dispatcher...");
-    const feeRole = await factory.FEE_ROLE();
-    tx = await factory.grantRole(feeRole, DISPATCHER_ADDRESS);
-    await tx.wait();
-    console.log("✓ FEE_ROLE granted");
-
-    // Verify roles
-    const hasOperatorRole = await factory.hasRole(operatorRole, DISPATCHER_ADDRESS);
-    const hasFeeRole = await factory.hasRole(feeRole, DISPATCHER_ADDRESS);
-
-    console.log("Role verification:");
-    console.log("- OPERATOR_ROLE:", hasOperatorRole);
-    console.log("- FEE_ROLE:", hasFeeRole);
-
-    if (hasOperatorRole && hasFeeRole) {
-        console.log("✅ All roles successfully granted to dispatcher");
-    } else {
-        console.error("❌ Role assignment failed");
-        process.exit(1);
-    }
+    console.log('✅ Roles granted to', orchestratorAddr);
 }
 
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
+if (require.main === module) {
+    main()
+        .then(() => process.exit(0))
+        .catch((e) => {
+            console.error(e);
+            process.exit(1);
+        });
+}

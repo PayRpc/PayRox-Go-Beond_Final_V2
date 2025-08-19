@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\audit\\AuditRegistry.sol": {
-      "lastModificationDate": 1755571562599,
+      "lastModificationDate": 1755581543753,
       "contentHash": "6832cf1da913606d6c72e139e34478fd",
       "sourceName": "contracts/audit/AuditRegistry.sol",
       "solcConfig": {
@@ -41,6 +41,80 @@
       ],
       "artifacts": [
         "AuditRegistry"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxAccessControlStorage.sol": {
+      "lastModificationDate": 1755581657460,
+      "contentHash": "16167ab581ffdec41f3b57486c294877",
+      "sourceName": "contracts/libraries/PayRoxAccessControlStorage.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "PayRoxAccessControlStorage"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxPauseStorage.sol": {
+      "lastModificationDate": 1755581659064,
+      "contentHash": "a37181d86d5b9d104fcb5096d9529268",
+      "sourceName": "contracts/libraries/PayRoxPauseStorage.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "PayRoxPauseStorage"
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\manifest\\ManifestTypes.sol": {
@@ -119,238 +193,8 @@
         "ManifestUtils"
       ]
     },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\Pausable.sol": {
-      "lastModificationDate": 1755502818257,
-      "contentHash": "0d47b53e10b1985efbb396f937626279",
-      "sourceName": "@openzeppelin/contracts/utils/Pausable.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../utils/Context.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "Pausable"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\access\\AccessControl.sol": {
-      "lastModificationDate": 1755502814559,
-      "contentHash": "d0e2c05f09a3aea7cd299bbd4a435ee2",
-      "sourceName": "@openzeppelin/contracts/access/AccessControl.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./IAccessControl.sol",
-        "../utils/Context.sol",
-        "../utils/introspection/ERC165.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "AccessControl"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1755502815110,
-      "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
-      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "Context"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\access\\IAccessControl.sol": {
-      "lastModificationDate": 1755502817059,
-      "contentHash": "def1e8f7b6cac577cf2600655bf3bdf8",
-      "sourceName": "@openzeppelin/contracts/access/IAccessControl.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.8.4"
-      ],
-      "artifacts": [
-        "IAccessControl"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
-      "lastModificationDate": 1755502815884,
-      "contentHash": "0906d06dca25210d4696dcef6dad2909",
-      "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./IERC165.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ERC165"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
-      "lastModificationDate": 1755502817391,
-      "contentHash": "7074c93b1ea0a122063f26ddd1db1032",
-      "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.16"
-      ],
-      "artifacts": [
-        "IERC165"
-      ]
-    },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\governance\\GovernanceOrchestrator.sol": {
-      "lastModificationDate": 1755571567964,
+      "lastModificationDate": 1755581547873,
       "contentHash": "3d4e0083b1fe59763a65b02736342f1f",
       "sourceName": "contracts/governance/GovernanceOrchestrator.sol",
       "solcConfig": {
@@ -430,7 +274,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\factory\\DeterministicChunkFactory.sol": {
-      "lastModificationDate": 1755571364804,
+      "lastModificationDate": 1755581561765,
       "contentHash": "4f48f25eac00a326e0202f063446a9f1",
       "sourceName": "contracts/factory/DeterministicChunkFactory.sol",
       "solcConfig": {
@@ -474,7 +318,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IChunkFactory.sol": {
-      "lastModificationDate": 1755571450097,
+      "lastModificationDate": 1755580509625,
       "contentHash": "a2ed48902e955612df9c92c8be002d31",
       "sourceName": "contracts/interfaces/IChunkFactory.sol",
       "solcConfig": {
@@ -511,7 +355,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IManifestDispatcher.sol": {
-      "lastModificationDate": 1755571609377,
+      "lastModificationDate": 1755580506402,
       "contentHash": "99f27d6aeaf73183282f0c475e5c206e",
       "sourceName": "contracts/interfaces/IManifestDispatcher.sol",
       "solcConfig": {
@@ -584,6 +428,84 @@
         "ChunkFactoryLib"
       ]
     },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\MockManifestDispatcher.sol": {
+      "lastModificationDate": 1755581598970,
+      "contentHash": "cced3cefe7ff898d3604e0fc71b7f8fb",
+      "sourceName": "contracts/Tests/MockManifestDispatcher.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IManifestDispatcher.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "MockManifestDispatcher"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\MockManifestDispatcher.sol": {
+      "lastModificationDate": 1755581637381,
+      "contentHash": "2eb2642cb815b588494d0e11f5831da6",
+      "sourceName": "contracts/test/MockManifestDispatcher.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IManifestDispatcher.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "MockManifestDispatcher"
+      ]
+    },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\orchestrator\\Orchestrator.sol": {
       "lastModificationDate": 1755395235972,
       "contentHash": "af4d83758d6110365ac36e99825e9894",
@@ -625,7 +547,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ChunkFactoryFacet.sol": {
-      "lastModificationDate": 1755571484932,
+      "lastModificationDate": 1755581565781,
       "contentHash": "6d5edf12ec4ec1c051d835c6ac9169cb",
       "sourceName": "contracts/facets/ChunkFactoryFacet.sol",
       "solcConfig": {
@@ -704,7 +626,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispacher.sol": {
-      "lastModificationDate": 1755576099832,
+      "lastModificationDate": 1755581560262,
       "contentHash": "5932bbe384e4ff795f7c4e4d6356d7cc",
       "sourceName": "contracts/dispacher/ManifestDispacher.sol",
       "solcConfig": {
@@ -898,7 +820,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Refactor\\SampleFacet.sol": {
-      "lastModificationDate": 1755571997970,
+      "lastModificationDate": 1755581620248,
       "contentHash": "c973807ffd17815dd3346fb6cedb5c4a",
       "sourceName": "contracts/test/Refactor/SampleFacet.sol",
       "solcConfig": {
@@ -975,10 +897,10 @@
         "RefactorSafeFacetBase"
       ]
     },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SecurityFacet.sol": {
-      "lastModificationDate": 1755572019780,
-      "contentHash": "0a404db408c582df1fd6da30eaa23662",
-      "sourceName": "contracts/facets/SecurityFacet.sol",
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\RefactorSafetyFacet.sol": {
+      "lastModificationDate": 1755580513742,
+      "contentHash": "23f468e32240e96b5e65c4904cd93d08",
+      "sourceName": "contracts/facets/RefactorSafetyFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
         "settings": {
@@ -1005,170 +927,17 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
-        "../security/LibSecurityStorage.sol",
-        "./IAntiBotFacet.sol"
+        "../libraries/RefactorSafetyLib.sol"
       ],
       "versionPragmas": [
         "0.8.30"
       ],
       "artifacts": [
-        "SecurityFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\security\\LibSecurityStorage.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "cd640fb60f2ef9cd18c4c38e867da775",
-      "sourceName": "contracts/security/LibSecurityStorage.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "LibSecurityStorage"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\IAntiBotFacet.sol": {
-      "lastModificationDate": 1755571710676,
-      "contentHash": "2bb1d6510b13fe2061852c74f029c283",
-      "sourceName": "contracts/facets/IAntiBotFacet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "IAntiBotFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PayRoxPaymentsFacet.sol": {
-      "lastModificationDate": 1755573273298,
-      "contentHash": "5857e9e30a1fe5e950bffb26389e37ef",
-      "sourceName": "contracts/facets/PayRoxPaymentsFacet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/PayRoxStorage.sol",
-        "../libraries/PayRoxPauseStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "PayRoxPaymentsFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxStorage.sol": {
-      "lastModificationDate": 1755573546221,
-      "contentHash": "cc48e2af225a67ccd8adf3fa019c62e5",
-      "sourceName": "contracts/libraries/PayRoxStorage.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "PayRoxStorage"
+        "RefactorSafetyFacet"
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PayRoxAdminFacet.sol": {
-      "lastModificationDate": 1755572977467,
+      "lastModificationDate": 1755580617194,
       "contentHash": "64fbedf8c39aefd1bdf68d5ca6d7c44f",
       "sourceName": "contracts/facets/PayRoxAdminFacet.sol",
       "solcConfig": {
@@ -1208,8 +977,287 @@
         "PayRoxAdminFacet"
       ]
     },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxStorage.sol": {
+      "lastModificationDate": 1755580614741,
+      "contentHash": "cc48e2af225a67ccd8adf3fa019c62e5",
+      "sourceName": "contracts/libraries/PayRoxStorage.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "PayRoxStorage"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\initializers\\PayRoxDiamondInit.sol": {
+      "lastModificationDate": 1755581656067,
+      "contentHash": "3e1dd51bdd0c82e3671dcda0e169c4e3",
+      "sourceName": "contracts/initializers/PayRoxDiamondInit.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/PayRoxERC165Storage.sol",
+        "../libraries/PayRoxAccessControlStorage.sol",
+        "../libraries/PayRoxPauseStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "IAccessControl",
+        "IDiamondLoupe",
+        "IERC165",
+        "IERC173",
+        "IPausable",
+        "PayRoxDiamondInit"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxERC165Storage.sol": {
+      "lastModificationDate": 1755581653267,
+      "contentHash": "87a5955f360528e66e43bcdb7e69b82d",
+      "sourceName": "contracts/libraries/PayRoxERC165Storage.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "PayRoxERC165Storage"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PauseFacet.sol": {
+      "lastModificationDate": 1755581662504,
+      "contentHash": "a1e794790e2d51d9fbdb2aac00f40db1",
+      "sourceName": "contracts/facets/PauseFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/PayRoxPauseStorage.sol",
+        "../libraries/PayRoxAccessControlStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "PauseFacet"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\AccessControlFacet.sol": {
+      "lastModificationDate": 1755581660752,
+      "contentHash": "e423624f57dfb2ea973618a8ccc57ac5",
+      "sourceName": "contracts/facets/AccessControlFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/PayRoxAccessControlStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "AccessControlFacet"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ERC165Facet.sol": {
+      "lastModificationDate": 1755581654730,
+      "contentHash": "6d8bc5ee79a6d64320b4bc1ed794ce2e",
+      "sourceName": "contracts/facets/ERC165Facet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/PayRoxERC165Storage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "ERC165Facet",
+        "IERC165"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PayRoxPaymentsFacet.sol": {
+      "lastModificationDate": 1755580621390,
+      "contentHash": "5857e9e30a1fe5e950bffb26389e37ef",
+      "sourceName": "contracts/facets/PayRoxPaymentsFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../libraries/PayRoxStorage.sol",
+        "../libraries/PayRoxPauseStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "PayRoxPaymentsFacet"
+      ]
+    },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetB.sol": {
-      "lastModificationDate": 1755573553344,
+      "lastModificationDate": 1755580605623,
       "contentHash": "6cec1df9d079933aae64c90c873a7829",
       "sourceName": "contracts/facets/ExampleFacetB.sol",
       "solcConfig": {
@@ -1327,43 +1375,6 @@
         "ECDSA"
       ]
     },
-    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC7913.sol": {
-      "lastModificationDate": 1755565425862,
-      "contentHash": "a051a14c8a262117cb4c5f4cbd13ed95",
-      "sourceName": "@openzeppelin/contracts/interfaces/IERC7913.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.5.0"
-      ],
-      "artifacts": [
-        "IERC7913SignatureVerifier"
-      ]
-    },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC1271.sol": {
       "lastModificationDate": 1755565425415,
       "contentHash": "97c727fa357056eddfe826ab58943611",
@@ -1438,6 +1449,43 @@
       ],
       "artifacts": [
         "Bytes"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC7913.sol": {
+      "lastModificationDate": 1755565425862,
+      "contentHash": "a051a14c8a262117cb4c5f4cbd13ed95",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC7913.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": [
+        "IERC7913SignatureVerifier"
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\math\\Math.sol": {
@@ -1674,7 +1722,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetA.sol": {
-      "lastModificationDate": 1755576085881,
+      "lastModificationDate": 1755581622133,
       "contentHash": "946954ff7e353303bf889427baa06683",
       "sourceName": "contracts/facets/ExampleFacetA.sol",
       "solcConfig": {
@@ -1829,7 +1877,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond.sol": {
-      "lastModificationDate": 1755570895426,
+      "lastModificationDate": 1755581618648,
       "contentHash": "ae2ddd9804ab4dcb41e70a80ca383ccb",
       "sourceName": "contracts/test/Diamond.sol",
       "solcConfig": {
@@ -1867,8 +1915,123 @@
         "Diamond"
       ]
     },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SecurityFacet.sol": {
+      "lastModificationDate": 1755581573633,
+      "contentHash": "0a404db408c582df1fd6da30eaa23662",
+      "sourceName": "contracts/facets/SecurityFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "../security/LibSecurityStorage.sol",
+        "./IAntiBotFacet.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "SecurityFacet"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\security\\LibSecurityStorage.sol": {
+      "lastModificationDate": 1755395235972,
+      "contentHash": "cd640fb60f2ef9cd18c4c38e867da775",
+      "sourceName": "contracts/security/LibSecurityStorage.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "LibSecurityStorage"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\IAntiBotFacet.sol": {
+      "lastModificationDate": 1755580511644,
+      "contentHash": "2bb1d6510b13fe2061852c74f029c283",
+      "sourceName": "contracts/facets/IAntiBotFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "IAntiBotFacet"
+      ]
+    },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispatcher.sol": {
-      "lastModificationDate": 1755575964068,
+      "lastModificationDate": 1755580543743,
       "contentHash": "2ce7dcdb85bea214ef8c3c82716d5df0",
       "sourceName": "contracts/dispacher/ManifestDispatcher.sol",
       "solcConfig": {
@@ -1940,7 +2103,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\LoupeFacet.sol": {
-      "lastModificationDate": 1755575969164,
+      "lastModificationDate": 1755580550241,
       "contentHash": "0ac4844a644fd8d632dcf5985911081e",
       "sourceName": "contracts/facets/LoupeFacet.sol",
       "solcConfig": {
@@ -1973,6 +2136,120 @@
         "^0.8.30"
       ],
       "artifacts": []
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SaltViewFacet.sol": {
+      "lastModificationDate": 1755581682915,
+      "contentHash": "a7605e21bdf5a49963d586b0e47d1f20",
+      "sourceName": "contracts/facets/SaltViewFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/ISaltView.sol",
+        "../libraries/SaltPolicyLib.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "SaltViewFacet"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\ISaltView.sol": {
+      "lastModificationDate": 1755581681379,
+      "contentHash": "5807a5dd60f3e1a54e042efac56d7080",
+      "sourceName": "contracts/interfaces/ISaltView.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "ISaltView"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\SaltPolicyLib.sol": {
+      "lastModificationDate": 1755581679833,
+      "contentHash": "4f6f82577077a32ff1075e34910b08de",
+      "sourceName": "contracts/libraries/SaltPolicyLib.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "SaltPolicyLib"
+      ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBot.sol": {
       "lastModificationDate": 1755459811068,
@@ -2012,9 +2289,44 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBotFacet.sol": {
-      "lastModificationDate": 1755575980948,
+      "lastModificationDate": 1755580567935,
       "contentHash": "5c6c3bd97e9a4d272c6b9ecd64d8e12f",
       "sourceName": "contracts/interfaces/IAntiBotFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
+      "artifacts": []
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IERC20Upgradeable.sol": {
+      "lastModificationDate": 1755581586214,
+      "contentHash": "06aa5a3500a9ed011e181b2e4bf40188",
+      "sourceName": "contracts/interfaces/IERC20Upgradeable.sol",
       "solcConfig": {
         "version": "0.8.30",
         "settings": {
@@ -2085,7 +2397,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond_new.sol": {
-      "lastModificationDate": 1755575986923,
+      "lastModificationDate": 1755580571218,
       "contentHash": "98cf762a02dec579acbca40ad46fd517",
       "sourceName": "contracts/test/Diamond_new.sol",
       "solcConfig": {
@@ -2264,513 +2576,6 @@
         "^0.8.30"
       ],
       "artifacts": []
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\MockManifestDispatcher.sol": {
-      "lastModificationDate": 1755570959282,
-      "contentHash": "2eb2642cb815b588494d0e11f5831da6",
-      "sourceName": "contracts/test/MockManifestDispatcher.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/IManifestDispatcher.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "MockManifestDispatcher"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ERC165Facet.sol": {
-      "lastModificationDate": 1755569997883,
-      "contentHash": "6d8bc5ee79a6d64320b4bc1ed794ce2e",
-      "sourceName": "contracts/facets/ERC165Facet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/PayRoxERC165Storage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "ERC165Facet",
-        "IERC165"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxERC165Storage.sol": {
-      "lastModificationDate": 1755569951313,
-      "contentHash": "87a5955f360528e66e43bcdb7e69b82d",
-      "sourceName": "contracts/libraries/PayRoxERC165Storage.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "PayRoxERC165Storage"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\initializers\\PayRoxDiamondInit.sol": {
-      "lastModificationDate": 1755570480120,
-      "contentHash": "3e1dd51bdd0c82e3671dcda0e169c4e3",
-      "sourceName": "contracts/initializers/PayRoxDiamondInit.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/PayRoxERC165Storage.sol",
-        "../libraries/PayRoxAccessControlStorage.sol",
-        "../libraries/PayRoxPauseStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "IAccessControl",
-        "IDiamondLoupe",
-        "IERC165",
-        "IERC173",
-        "IPausable",
-        "PayRoxDiamondInit"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\AccessControlFacet.sol": {
-      "lastModificationDate": 1755570425477,
-      "contentHash": "e423624f57dfb2ea973618a8ccc57ac5",
-      "sourceName": "contracts/facets/AccessControlFacet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/PayRoxAccessControlStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "AccessControlFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxAccessControlStorage.sol": {
-      "lastModificationDate": 1755570408479,
-      "contentHash": "16167ab581ffdec41f3b57486c294877",
-      "sourceName": "contracts/libraries/PayRoxAccessControlStorage.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "PayRoxAccessControlStorage"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxPauseStorage.sol": {
-      "lastModificationDate": 1755570414122,
-      "contentHash": "a37181d86d5b9d104fcb5096d9529268",
-      "sourceName": "contracts/libraries/PayRoxPauseStorage.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "PayRoxPauseStorage"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PauseFacet.sol": {
-      "lastModificationDate": 1755570434482,
-      "contentHash": "a1e794790e2d51d9fbdb2aac00f40db1",
-      "sourceName": "contracts/facets/PauseFacet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/PayRoxPauseStorage.sol",
-        "../libraries/PayRoxAccessControlStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "PauseFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\MockManifestDispatcher.sol": {
-      "lastModificationDate": 1755570888117,
-      "contentHash": "cced3cefe7ff898d3604e0fc71b7f8fb",
-      "sourceName": "contracts/Tests/MockManifestDispatcher.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/IManifestDispatcher.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "MockManifestDispatcher"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\RefactorSafetyFacet.sol": {
-      "lastModificationDate": 1755571884259,
-      "contentHash": "23f468e32240e96b5e65c4904cd93d08",
-      "sourceName": "contracts/facets/RefactorSafetyFacet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../libraries/RefactorSafetyLib.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "RefactorSafetyFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SaltViewFacet.sol": {
-      "lastModificationDate": 1755577532649,
-      "contentHash": "a7605e21bdf5a49963d586b0e47d1f20",
-      "sourceName": "contracts/facets/SaltViewFacet.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/ISaltView.sol",
-        "../libraries/SaltPolicyLib.sol"
-      ],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "SaltViewFacet"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\ISaltView.sol": {
-      "lastModificationDate": 1755577525395,
-      "contentHash": "5807a5dd60f3e1a54e042efac56d7080",
-      "sourceName": "contracts/interfaces/ISaltView.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "ISaltView"
-      ]
-    },
-    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\SaltPolicyLib.sol": {
-      "lastModificationDate": 1755577586092,
-      "contentHash": "4f6f82577077a32ff1075e34910b08de",
-      "sourceName": "contracts/libraries/SaltPolicyLib.sol",
-      "solcConfig": {
-        "version": "0.8.30",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "viaIR": true,
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.30"
-      ],
-      "artifacts": [
-        "SaltPolicyLib"
-      ]
     }
   }
 }

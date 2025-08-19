@@ -84,6 +84,15 @@
         "0xc34c492f"
       ]
     },
+    "SaltViewFacet": {
+      "selectors": [
+        "0x279e8f3e",
+        "0x3bef06b4",
+        "0x8e6a2c1d",
+        "0xeb117be8",
+        "0x6a9f1e16"
+      ]
+    },
     "SecurityFacet": {
       "selectors": [
         "0xf36c8f5c",
