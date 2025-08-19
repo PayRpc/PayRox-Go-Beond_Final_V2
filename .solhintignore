@@ -1,0 +1,6 @@
+contracts/test/**
+contracts/Tests/**
+contracts/test/**/**
+build/**
+artifacts/**
+node_modules/**

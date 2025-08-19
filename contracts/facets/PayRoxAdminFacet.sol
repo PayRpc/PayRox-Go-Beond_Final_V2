@@ -2,17 +2,11 @@
 pragma solidity 0.8.30;
 
 import { PayRoxStorage } from "../libraries/PayRoxStorage.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafeFacetBase.sol";
+import { PayRoxPauseStorage as PS } from "../libraries/PayRoxPauseStorage.sol";
 import { RefactorSafetyLib } from "../libraries/RefactorSafetyLib.sol";
 
-contract PayRoxAdminFacet is RefactorSafeFacetBase {
+contract PayRoxAdminFacet {
     using RefactorSafetyLib for *;
-
-    // Optional: pin a version (used only by the base for logs/checks)
-    function _getVersion() internal pure override returns (uint256) { return 1; }
-    function _getStorageNamespace() internal pure override returns (bytes32) { return PayRoxStorage.SLOT; }
-    // IMPORTANT: under delegatecall, address(this) == dispatcher; disable codehash check in prod
-    function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }
 
     /// @notice One-time initializer (call via dispatcher) — sets owner/treasury and validates storage layout.
     function initPayRox(address owner, address treasury, uint16 feeBps, bytes32 expectedStructHash) external {
@@ -52,14 +46,9 @@ contract PayRoxAdminFacet is RefactorSafeFacetBase {
         s.feeBps = feeBps;
     }
 
-    function setPaused(bool p) external {
-        PayRoxStorage.Layout storage s = PayRoxStorage.layout();
-        require(msg.sender == s.owner, "only owner");
-        s.paused = p;
-    }
-
     function getConfig() external view returns (address owner, address treasury, uint16 feeBps, bool paused) {
         PayRoxStorage.Layout storage s = PayRoxStorage.layout();
-        return (s.owner, s.treasury, s.feeBps, s.paused);
+        // Read canonical paused state from Pause storage to avoid duplication of pause selectors
+        return (s.owner, s.treasury, s.feeBps, PS.layout().paused);
     }
 }

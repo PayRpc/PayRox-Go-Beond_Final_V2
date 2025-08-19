@@ -2,19 +2,15 @@
 pragma solidity 0.8.30;
 
 import { PayRoxStorage } from "../libraries/PayRoxStorage.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafeFacetBase.sol";
+import { PayRoxPauseStorage as PS } from "../libraries/PayRoxPauseStorage.sol";
 
-contract PayRoxPaymentsFacet is RefactorSafeFacetBase {
+contract PayRoxPaymentsFacet {
     // Minimal facet that records and settles payments in shared diamond storage.
-
-    function _getVersion() internal pure override returns (uint256) { return 1; }
-    function _getStorageNamespace() internal pure override returns (bytes32) { return PayRoxStorage.SLOT; }
-    function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }
 
     /// @notice Record a payment (caller funds the payment if sending ETH)
     function createPayment(address to, uint256 amount, bytes32 ref) external payable {
-        PayRoxStorage.Layout storage s = PayRoxStorage.layout();
-        require(!s.paused, "paused");
+    PayRoxStorage.Layout storage s = PayRoxStorage.layout();
+    require(!PS.layout().paused, "paused");
         require(to != address(0), "bad to");
 
         // For simplicity this records intent; optionally require msg.value == amount to accept ETH

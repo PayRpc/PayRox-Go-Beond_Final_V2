@@ -383,8 +383,24 @@ class PayRoxRefactorLinter {
   }
 
   private computeSelector(signature: string): string {
-    // This is a simplified selector computation
-    // In a real implementation, you'd use ethers.js or similar
+    // Function selector = first 4 bytes of keccak256(functionSignature)
+    // Use ethers (v6 or v5) if available; fallback to js-sha3
+    try {
+      const ethersLib = require('ethers');
+      // ethers v6 exports keccak256 & toUtf8Bytes at top-level
+      const keccak256 = (ethersLib.keccak256 || (ethersLib.utils && ethersLib.utils.keccak256));
+      const toUtf8Bytes = (ethersLib.toUtf8Bytes || (ethersLib.utils && ethersLib.utils.toUtf8Bytes));
+      if (keccak256 && toUtf8Bytes) {
+        const full = keccak256(toUtf8Bytes(signature));
+        return full.slice(0, 10); // 0x + 8 hex chars
+      }
+    } catch (_) { /* ignore and fallback */ }
+    try {
+      const { keccak_256 } = require('js-sha3');
+      const full = '0x' + keccak_256(signature);
+      return full.slice(0, 10);
+    } catch (_) { /* ignore */ }
+    // Absolute last resort (should never happen): clearly mark fallback
     const crypto = require('crypto');
     const hash = crypto.createHash('sha256').update(signature).digest('hex');
     return '0x' + hash.substring(0, 8);

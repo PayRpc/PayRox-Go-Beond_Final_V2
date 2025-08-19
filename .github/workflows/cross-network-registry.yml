@@ -1,0 +1,53 @@
+name: Cross-Network Registry
+
+on:
+  push:
+    branches: [ main, '**' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      allow_fallback:
+        description: 'Allow fallback artifact usage (for debugging)'
+        required: false
+        default: 'false'
+
+jobs:
+  generate:
+    name: generate-manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Compile contracts
+        run: npx hardhat compile --show-stack-traces
+
+      - name: Run registry generator
+        env:
+          PRX_VERSION: ${{ github.event.pull_request.head.ref || 'ci' }}
+          # disallow fallback by default in CI; set ALLOW_FALLBACK=true for manual debugging
+          ALLOW_FALLBACK: ${{ inputs.allow_fallback || 'false' }}
+        run: |
+          npx hardhat run scripts/generate-cross-network-registry.ts
+
+      - name: Verify manifest
+        run: |
+          node scripts/verify-manifest.js
+
+      - name: Upload generated manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-network-manifests
+          path: |
+            cross-network-address-registry.json
+            manifests/cross-network-registry.json

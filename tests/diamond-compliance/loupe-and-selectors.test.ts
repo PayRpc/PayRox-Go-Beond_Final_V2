@@ -45,11 +45,19 @@ describe("Loupe and Selectors", function () {
   const facetASelectors = getSelectors(facetA);
   const facetBSelectors = getSelectors(facetB);
 
+  // Deploy ERC165Facet and register it so the diamond supports ERC-165 for tests
+  const ERC165Facet = await ethers.getContractFactory("ERC165Facet");
+  const erc165Facet = await ERC165Facet.deploy();
+  await erc165Facet.waitForDeployment();
+  const erc165Selectors = getSelectors(erc165Facet);
+
   // use test helper to add facet metadata directly and wait for mining
   const txA = await diamond.addFacet(getTarget(facetA), facetASelectors);
   await txA.wait();
   const txB = await diamond.addFacet(getTarget(facetB), facetBSelectors);
   await txB.wait();
+  const txE = await diamond.addFacet(getTarget(erc165Facet), erc165Selectors);
+  await txE.wait();
 
     return { 
       diamond, 
@@ -70,7 +78,10 @@ describe("Loupe and Selectors", function () {
 
   describe("IDiamondLoupe Implementation", function () {
     it("Should implement facets() function", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       
       const facetAddresses = await diamondLoupe.facets();
       expect(facetAddresses.length).to.be.greaterThan(0);
@@ -83,7 +94,10 @@ describe("Loupe and Selectors", function () {
     });
 
     it("Should implement facetFunctionSelectors()", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       
       for (const facet of facets) {
         const selectors = await diamondLoupe.facetFunctionSelectors(getTarget(facet));
@@ -97,7 +111,10 @@ describe("Loupe and Selectors", function () {
     });
 
     it("Should implement facetAddresses()", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       
       const addresses = await diamondLoupe.facetAddresses();
       expect(addresses.length).to.be.greaterThan(0);
@@ -110,7 +127,10 @@ describe("Loupe and Selectors", function () {
     });
 
     it("Should implement facetAddress(bytes4)", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       
       for (const selector of expectedSelectors) {
         const facetAddress = await diamondLoupe.facetAddress(selector);
@@ -119,7 +139,10 @@ describe("Loupe and Selectors", function () {
     });
 
     it("Should return zero address for unknown selectors", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       
       const unknownSelector = "0x12345678";
       const facetAddress = await diamondLoupe.facetAddress(unknownSelector);
@@ -129,7 +152,10 @@ describe("Loupe and Selectors", function () {
 
   describe("Selector Routing", function () {
     it("Should route all selectors correctly", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       
       // Test each expected selector
       for (const selector of expectedSelectors) {
@@ -143,7 +169,10 @@ describe("Loupe and Selectors", function () {
     });
 
     it("Should have no selector collisions", async function () {
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       const allFacets = await diamondLoupe.facets();
       
       const allSelectors: string[] = [];
@@ -188,7 +217,10 @@ describe("Loupe and Selectors", function () {
       // Deduplicate & sort expected
       const expectedUnique = [...new Set(expected.map(s => s.toLowerCase()))].sort();
 
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        getTarget(diamond)
+      );
       const diamondFacets = await diamondLoupe.facets();
       const diamondSelectors: string[] = [];
       for (const facet of diamondFacets) diamondSelectors.push(...facet.functionSelectors);
@@ -212,21 +244,30 @@ describe("Loupe and Selectors", function () {
 
   describe("ERC-165 Support", function () {
     it("Should support IDiamondLoupe interface", async function () {
-      const diamond165 = await ethers.getContractAt("IERC165", getTarget(diamond));
+      const diamond165 = await ethers.getContractAt(
+        "contracts/facets/ERC165Facet.sol:IERC165",
+        getTarget(diamond)
+      );
       
       // IDiamondLoupe interface ID: 0x48e2b093
       expect(await diamond165.supportsInterface("0x48e2b093")).to.be.true;
     });
 
     it("Should support ERC-165 interface", async function () {
-      const diamond165 = await ethers.getContractAt("IERC165", getTarget(diamond));
+      const diamond165 = await ethers.getContractAt(
+        "contracts/facets/ERC165Facet.sol:IERC165",
+        getTarget(diamond)
+      );
       
       // ERC-165 interface ID: 0x01ffc9a7
       expect(await diamond165.supportsInterface("0x01ffc9a7")).to.be.true;
     });
 
     it("Should not support unknown interfaces", async function () {
-      const diamond165 = await ethers.getContractAt("IERC165", getTarget(diamond));
+      const diamond165 = await ethers.getContractAt(
+        "contracts/facets/ERC165Facet.sol:IERC165",
+        getTarget(diamond)
+      );
       
       // Random interface ID
       expect(await diamond165.supportsInterface("0x12345678")).to.be.false;
@@ -238,7 +279,10 @@ describe("Loupe and Selectors", function () {
       // This test ensures facets don't claim loupe interface support
       for (const facet of facets) {
         try {
-          const facet165 = await ethers.getContractAt("IERC165", getTarget(facet));
+          const facet165 = await ethers.getContractAt(
+            "contracts/facets/ERC165Facet.sol:IERC165",
+            getTarget(facet)
+          );
           const supportsLoupe = await facet165.supportsInterface("0x48e2b093");
           expect(supportsLoupe).to.be.false;
         } catch (error) {

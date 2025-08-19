@@ -60,6 +60,9 @@ yarn.lock
 
 # Analyzer/normalizer reports & stubs
 .payrox/*.report.json
+
+# Mythril reports (CI artifacts)
+security/mythril-reports/
 .payrox/stubs/
 
 # Local payrox generated artifacts - keep out of main repo unless intentional

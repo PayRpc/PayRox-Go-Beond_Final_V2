@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {PayRoxAccessControlStorage as ACS} from "../libraries/PayRoxAccessControlStorage.sol";
+import {PayRoxPauseStorage as PS} from "../libraries/PayRoxPauseStorage.sol";
 import "../manifest/ManifestTypes.sol";
 import "../manifest/ManifestUtils.sol";
 
@@ -12,7 +12,7 @@ import "../manifest/ManifestUtils.sol";
  * @dev Advanced governance system for PayRox protocol upgrades and decisions
  * @notice Manages proposal creation, voting, and execution for protocol governance
  */
-contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
+contract GovernanceOrchestrator is ReentrancyGuard {
     using ManifestUtils for ManifestTypes.GovernanceProposal;
 
     /// @dev Role for proposal creators
@@ -100,9 +100,10 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
     constructor(address admin) {
         if (admin == address(0)) revert ManifestTypes.UnauthorizedDeployer();
 
-        _grantRole(DEFAULT_ADMIN_ROLE, admin);
-        _grantRole(PROPOSER_ROLE, admin);
-        _grantRole(EMERGENCY_ROLE, admin);
+    // Seed canonical roles
+    ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][admin] = true;
+    ACS.layout().roles[PROPOSER_ROLE][admin] = true;
+    ACS.layout().roles[EMERGENCY_ROLE][admin] = true;
     }
 
     /**
@@ -117,7 +118,9 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
         string calldata description,
         bytes32[] calldata targetHashes,
         uint256 votingPeriod
-    ) external onlyRole(PROPOSER_ROLE) whenNotPaused {
+    ) external {
+        require(!PS.layout().paused, "Pausable: paused");
+        require(ACS.layout().roles[PROPOSER_ROLE][msg.sender], "Missing role");
         if (proposals[proposalId].proposalId != bytes32(0)) {
             revert ProposalAlreadyExists(proposalId);
         }
@@ -154,7 +157,8 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
     function castVote(
         bytes32 proposalId,
         bool support
-    ) external whenNotPaused nonReentrant {
+    ) external nonReentrant {
+        require(!PS.layout().paused, "Pausable: paused");
         ManifestTypes.GovernanceProposal storage proposal = proposals[proposalId];
 
         if (proposal.proposalId == bytes32(0)) {
@@ -199,7 +203,8 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
      * @dev Execute a proposal that has passed
      * @param proposalId The proposal to execute
      */
-    function executeProposal(bytes32 proposalId) external whenNotPaused nonReentrant {
+    function executeProposal(bytes32 proposalId) external nonReentrant {
+        require(!PS.layout().paused, "Pausable: paused");
         ManifestTypes.GovernanceProposal storage proposal = proposals[proposalId];
 
         if (proposal.proposalId == bytes32(0)) {
@@ -238,7 +243,8 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
     function updateVotingPower(
         address account,
         uint256 newPower
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         uint256 oldPower = votingPower[account];
 
         votingPower[account] = newPower;
@@ -253,7 +259,8 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
      */
     function updateQuorumThreshold(
         uint256 newThreshold
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (newThreshold == 0 || newThreshold > 100) {
             revert InvalidQuorumThreshold(newThreshold);
         }
@@ -308,14 +315,5 @@ contract GovernanceOrchestrator is AccessControl, Pausable, ReentrancyGuard {
     /**
      * @dev Emergency pause function
      */
-    function emergencyPause() external onlyRole(EMERGENCY_ROLE) {
-        _pause();
-    }
-
-    /**
-     * @dev Emergency unpause function
-     */
-    function emergencyUnpause() external onlyRole(EMERGENCY_ROLE) {
-        _unpause();
-    }
+    // Pause/unpause provided by PauseFacet
 }

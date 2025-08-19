@@ -5,46 +5,30 @@
       "name": "@ethersproject/providers",
       "severity": "high",
       "isDirect": false,
-      "via": [
-        "ws"
-      ],
-      "effects": [
-        "ethers"
-      ],
+      "via": ["ws"],
+      "effects": ["ethers"],
       "range": "<=5.7.2",
-      "nodes": [
-        "node_modules/zksync-ethers/node_modules/@ethersproject/providers"
-      ],
+      "nodes": ["node_modules/zksync-ethers/node_modules/@ethersproject/providers"],
       "fixAvailable": false
     },
     "@ethersproject/signing-key": {
       "name": "@ethersproject/signing-key",
       "severity": "low",
       "isDirect": false,
-      "via": [
-        "elliptic"
-      ],
+      "via": ["elliptic"],
       "effects": [],
       "range": "<=5.7.0",
-      "nodes": [
-        "node_modules/zksync-ethers/node_modules/@ethersproject/signing-key"
-      ],
+      "nodes": ["node_modules/zksync-ethers/node_modules/@ethersproject/signing-key"],
       "fixAvailable": true
     },
     "@sentry/node": {
       "name": "@sentry/node",
       "severity": "low",
       "isDirect": false,
-      "via": [
-        "cookie"
-      ],
-      "effects": [
-        "hardhat"
-      ],
+      "via": ["cookie"],
+      "effects": ["hardhat"],
       "range": "4.0.0-beta.0 - 7.74.2-alpha.1",
-      "nodes": [
-        "node_modules/@sentry/node"
-      ],
+      "nodes": ["node_modules/@sentry/node"],
       "fixAvailable": {
         "name": "hardhat",
         "version": "3.0.0",
@@ -63,9 +47,7 @@
           "title": "Axios Cross-Site Request Forgery Vulnerability",
           "url": "https://github.com/advisories/GHSA-wf5p-g6vw-rhxx",
           "severity": "moderate",
-          "cwe": [
-            "CWE-352"
-          ],
+          "cwe": ["CWE-352"],
           "cvss": {
             "score": 6.5,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
@@ -79,9 +61,7 @@
           "title": "axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL",
           "url": "https://github.com/advisories/GHSA-jr5f-v2jv-69x6",
           "severity": "high",
-          "cwe": [
-            "CWE-918"
-          ],
+          "cwe": ["CWE-918"],
           "cvss": {
             "score": 0,
             "vectorString": null
@@ -89,13 +69,9 @@
           "range": "<0.30.0"
         }
       ],
-      "effects": [
-        "hardhat-deploy"
-      ],
+      "effects": ["hardhat-deploy"],
       "range": "<=0.29.0",
-      "nodes": [
-        "node_modules/hardhat-deploy/node_modules/axios"
-      ],
+      "nodes": ["node_modules/hardhat-deploy/node_modules/axios"],
       "fixAvailable": false
     },
     "cookie": {
@@ -110,9 +86,7 @@
           "title": "cookie accepts cookie name, path, and domain with out of bounds characters",
           "url": "https://github.com/advisories/GHSA-pxg6-pf52-xh8x",
           "severity": "low",
-          "cwe": [
-            "CWE-74"
-          ],
+          "cwe": ["CWE-74"],
           "cvss": {
             "score": 0,
             "vectorString": null
@@ -120,13 +94,9 @@
           "range": "<0.7.0"
         }
       ],
-      "effects": [
-        "@sentry/node"
-      ],
+      "effects": ["@sentry/node"],
       "range": "<0.7.0",
-      "nodes": [
-        "node_modules/@sentry/node/node_modules/cookie"
-      ],
+      "nodes": ["node_modules/@sentry/node/node_modules/cookie"],
       "fixAvailable": {
         "name": "hardhat",
         "version": "3.0.0",
@@ -145,9 +115,7 @@
           "title": "Elliptic's EDDSA missing signature length check",
           "url": "https://github.com/advisories/GHSA-f7q4-pwc6-w24p",
           "severity": "low",
-          "cwe": [
-            "CWE-347"
-          ],
+          "cwe": ["CWE-347"],
           "cvss": {
             "score": 5.3,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
@@ -161,9 +129,7 @@
           "title": "Elliptic's ECDSA missing check for whether leading bit of r and s is zero",
           "url": "https://github.com/advisories/GHSA-977x-g7h5-7qgw",
           "severity": "low",
-          "cwe": [
-            "CWE-130"
-          ],
+          "cwe": ["CWE-130"],
           "cvss": {
             "score": 5.3,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
@@ -177,9 +143,7 @@
           "title": "Elliptic allows BER-encoded signatures",
           "url": "https://github.com/advisories/GHSA-49q7-c7j4-3p7m",
           "severity": "low",
-          "cwe": [
-            "CWE-347"
-          ],
+          "cwe": ["CWE-347"],
           "cvss": {
             "score": 5.3,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
@@ -193,9 +157,7 @@
           "title": "Elliptic's verify function omits uniqueness validation",
           "url": "https://github.com/advisories/GHSA-434g-2637-qmqr",
           "severity": "low",
-          "cwe": [
-            "CWE-347"
-          ],
+          "cwe": ["CWE-347"],
           "cvss": {
             "score": 5.3,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
@@ -209,9 +171,7 @@
           "title": "Elliptic's private key extraction in ECDSA upon signing a malformed input (e.g. a string)",
           "url": "https://github.com/advisories/GHSA-vjh7-7g9h-fjfh",
           "severity": "critical",
-          "cwe": [
-            "CWE-200"
-          ],
+          "cwe": ["CWE-200"],
           "cvss": {
             "score": 0,
             "vectorString": null
@@ -225,9 +185,7 @@
           "title": "Valid ECDSA signatures erroneously rejected in Elliptic",
           "url": "https://github.com/advisories/GHSA-fc9h-whq2-v747",
           "severity": "low",
-          "cwe": [
-            "CWE-347"
-          ],
+          "cwe": ["CWE-347"],
           "cvss": {
             "score": 4.8,
             "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
@@ -235,30 +193,19 @@
           "range": "<6.6.0"
         }
       ],
-      "effects": [
-        "@ethersproject/signing-key"
-      ],
+      "effects": ["@ethersproject/signing-key"],
       "range": "<=6.6.0",
-      "nodes": [
-        "node_modules/zksync-ethers/node_modules/elliptic"
-      ],
+      "nodes": ["node_modules/zksync-ethers/node_modules/elliptic"],
       "fixAvailable": true
     },
     "eth-lib": {
       "name": "eth-lib",
       "severity": "high",
       "isDirect": false,
-      "via": [
-        "servify",
-        "ws"
-      ],
-      "effects": [
-        "swarm-js"
-      ],
+      "via": ["servify", "ws"],
+      "effects": ["swarm-js"],
       "range": "<=0.1.29",
-      "nodes": [
-        "node_modules/eth-lib"
-      ],
+      "nodes": ["node_modules/eth-lib"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -269,17 +216,10 @@
       "name": "ethers",
       "severity": "high",
       "isDirect": false,
-      "via": [
-        "@ethersproject/providers",
-        "@ethersproject/signing-key"
-      ],
-      "effects": [
-        "zksync-ethers"
-      ],
+      "via": ["@ethersproject/providers", "@ethersproject/signing-key"],
+      "effects": ["zksync-ethers"],
       "range": "5.0.15 - 5.7.2",
-      "nodes": [
-        "node_modules/zksync-ethers/node_modules/ethers"
-      ],
+      "nodes": ["node_modules/zksync-ethers/node_modules/ethers"],
       "fixAvailable": false
     },
     "form-data": {
@@ -294,9 +234,7 @@
           "title": "form-data uses unsafe random function in form-data for choosing boundary",
           "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
           "severity": "critical",
-          "cwe": [
-            "CWE-330"
-          ],
+          "cwe": ["CWE-330"],
           "cvss": {
             "score": 0,
             "vectorString": null
@@ -304,13 +242,9 @@
           "range": "<2.5.4"
         }
       ],
-      "effects": [
-        "request"
-      ],
+      "effects": ["request"],
       "range": "<2.5.4",
-      "nodes": [
-        "node_modules/request/node_modules/form-data"
-      ],
+      "nodes": ["node_modules/request/node_modules/form-data"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -321,15 +255,10 @@
       "name": "hardhat",
       "severity": "low",
       "isDirect": true,
-      "via": [
-        "@sentry/node",
-        "solc"
-      ],
+      "via": ["@sentry/node", "solc"],
       "effects": [],
       "range": "0.1.0-rc.0 - 3.0.0-next.32",
-      "nodes": [
-        "node_modules/hardhat"
-      ],
+      "nodes": ["node_modules/hardhat"],
       "fixAvailable": {
         "name": "hardhat",
         "version": "3.0.0",
@@ -340,15 +269,10 @@
       "name": "hardhat-deploy",
       "severity": "high",
       "isDirect": true,
-      "via": [
-        "axios",
-        "zksync-ethers"
-      ],
+      "via": ["axios", "zksync-ethers"],
       "effects": [],
       "range": "<=1.0.4",
-      "nodes": [
-        "node_modules/hardhat-deploy"
-      ],
+      "nodes": ["node_modules/hardhat-deploy"],
       "fixAvailable": false
     },
     "request": {
@@ -363,9 +287,7 @@
           "title": "Server-Side Request Forgery in Request",
           "url": "https://github.com/advisories/GHSA-p8p7-x288-28g6",
           "severity": "moderate",
-          "cwe": [
-            "CWE-918"
-          ],
+          "cwe": ["CWE-918"],
           "cvss": {
             "score": 6.1,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
@@ -375,13 +297,9 @@
         "form-data",
         "tough-cookie"
       ],
-      "effects": [
-        "servify"
-      ],
+      "effects": ["servify"],
       "range": "*",
-      "nodes": [
-        "node_modules/request"
-      ],
+      "nodes": ["node_modules/request"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -392,16 +310,10 @@
       "name": "servify",
       "severity": "moderate",
       "isDirect": false,
-      "via": [
-        "request"
-      ],
-      "effects": [
-        "eth-lib"
-      ],
+      "via": ["request"],
+      "effects": ["eth-lib"],
       "range": "*",
-      "nodes": [
-        "node_modules/servify"
-      ],
+      "nodes": ["node_modules/servify"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -412,16 +324,10 @@
       "name": "solc",
       "severity": "low",
       "isDirect": false,
-      "via": [
-        "tmp"
-      ],
-      "effects": [
-        "hardhat"
-      ],
+      "via": ["tmp"],
+      "effects": ["hardhat"],
       "range": ">=0.5.1",
-      "nodes": [
-        "node_modules/solc"
-      ],
+      "nodes": ["node_modules/solc"],
       "fixAvailable": {
         "name": "hardhat",
         "version": "3.0.0",
@@ -432,17 +338,10 @@
       "name": "swarm-js",
       "severity": "high",
       "isDirect": false,
-      "via": [
-        "eth-lib",
-        "tar"
-      ],
-      "effects": [
-        "web3-bzz"
-      ],
+      "via": ["eth-lib", "tar"],
+      "effects": ["web3-bzz"],
       "range": ">=0.1.36",
-      "nodes": [
-        "node_modules/swarm-js"
-      ],
+      "nodes": ["node_modules/swarm-js"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -461,9 +360,7 @@
           "title": "Denial of service while parsing a tar file due to lack of folders count validation",
           "url": "https://github.com/advisories/GHSA-f5x3-32g6-xq36",
           "severity": "moderate",
-          "cwe": [
-            "CWE-400"
-          ],
+          "cwe": ["CWE-400"],
           "cvss": {
             "score": 6.5,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
@@ -471,13 +368,9 @@
           "range": "<6.2.1"
         }
       ],
-      "effects": [
-        "swarm-js"
-      ],
+      "effects": ["swarm-js"],
       "range": "<6.2.1",
-      "nodes": [
-        "node_modules/tar"
-      ],
+      "nodes": ["node_modules/tar"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -496,9 +389,7 @@
           "title": "tmp allows arbitrary temporary file / directory write via symbolic link `dir` parameter",
           "url": "https://github.com/advisories/GHSA-52f5-9888-hmc6",
           "severity": "low",
-          "cwe": [
-            "CWE-59"
-          ],
+          "cwe": ["CWE-59"],
           "cvss": {
             "score": 2.5,
             "vectorString": "CVSS:3.1/AV:L/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N"
@@ -506,13 +397,9 @@
           "range": "<=0.2.3"
         }
       ],
-      "effects": [
-        "solc"
-      ],
+      "effects": ["solc"],
       "range": "<=0.2.3",
-      "nodes": [
-        "node_modules/tmp"
-      ],
+      "nodes": ["node_modules/tmp"],
       "fixAvailable": {
         "name": "hardhat",
         "version": "3.0.0",
@@ -531,9 +418,7 @@
           "title": "tough-cookie Prototype Pollution vulnerability",
           "url": "https://github.com/advisories/GHSA-72xf-g2v4-qvf3",
           "severity": "moderate",
-          "cwe": [
-            "CWE-1321"
-          ],
+          "cwe": ["CWE-1321"],
           "cvss": {
             "score": 6.5,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
@@ -541,13 +426,9 @@
           "range": "<4.1.3"
         }
       ],
-      "effects": [
-        "request"
-      ],
+      "effects": ["request"],
       "range": "<4.1.3",
-      "nodes": [
-        "node_modules/tough-cookie"
-      ],
+      "nodes": ["node_modules/tough-cookie"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -558,14 +439,10 @@
       "name": "web3",
       "severity": "moderate",
       "isDirect": true,
-      "via": [
-        "web3-bzz"
-      ],
+      "via": ["web3-bzz"],
       "effects": [],
       "range": "1.0.0-beta.1 - 3.0.0-rc.0",
-      "nodes": [
-        "node_modules/web3"
-      ],
+      "nodes": ["node_modules/web3"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -576,16 +453,10 @@
       "name": "web3-bzz",
       "severity": "moderate",
       "isDirect": false,
-      "via": [
-        "swarm-js"
-      ],
-      "effects": [
-        "web3"
-      ],
+      "via": ["swarm-js"],
+      "effects": ["web3"],
       "range": "*",
-      "nodes": [
-        "node_modules/web3-bzz"
-      ],
+      "nodes": ["node_modules/web3-bzz"],
       "fixAvailable": {
         "name": "web3",
         "version": "4.16.0",
@@ -604,9 +475,7 @@
           "title": "ws affected by a DoS when handling a request with many HTTP headers",
           "url": "https://github.com/advisories/GHSA-3h5v-q93c-6h6q",
           "severity": "high",
-          "cwe": [
-            "CWE-476"
-          ],
+          "cwe": ["CWE-476"],
           "cvss": {
             "score": 7.5,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
@@ -620,9 +489,7 @@
           "title": "ws affected by a DoS when handling a request with many HTTP headers",
           "url": "https://github.com/advisories/GHSA-3h5v-q93c-6h6q",
           "severity": "high",
-          "cwe": [
-            "CWE-476"
-          ],
+          "cwe": ["CWE-476"],
           "cvss": {
             "score": 7.5,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
@@ -630,10 +497,7 @@
           "range": ">=2.1.0 <5.2.4"
         }
       ],
-      "effects": [
-        "@ethersproject/providers",
-        "eth-lib"
-      ],
+      "effects": ["@ethersproject/providers", "eth-lib"],
       "range": "2.1.0 - 5.2.3 || 7.0.0 - 7.5.9",
       "nodes": [
         "node_modules/eth-lib/node_modules/ws",
@@ -645,16 +509,10 @@
       "name": "zksync-ethers",
       "severity": "high",
       "isDirect": false,
-      "via": [
-        "ethers"
-      ],
-      "effects": [
-        "hardhat-deploy"
-      ],
+      "via": ["ethers"],
+      "effects": ["hardhat-deploy"],
       "range": "<=5.10.0",
-      "nodes": [
-        "node_modules/zksync-ethers"
-      ],
+      "nodes": ["node_modules/zksync-ethers"],
       "fixAvailable": false
     }
   },

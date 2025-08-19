@@ -28,8 +28,6 @@ interface IAntiBotFacet {
     // --- Trust / roles ---
     function addTrusted(address a) external;
     function removeTrusted(address a) external;
-    function grantRole(bytes32 role, address account) external;
-    function revokeRole(bytes32 role, address account) external;
-    function hasRole(bytes32 role, address account) external view returns (bool);
+    // hasRole/grantRole/revokeRole provided by canonical AccessControlFacet to avoid selector collisions
     function isTrusted(address a) external view returns (bool);
 }

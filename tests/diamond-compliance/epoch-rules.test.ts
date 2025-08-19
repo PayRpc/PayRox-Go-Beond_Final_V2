@@ -167,7 +167,10 @@ describe("Epoch Rules", function () {
       await epochManager.advanceEpoch();
       
       // Check that routing is now active
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
+        const diamondLoupe = await ethers.getContractAt(
+          "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+          diamond.target ?? diamond.address
+        );
       const facetAddress = await diamondLoupe.facetAddress("0x12345678");
       expect(facetAddress).to.equal(facetA.target);
     });
@@ -179,7 +182,10 @@ describe("Epoch Rules", function () {
       await epochManager.advanceEpoch();
       
       // Routing should remain unchanged
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
+        const diamondLoupe = await ethers.getContractAt(
+          "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+          diamond.target ?? diamond.address
+        );
       const facetAddress = await diamondLoupe.facetAddress("0x12345678");
       expect(facetAddress).to.equal(ethers.ZeroAddress);
     });
@@ -202,7 +208,10 @@ describe("Epoch Rules", function () {
       expect(Number(receipt.gasUsed)).to.be.lt(500000);
       
       // Verify all selectors are active
-      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
+        const diamondLoupe = await ethers.getContractAt(
+          "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+          diamond.target ?? diamond.address
+        );
       for (const selector of selectors) {
   const facetAddress = await diamondLoupe.facetAddress(selector);
   expect(facetAddress).to.equal(facetA.target);
@@ -255,7 +264,10 @@ describe("Epoch Rules", function () {
   await epochManager.advanceEpoch();
       
       // Verify routing
-      let diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
+      let diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        diamond.target ?? diamond.address
+      );
   expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetA.target);
       
       // Plan transition to facetB for next epoch
@@ -264,7 +276,10 @@ describe("Epoch Rules", function () {
       await epochManager.advanceEpoch();
       
       // Verify transition
-      diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.target ?? diamond.address);
+      diamondLoupe = await ethers.getContractAt(
+        "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+        diamond.target ?? diamond.address
+      );
   expect(await diamondLoupe.facetAddress("0x12345678")).to.equal(facetB.target);
     });
 

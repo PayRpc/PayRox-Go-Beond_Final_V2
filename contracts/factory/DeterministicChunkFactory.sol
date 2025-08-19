@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import {AccessControl}   from "@openzeppelin/contracts/access/AccessControl.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {Pausable}        from "@openzeppelin/contracts/utils/Pausable.sol";
+import {PayRoxAccessControlStorage as ACS} from "../libraries/PayRoxAccessControlStorage.sol";
+import {PayRoxPauseStorage as PS} from "../libraries/PayRoxPauseStorage.sol";
 import {IChunkFactory}   from "../interfaces/IChunkFactory.sol";
 import {IManifestDispatcher} from "../interfaces/IManifestDispatcher.sol";
 import {ChunkFactoryLib} from "../utils/ChunkFactoryLib.sol";
@@ -11,7 +11,7 @@ import {ChunkFactoryLib} from "../utils/ChunkFactoryLib.sol";
 /// @title DeterministicChunkFactory
 /// @notice Size-optimized version using library delegation
 /// @dev Maintains full IChunkFactory interface while staying under EIP-170 limit
-contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGuard, Pausable {
+contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
     // Custom errors used in constructor and validations
     error ZeroAddress();
     error InvalidConstructorArgs();
@@ -28,7 +28,17 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
     }
 
     modifier onlyOwner() {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Not owner");
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Not owner");
+        _;
+    }
+
+    modifier onlyRole(bytes32 role) {
+        require(ACS.layout().roles[role][msg.sender], "Missing role");
+        _;
+    }
+
+    modifier whenNotPaused() {
+        require(!PS.layout().paused, "Pausable: paused");
         _;
     }
 
@@ -85,9 +95,10 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
         if (_dispatcherCodehash == bytes32(0)) revert InvalidConstructorArgs();
         if (_factoryBytecodeHash == bytes32(0)) revert InvalidConstructorArgs();
 
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(OPERATOR_ROLE, msg.sender);
-        _grantRole(FEE_ROLE, msg.sender);
+    // Seed canonical role storage
+    ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender] = true;
+    ACS.layout().roles[OPERATOR_ROLE][msg.sender] = true;
+    ACS.layout().roles[FEE_ROLE][msg.sender] = true;
         defaultAdmin = msg.sender;
         authorizedRecipients[msg.sender] = true;
 
@@ -383,8 +394,7 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
         return expectedManifestDispatcher;
     }
 
-    function pause() external onlyRole(OPERATOR_ROLE) { _pause(); }
-    function unpause() external onlyRole(OPERATOR_ROLE) { _unpause(); }
+    // Pause/unpause are provided by the canonical PauseFacet; remove local exposure to avoid selector collisions.
 
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     // INTERNAL HELPERS
@@ -536,15 +546,17 @@ contract DeterministicChunkFactory is IChunkFactory, AccessControl, ReentrancyGu
         emit FeesEnabledSet(enabled);
     }
 
-    function setMaxSingleTransfer(uint256 newMax) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setMaxSingleTransfer(uint256 newMax) external {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         maxSingleTransfer = newMax;
     }
 
-    function transferDefaultAdmin(address newAdmin) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function transferDefaultAdmin(address newAdmin) external {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (newAdmin == address(0)) revert ZeroAddress();
         address prev = defaultAdmin;
-        _grantRole(DEFAULT_ADMIN_ROLE, newAdmin);
-        _revokeRole(DEFAULT_ADMIN_ROLE, prev);
+        ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][newAdmin] = true;
+        ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][prev] = false;
         defaultAdmin = newAdmin;
     }
 }

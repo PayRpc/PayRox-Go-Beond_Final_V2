@@ -32,7 +32,7 @@ interface ManifestData {
 
 class DiamondDeployer {
   private config: DeploymentConfig;
-  private manifest: ManifestData;
+  private manifest!: ManifestData; // loaded in constructor
   private deployedFacets: Map<string, Contract> = new Map();
 
   constructor(config: DeploymentConfig) {
@@ -131,7 +131,10 @@ class DiamondDeployer {
     console.log(`  ✅ Diamond deployed to: ${diamond.address}`);
     
     // Add loupe facet
-    const diamondCut = await ethers.getContractAt("IDiamondCut", diamond.address);
+    const diamondCut = await ethers.getContractAt(
+      "contracts/interfaces/IDiamondCut.sol:IDiamondCut",
+      diamond.address
+    );
     const loupeSelectors = this.getFunctionSelectors(diamondLoupeFacet);
     
     await diamondCut.diamondCut(
@@ -183,7 +186,10 @@ class DiamondDeployer {
   private async verifyDeployment(diamond: Contract): Promise<void> {
     console.log('✅ Verifying deployment...');
 
-    const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", diamond.address);
+    const diamondLoupe = await ethers.getContractAt(
+      "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
+      diamond.address
+    );
     
     // Verify all facets are properly added
     const facets = await diamondLoupe.facets();
