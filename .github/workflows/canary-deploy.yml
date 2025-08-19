@@ -21,6 +21,11 @@ on:
         required: false
         default: false
         type: boolean
+      strict_diff:
+        description: "Fail canary on manifest collisions/banned selectors"
+        required: false
+        default: false
+        type: boolean
 
 env:
   NODE_VERSION: '18'
@@ -111,9 +116,21 @@ jobs:
       - name: Diff strict vs canary manifest (summary only)
         run: |
           if [ -f strict-artifacts/payrox-manifest.json ]; then
+            FAIL_ARGS=""
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.strict_diff }}" = "true" ]; then
+              FAIL_ARGS="--fail-on collision,banned"
+              echo "✅ strict_diff enabled: will fail on collisions/banned selectors" >> "$GITHUB_STEP_SUMMARY"
+            fi
+            set +e
             node scripts/diff-manifests.js \
               --strict strict-artifacts/payrox-manifest.json \
-              --canary payrox-manifest.json || true
+              --canary payrox-manifest.json $FAIL_ARGS
+            CODE=$?
+            set -e
+            if [ $CODE -ne 0 ]; then
+              echo "❌ Manifest diff failed (code $CODE)" >> "$GITHUB_STEP_SUMMARY"
+              exit $CODE
+            fi
           else
             echo "No strict manifest artifact found; skipping diff."; \
             echo "No strict manifest artifact found; skipping diff." >> "$GITHUB_STEP_SUMMARY";
