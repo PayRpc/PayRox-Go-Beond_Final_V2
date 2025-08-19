@@ -2657,6 +2657,120 @@
       "artifacts": [
         "RefactorSafetyFacet"
       ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SaltViewFacet.sol": {
+      "lastModificationDate": 1755577532649,
+      "contentHash": "a7605e21bdf5a49963d586b0e47d1f20",
+      "sourceName": "contracts/facets/SaltViewFacet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/ISaltView.sol",
+        "../libraries/SaltPolicyLib.sol"
+      ],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "SaltViewFacet"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\ISaltView.sol": {
+      "lastModificationDate": 1755577525395,
+      "contentHash": "5807a5dd60f3e1a54e042efac56d7080",
+      "sourceName": "contracts/interfaces/ISaltView.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "ISaltView"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\SaltPolicyLib.sol": {
+      "lastModificationDate": 1755577586092,
+      "contentHash": "4f6f82577077a32ff1075e34910b08de",
+      "sourceName": "contracts/libraries/SaltPolicyLib.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.30"
+      ],
+      "artifacts": [
+        "SaltPolicyLib"
+      ]
     }
   }
 }

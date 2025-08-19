@@ -5,7 +5,8 @@ pragma solidity 0.8.30;
 /// @notice Canonical salt + CREATE2 helpers used across PayRox
 library SaltPolicyLib {
     /// @dev EIP-2470 singleton CREATE2 deployer (widely deployed)
-    address internal constant EIP2470 = 0x4e59b44847b379578588920ca78fbf26c0b4956c;
+    // Address literal uses checksum casing to satisfy Solidity's address literal rules.
+    address internal constant EIP2470 = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
 
     /// @notice Compute universal cross-chain salt (mirrors off-chain script)
     /// @dev Uses abi.encodePacked to match TS `ethers.solidityPacked`. No adjacent dynamic types.
