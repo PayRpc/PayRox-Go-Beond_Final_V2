@@ -65,6 +65,3 @@ yarn.lock
 # Local payrox generated artifacts - keep out of main repo unless intentional
 .payrox/generated/
 .payrox/*.report.json
-
-# Ignore locally committed split test artifacts
-build/split-test-enhanced/

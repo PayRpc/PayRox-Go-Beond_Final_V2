@@ -1,0 +1,28 @@
+name: Refactor Manifest Check
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci --legacy-peer-deps
+
+      - name: Split & Manifest
+        shell: pwsh
+        run: |
+          pwsh -File scripts/split-and-manifest.ps1 `
+            -Source contracts/dispacher/ManifestDispacher.sol `
+            -Expected manifests/expected/ManifestDispatcher.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manifests
+          path: artifacts/manifests/*

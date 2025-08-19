@@ -392,6 +392,53 @@ contract ChunkFactoryFacet is IChunkFactory {
         return interfaceId == type(IChunkFactory).interfaceId || interfaceId == 0x01ffc9a7; // ERC165
     }
 
-    // Note: Diamond loupe selectors were moved to `LoupeFacet.sol` to comply with
-    // the linter's requirement that loupe functions live in a dedicated facet.
+    // ─────────────────────────────────────────────────────────────────────────────
+    // DIAMOND LOUPE COMPATIBILITY (selectors list)
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    function getFacetFunctionSelectors() external pure returns (bytes4[] memory selectors) {
+        // Update this list to match EXACTLY what the facet exposes
+        selectors = new bytes4[](34);
+        uint256 i;
+        // IChunkFactory interface functions
+        selectors[i++] = IChunkFactory.stage.selector;
+        selectors[i++] = IChunkFactory.stageMany.selector;
+        selectors[i++] = IChunkFactory.stageBatch.selector;
+        selectors[i++] = IChunkFactory.deployDeterministic.selector;
+        selectors[i++] = IChunkFactory.deployDeterministicBatch.selector;
+        selectors[i++] = IChunkFactory.predict.selector;
+        selectors[i++] = IChunkFactory.predictAddress.selector;
+        selectors[i++] = IChunkFactory.predictAddressBatch.selector;
+        selectors[i++] = IChunkFactory.read.selector;
+        selectors[i++] = IChunkFactory.exists.selector;
+        selectors[i++] = IChunkFactory.isDeployedContract.selector;
+        selectors[i++] = IChunkFactory.validateBytecodeSize.selector;
+        selectors[i++] = IChunkFactory.verifySystemIntegrity.selector;
+        selectors[i++] = IChunkFactory.deploymentCount.selector;
+        selectors[i++] = IChunkFactory.userTiers.selector;
+        selectors[i++] = IChunkFactory.owner.selector;
+        selectors[i++] = IChunkFactory.withdrawFees.selector;
+        selectors[i++] = IChunkFactory.withdrawRefund.selector;
+        selectors[i++] = IChunkFactory.pause.selector;
+        selectors[i++] = IChunkFactory.unpause.selector;
+        selectors[i++] = IChunkFactory.setTierFee.selector;
+        selectors[i++] = IChunkFactory.setUserTier.selector;
+        selectors[i++] = IChunkFactory.setIdempotentMode.selector;
+        selectors[i++] = IChunkFactory.setFeeRecipient.selector;
+        selectors[i++] = IChunkFactory.setBaseFeeWei.selector;
+        selectors[i++] = IChunkFactory.setFeesEnabled.selector;
+        selectors[i++] = IChunkFactory.setMaxSingleTransfer.selector;
+        selectors[i++] = IChunkFactory.transferDefaultAdmin.selector;
+        selectors[i++] = IChunkFactory.addAuthorizedRecipient.selector;
+        selectors[i++] = IChunkFactory.removeAuthorizedRecipient.selector;
+
+        // PayRox helpers from this facet
+        selectors[i++] = this.getExpectedManifestHash.selector;
+        selectors[i++] = this.getExpectedFactoryBytecodeHash.selector;
+        selectors[i++] = this.getManifestDispatcher.selector;
+        selectors[i++] = this.getFactoryAddress.selector;
+
+        require(i == selectors.length, "selector count mismatch");
+        return selectors;
+    }
 }

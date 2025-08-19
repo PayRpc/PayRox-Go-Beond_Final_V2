@@ -17,11 +17,16 @@ jobs:
           cache: 'npm'
 
       - name: Install deps
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Run splitter (non-interactive)
-        # Run pwsh from bash to avoid multi-line pwsh wrapper/argument parsing issues on ubuntu runners
-        run: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/split-and-manifest.ps1 -Source 'contracts/dispacher/ManifestDispacher.sol' -OutDir 'artifacts/splits' -CiMode -FailOnEmptyParts
+        shell: pwsh
+        run: |
+          ./scripts/split-and-manifest.ps1 `
+            -Source 'contracts/dispacher/ManifestDispacher.sol' `
+            -OutDir 'artifacts/splits' `
+            -CiMode `
+            -FailOnEmptyParts
 
       - name: Sanity checks
         run: |
@@ -52,7 +57,7 @@ jobs:
           cache: 'npm'
 
       - name: Install deps
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Run splitter (Windows)
         run: |

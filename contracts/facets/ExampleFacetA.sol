@@ -175,7 +175,7 @@ contract ExampleFacetA is RefactorSafeFacetBase {
         name = "ExampleFacetA";
         version = "1.1.0";
 
-    selectors = new bytes4[](9);
+        selectors = new bytes4[](10);
         selectors[0] = this.executeA.selector;
         selectors[1] = this.storeData.selector;
         selectors[2] = this.getData.selector;
@@ -184,6 +184,7 @@ contract ExampleFacetA is RefactorSafeFacetBase {
         selectors[5] = this.calculateHash.selector;
         selectors[6] = this.verifySignature.selector;
         selectors[7] = this.totalExecutions.selector;
-    selectors[8] = this.getFacetInfo.selector;
+        selectors[8] = this.lastCaller.selector;
+        selectors[9] = this.getFacetInfo.selector;
     }
 }

@@ -4,7 +4,7 @@ pragma solidity 0.8.30;
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {RefactorSafeFacetBase} from "../libraries/RefactorSafetyLib.sol";
 import {LibSecurityStorage as Sec} from "../security/LibSecurityStorage.sol";
-import {IAntiBotFacet} from "../interfaces/IAntiBotFacet.sol";
+import {IAntiBotFacet} from "./IAntiBotFacet.sol";
 
 /**
  * @title SecurityFacet (AntiBotLite) for PayRox
@@ -289,11 +289,5 @@ contract SecurityFacet is RefactorSafeFacetBase, ReentrancyGuard, IAntiBotFacet 
 
     function isSecurityInitialized() external view returns (bool) {
         return _getOwner() != address(0);
-    }
-
-    /// @notice Exposed public emergency refactor validation. This consolidates the selector
-    /// so only SecurityFacet owns the public API for the emergency refactor check.
-    function emergencyRefactorValidation() external view returns (bool) {
-        return _emergencyRefactorValidation();
     }
 }

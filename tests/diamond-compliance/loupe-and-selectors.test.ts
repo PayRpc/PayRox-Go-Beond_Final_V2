@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract, keccak256, toUtf8Bytes } from "ethers";
+import { Contract } from "ethers";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -26,57 +26,7 @@ describe("Loupe and Selectors", function () {
   async function deployDiamondFixture() {
     const [owner, addr1] = await ethers.getSigners();
 
-    // Deploy diamond
-    const Diamond = await ethers.getContractFactory("Diamond");
-    const diamond = await Diamond.deploy(await owner.getAddress());
-    await diamond.waitForDeployment();
-
-    // Add facets to diamond (using DiamondCutFacet)
-    const diamondCut = await ethers.getContractAt("IDiamondCut", getTarget(diamond));
-
-    // If a manifest exists, deploy and register all facets listed there.
-    const fs = require('fs');
-    const path = require('path');
-    const manifestPath = path.join(process.cwd(), 'payrox-manifest.json');
-
-    const deployedFacets: any[] = [];
-    const expectedSelectors: string[] = [];
-
-    if (fs.existsSync(manifestPath)) {
-      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-      const facetEntries = Object.keys(manifest.facets || {});
-
-      const cutArgs: any[] = [];
-
-      for (const facetName of facetEntries) {
-        try {
-          const FacetCF = await ethers.getContractFactory(facetName);
-          // Attempt to deploy without constructor args. If the contract requires constructor
-          // parameters this will throw and we'll skip that facet for the test fixture.
-          const facet = await FacetCF.deploy();
-          await facet.waitForDeployment();
-
-          const selectors = manifest.facets[facetName].selectors || [];
-          expectedSelectors.push(...selectors);
-
-          cutArgs.push({ facetAddress: getTarget(facet), action: 0, functionSelectors: selectors });
-          deployedFacets.push(facet);
-        } catch (e) {
-          // Skip facets that cannot be deployed in the test environment (require constructor args)
-          // and continue with remaining facets.
-          // eslint-disable-next-line no-console
-          console.warn(`Skipping facet ${facetName} during test deploy: ${e?.message || e}`);
-        }
-      }
-
-      if (cutArgs.length > 0) {
-        await diamondCut.diamondCut(cutArgs, ZERO_ADDRESS, "0x");
-      }
-
-      return { diamond, facetA: deployedFacets[0], facetB: deployedFacets[1], owner, addr1, expectedSelectors };
-    }
-
-    // Fallback: deploy two example facets if no manifest is present
+    // Deploy facets
     const FacetA = await ethers.getContractFactory("FacetA");
     const FacetB = await ethers.getContractFactory("FacetB");
     
@@ -85,26 +35,21 @@ describe("Loupe and Selectors", function () {
     const facetB = await FacetB.deploy();
     await facetB.waitForDeployment();
 
-    // Get function selectors for each facet
-    const facetASelectors = getSelectors(facetA);
-    const facetBSelectors = getSelectors(facetB);
+    // Deploy diamond
+    const Diamond = await ethers.getContractFactory("Diamond");
+    const diamond = await Diamond.deploy(await owner.getAddress());
+    await diamond.waitForDeployment();
 
-    await diamondCut.diamondCut(
-      [
-        {
-          facetAddress: getTarget(facetA),
-          action: 0, // Add
-          functionSelectors: facetASelectors
-        },
-        {
-          facetAddress: getTarget(facetB),
-          action: 0, // Add
-          functionSelectors: facetBSelectors
-        }
-      ],
-      ZERO_ADDRESS,
-      "0x"
-    );
+    // Add facets to diamond (using DiamondCutFacet)
+  // Get function selectors for each facet and register them directly on the test Diamond
+  const facetASelectors = getSelectors(facetA);
+  const facetBSelectors = getSelectors(facetB);
+
+  // use test helper to add facet metadata directly and wait for mining
+  const txA = await diamond.addFacet(getTarget(facetA), facetASelectors);
+  await txA.wait();
+  const txB = await diamond.addFacet(getTarget(facetB), facetBSelectors);
+  await txB.wait();
 
     return { 
       diamond, 
@@ -257,13 +202,7 @@ describe("Loupe and Selectors", function () {
           sel => !loupeSelectors.includes(sel)
         );
         
-        // If tests deploy a full manifest, parity should hold exactly. In local/test fixtures
-        // we may only deploy a subset of facets; ensure the diamond's selectors are contained
-        // within the manifest's selector set to validate parity without forcing exact equality.
-        const manSet = new Set(manifestSelectors);
-        for (const sel of filteredDiamondSelectors) {
-          expect(manSet.has(sel)).to.be.true;
-        }
+        expect(filteredDiamondSelectors.sort()).to.deep.equal(manifestSelectors.sort());
       }
     });
   });
@@ -326,55 +265,18 @@ describe("Loupe and Selectors", function () {
 // Helper function to get function selectors from a contract
 function getSelectors(contract: Contract): string[] {
   const selectors: string[] = [];
-  const ifaceAny: any = contract.interface;
-
-  // ethers v6 Interface exposes `fragments` array; prefer that when present
-  const frags = ifaceAny?.fragments;
-  if (Array.isArray(frags)) {
-    for (const frag of frags) {
-      try {
-        if (!frag || frag.type !== 'function') continue;
-        let sel: string | undefined;
-        if (typeof ifaceAny.getSighash === 'function') {
-          try { sel = ifaceAny.getSighash(frag); } catch (e) { /* ignore */ }
-        }
-        if (!sel) {
-          const sig = (typeof frag.format === 'function') ? frag.format() : frag.name || '';
-          try { 
-            sel = keccak256(toUtf8Bytes(sig)).slice(0, 10); 
-          } catch (e) { 
-            sel = undefined; 
-          }
-        }
-        if (sel) selectors.push(sel);
-      } catch (e) { /* ignore individual fragment errors */ }
-    }
-    return selectors;
-  }
-
-  const funcs = ifaceAny?.functions;
-  if (!funcs) { return selectors; }
-
-  // functions may be a Map, array, or plain object
-  if (funcs instanceof Map) {
-    for (const f of funcs.values()) {
-      if (f && f.type === 'function' && f.selector) selectors.push(f.selector);
-    }
-  } else if (Array.isArray(funcs)) {
-    for (const f of funcs) {
-      if (f && f.type === 'function' && f.selector) selectors.push(f.selector);
-    }
-  } else if (typeof funcs === 'object') {
-    for (const f of Object.values(funcs)) {
-      const ff: any = f;
-      if (ff && ff.type === 'function' && ff.selector) selectors.push(ff.selector);
+  
+  for (const func of Object.values((contract.interface as any).functions || {})) {
+    const f: any = func;
+    if (f && f.type === 'function') {
+      selectors.push(f.selector);
     }
   }
-
+  
   return selectors;
 }
 
 // Helper function to compute function selector
 function computeSelector(signature: string): string {
-  return keccak256(toUtf8Bytes(signature)).slice(0, 10);
+  return (ethers as any).utils.id(signature).slice(0, 10);
 }

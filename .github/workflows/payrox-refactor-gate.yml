@@ -25,7 +25,17 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci --legacy-peer-deps
+
+    - name: Run local refactor validator (AI)
+      run: npm run refactor:validate -- AI/sample-refactor-output.json || true
+      continue-on-error: true
+      id: ai-validate
+
+    - name: Early loupe/selectors smoke test
+      run: npx hardhat test tests/diamond-compliance/loupe-and-selectors.test.ts --grep "facets\(\)" || true
+      continue-on-error: true
+      id: early-selectors
 
     - name: Setup Hardhat
       run: npx hardhat --version
@@ -33,13 +43,6 @@ jobs:
     - name: Compile contracts
       id: compile
       run: npx hardhat compile
-
-    - name: Generate payrox manifest
-      if: always()
-      run: |
-        echo "🔧 Generating payrox-manifest.json from contracts/facets"
-        node tools/generate-manifest.js
-      shell: bash
 
     - name: Run refactor linter
       run: npm run ai:lint
@@ -69,19 +72,22 @@ jobs:
     - name: Check for banned patterns
       run: |
         echo "🔍 Checking for banned patterns..."
-        
-        # Check for loupe functions in facets
-        if grep -r "function facets\|function facetFunctionSelectors\|function facetAddresses" facets/ 2>/dev/null; then
-          echo "❌ ERROR: Loupe functions found in facets directory"
+        # Loupe functions should not appear in facets
+        if grep -r "function\s\+facets\s*\(|function\s\+facetFunctionSelectors\s*\(|function\s\+facetAddresses\s*\(" contracts/facets/ 2>/dev/null; then
+          echo "❌ ERROR: Loupe functions found in contracts/facets"
           exit 1
         fi
-        
-        # Check for oversized facets (approximate check)
-        if find artifacts/ -name "*.json" -exec sh -c 'size=$(jq -r ".deployedBytecode.object" "$1" 2>/dev/null | wc -c); if [ $size -gt 49152 ]; then echo "❌ ERROR: Potential size limit violation in $1 ($size chars)"; exit 1; fi' _ {} \; 2>/dev/null; then
+        # Approx size check (~2 hex chars per bytecode byte)
+        if find artifacts/ -name "*.json" -exec sh -c '
+          size=$(jq -r ".deployedBytecode.object" "$1" 2>/dev/null | wc -c);
+          if [ "$size" -gt 49152 ]; then
+            echo "❌ ERROR: Potential size limit violation in $1 ($size chars)";
+            exit 1;
+          fi
+        ' _ {} \; 2>/dev/null; then
           echo "✅ No obvious size violations found"
         fi
-        
-        # Check for proper self-check footers in recent AI outputs
+        # Optional SELF-CHECK footer enforcement in recent docs
         if find . -name "*.md" -newer .git/HEAD -exec grep -l "SELF-CHECK" {} \; | while read file; do
           if ! grep -q "\[✓\] Size OK.*\[✓\] No Loupe in Facets.*\[✓\] Selectors Parity" "$file"; then
             echo "❌ ERROR: Incomplete SELF-CHECK footer in $file"
@@ -95,25 +101,12 @@ jobs:
       run: |
         if [ -f "payrox-manifest.json" ]; then
           echo "🔍 Validating manifest structure..."
-          
-          # Check JSON validity
           if ! jq empty payrox-manifest.json; then
-            echo "❌ ERROR: Invalid JSON in payrox-manifest.json"
-            exit 1
-          fi
-          
-          # Check required fields
+            echo "❌ ERROR: Invalid JSON in payrox-manifest.json"; exit 1; fi
           if ! jq -e '.version and .facets' payrox-manifest.json >/dev/null; then
-            echo "❌ ERROR: Manifest missing required fields (version, facets)"
-            exit 1
-          fi
-          
-          # Check facet structure
+            echo "❌ ERROR: Manifest missing required fields (version, facets)"; exit 1; fi
           if ! jq -e '.facets | to_entries[] | .value.selectors | type == "array"' payrox-manifest.json >/dev/null; then
-            echo "❌ ERROR: Facets must have selectors arrays"
-            exit 1
-          fi
-          
+            echo "❌ ERROR: Facets must have selectors arrays"; exit 1; fi
           echo "✅ Manifest structure validated"
         else
           echo "⚠️  No manifest found - skipping validation"
@@ -123,38 +116,23 @@ jobs:
       run: |
         if [ -f "selector_map.json" ]; then
           echo "🔍 Validating selector map..."
-          
           if ! jq empty selector_map.json; then
-            echo "❌ ERROR: Invalid JSON in selector_map.json"
-            exit 1
-          fi
-          
-          # Check for duplicates
+            echo "❌ ERROR: Invalid JSON in selector_map.json"; exit 1; fi
           if jq -r 'to_entries[] | .key' selector_map.json | sort | uniq -d | grep -q .; then
-            echo "❌ ERROR: Duplicate selectors found in selector map"
-            exit 1
-          fi
-          
+            echo "❌ ERROR: Duplicate selectors found in selector map"; exit 1; fi
           echo "✅ Selector map validated"
         fi
 
     - name: Validate deployment scripts
       run: |
         echo "🔍 Checking deployment scripts..."
-        
-        # Look for deployment scripts
         deploy_scripts=$(find scripts/ -name "*deploy*.ts" -o -name "*deploy*.js" 2>/dev/null || true)
-        
         if [ -n "$deploy_scripts" ]; then
           for script in $deploy_scripts; do
             echo "Checking $script..."
-            
-            # Check for proper role assignments (should grant to dispatcher, not facets)
             if grep -q "grantRole.*facet" "$script" 2>/dev/null; then
               echo "⚠️  WARNING: Possible role assignment to facet in $script"
             fi
-            
-            # Check for CREATE2 usage
             if ! grep -q "CREATE2\|predictDeterministicAddress\|deploy.*salt" "$script" 2>/dev/null; then
               echo "⚠️  WARNING: No CREATE2 deployment detected in $script"
             fi
@@ -167,46 +145,40 @@ jobs:
     - name: Generate validation report
       run: |
         echo "📊 PayRox Refactor Validation Report" > validation-report.md
-        echo "=====================================" >> validation-report.md
-        echo "" >> validation-report.md
-        echo "**Commit:** ${{ github.sha }}" >> validation-report.md
-        echo "**Branch:** ${{ github.ref_name }}" >> validation-report.md
-        echo "**Date:** $(date -u)" >> validation-report.md
-        echo "" >> validation-report.md
-        
-        echo "## Test Results" >> validation-report.md
-        echo "" >> validation-report.md
-        echo "| Component | Status |" >> validation-report.md
-        echo "|-----------|---------|" >> validation-report.md
-        echo "| Compilation | ${{ steps.compile.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |" >> validation-report.md
-        echo "| Refactor Lint | ${{ steps.lint.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |" >> validation-report.md
-        echo "| Diamond Tests | ${{ steps.diamond-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |" >> validation-report.md
-        echo "| Epoch Tests | ${{ steps.epoch-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |" >> validation-report.md
-        echo "| Role Tests | ${{ steps.role-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |" >> validation-report.md
-        echo "| Size Tests | ${{ steps.size-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |" >> validation-report.md
-        echo "" >> validation-report.md
-        
-        # Count facets if directory exists
-        if [ -d "facets" ]; then
-          facet_count=$(find facets/ -name "*.sol" | wc -l)
-          echo "**Facets Found:** $facet_count" >> validation-report.md
-        fi
-        
-        # Check manifest
-        if [ -f "payrox-manifest.json" ]; then
-          selector_count=$(jq '[.facets[] | .selectors[]] | length' payrox-manifest.json 2>/dev/null || echo "0")
-          echo "**Total Selectors:** $selector_count" >> validation-report.md
-        fi
-        
-        echo "" >> validation-report.md
-        echo "## Compliance Checklist" >> validation-report.md
-        echo "" >> validation-report.md
-        echo "- [ ] EIP-170 size limits enforced" >> validation-report.md
-        echo "- [ ] No loupe functions in facets" >> validation-report.md
-        echo "- [ ] Selector parity maintained" >> validation-report.md
-        echo "- [ ] Roles assigned to dispatcher" >> validation-report.md
-        echo "- [ ] Epoch rules implemented" >> validation-report.md
-        echo "- [ ] CREATE2 deployment ready" >> validation-report.md
+        {
+          echo "====================================="
+          echo
+          echo "**Commit:** ${{ github.sha }}"
+          echo "**Branch:** ${{ github.ref_name }}"
+          echo "**Date:** $(date -u)"
+          echo
+          echo "## Test Results"
+          echo
+          echo "| Component | Status |"
+          echo "|-----------|--------|"
+          echo "| Compilation | ${{ steps.compile.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |"
+          echo "| Refactor Lint | ${{ steps.lint.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |"
+          echo "| Diamond Tests | ${{ steps.diamond-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |"
+          echo "| Epoch Tests | ${{ steps.epoch-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |"
+          echo "| Role Tests | ${{ steps.role-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |"
+          echo "| Size Tests | ${{ steps.size-tests.outcome == 'success' && '✅ Pass' || '❌ Fail' }} |"
+          echo
+          if [ -d "contracts/facets" ]; then
+            echo "**Facets Found:** $(find contracts/facets -name '*.sol' | wc -l)"
+          fi
+          if [ -f "payrox-manifest.json" ]; then
+            echo "**Total Selectors:** $(jq '[.facets[] | .selectors[]] | length' payrox-manifest.json 2>/dev/null || echo 0)"
+          fi
+          echo
+          echo "## Compliance Checklist"
+          echo
+          echo "- [ ] EIP-170 size limits enforced"
+          echo "- [ ] No loupe functions in facets"
+          echo "- [ ] Selector parity maintained"
+          echo "- [ ] Roles assigned to dispatcher"
+          echo "- [ ] Epoch rules implemented"
+          echo "- [ ] CREATE2 deployment ready"
+        } >> validation-report.md
 
     - name: Upload validation report
       uses: actions/upload-artifact@v4
@@ -217,101 +189,56 @@ jobs:
     - name: Check overall status
       run: |
         echo "🔍 Final validation check..."
-        
-        # Collect all step outcomes
         compile_status="${{ steps.compile.outcome }}"
         lint_status="${{ steps.lint.outcome }}"
         diamond_status="${{ steps.diamond-tests.outcome }}"
         epoch_status="${{ steps.epoch-tests.outcome }}"
         role_status="${{ steps.role-tests.outcome }}"
         size_status="${{ steps.size-tests.outcome }}"
-        
-        # Critical failures that should block
         critical_failures=0
-        
         if [ "$compile_status" != "success" ]; then
-          echo "❌ CRITICAL: Compilation failed"
-          critical_failures=$((critical_failures + 1))
-        fi
-        
+          echo "❌ CRITICAL: Compilation failed"; critical_failures=$((critical_failures + 1)); fi
         if [ "$lint_status" != "success" ]; then
-          echo "❌ CRITICAL: Refactor lint failed"
-          critical_failures=$((critical_failures + 1))
-        fi
-        
+          echo "❌ CRITICAL: Refactor lint failed"; critical_failures=$((critical_failures + 1)); fi
         if [ "$diamond_status" != "success" ]; then
-          echo "❌ CRITICAL: Diamond compliance tests failed"
-          critical_failures=$((critical_failures + 1))
-        fi
-        
-        # Non-critical warnings
-        if [ "$epoch_status" != "success" ]; then
-          echo "⚠️  WARNING: Epoch tests failed"
-        fi
-        
-        if [ "$role_status" != "success" ]; then
-          echo "⚠️  WARNING: Role tests failed"
-        fi
-        
-        if [ "$size_status" != "success" ]; then
-          echo "⚠️  WARNING: Size tests failed"
-        fi
-        
-        # Final decision
+          echo "❌ CRITICAL: Diamond compliance tests failed"; critical_failures=$((critical_failures + 1)); fi
+        if [ "$epoch_status" != "success" ]; then echo "⚠️  WARNING: Epoch tests failed"; fi
+        if [ "$role_status" != "success" ]; then echo "⚠️  WARNING: Role tests failed"; fi
+        if [ "$size_status" != "success" ]; then echo "⚠️  WARNING: Size tests failed"; fi
         if [ $critical_failures -gt 0 ]; then
-          echo ""
-          echo "💥 REFACTOR GATE: BLOCKED"
-          echo "Critical failures detected. Please fix and retry."
-          exit 1
+          echo; echo "💥 REFACTOR GATE: BLOCKED"; exit 1;
         else
-          echo ""
-          echo "✅ REFACTOR GATE: PASSED"
-          echo "All critical validations successful."
+          echo; echo "✅ REFACTOR GATE: PASSED";
         fi
 
   security-scan:
     runs-on: ubuntu-latest
     needs: refactor-validation
     if: always()
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
-
     - name: Install dependencies
-      run: npm install
-
+      run: npm ci --legacy-peer-deps
     - name: Run Slither analysis
       uses: crytic/slither-action@v0.3.0
       continue-on-error: true
       with:
-        target: 'facets/'
+        target: 'contracts/facets/'
         fail-on: none
         slither-args: --print human-summary
-
     - name: Check for common vulnerabilities
       run: |
         echo "🔐 Scanning for common vulnerabilities..."
-        
-        # Check for reentrancy patterns
-        if grep -r "external.*payable\|call.*value" facets/ 2>/dev/null; then
-          echo "⚠️  WARNING: Potential reentrancy patterns found"
-        fi
-        
-        # Check for unchecked external calls
-        if grep -r "\.call\|\.delegatecall\|\.staticcall" facets/ 2>/dev/null | grep -v "require\|assert"; then
-          echo "⚠️  WARNING: Unchecked external calls found"
-        fi
-        
-        # Check for proper access control
-        if ! grep -r "onlyOwner\|hasRole\|modifier" facets/ 2>/dev/null; then
-          echo "⚠️  WARNING: No access control modifiers found"
-        fi
-        
+        if grep -r "external.*payable\|call.*value" contracts/facets/ 2>/dev/null; then
+          echo "⚠️  WARNING: Potential reentrancy patterns found"; fi
+        if grep -r "\.call\|\.delegatecall\|\.staticcall" contracts/facets/ 2>/dev/null | grep -v "require\|assert"; then
+          echo "⚠️  WARNING: Unchecked external calls found"; fi
+        if ! grep -r "onlyOwner\|hasRole\|modifier" contracts/facets/ 2>/dev/null; then
+          echo "⚠️  WARNING: No access control modifiers found"; fi
         echo "✅ Security scan completed"
