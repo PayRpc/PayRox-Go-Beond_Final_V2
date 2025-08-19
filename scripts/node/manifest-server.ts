@@ -12,7 +12,7 @@ const port = Number(process.env.PORT || 3001);
 const wsPort = Number(process.env.WS_PORT || 3002);
 
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 
 // ---- Types ----
 interface FunctionInfo {
@@ -24,7 +24,7 @@ interface FunctionInfo {
 interface FacetIn {
   name: string;
   signatures: string[];
-  predictedAddress?: string; // optional
+  predictedAddress?: string;       // optional
 }
 
 interface FacetOut {
@@ -35,9 +35,9 @@ interface FacetOut {
 }
 
 interface ManifestEntry {
-  selector: string; // 0x + 8 hex
-  facet: string; // address
-  fn?: string; // optional function name
+  selector: string;  // 0x + 8 hex
+  facet: string;     // address
+  fn?: string;       // optional function name
 }
 
 interface SelectorMap {
@@ -64,8 +64,8 @@ const broadcast = (msg: any) => {
     if (client.readyState === 1) client.send(data);
   }
 };
-wss.on('connection', (ws: any) => {
-  ws.send(JSON.stringify({ type: 'log', message: 'Connected to PayRox toolkit logs' }));
+wss.on("connection", (ws: any) => {
+  ws.send(JSON.stringify({ type: "log", message: "Connected to PayRox toolkit logs" }));
 });
 
 // ---- Helpers ----
@@ -76,7 +76,7 @@ const HASH_ZERO = '0x' + '0'.repeat(64);
 
 function sigToSelector(signature: string): string {
   const h = keccak256(toUtf8Bytes(signature));
-  return '0x' + h.slice(2, 10);
+  return "0x" + h.slice(2, 10);
 }
 
 function stablePairHash(a: string, b: string): string {
@@ -88,13 +88,13 @@ function stablePairHash(a: string, b: string): string {
 // ---- Routes ----
 
 // Health
-app.get('/api/health', (_req: Request, res: Response) => {
-  res.json({ ok: true, service: 'payrox-manifest', ts: new Date().toISOString() });
+app.get("/api/health", (_req: Request, res: Response) => {
+  res.json({ ok: true, service: "payrox-manifest", ts: new Date().toISOString() });
 });
 
 // Selectors from signatures OR facets
 // Body: { signatures?: string[], facets?: [{name, signatures[]}] }
-app.post('/api/selectors', (req: Request, res: Response) => {
+app.post("/api/selectors", (req: Request, res: Response) => {
   try {
     const { signatures, facets } = req.body || {};
 
@@ -118,15 +118,12 @@ app.post('/api/selectors', (req: Request, res: Response) => {
       const allSels = out.flatMap((f) => f.selectors);
       return res.json({
         facets: out,
-        collisions: findCollisions(
-          allSels,
-          out.flatMap((f) => f.signatures),
-        ),
+        collisions: findCollisions(allSels, out.flatMap((f) => f.signatures)),
         coverage: uniqueCount(allSels) / Math.max(1, allSels.length),
       } as SelectorMap);
     }
 
-    return res.status(400).json({ error: 'Provide signatures[] or facets[]' });
+    return res.status(400).json({ error: "Provide signatures[] or facets[]" });
   } catch (e: any) {
     return res.status(500).json({ error: String(e?.message || e) });
   }
@@ -147,37 +144,24 @@ function uniqueCount(arr: string[]): number {
 
 // Chunk (facet grouping) — strict, no minimum facet count enforced
 // Body: { functions?: FunctionInfo[], analyzer?: { functions: [...] }, maxPerFacet?: number }
-app.post('/api/chunk', (req: Request, res: Response) => {
+app.post("/api/chunk", (req: Request, res: Response) => {
   try {
     const { functions, analyzer, maxPerFacet } = req.body || {};
     const fns: FunctionInfo[] = Array.isArray(functions)
       ? functions
       : Array.isArray(analyzer?.functions)
-        ? analyzer.functions
-        : [];
+      ? analyzer.functions
+      : [];
 
-    if (fns.length === 0) return res.status(400).json({ error: 'No functions provided' });
+    if (fns.length === 0) return res.status(400).json({ error: "No functions provided" });
 
     const groups: Record<string, FunctionInfo[]> = { Admin: [], View: [], Core: [], Utility: [] };
     for (const f of fns) {
-      const n = (f.name || '').toLowerCase();
-      const mut = (f.stateMutability || '').toLowerCase();
-      if (mut === 'view' || mut === 'pure' || n.startsWith('get') || n.startsWith('facet'))
-        groups.View.push(f);
-      else if (
-        n.includes('owner') ||
-        n.includes('admin') ||
-        n.includes('pause') ||
-        n.includes('govern')
-      )
-        groups.Admin.push(f);
-      else if (
-        n.includes('oracle') ||
-        n.includes('twap') ||
-        n.includes('price') ||
-        n.includes('util')
-      )
-        groups.Utility.push(f);
+      const n = (f.name || "").toLowerCase();
+      const mut = (f.stateMutability || "").toLowerCase();
+      if (mut === "view" || mut === "pure" || n.startsWith("get") || n.startsWith("facet")) groups.View.push(f);
+      else if (n.includes("owner") || n.includes("admin") || n.includes("pause") || n.includes("govern")) groups.Admin.push(f);
+      else if (n.includes("oracle") || n.includes("twap") || n.includes("price") || n.includes("util")) groups.Utility.push(f);
       else groups.Core.push(f);
     }
 
@@ -201,31 +185,28 @@ app.post('/api/chunk', (req: Request, res: Response) => {
 
 // Manifest builder — deterministic Merkle
 // Body: { facets:[{name, signatures[], predictedAddress?}], addresses?: { [name]: string } }
-app.post('/api/manifest', (req: Request, res: Response) => {
+app.post("/api/manifest", (req: Request, res: Response) => {
   try {
     const { facets, addresses } = req.body || {};
-    if (!Array.isArray(facets) || facets.length === 0)
-      return res.status(400).json({ error: 'facets[] required' });
+    if (!Array.isArray(facets) || facets.length === 0) return res.status(400).json({ error: "facets[] required" });
 
     const routes: ManifestEntry[] = [];
     for (const f of facets as FacetIn[]) {
       const selectors = f.signatures.map(sigToSelector);
-      const addr = (addresses && addresses[f.name]) || f.predictedAddress || ADDRESS_ZERO;
+  const addr = (addresses && addresses[f.name]) || f.predictedAddress || ADDRESS_ZERO;
       selectors.forEach((sel, i) => {
         routes.push({ selector: sel, facet: addr, fn: f.signatures[i] });
       });
     }
 
-    const leaves = routes.map((r) =>
-      keccak256(abi.encode(['bytes4', 'address'], [r.selector, r.facet])),
-    );
+  const leaves = routes.map((r) => keccak256(abi.encode(["bytes4", "address"], [r.selector, r.facet])));
     const merkleRoot = buildMerkleRoot(leaves);
 
     const out: ManifestResult = {
       routes,
       merkleRoot,
       leaves,
-      version: '1.0.0',
+      version: "1.0.0",
       timestamp: new Date().toISOString(),
     };
     return res.json(out);
@@ -236,15 +217,12 @@ app.post('/api/manifest', (req: Request, res: Response) => {
 
 // Proofs for given routes
 // Body: { routes: ManifestEntry[] }
-app.post('/api/proofs', (req: Request, res: Response) => {
+app.post("/api/proofs", (req: Request, res: Response) => {
   try {
     const { routes } = req.body || {};
-    if (!Array.isArray(routes) || routes.length === 0)
-      return res.status(400).json({ error: 'routes[] required' });
+    if (!Array.isArray(routes) || routes.length === 0) return res.status(400).json({ error: "routes[] required" });
 
-    const leaves = routes.map((r: ManifestEntry) =>
-      keccak256(abi.encode(['bytes4', 'address'], [r.selector, r.facet])),
-    );
+  const leaves = routes.map((r: ManifestEntry) => keccak256(abi.encode(["bytes4", "address"], [r.selector, r.facet])));
     const proofs = leaves.map((_, i) => generateProof(leaves, i));
     const root = buildMerkleRoot(leaves);
     return res.json({ proofs, root, leaves });
@@ -295,5 +273,5 @@ function generateProof(leaves: string[], index: number): string[] {
 app.listen(port, () => {
   console.log(`[payrox-manifest] http://0.0.0.0:${port}`);
   console.log(`[payrox-manifest] WS logs ws://0.0.0.0:${wsPort}`);
-  broadcast({ type: 'log', message: 'Toolkit ready' });
+  broadcast({ type: "log", message: "Toolkit ready" });
 });

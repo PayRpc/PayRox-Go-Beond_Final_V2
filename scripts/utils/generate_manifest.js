@@ -14,30 +14,26 @@ const chunks = ref.chunks || [];
 
 // Find cleaned facet files in the same folder
 const dir = path.join('contracts', 'Tests');
-const files = fs.readdirSync(dir).filter((f) => f.endsWith('.cleaned.facet.sol'));
+const files = fs.readdirSync(dir).filter(f => f.endsWith('.cleaned.facet.sol'));
 
 const manifest = {
   contract: 'Test',
   generatedAt: new Date().toISOString(),
-  facets: [],
+  facets: []
 };
 
 for (const c of chunks) {
   // attempt to choose facet file that matches chunk id
-  const prefer = files.find((f) => f.includes(c.id)) || files[0] || null;
+  const prefer = files.find(f => f.includes(c.id)) || files[0] || null;
   const facetEntry = {
     file: prefer || `UNKNOWN-${c.id}.facet.sol`,
     chunkId: c.id,
-    functions: [],
+    functions: []
   };
   for (let s of c.functions) {
-    const norm = s
-      .replace(/address payable/g, 'address')
-      .replace(/\s+(calldata|memory)\b/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-    const hash = ethers.id(norm);
-    const selector = '0x' + hash.slice(2, 10);
+    const norm = s.replace(/address payable/g, 'address').replace(/\s+(calldata|memory)\b/g, '').replace(/\s+/g, ' ').trim();
+  const hash = ethers.id(norm);
+  const selector = '0x' + hash.slice(2, 10);
     // derive simple name
     const name = norm.split('(')[0];
     facetEntry.functions.push({ name, signature: norm, selector, path: `/${name}` });

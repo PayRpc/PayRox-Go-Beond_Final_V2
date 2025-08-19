@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,148 +21,298 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export interface ChunkFactoryFacetInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'addAuthorizedRecipient'
-      | 'deployDeterministic'
-      | 'deployDeterministicBatch'
-      | 'deploymentCount'
-      | 'exists'
-      | 'factoryAddress'
-      | 'getExpectedFactoryBytecodeHash'
-      | 'getExpectedManifestHash'
-      | 'getFacetFunctionSelectors'
-      | 'getFactoryAddress'
-      | 'getManifestDispatcher'
-      | 'isDeployedContract'
-      | 'owner'
-      | 'predict'
-      | 'predictAddress'
-      | 'predictAddressBatch'
-      | 'read'
-      | 'removeAuthorizedRecipient'
-      | 'setBaseFeeWei'
-      | 'setFeeRecipient'
-      | 'setFeesEnabled'
-      | 'setIdempotentMode'
-      | 'setMaxSingleTransfer'
-      | 'setTierFee'
-      | 'setUserTier'
-      | 'stage'
-      | 'stageBatch'
-      | 'stageMany'
-      | 'transferDefaultAdmin'
-      | 'userTiers'
-      | 'validateBytecodeSize'
-      | 'verifySystemIntegrity'
-      | 'withdrawFees'
-      | 'withdrawRefund',
+      | "addAuthorizedRecipient"
+      | "deployDeterministic"
+      | "deployDeterministicBatch"
+      | "deploymentCount"
+      | "exists"
+      | "factoryAddress"
+      | "getExpectedFactoryBytecodeHash"
+      | "getExpectedManifestHash"
+      | "getFacetFunctionSelectors"
+      | "getFactoryAddress"
+      | "getManifestDispatcher"
+      | "isDeployedContract"
+      | "owner"
+      | "predict"
+      | "predictAddress"
+      | "predictAddressBatch"
+      | "read"
+      | "removeAuthorizedRecipient"
+      | "setBaseFeeWei"
+      | "setFeeRecipient"
+      | "setFeesEnabled"
+      | "setIdempotentMode"
+      | "setMaxSingleTransfer"
+      | "setTierFee"
+      | "setUserTier"
+      | "stage"
+      | "stageBatch"
+      | "stageMany"
+      | "transferDefaultAdmin"
+      | "userTiers"
+      | "validateBytecodeSize"
+      | "verifySystemIntegrity"
+      | "withdrawFees"
+      | "withdrawRefund"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | 'AuthorizedRecipientAdded'
-      | 'AuthorizedRecipientRemoved'
-      | 'BaseFeeSet'
-      | 'BatchDeployed'
-      | 'BatchStaged'
-      | 'ChunkStaged'
-      | 'ContractDeployed'
-      | 'DefaultAdminTransferred'
-      | 'EmergencyWithdrawal'
-      | 'FeeCollectionFailed'
-      | 'FeeRecipientSet'
-      | 'FeesEnabledSet'
-      | 'FeesWithdrawn'
-      | 'IdempotentModeSet'
-      | 'TierFeeSet'
-      | 'UserTierSet',
+      | "AuthorizedRecipientAdded"
+      | "AuthorizedRecipientRemoved"
+      | "BaseFeeSet"
+      | "BatchDeployed"
+      | "BatchStaged"
+      | "ChunkStaged"
+      | "ContractDeployed"
+      | "DefaultAdminTransferred"
+      | "EmergencyWithdrawal"
+      | "FeeCollectionFailed"
+      | "FeeRecipientSet"
+      | "FeesEnabledSet"
+      | "FeesWithdrawn"
+      | "IdempotentModeSet"
+      | "TierFeeSet"
+      | "UserTierSet"
   ): EventFragment;
 
-  encodeFunctionData(functionFragment: 'addAuthorizedRecipient', values: [AddressLike]): string;
   encodeFunctionData(
-    functionFragment: 'deployDeterministic',
-    values: [BytesLike, BytesLike, BytesLike],
+    functionFragment: "addAuthorizedRecipient",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'deployDeterministicBatch',
-    values: [BytesLike[], BytesLike[], BytesLike[]],
+    functionFragment: "deployDeterministic",
+    values: [BytesLike, BytesLike, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: 'deploymentCount', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'exists', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'factoryAddress', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'getExpectedFactoryBytecodeHash',
-    values?: undefined,
+    functionFragment: "deployDeterministicBatch",
+    values: [BytesLike[], BytesLike[], BytesLike[]]
   ): string;
-  encodeFunctionData(functionFragment: 'getExpectedManifestHash', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getFacetFunctionSelectors', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getFactoryAddress', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getManifestDispatcher', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'isDeployedContract', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'predict', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'predictAddress', values: [BytesLike, BytesLike]): string;
   encodeFunctionData(
-    functionFragment: 'predictAddressBatch',
-    values: [BytesLike[], BytesLike[]],
+    functionFragment: "deploymentCount",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'read', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'removeAuthorizedRecipient', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'setBaseFeeWei', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'setFeeRecipient', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'setFeesEnabled', values: [boolean]): string;
-  encodeFunctionData(functionFragment: 'setIdempotentMode', values: [boolean]): string;
-  encodeFunctionData(functionFragment: 'setMaxSingleTransfer', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'setTierFee', values: [BigNumberish, BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'setUserTier', values: [AddressLike, BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'stage', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'stageBatch', values: [BytesLike[]]): string;
-  encodeFunctionData(functionFragment: 'stageMany', values: [BytesLike[]]): string;
-  encodeFunctionData(functionFragment: 'transferDefaultAdmin', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'userTiers', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'validateBytecodeSize', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'verifySystemIntegrity', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'withdrawFees', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'withdrawRefund', values?: undefined): string;
+  encodeFunctionData(functionFragment: "exists", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "factoryAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getExpectedFactoryBytecodeHash",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getExpectedManifestHash",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getFacetFunctionSelectors",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getFactoryAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getManifestDispatcher",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isDeployedContract",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "predict", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "predictAddress",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "predictAddressBatch",
+    values: [BytesLike[], BytesLike[]]
+  ): string;
+  encodeFunctionData(functionFragment: "read", values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: "removeAuthorizedRecipient",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setBaseFeeWei",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setFeeRecipient",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setFeesEnabled",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setIdempotentMode",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMaxSingleTransfer",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setTierFee",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setUserTier",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "stage", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "stageBatch",
+    values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "stageMany",
+    values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferDefaultAdmin",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "userTiers",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "validateBytecodeSize",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "verifySystemIntegrity",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawFees",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawRefund",
+    values?: undefined
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'addAuthorizedRecipient', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'deployDeterministic', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'deployDeterministicBatch', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'deploymentCount', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'exists', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'factoryAddress', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getExpectedFactoryBytecodeHash', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getExpectedManifestHash', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getFacetFunctionSelectors', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getFactoryAddress', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getManifestDispatcher', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'isDeployedContract', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'predict', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'predictAddress', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'predictAddressBatch', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'read', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'removeAuthorizedRecipient', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setBaseFeeWei', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setFeeRecipient', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setFeesEnabled', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setIdempotentMode', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setMaxSingleTransfer', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setTierFee', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setUserTier', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'stage', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'stageBatch', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'stageMany', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'transferDefaultAdmin', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'userTiers', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'validateBytecodeSize', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'verifySystemIntegrity', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'withdrawFees', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'withdrawRefund', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "addAuthorizedRecipient",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "deployDeterministic",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "deployDeterministicBatch",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "deploymentCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "exists", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "factoryAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getExpectedFactoryBytecodeHash",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getExpectedManifestHash",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getFacetFunctionSelectors",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getFactoryAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getManifestDispatcher",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isDeployedContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "predict", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "predictAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "predictAddressBatch",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "read", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "removeAuthorizedRecipient",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setBaseFeeWei",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setFeeRecipient",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setFeesEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setIdempotentMode",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMaxSingleTransfer",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setTierFee", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setUserTier",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "stage", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "stageBatch", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "stageMany", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferDefaultAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "userTiers", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "validateBytecodeSize",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "verifySystemIntegrity",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawFees",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawRefund",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace AuthorizedRecipientAddedEvent {
@@ -206,13 +356,13 @@ export namespace BatchDeployedEvent {
     deployed: AddressLike[],
     salts: BytesLike[],
     deployer: AddressLike,
-    totalFee: BigNumberish,
+    totalFee: BigNumberish
   ];
   export type OutputTuple = [
     deployed: string[],
     salts: string[],
     deployer: string,
-    totalFee: bigint,
+    totalFee: bigint
   ];
   export interface OutputObject {
     deployed: string[];
@@ -231,13 +381,13 @@ export namespace BatchStagedEvent {
     chunkCount: BigNumberish,
     gasUsed: BigNumberish,
     packedMetadata: BytesLike,
-    timestamp: BigNumberish,
+    timestamp: BigNumberish
   ];
   export type OutputTuple = [
     chunkCount: bigint,
     gasUsed: bigint,
     packedMetadata: string,
-    timestamp: bigint,
+    timestamp: bigint
   ];
   export interface OutputObject {
     chunkCount: bigint;
@@ -256,9 +406,14 @@ export namespace ChunkStagedEvent {
     chunk: AddressLike,
     hash: BytesLike,
     salt: BytesLike,
-    size: BigNumberish,
+    size: BigNumberish
   ];
-  export type OutputTuple = [chunk: string, hash: string, salt: string, size: bigint];
+  export type OutputTuple = [
+    chunk: string,
+    hash: string,
+    salt: string,
+    size: bigint
+  ];
   export interface OutputObject {
     chunk: string;
     hash: string;
@@ -276,9 +431,14 @@ export namespace ContractDeployedEvent {
     deployed: AddressLike,
     salt: BytesLike,
     deployer: AddressLike,
-    fee: BigNumberish,
+    fee: BigNumberish
   ];
-  export type OutputTuple = [deployed: string, salt: string, deployer: string, fee: bigint];
+  export type OutputTuple = [
+    deployed: string,
+    salt: string,
+    deployer: string,
+    fee: bigint
+  ];
   export interface OutputObject {
     deployed: string;
     salt: string;
@@ -414,342 +574,434 @@ export interface ChunkFactoryFacet extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  addAuthorizedRecipient: TypedContractMethod<[recipient: AddressLike], [void], 'nonpayable'>;
+  addAuthorizedRecipient: TypedContractMethod<
+    [recipient: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   deployDeterministic: TypedContractMethod<
     [salt: BytesLike, bytecode: BytesLike, constructorArgs: BytesLike],
     [string],
-    'payable'
+    "payable"
   >;
 
   deployDeterministicBatch: TypedContractMethod<
     [salts: BytesLike[], bytecodes: BytesLike[], constructorArgs: BytesLike[]],
     [string[]],
-    'payable'
+    "payable"
   >;
 
-  deploymentCount: TypedContractMethod<[], [bigint], 'view'>;
+  deploymentCount: TypedContractMethod<[], [bigint], "view">;
 
-  exists: TypedContractMethod<[hash: BytesLike], [boolean], 'view'>;
+  exists: TypedContractMethod<[hash: BytesLike], [boolean], "view">;
 
-  factoryAddress: TypedContractMethod<[], [string], 'view'>;
+  factoryAddress: TypedContractMethod<[], [string], "view">;
 
-  getExpectedFactoryBytecodeHash: TypedContractMethod<[], [string], 'view'>;
+  getExpectedFactoryBytecodeHash: TypedContractMethod<[], [string], "view">;
 
-  getExpectedManifestHash: TypedContractMethod<[], [string], 'view'>;
+  getExpectedManifestHash: TypedContractMethod<[], [string], "view">;
 
-  getFacetFunctionSelectors: TypedContractMethod<[], [string[]], 'view'>;
+  getFacetFunctionSelectors: TypedContractMethod<[], [string[]], "view">;
 
-  getFactoryAddress: TypedContractMethod<[], [string], 'view'>;
+  getFactoryAddress: TypedContractMethod<[], [string], "view">;
 
-  getManifestDispatcher: TypedContractMethod<[], [string], 'view'>;
+  getManifestDispatcher: TypedContractMethod<[], [string], "view">;
 
-  isDeployedContract: TypedContractMethod<[target: AddressLike], [boolean], 'view'>;
+  isDeployedContract: TypedContractMethod<
+    [target: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-  owner: TypedContractMethod<[], [string], 'view'>;
+  owner: TypedContractMethod<[], [string], "view">;
 
   predict: TypedContractMethod<
     [data: BytesLike],
     [[string, string] & { predicted: string; hash: string }],
-    'view'
+    "view"
   >;
 
-  predictAddress: TypedContractMethod<[salt: BytesLike, codeHash: BytesLike], [string], 'view'>;
+  predictAddress: TypedContractMethod<
+    [salt: BytesLike, codeHash: BytesLike],
+    [string],
+    "view"
+  >;
 
   predictAddressBatch: TypedContractMethod<
     [salts: BytesLike[], codeHashes: BytesLike[]],
     [string[]],
-    'view'
+    "view"
   >;
 
-  read: TypedContractMethod<[chunk: AddressLike], [string], 'view'>;
+  read: TypedContractMethod<[chunk: AddressLike], [string], "view">;
 
-  removeAuthorizedRecipient: TypedContractMethod<[recipient: AddressLike], [void], 'nonpayable'>;
+  removeAuthorizedRecipient: TypedContractMethod<
+    [recipient: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  setBaseFeeWei: TypedContractMethod<[newBase: BigNumberish], [void], 'nonpayable'>;
+  setBaseFeeWei: TypedContractMethod<
+    [newBase: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
-  setFeeRecipient: TypedContractMethod<[newRecipient: AddressLike], [void], 'nonpayable'>;
+  setFeeRecipient: TypedContractMethod<
+    [newRecipient: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  setFeesEnabled: TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+  setFeesEnabled: TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
 
-  setIdempotentMode: TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+  setIdempotentMode: TypedContractMethod<
+    [enabled: boolean],
+    [void],
+    "nonpayable"
+  >;
 
-  setMaxSingleTransfer: TypedContractMethod<[newMax: BigNumberish], [void], 'nonpayable'>;
+  setMaxSingleTransfer: TypedContractMethod<
+    [newMax: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
-  setTierFee: TypedContractMethod<[tier: BigNumberish, fee: BigNumberish], [void], 'nonpayable'>;
+  setTierFee: TypedContractMethod<
+    [tier: BigNumberish, fee: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
-  setUserTier: TypedContractMethod<[user: AddressLike, tier: BigNumberish], [void], 'nonpayable'>;
+  setUserTier: TypedContractMethod<
+    [user: AddressLike, tier: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   stage: TypedContractMethod<
     [data: BytesLike],
     [[string, string] & { chunk: string; hash: string }],
-    'payable'
+    "payable"
   >;
 
   stageBatch: TypedContractMethod<
     [blobs: BytesLike[]],
     [[string[], string[]] & { chunks: string[]; hashes: string[] }],
-    'payable'
+    "payable"
   >;
 
-  stageMany: TypedContractMethod<[dataArray: BytesLike[]], [string[]], 'payable'>;
+  stageMany: TypedContractMethod<
+    [dataArray: BytesLike[]],
+    [string[]],
+    "payable"
+  >;
 
-  transferDefaultAdmin: TypedContractMethod<[newAdmin: AddressLike], [void], 'nonpayable'>;
+  transferDefaultAdmin: TypedContractMethod<
+    [newAdmin: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  userTiers: TypedContractMethod<[user: AddressLike], [bigint], 'view'>;
+  userTiers: TypedContractMethod<[user: AddressLike], [bigint], "view">;
 
-  validateBytecodeSize: TypedContractMethod<[bytecode: BytesLike], [boolean], 'view'>;
+  validateBytecodeSize: TypedContractMethod<
+    [bytecode: BytesLike],
+    [boolean],
+    "view"
+  >;
 
-  verifySystemIntegrity: TypedContractMethod<[], [boolean], 'view'>;
+  verifySystemIntegrity: TypedContractMethod<[], [boolean], "view">;
 
-  withdrawFees: TypedContractMethod<[], [void], 'nonpayable'>;
+  withdrawFees: TypedContractMethod<[], [void], "nonpayable">;
 
-  withdrawRefund: TypedContractMethod<[], [void], 'nonpayable'>;
+  withdrawRefund: TypedContractMethod<[], [void], "nonpayable">;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
   getFunction(
-    nameOrSignature: 'addAuthorizedRecipient',
-  ): TypedContractMethod<[recipient: AddressLike], [void], 'nonpayable'>;
+    nameOrSignature: "addAuthorizedRecipient"
+  ): TypedContractMethod<[recipient: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'deployDeterministic',
+    nameOrSignature: "deployDeterministic"
   ): TypedContractMethod<
     [salt: BytesLike, bytecode: BytesLike, constructorArgs: BytesLike],
     [string],
-    'payable'
+    "payable"
   >;
   getFunction(
-    nameOrSignature: 'deployDeterministicBatch',
+    nameOrSignature: "deployDeterministicBatch"
   ): TypedContractMethod<
     [salts: BytesLike[], bytecodes: BytesLike[], constructorArgs: BytesLike[]],
     [string[]],
-    'payable'
+    "payable"
   >;
-  getFunction(nameOrSignature: 'deploymentCount'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'exists'): TypedContractMethod<[hash: BytesLike], [boolean], 'view'>;
-  getFunction(nameOrSignature: 'factoryAddress'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: 'getExpectedFactoryBytecodeHash',
-  ): TypedContractMethod<[], [string], 'view'>;
+    nameOrSignature: "deploymentCount"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'getExpectedManifestHash',
-  ): TypedContractMethod<[], [string], 'view'>;
+    nameOrSignature: "exists"
+  ): TypedContractMethod<[hash: BytesLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: 'getFacetFunctionSelectors',
-  ): TypedContractMethod<[], [string[]], 'view'>;
-  getFunction(nameOrSignature: 'getFactoryAddress'): TypedContractMethod<[], [string], 'view'>;
-  getFunction(nameOrSignature: 'getManifestDispatcher'): TypedContractMethod<[], [string], 'view'>;
+    nameOrSignature: "factoryAddress"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'isDeployedContract',
-  ): TypedContractMethod<[target: AddressLike], [boolean], 'view'>;
-  getFunction(nameOrSignature: 'owner'): TypedContractMethod<[], [string], 'view'>;
+    nameOrSignature: "getExpectedFactoryBytecodeHash"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'predict',
+    nameOrSignature: "getExpectedManifestHash"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "getFacetFunctionSelectors"
+  ): TypedContractMethod<[], [string[]], "view">;
+  getFunction(
+    nameOrSignature: "getFactoryAddress"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "getManifestDispatcher"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "isDeployedContract"
+  ): TypedContractMethod<[target: AddressLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "predict"
   ): TypedContractMethod<
     [data: BytesLike],
     [[string, string] & { predicted: string; hash: string }],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'predictAddress',
-  ): TypedContractMethod<[salt: BytesLike, codeHash: BytesLike], [string], 'view'>;
+    nameOrSignature: "predictAddress"
+  ): TypedContractMethod<
+    [salt: BytesLike, codeHash: BytesLike],
+    [string],
+    "view"
+  >;
   getFunction(
-    nameOrSignature: 'predictAddressBatch',
-  ): TypedContractMethod<[salts: BytesLike[], codeHashes: BytesLike[]], [string[]], 'view'>;
-  getFunction(nameOrSignature: 'read'): TypedContractMethod<[chunk: AddressLike], [string], 'view'>;
+    nameOrSignature: "predictAddressBatch"
+  ): TypedContractMethod<
+    [salts: BytesLike[], codeHashes: BytesLike[]],
+    [string[]],
+    "view"
+  >;
   getFunction(
-    nameOrSignature: 'removeAuthorizedRecipient',
-  ): TypedContractMethod<[recipient: AddressLike], [void], 'nonpayable'>;
+    nameOrSignature: "read"
+  ): TypedContractMethod<[chunk: AddressLike], [string], "view">;
   getFunction(
-    nameOrSignature: 'setBaseFeeWei',
-  ): TypedContractMethod<[newBase: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "removeAuthorizedRecipient"
+  ): TypedContractMethod<[recipient: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setFeeRecipient',
-  ): TypedContractMethod<[newRecipient: AddressLike], [void], 'nonpayable'>;
+    nameOrSignature: "setBaseFeeWei"
+  ): TypedContractMethod<[newBase: BigNumberish], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setFeesEnabled',
-  ): TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+    nameOrSignature: "setFeeRecipient"
+  ): TypedContractMethod<[newRecipient: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setIdempotentMode',
-  ): TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+    nameOrSignature: "setFeesEnabled"
+  ): TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setMaxSingleTransfer',
-  ): TypedContractMethod<[newMax: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "setIdempotentMode"
+  ): TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setTierFee',
-  ): TypedContractMethod<[tier: BigNumberish, fee: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "setMaxSingleTransfer"
+  ): TypedContractMethod<[newMax: BigNumberish], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setUserTier',
-  ): TypedContractMethod<[user: AddressLike, tier: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "setTierFee"
+  ): TypedContractMethod<
+    [tier: BigNumberish, fee: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: 'stage',
+    nameOrSignature: "setUserTier"
+  ): TypedContractMethod<
+    [user: AddressLike, tier: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "stage"
   ): TypedContractMethod<
     [data: BytesLike],
     [[string, string] & { chunk: string; hash: string }],
-    'payable'
+    "payable"
   >;
   getFunction(
-    nameOrSignature: 'stageBatch',
+    nameOrSignature: "stageBatch"
   ): TypedContractMethod<
     [blobs: BytesLike[]],
     [[string[], string[]] & { chunks: string[]; hashes: string[] }],
-    'payable'
+    "payable"
   >;
   getFunction(
-    nameOrSignature: 'stageMany',
-  ): TypedContractMethod<[dataArray: BytesLike[]], [string[]], 'payable'>;
+    nameOrSignature: "stageMany"
+  ): TypedContractMethod<[dataArray: BytesLike[]], [string[]], "payable">;
   getFunction(
-    nameOrSignature: 'transferDefaultAdmin',
-  ): TypedContractMethod<[newAdmin: AddressLike], [void], 'nonpayable'>;
+    nameOrSignature: "transferDefaultAdmin"
+  ): TypedContractMethod<[newAdmin: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'userTiers',
-  ): TypedContractMethod<[user: AddressLike], [bigint], 'view'>;
+    nameOrSignature: "userTiers"
+  ): TypedContractMethod<[user: AddressLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'validateBytecodeSize',
-  ): TypedContractMethod<[bytecode: BytesLike], [boolean], 'view'>;
-  getFunction(nameOrSignature: 'verifySystemIntegrity'): TypedContractMethod<[], [boolean], 'view'>;
-  getFunction(nameOrSignature: 'withdrawFees'): TypedContractMethod<[], [void], 'nonpayable'>;
-  getFunction(nameOrSignature: 'withdrawRefund'): TypedContractMethod<[], [void], 'nonpayable'>;
+    nameOrSignature: "validateBytecodeSize"
+  ): TypedContractMethod<[bytecode: BytesLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "verifySystemIntegrity"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "withdrawFees"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "withdrawRefund"
+  ): TypedContractMethod<[], [void], "nonpayable">;
 
   getEvent(
-    key: 'AuthorizedRecipientAdded',
+    key: "AuthorizedRecipientAdded"
   ): TypedContractEvent<
     AuthorizedRecipientAddedEvent.InputTuple,
     AuthorizedRecipientAddedEvent.OutputTuple,
     AuthorizedRecipientAddedEvent.OutputObject
   >;
   getEvent(
-    key: 'AuthorizedRecipientRemoved',
+    key: "AuthorizedRecipientRemoved"
   ): TypedContractEvent<
     AuthorizedRecipientRemovedEvent.InputTuple,
     AuthorizedRecipientRemovedEvent.OutputTuple,
     AuthorizedRecipientRemovedEvent.OutputObject
   >;
   getEvent(
-    key: 'BaseFeeSet',
+    key: "BaseFeeSet"
   ): TypedContractEvent<
     BaseFeeSetEvent.InputTuple,
     BaseFeeSetEvent.OutputTuple,
     BaseFeeSetEvent.OutputObject
   >;
   getEvent(
-    key: 'BatchDeployed',
+    key: "BatchDeployed"
   ): TypedContractEvent<
     BatchDeployedEvent.InputTuple,
     BatchDeployedEvent.OutputTuple,
     BatchDeployedEvent.OutputObject
   >;
   getEvent(
-    key: 'BatchStaged',
+    key: "BatchStaged"
   ): TypedContractEvent<
     BatchStagedEvent.InputTuple,
     BatchStagedEvent.OutputTuple,
     BatchStagedEvent.OutputObject
   >;
   getEvent(
-    key: 'ChunkStaged',
+    key: "ChunkStaged"
   ): TypedContractEvent<
     ChunkStagedEvent.InputTuple,
     ChunkStagedEvent.OutputTuple,
     ChunkStagedEvent.OutputObject
   >;
   getEvent(
-    key: 'ContractDeployed',
+    key: "ContractDeployed"
   ): TypedContractEvent<
     ContractDeployedEvent.InputTuple,
     ContractDeployedEvent.OutputTuple,
     ContractDeployedEvent.OutputObject
   >;
   getEvent(
-    key: 'DefaultAdminTransferred',
+    key: "DefaultAdminTransferred"
   ): TypedContractEvent<
     DefaultAdminTransferredEvent.InputTuple,
     DefaultAdminTransferredEvent.OutputTuple,
     DefaultAdminTransferredEvent.OutputObject
   >;
   getEvent(
-    key: 'EmergencyWithdrawal',
+    key: "EmergencyWithdrawal"
   ): TypedContractEvent<
     EmergencyWithdrawalEvent.InputTuple,
     EmergencyWithdrawalEvent.OutputTuple,
     EmergencyWithdrawalEvent.OutputObject
   >;
   getEvent(
-    key: 'FeeCollectionFailed',
+    key: "FeeCollectionFailed"
   ): TypedContractEvent<
     FeeCollectionFailedEvent.InputTuple,
     FeeCollectionFailedEvent.OutputTuple,
     FeeCollectionFailedEvent.OutputObject
   >;
   getEvent(
-    key: 'FeeRecipientSet',
+    key: "FeeRecipientSet"
   ): TypedContractEvent<
     FeeRecipientSetEvent.InputTuple,
     FeeRecipientSetEvent.OutputTuple,
     FeeRecipientSetEvent.OutputObject
   >;
   getEvent(
-    key: 'FeesEnabledSet',
+    key: "FeesEnabledSet"
   ): TypedContractEvent<
     FeesEnabledSetEvent.InputTuple,
     FeesEnabledSetEvent.OutputTuple,
     FeesEnabledSetEvent.OutputObject
   >;
   getEvent(
-    key: 'FeesWithdrawn',
+    key: "FeesWithdrawn"
   ): TypedContractEvent<
     FeesWithdrawnEvent.InputTuple,
     FeesWithdrawnEvent.OutputTuple,
     FeesWithdrawnEvent.OutputObject
   >;
   getEvent(
-    key: 'IdempotentModeSet',
+    key: "IdempotentModeSet"
   ): TypedContractEvent<
     IdempotentModeSetEvent.InputTuple,
     IdempotentModeSetEvent.OutputTuple,
     IdempotentModeSetEvent.OutputObject
   >;
   getEvent(
-    key: 'TierFeeSet',
+    key: "TierFeeSet"
   ): TypedContractEvent<
     TierFeeSetEvent.InputTuple,
     TierFeeSetEvent.OutputTuple,
     TierFeeSetEvent.OutputObject
   >;
   getEvent(
-    key: 'UserTierSet',
+    key: "UserTierSet"
   ): TypedContractEvent<
     UserTierSetEvent.InputTuple,
     UserTierSetEvent.OutputTuple,
@@ -757,7 +1009,7 @@ export interface ChunkFactoryFacet extends BaseContract {
   >;
 
   filters: {
-    'AuthorizedRecipientAdded(address)': TypedContractEvent<
+    "AuthorizedRecipientAdded(address)": TypedContractEvent<
       AuthorizedRecipientAddedEvent.InputTuple,
       AuthorizedRecipientAddedEvent.OutputTuple,
       AuthorizedRecipientAddedEvent.OutputObject
@@ -768,7 +1020,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       AuthorizedRecipientAddedEvent.OutputObject
     >;
 
-    'AuthorizedRecipientRemoved(address)': TypedContractEvent<
+    "AuthorizedRecipientRemoved(address)": TypedContractEvent<
       AuthorizedRecipientRemovedEvent.InputTuple,
       AuthorizedRecipientRemovedEvent.OutputTuple,
       AuthorizedRecipientRemovedEvent.OutputObject
@@ -779,7 +1031,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       AuthorizedRecipientRemovedEvent.OutputObject
     >;
 
-    'BaseFeeSet(uint256)': TypedContractEvent<
+    "BaseFeeSet(uint256)": TypedContractEvent<
       BaseFeeSetEvent.InputTuple,
       BaseFeeSetEvent.OutputTuple,
       BaseFeeSetEvent.OutputObject
@@ -790,7 +1042,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       BaseFeeSetEvent.OutputObject
     >;
 
-    'BatchDeployed(address[],bytes32[],address,uint256)': TypedContractEvent<
+    "BatchDeployed(address[],bytes32[],address,uint256)": TypedContractEvent<
       BatchDeployedEvent.InputTuple,
       BatchDeployedEvent.OutputTuple,
       BatchDeployedEvent.OutputObject
@@ -801,7 +1053,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       BatchDeployedEvent.OutputObject
     >;
 
-    'BatchStaged(uint256,uint256,bytes32,uint256)': TypedContractEvent<
+    "BatchStaged(uint256,uint256,bytes32,uint256)": TypedContractEvent<
       BatchStagedEvent.InputTuple,
       BatchStagedEvent.OutputTuple,
       BatchStagedEvent.OutputObject
@@ -812,7 +1064,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       BatchStagedEvent.OutputObject
     >;
 
-    'ChunkStaged(address,bytes32,bytes32,uint256)': TypedContractEvent<
+    "ChunkStaged(address,bytes32,bytes32,uint256)": TypedContractEvent<
       ChunkStagedEvent.InputTuple,
       ChunkStagedEvent.OutputTuple,
       ChunkStagedEvent.OutputObject
@@ -823,7 +1075,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       ChunkStagedEvent.OutputObject
     >;
 
-    'ContractDeployed(address,bytes32,address,uint256)': TypedContractEvent<
+    "ContractDeployed(address,bytes32,address,uint256)": TypedContractEvent<
       ContractDeployedEvent.InputTuple,
       ContractDeployedEvent.OutputTuple,
       ContractDeployedEvent.OutputObject
@@ -834,7 +1086,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       ContractDeployedEvent.OutputObject
     >;
 
-    'DefaultAdminTransferred(address,address)': TypedContractEvent<
+    "DefaultAdminTransferred(address,address)": TypedContractEvent<
       DefaultAdminTransferredEvent.InputTuple,
       DefaultAdminTransferredEvent.OutputTuple,
       DefaultAdminTransferredEvent.OutputObject
@@ -845,7 +1097,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       DefaultAdminTransferredEvent.OutputObject
     >;
 
-    'EmergencyWithdrawal(address,uint256)': TypedContractEvent<
+    "EmergencyWithdrawal(address,uint256)": TypedContractEvent<
       EmergencyWithdrawalEvent.InputTuple,
       EmergencyWithdrawalEvent.OutputTuple,
       EmergencyWithdrawalEvent.OutputObject
@@ -856,7 +1108,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       EmergencyWithdrawalEvent.OutputObject
     >;
 
-    'FeeCollectionFailed(address,uint256)': TypedContractEvent<
+    "FeeCollectionFailed(address,uint256)": TypedContractEvent<
       FeeCollectionFailedEvent.InputTuple,
       FeeCollectionFailedEvent.OutputTuple,
       FeeCollectionFailedEvent.OutputObject
@@ -867,7 +1119,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       FeeCollectionFailedEvent.OutputObject
     >;
 
-    'FeeRecipientSet(address)': TypedContractEvent<
+    "FeeRecipientSet(address)": TypedContractEvent<
       FeeRecipientSetEvent.InputTuple,
       FeeRecipientSetEvent.OutputTuple,
       FeeRecipientSetEvent.OutputObject
@@ -878,7 +1130,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       FeeRecipientSetEvent.OutputObject
     >;
 
-    'FeesEnabledSet(bool)': TypedContractEvent<
+    "FeesEnabledSet(bool)": TypedContractEvent<
       FeesEnabledSetEvent.InputTuple,
       FeesEnabledSetEvent.OutputTuple,
       FeesEnabledSetEvent.OutputObject
@@ -889,7 +1141,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       FeesEnabledSetEvent.OutputObject
     >;
 
-    'FeesWithdrawn(address,uint256)': TypedContractEvent<
+    "FeesWithdrawn(address,uint256)": TypedContractEvent<
       FeesWithdrawnEvent.InputTuple,
       FeesWithdrawnEvent.OutputTuple,
       FeesWithdrawnEvent.OutputObject
@@ -900,7 +1152,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       FeesWithdrawnEvent.OutputObject
     >;
 
-    'IdempotentModeSet(bool)': TypedContractEvent<
+    "IdempotentModeSet(bool)": TypedContractEvent<
       IdempotentModeSetEvent.InputTuple,
       IdempotentModeSetEvent.OutputTuple,
       IdempotentModeSetEvent.OutputObject
@@ -911,7 +1163,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       IdempotentModeSetEvent.OutputObject
     >;
 
-    'TierFeeSet(uint8,uint256)': TypedContractEvent<
+    "TierFeeSet(uint8,uint256)": TypedContractEvent<
       TierFeeSetEvent.InputTuple,
       TierFeeSetEvent.OutputTuple,
       TierFeeSetEvent.OutputObject
@@ -922,7 +1174,7 @@ export interface ChunkFactoryFacet extends BaseContract {
       TierFeeSetEvent.OutputObject
     >;
 
-    'UserTierSet(address,uint8)': TypedContractEvent<
+    "UserTierSet(address,uint8)": TypedContractEvent<
       UserTierSetEvent.InputTuple,
       UserTierSetEvent.OutputTuple,
       UserTierSetEvent.OutputObject

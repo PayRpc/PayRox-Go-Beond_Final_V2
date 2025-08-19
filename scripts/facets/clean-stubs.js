@@ -5,7 +5,7 @@ const path = require('path');
 function walk(dir) {
   const results = [];
   const list = fs.readdirSync(dir);
-  list.forEach(function (file) {
+  list.forEach(function(file) {
     const fp = path.join(dir, file);
     const stat = fs.statSync(fp);
     if (stat && stat.isDirectory()) {
@@ -33,21 +33,19 @@ function extractFunctionNames(src) {
 
 function makeContract(name, functions) {
   const header = `// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.20;\n\n// Auto-generated facet wrapper (cleaned)\ncontract ${name} {\n`;
-  const body = functions
-    .map((fn) => `  function ${fn}() external pure { revert("stub: ${fn}"); }\n`)
-    .join('\n');
+  const body = functions.map(fn => `  function ${fn}() external pure { revert("stub: ${fn}"); }\n`).join('\n');
   const footer = `}\n`;
   return header + body + footer;
 }
 
-(function main() {
+(function main(){
   const root = path.resolve(process.cwd(), 'contracts');
   if (!fs.existsSync(root)) {
     console.error('contracts directory not found');
     process.exit(2);
   }
 
-  const files = walk(root).filter((f) => f.endsWith('.facet.sol'));
+  const files = walk(root).filter(f => f.endsWith('.facet.sol'));
   if (files.length === 0) {
     console.log('No .facet.sol stub files found under contracts/');
     return;

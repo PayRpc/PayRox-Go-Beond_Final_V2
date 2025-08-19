@@ -2,36 +2,36 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from 'ethers';
+import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   IAccessControl,
   IAccessControlInterface,
-} from '../../../../contracts/initializers/PayRoxDiamondInit.sol/IAccessControl';
+} from "../../../../contracts/initializers/PayRoxDiamondInit.sol/IAccessControl";
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
       },
       {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
+        internalType: "address",
+        name: "account",
+        type: "address",
       },
     ],
-    name: 'hasRole',
+    name: "hasRole",
     outputs: [
       {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
 ] as const;
 
@@ -40,7 +40,10 @@ export class IAccessControl__factory {
   static createInterface(): IAccessControlInterface {
     return new Interface(_abi) as IAccessControlInterface;
   }
-  static connect(address: string, runner?: ContractRunner | null): IAccessControl {
+  static connect(
+    address: string,
+    runner?: ContractRunner | null
+  ): IAccessControl {
     return new Contract(address, _abi, runner) as unknown as IAccessControl;
   }
 }

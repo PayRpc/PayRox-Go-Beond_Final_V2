@@ -1,23 +1,21 @@
 import hre from 'hardhat';
 import { encodeLeaf } from '../utils/merkle';
-import { utils, constants } from '../utils/ethers-compat';
 
 async function main() {
-  const { ethers } = hre as any;
+  const ethers = (hre as any).ethers;
   console.log('Compiling and deploying minimal fixtures for gas estimation...');
 
   const [deployer] = await ethers.getSigners();
-  console.log('Deployer:', await deployer.getAddress());
+  console.log('Deployer:', deployer.address);
 
   const DispatcherFactory = await ethers.getContractFactory('ManifestDispatcher');
 
   // Pass constructor args: admin address and activationDelaySeconds (e.g., 3600 seconds)
-  const admin = await deployer.getAddress();
+  const admin = deployer.address;
   const activationDelaySeconds = 3600; // 1 hour for gas-estimate fixture
   const dispatcher = await DispatcherFactory.deploy(admin, activationDelaySeconds);
-  await dispatcher.waitForDeployment();
-  const dispatcherAddr = await dispatcher.getAddress();
-  console.log('Dispatcher deployed at', dispatcherAddr);
+  await dispatcher.deployed();
+  console.log('Dispatcher deployed at', dispatcher.address);
 
   const selectors = ['0x00000000']; // single bytes4 selector
   // Deploy a minimal facet (ExampleFacetA) so the facet has code and a stable codehash
@@ -28,8 +26,8 @@ async function main() {
     try {
       const GasFactory = await ethers.getContractFactory('GasOptimizationUtils');
       const gasLib = await GasFactory.deploy();
-      await gasLib.waitForDeployment();
-      gasLibAddress = await gasLib.getAddress();
+      await gasLib.deployed();
+      gasLibAddress = gasLib.address;
       console.log('Deployed GasOptimizationUtils at', gasLibAddress);
     } catch (linkErr) {
       console.warn(
@@ -49,24 +47,23 @@ async function main() {
     }
 
     const facetCtr = await FacetFactory.deploy();
-    await facetCtr.waitForDeployment();
-    facet = { address: await facetCtr.getAddress() };
+    await facetCtr.deployed();
+    facet = { address: facetCtr.address };
     console.log('Deployed ExampleFacetA at', facet.address);
   } catch (err) {
     console.warn(
       'ExampleFacetA not found or failed to deploy, falling back to deployer as facet (may revert)',
       (err as any)?.message || err,
     );
-    facet = { address: await deployer.getAddress() };
+    facet = { address: deployer.address };
   }
 
   const facets = [facet.address];
   // compute on-chain code hash for the deployed facet
-  const zero32 = '0x' + '00'.repeat(32);
-  let codehash = zero32;
+  let codehash = ethers.constants.HashZero;
   try {
     const code = await ethers.provider.getCode(facet.address);
-    codehash = utils.keccak256(code as any) as string;
+    codehash = ethers.utils.keccak256(code);
   } catch (err) {
     console.warn('Failed to fetch code for facet:', (err as any)?.message || err);
   }
@@ -82,10 +79,9 @@ async function main() {
 
   // Commit the root to make applyRoutes callable (commitRoot requires COMMIT_ROLE which deployer has)
   try {
-    const root = utils.keccak256(utils.concat(['0x00', leaf]) as any) as string;
-    const commitResp = await dispatcher.commitRoot(root, 1);
-    const commitTx = await commitResp.wait();
-    console.log('Committed root', root, 'tx:', (commitTx as any).transactionHash);
+    const root = ethers.utils.keccak256(ethers.utils.concat(['0x00', leaf]));
+    const commitTx = await (await dispatcher.commitRoot(root, 1)).wait();
+    console.log('Committed root', root, 'tx:', commitTx.transactionHash);
   } catch (err) {
     console.error('commitRoot failed:', (err && (err as Error).message) || err);
   }

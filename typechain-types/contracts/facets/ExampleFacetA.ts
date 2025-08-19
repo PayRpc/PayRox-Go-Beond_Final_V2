@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,55 +21,94 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export interface ExampleFacetAInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'batchExecute'
-      | 'calculateHash'
-      | 'executeA'
-      | 'getData'
-      | 'getFacetInfo'
-      | 'getUserCount'
-      | 'lastCaller'
-      | 'storeData'
-      | 'totalExecutions'
-      | 'verifySignature',
+      | "batchExecute"
+      | "calculateHash"
+      | "executeA"
+      | "getData"
+      | "getFacetInfo"
+      | "getUserCount"
+      | "lastCaller"
+      | "storeData"
+      | "totalExecutions"
+      | "verifySignature"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | 'BatchExecutedOptimized'
-      | 'DataStored'
-      | 'FacetAExecuted'
-      | 'FacetAExecutedHash',
+      | "BatchExecutedOptimized"
+      | "DataStored"
+      | "FacetAExecuted"
+      | "FacetAExecutedHash"
   ): EventFragment;
 
-  encodeFunctionData(functionFragment: 'batchExecute', values: [string[]]): string;
-  encodeFunctionData(functionFragment: 'calculateHash', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'executeA', values: [string]): string;
-  encodeFunctionData(functionFragment: 'getData', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'getFacetInfo', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getUserCount', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'lastCaller', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'storeData', values: [BytesLike, BytesLike]): string;
-  encodeFunctionData(functionFragment: 'totalExecutions', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'verifySignature',
-    values: [BytesLike, BytesLike, AddressLike],
+    functionFragment: "batchExecute",
+    values: [string[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "calculateHash",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "executeA", values: [string]): string;
+  encodeFunctionData(functionFragment: "getData", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "getFacetInfo",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserCount",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lastCaller",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "storeData",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalExecutions",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "verifySignature",
+    values: [BytesLike, BytesLike, AddressLike]
   ): string;
 
-  decodeFunctionResult(functionFragment: 'batchExecute', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'calculateHash', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'executeA', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getData', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getFacetInfo', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getUserCount', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'lastCaller', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'storeData', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'totalExecutions', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'verifySignature', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "batchExecute",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "calculateHash",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "executeA", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getData", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getFacetInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "lastCaller", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "storeData", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalExecutions",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "verifySignature",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace BatchExecutedOptimizedEvent {
@@ -77,13 +116,13 @@ export namespace BatchExecutedOptimizedEvent {
     messageCount: BigNumberish,
     gasUsed: BigNumberish,
     packedMetadata: BytesLike,
-    timestamp: BigNumberish,
+    timestamp: BigNumberish
   ];
   export type OutputTuple = [
     messageCount: bigint,
     gasUsed: bigint,
     packedMetadata: string,
-    timestamp: bigint,
+    timestamp: bigint
   ];
   export interface OutputObject {
     messageCount: bigint;
@@ -102,9 +141,14 @@ export namespace DataStoredEvent {
     key: BytesLike,
     dataHash: BytesLike,
     size: BigNumberish,
-    setter: AddressLike,
+    setter: AddressLike
   ];
-  export type OutputTuple = [key: string, dataHash: string, size: bigint, setter: string];
+  export type OutputTuple = [
+    key: string,
+    dataHash: string,
+    size: bigint,
+    setter: string
+  ];
   export interface OutputObject {
     key: string;
     dataHash: string;
@@ -118,7 +162,11 @@ export namespace DataStoredEvent {
 }
 
 export namespace FacetAExecutedEvent {
-  export type InputTuple = [caller: AddressLike, value: BigNumberish, message: string];
+  export type InputTuple = [
+    caller: AddressLike,
+    value: BigNumberish,
+    message: string
+  ];
   export type OutputTuple = [caller: string, value: bigint, message: string];
   export interface OutputObject {
     caller: string;
@@ -153,45 +201,51 @@ export interface ExampleFacetA extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  batchExecute: TypedContractMethod<[messages: string[]], [boolean[]], 'nonpayable'>;
+  batchExecute: TypedContractMethod<
+    [messages: string[]],
+    [boolean[]],
+    "nonpayable"
+  >;
 
-  calculateHash: TypedContractMethod<[input: BytesLike], [string], 'view'>;
+  calculateHash: TypedContractMethod<[input: BytesLike], [string], "view">;
 
-  executeA: TypedContractMethod<[message: string], [boolean], 'nonpayable'>;
+  executeA: TypedContractMethod<[message: string], [boolean], "nonpayable">;
 
-  getData: TypedContractMethod<[key: BytesLike], [string], 'view'>;
+  getData: TypedContractMethod<[key: BytesLike], [string], "view">;
 
   getFacetInfo: TypedContractMethod<
     [],
@@ -200,87 +254,105 @@ export interface ExampleFacetA extends BaseContract {
         name: string;
         version: string;
         selectors: string[];
-      },
+      }
     ],
-    'view'
+    "view"
   >;
 
-  getUserCount: TypedContractMethod<[user: AddressLike], [bigint], 'view'>;
+  getUserCount: TypedContractMethod<[user: AddressLike], [bigint], "view">;
 
-  lastCaller: TypedContractMethod<[], [string], 'view'>;
+  lastCaller: TypedContractMethod<[], [string], "view">;
 
-  storeData: TypedContractMethod<[key: BytesLike, data_: BytesLike], [void], 'nonpayable'>;
+  storeData: TypedContractMethod<
+    [key: BytesLike, data_: BytesLike],
+    [void],
+    "nonpayable"
+  >;
 
-  totalExecutions: TypedContractMethod<[], [bigint], 'view'>;
+  totalExecutions: TypedContractMethod<[], [bigint], "view">;
 
   verifySignature: TypedContractMethod<
     [hash: BytesLike, signature: BytesLike, expectedSigner: AddressLike],
     [boolean],
-    'view'
+    "view"
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
   getFunction(
-    nameOrSignature: 'batchExecute',
-  ): TypedContractMethod<[messages: string[]], [boolean[]], 'nonpayable'>;
+    nameOrSignature: "batchExecute"
+  ): TypedContractMethod<[messages: string[]], [boolean[]], "nonpayable">;
   getFunction(
-    nameOrSignature: 'calculateHash',
-  ): TypedContractMethod<[input: BytesLike], [string], 'view'>;
+    nameOrSignature: "calculateHash"
+  ): TypedContractMethod<[input: BytesLike], [string], "view">;
   getFunction(
-    nameOrSignature: 'executeA',
-  ): TypedContractMethod<[message: string], [boolean], 'nonpayable'>;
-  getFunction(nameOrSignature: 'getData'): TypedContractMethod<[key: BytesLike], [string], 'view'>;
-  getFunction(nameOrSignature: 'getFacetInfo'): TypedContractMethod<
+    nameOrSignature: "executeA"
+  ): TypedContractMethod<[message: string], [boolean], "nonpayable">;
+  getFunction(
+    nameOrSignature: "getData"
+  ): TypedContractMethod<[key: BytesLike], [string], "view">;
+  getFunction(
+    nameOrSignature: "getFacetInfo"
+  ): TypedContractMethod<
     [],
     [
       [string, string, string[]] & {
         name: string;
         version: string;
         selectors: string[];
-      },
+      }
     ],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'getUserCount',
-  ): TypedContractMethod<[user: AddressLike], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'lastCaller'): TypedContractMethod<[], [string], 'view'>;
+    nameOrSignature: "getUserCount"
+  ): TypedContractMethod<[user: AddressLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'storeData',
-  ): TypedContractMethod<[key: BytesLike, data_: BytesLike], [void], 'nonpayable'>;
-  getFunction(nameOrSignature: 'totalExecutions'): TypedContractMethod<[], [bigint], 'view'>;
+    nameOrSignature: "lastCaller"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'verifySignature',
+    nameOrSignature: "storeData"
+  ): TypedContractMethod<
+    [key: BytesLike, data_: BytesLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "totalExecutions"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "verifySignature"
   ): TypedContractMethod<
     [hash: BytesLike, signature: BytesLike, expectedSigner: AddressLike],
     [boolean],
-    'view'
+    "view"
   >;
 
   getEvent(
-    key: 'BatchExecutedOptimized',
+    key: "BatchExecutedOptimized"
   ): TypedContractEvent<
     BatchExecutedOptimizedEvent.InputTuple,
     BatchExecutedOptimizedEvent.OutputTuple,
     BatchExecutedOptimizedEvent.OutputObject
   >;
   getEvent(
-    key: 'DataStored',
+    key: "DataStored"
   ): TypedContractEvent<
     DataStoredEvent.InputTuple,
     DataStoredEvent.OutputTuple,
     DataStoredEvent.OutputObject
   >;
   getEvent(
-    key: 'FacetAExecuted',
+    key: "FacetAExecuted"
   ): TypedContractEvent<
     FacetAExecutedEvent.InputTuple,
     FacetAExecutedEvent.OutputTuple,
     FacetAExecutedEvent.OutputObject
   >;
   getEvent(
-    key: 'FacetAExecutedHash',
+    key: "FacetAExecutedHash"
   ): TypedContractEvent<
     FacetAExecutedHashEvent.InputTuple,
     FacetAExecutedHashEvent.OutputTuple,
@@ -288,7 +360,7 @@ export interface ExampleFacetA extends BaseContract {
   >;
 
   filters: {
-    'BatchExecutedOptimized(uint256,uint256,bytes32,uint256)': TypedContractEvent<
+    "BatchExecutedOptimized(uint256,uint256,bytes32,uint256)": TypedContractEvent<
       BatchExecutedOptimizedEvent.InputTuple,
       BatchExecutedOptimizedEvent.OutputTuple,
       BatchExecutedOptimizedEvent.OutputObject
@@ -299,7 +371,7 @@ export interface ExampleFacetA extends BaseContract {
       BatchExecutedOptimizedEvent.OutputObject
     >;
 
-    'DataStored(bytes32,bytes32,uint256,address)': TypedContractEvent<
+    "DataStored(bytes32,bytes32,uint256,address)": TypedContractEvent<
       DataStoredEvent.InputTuple,
       DataStoredEvent.OutputTuple,
       DataStoredEvent.OutputObject
@@ -310,7 +382,7 @@ export interface ExampleFacetA extends BaseContract {
       DataStoredEvent.OutputObject
     >;
 
-    'FacetAExecuted(address,uint256,string)': TypedContractEvent<
+    "FacetAExecuted(address,uint256,string)": TypedContractEvent<
       FacetAExecutedEvent.InputTuple,
       FacetAExecutedEvent.OutputTuple,
       FacetAExecutedEvent.OutputObject
@@ -321,7 +393,7 @@ export interface ExampleFacetA extends BaseContract {
       FacetAExecutedEvent.OutputObject
     >;
 
-    'FacetAExecutedHash(address,bytes32)': TypedContractEvent<
+    "FacetAExecutedHash(address,bytes32)": TypedContractEvent<
       FacetAExecutedHashEvent.InputTuple,
       FacetAExecutedHashEvent.OutputTuple,
       FacetAExecutedHashEvent.OutputObject

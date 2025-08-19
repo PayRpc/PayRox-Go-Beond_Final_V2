@@ -10,21 +10,21 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export interface FacetAInterface extends Interface {
-  getFunction(nameOrSignature: 'fooA'): FunctionFragment;
+  getFunction(nameOrSignature: "fooA"): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'fooA', values?: undefined): string;
+  encodeFunctionData(functionFragment: "fooA", values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'fooA', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "fooA", data: BytesLike): Result;
 }
 
 export interface FacetA extends BaseContract {
@@ -36,43 +36,49 @@ export interface FacetA extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  fooA: TypedContractMethod<[], [bigint], 'view'>;
+  fooA: TypedContractMethod<[], [bigint], "view">;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  getFunction(nameOrSignature: 'fooA'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(
+    nameOrSignature: "fooA"
+  ): TypedContractMethod<[], [bigint], "view">;
 
   filters: {};
 }

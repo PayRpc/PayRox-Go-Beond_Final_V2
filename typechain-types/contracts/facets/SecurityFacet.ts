@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export declare namespace SecurityFacet {
   export type SecurityConfigStruct = {
@@ -39,7 +39,7 @@ export declare namespace SecurityFacet {
     circuitBroken: boolean,
     throttleBlocks: bigint,
     pauseThresholdBps: bigint,
-    circuitThresholdBps: bigint,
+    circuitThresholdBps: bigint
   ] & {
     antibotEnabled: boolean;
     buybackPaused: boolean;
@@ -53,46 +53,61 @@ export declare namespace SecurityFacet {
 export interface SecurityFacetInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'GOVERNANCE_ROLE'
-      | 'MONITOR_ROLE'
-      | 'addTrusted'
-      | 'ensureBuybackAllowed'
-      | 'getSecurityConfig'
-      | 'initializeSecurityFacet'
-      | 'isSecurityInitialized'
-      | 'isTrusted'
-      | 'removeTrusted'
-      | 'reportMarketMove'
-      | 'resetCircuitBreaker'
-      | 'setBuybackPaused'
-      | 'setEnabled'
-      | 'setThresholds'
-      | 'setThrottleBlocks'
-      | 'validateTransaction',
+      | "GOVERNANCE_ROLE"
+      | "MONITOR_ROLE"
+      | "addTrusted"
+      | "ensureBuybackAllowed"
+      | "getSecurityConfig"
+      | "initializeSecurityFacet"
+      | "isSecurityInitialized"
+      | "isTrusted"
+      | "removeTrusted"
+      | "reportMarketMove"
+      | "resetCircuitBreaker"
+      | "setBuybackPaused"
+      | "setEnabled"
+      | "setThresholds"
+      | "setThrottleBlocks"
+      | "validateTransaction"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | 'AntibotStatusUpdated'
-      | 'BuybackPaused'
-      | 'CircuitBreaker'
-      | 'MonitorPing'
-      | 'RoleGranted'
-      | 'RoleRevoked'
-      | 'ThresholdsUpdated'
-      | 'ThrottleUpdated'
-      | 'Throttled'
-      | 'TrustedAdded'
-      | 'TrustedRemoved',
+      | "AntibotStatusUpdated"
+      | "BuybackPaused"
+      | "CircuitBreaker"
+      | "MonitorPing"
+      | "RoleGranted"
+      | "RoleRevoked"
+      | "ThresholdsUpdated"
+      | "ThrottleUpdated"
+      | "Throttled"
+      | "TrustedAdded"
+      | "TrustedRemoved"
   ): EventFragment;
 
-  encodeFunctionData(functionFragment: 'GOVERNANCE_ROLE', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'MONITOR_ROLE', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'addTrusted', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'ensureBuybackAllowed', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getSecurityConfig', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'initializeSecurityFacet',
+    functionFragment: "GOVERNANCE_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MONITOR_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addTrusted",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ensureBuybackAllowed",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSecurityConfig",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initializeSecurityFacet",
     values: [
       boolean,
       BigNumberish,
@@ -100,39 +115,102 @@ export interface SecurityFacetInterface extends Interface {
       BigNumberish,
       AddressLike[],
       AddressLike,
-      AddressLike,
-    ],
+      AddressLike
+    ]
   ): string;
-  encodeFunctionData(functionFragment: 'isSecurityInitialized', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'isTrusted', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'removeTrusted', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'reportMarketMove', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'resetCircuitBreaker', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'setBuybackPaused', values: [boolean]): string;
-  encodeFunctionData(functionFragment: 'setEnabled', values: [boolean]): string;
   encodeFunctionData(
-    functionFragment: 'setThresholds',
-    values: [BigNumberish, BigNumberish],
+    functionFragment: "isSecurityInitialized",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'setThrottleBlocks', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'validateTransaction', values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: "isTrusted",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "removeTrusted",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "reportMarketMove",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "resetCircuitBreaker",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setBuybackPaused",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(functionFragment: "setEnabled", values: [boolean]): string;
+  encodeFunctionData(
+    functionFragment: "setThresholds",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setThrottleBlocks",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "validateTransaction",
+    values: [AddressLike]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'GOVERNANCE_ROLE', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'MONITOR_ROLE', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'addTrusted', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'ensureBuybackAllowed', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getSecurityConfig', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'initializeSecurityFacet', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'isSecurityInitialized', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'isTrusted', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'removeTrusted', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'reportMarketMove', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'resetCircuitBreaker', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setBuybackPaused', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setEnabled', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setThresholds', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'setThrottleBlocks', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'validateTransaction', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "GOVERNANCE_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MONITOR_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "addTrusted", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ensureBuybackAllowed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSecurityConfig",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "initializeSecurityFacet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isSecurityInitialized",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "isTrusted", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "removeTrusted",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "reportMarketMove",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "resetCircuitBreaker",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setBuybackPaused",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setEnabled", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setThresholds",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setThrottleBlocks",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "validateTransaction",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace AntibotStatusUpdatedEvent {
@@ -282,47 +360,53 @@ export interface SecurityFacet extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  GOVERNANCE_ROLE: TypedContractMethod<[], [string], 'view'>;
+  GOVERNANCE_ROLE: TypedContractMethod<[], [string], "view">;
 
-  MONITOR_ROLE: TypedContractMethod<[], [string], 'view'>;
+  MONITOR_ROLE: TypedContractMethod<[], [string], "view">;
 
-  addTrusted: TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
+  addTrusted: TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
 
-  ensureBuybackAllowed: TypedContractMethod<[], [boolean], 'view'>;
+  ensureBuybackAllowed: TypedContractMethod<[], [boolean], "view">;
 
-  getSecurityConfig: TypedContractMethod<[], [SecurityFacet.SecurityConfigStructOutput], 'view'>;
+  getSecurityConfig: TypedContractMethod<
+    [],
+    [SecurityFacet.SecurityConfigStructOutput],
+    "view"
+  >;
 
   initializeSecurityFacet: TypedContractMethod<
     [
@@ -332,49 +416,77 @@ export interface SecurityFacet extends BaseContract {
       circuitBps: BigNumberish,
       initialTrusted: AddressLike[],
       governance: AddressLike,
-      monitor: AddressLike,
+      monitor: AddressLike
     ],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
 
-  isSecurityInitialized: TypedContractMethod<[], [boolean], 'view'>;
+  isSecurityInitialized: TypedContractMethod<[], [boolean], "view">;
 
-  isTrusted: TypedContractMethod<[a: AddressLike], [boolean], 'view'>;
+  isTrusted: TypedContractMethod<[a: AddressLike], [boolean], "view">;
 
-  removeTrusted: TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
+  removeTrusted: TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
 
-  reportMarketMove: TypedContractMethod<[moveBps: BigNumberish], [void], 'nonpayable'>;
+  reportMarketMove: TypedContractMethod<
+    [moveBps: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
-  resetCircuitBreaker: TypedContractMethod<[], [void], 'nonpayable'>;
+  resetCircuitBreaker: TypedContractMethod<[], [void], "nonpayable">;
 
-  setBuybackPaused: TypedContractMethod<[paused: boolean], [void], 'nonpayable'>;
+  setBuybackPaused: TypedContractMethod<
+    [paused: boolean],
+    [void],
+    "nonpayable"
+  >;
 
-  setEnabled: TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+  setEnabled: TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
 
   setThresholds: TypedContractMethod<
     [pauseBps_: BigNumberish, circuitBps_: BigNumberish],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
 
-  setThrottleBlocks: TypedContractMethod<[blocks_: BigNumberish], [void], 'nonpayable'>;
+  setThrottleBlocks: TypedContractMethod<
+    [blocks_: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
-  validateTransaction: TypedContractMethod<[sender: AddressLike], [boolean], 'nonpayable'>;
+  validateTransaction: TypedContractMethod<
+    [sender: AddressLike],
+    [boolean],
+    "nonpayable"
+  >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  getFunction(nameOrSignature: 'GOVERNANCE_ROLE'): TypedContractMethod<[], [string], 'view'>;
-  getFunction(nameOrSignature: 'MONITOR_ROLE'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: 'addTrusted',
-  ): TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
-  getFunction(nameOrSignature: 'ensureBuybackAllowed'): TypedContractMethod<[], [boolean], 'view'>;
+    nameOrSignature: "GOVERNANCE_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'getSecurityConfig',
-  ): TypedContractMethod<[], [SecurityFacet.SecurityConfigStructOutput], 'view'>;
+    nameOrSignature: "MONITOR_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'initializeSecurityFacet',
+    nameOrSignature: "addTrusted"
+  ): TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "ensureBuybackAllowed"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "getSecurityConfig"
+  ): TypedContractMethod<
+    [],
+    [SecurityFacet.SecurityConfigStructOutput],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "initializeSecurityFacet"
   ): TypedContractMethod<
     [
       enabled: boolean,
@@ -383,116 +495,118 @@ export interface SecurityFacet extends BaseContract {
       circuitBps: BigNumberish,
       initialTrusted: AddressLike[],
       governance: AddressLike,
-      monitor: AddressLike,
+      monitor: AddressLike
     ],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
-  getFunction(nameOrSignature: 'isSecurityInitialized'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: 'isTrusted',
-  ): TypedContractMethod<[a: AddressLike], [boolean], 'view'>;
+    nameOrSignature: "isSecurityInitialized"
+  ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
-    nameOrSignature: 'removeTrusted',
-  ): TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
+    nameOrSignature: "isTrusted"
+  ): TypedContractMethod<[a: AddressLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: 'reportMarketMove',
-  ): TypedContractMethod<[moveBps: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "removeTrusted"
+  ): TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'resetCircuitBreaker',
-  ): TypedContractMethod<[], [void], 'nonpayable'>;
+    nameOrSignature: "reportMarketMove"
+  ): TypedContractMethod<[moveBps: BigNumberish], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setBuybackPaused',
-  ): TypedContractMethod<[paused: boolean], [void], 'nonpayable'>;
+    nameOrSignature: "resetCircuitBreaker"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setEnabled',
-  ): TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+    nameOrSignature: "setBuybackPaused"
+  ): TypedContractMethod<[paused: boolean], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'setThresholds',
+    nameOrSignature: "setEnabled"
+  ): TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setThresholds"
   ): TypedContractMethod<
     [pauseBps_: BigNumberish, circuitBps_: BigNumberish],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
   getFunction(
-    nameOrSignature: 'setThrottleBlocks',
-  ): TypedContractMethod<[blocks_: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "setThrottleBlocks"
+  ): TypedContractMethod<[blocks_: BigNumberish], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'validateTransaction',
-  ): TypedContractMethod<[sender: AddressLike], [boolean], 'nonpayable'>;
+    nameOrSignature: "validateTransaction"
+  ): TypedContractMethod<[sender: AddressLike], [boolean], "nonpayable">;
 
   getEvent(
-    key: 'AntibotStatusUpdated',
+    key: "AntibotStatusUpdated"
   ): TypedContractEvent<
     AntibotStatusUpdatedEvent.InputTuple,
     AntibotStatusUpdatedEvent.OutputTuple,
     AntibotStatusUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: 'BuybackPaused',
+    key: "BuybackPaused"
   ): TypedContractEvent<
     BuybackPausedEvent.InputTuple,
     BuybackPausedEvent.OutputTuple,
     BuybackPausedEvent.OutputObject
   >;
   getEvent(
-    key: 'CircuitBreaker',
+    key: "CircuitBreaker"
   ): TypedContractEvent<
     CircuitBreakerEvent.InputTuple,
     CircuitBreakerEvent.OutputTuple,
     CircuitBreakerEvent.OutputObject
   >;
   getEvent(
-    key: 'MonitorPing',
+    key: "MonitorPing"
   ): TypedContractEvent<
     MonitorPingEvent.InputTuple,
     MonitorPingEvent.OutputTuple,
     MonitorPingEvent.OutputObject
   >;
   getEvent(
-    key: 'RoleGranted',
+    key: "RoleGranted"
   ): TypedContractEvent<
     RoleGrantedEvent.InputTuple,
     RoleGrantedEvent.OutputTuple,
     RoleGrantedEvent.OutputObject
   >;
   getEvent(
-    key: 'RoleRevoked',
+    key: "RoleRevoked"
   ): TypedContractEvent<
     RoleRevokedEvent.InputTuple,
     RoleRevokedEvent.OutputTuple,
     RoleRevokedEvent.OutputObject
   >;
   getEvent(
-    key: 'ThresholdsUpdated',
+    key: "ThresholdsUpdated"
   ): TypedContractEvent<
     ThresholdsUpdatedEvent.InputTuple,
     ThresholdsUpdatedEvent.OutputTuple,
     ThresholdsUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: 'ThrottleUpdated',
+    key: "ThrottleUpdated"
   ): TypedContractEvent<
     ThrottleUpdatedEvent.InputTuple,
     ThrottleUpdatedEvent.OutputTuple,
     ThrottleUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: 'Throttled',
+    key: "Throttled"
   ): TypedContractEvent<
     ThrottledEvent.InputTuple,
     ThrottledEvent.OutputTuple,
     ThrottledEvent.OutputObject
   >;
   getEvent(
-    key: 'TrustedAdded',
+    key: "TrustedAdded"
   ): TypedContractEvent<
     TrustedAddedEvent.InputTuple,
     TrustedAddedEvent.OutputTuple,
     TrustedAddedEvent.OutputObject
   >;
   getEvent(
-    key: 'TrustedRemoved',
+    key: "TrustedRemoved"
   ): TypedContractEvent<
     TrustedRemovedEvent.InputTuple,
     TrustedRemovedEvent.OutputTuple,
@@ -500,7 +614,7 @@ export interface SecurityFacet extends BaseContract {
   >;
 
   filters: {
-    'AntibotStatusUpdated(bool)': TypedContractEvent<
+    "AntibotStatusUpdated(bool)": TypedContractEvent<
       AntibotStatusUpdatedEvent.InputTuple,
       AntibotStatusUpdatedEvent.OutputTuple,
       AntibotStatusUpdatedEvent.OutputObject
@@ -511,7 +625,7 @@ export interface SecurityFacet extends BaseContract {
       AntibotStatusUpdatedEvent.OutputObject
     >;
 
-    'BuybackPaused(bool)': TypedContractEvent<
+    "BuybackPaused(bool)": TypedContractEvent<
       BuybackPausedEvent.InputTuple,
       BuybackPausedEvent.OutputTuple,
       BuybackPausedEvent.OutputObject
@@ -522,7 +636,7 @@ export interface SecurityFacet extends BaseContract {
       BuybackPausedEvent.OutputObject
     >;
 
-    'CircuitBreaker(bool,int256)': TypedContractEvent<
+    "CircuitBreaker(bool,int256)": TypedContractEvent<
       CircuitBreakerEvent.InputTuple,
       CircuitBreakerEvent.OutputTuple,
       CircuitBreakerEvent.OutputObject
@@ -533,7 +647,7 @@ export interface SecurityFacet extends BaseContract {
       CircuitBreakerEvent.OutputObject
     >;
 
-    'MonitorPing(address,int256)': TypedContractEvent<
+    "MonitorPing(address,int256)": TypedContractEvent<
       MonitorPingEvent.InputTuple,
       MonitorPingEvent.OutputTuple,
       MonitorPingEvent.OutputObject
@@ -544,7 +658,7 @@ export interface SecurityFacet extends BaseContract {
       MonitorPingEvent.OutputObject
     >;
 
-    'RoleGranted(bytes32,address)': TypedContractEvent<
+    "RoleGranted(bytes32,address)": TypedContractEvent<
       RoleGrantedEvent.InputTuple,
       RoleGrantedEvent.OutputTuple,
       RoleGrantedEvent.OutputObject
@@ -555,7 +669,7 @@ export interface SecurityFacet extends BaseContract {
       RoleGrantedEvent.OutputObject
     >;
 
-    'RoleRevoked(bytes32,address)': TypedContractEvent<
+    "RoleRevoked(bytes32,address)": TypedContractEvent<
       RoleRevokedEvent.InputTuple,
       RoleRevokedEvent.OutputTuple,
       RoleRevokedEvent.OutputObject
@@ -566,7 +680,7 @@ export interface SecurityFacet extends BaseContract {
       RoleRevokedEvent.OutputObject
     >;
 
-    'ThresholdsUpdated(uint256,uint256)': TypedContractEvent<
+    "ThresholdsUpdated(uint256,uint256)": TypedContractEvent<
       ThresholdsUpdatedEvent.InputTuple,
       ThresholdsUpdatedEvent.OutputTuple,
       ThresholdsUpdatedEvent.OutputObject
@@ -577,7 +691,7 @@ export interface SecurityFacet extends BaseContract {
       ThresholdsUpdatedEvent.OutputObject
     >;
 
-    'ThrottleUpdated(uint256)': TypedContractEvent<
+    "ThrottleUpdated(uint256)": TypedContractEvent<
       ThrottleUpdatedEvent.InputTuple,
       ThrottleUpdatedEvent.OutputTuple,
       ThrottleUpdatedEvent.OutputObject
@@ -588,7 +702,7 @@ export interface SecurityFacet extends BaseContract {
       ThrottleUpdatedEvent.OutputObject
     >;
 
-    'Throttled(address,uint256)': TypedContractEvent<
+    "Throttled(address,uint256)": TypedContractEvent<
       ThrottledEvent.InputTuple,
       ThrottledEvent.OutputTuple,
       ThrottledEvent.OutputObject
@@ -599,7 +713,7 @@ export interface SecurityFacet extends BaseContract {
       ThrottledEvent.OutputObject
     >;
 
-    'TrustedAdded(address)': TypedContractEvent<
+    "TrustedAdded(address)": TypedContractEvent<
       TrustedAddedEvent.InputTuple,
       TrustedAddedEvent.OutputTuple,
       TrustedAddedEvent.OutputObject
@@ -610,7 +724,7 @@ export interface SecurityFacet extends BaseContract {
       TrustedAddedEvent.OutputObject
     >;
 
-    'TrustedRemoved(address)': TypedContractEvent<
+    "TrustedRemoved(address)": TypedContractEvent<
       TrustedRemovedEvent.InputTuple,
       TrustedRemovedEvent.OutputTuple,
       TrustedRemovedEvent.OutputObject

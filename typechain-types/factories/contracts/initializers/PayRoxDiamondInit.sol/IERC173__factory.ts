@@ -2,38 +2,38 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from 'ethers';
+import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   IERC173,
   IERC173Interface,
-} from '../../../../contracts/initializers/PayRoxDiamondInit.sol/IERC173';
+} from "../../../../contracts/initializers/PayRoxDiamondInit.sol/IERC173";
 
 const _abi = [
   {
     inputs: [],
-    name: 'owner',
+    name: "owner",
     outputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
       },
     ],
-    name: 'transferOwnership',
+    name: "transferOwnership",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
 ] as const;
 

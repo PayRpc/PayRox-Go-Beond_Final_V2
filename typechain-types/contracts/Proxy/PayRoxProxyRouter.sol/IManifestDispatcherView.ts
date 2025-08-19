@@ -10,25 +10,30 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from '../../../common';
+} from "../../../common";
 
 export interface IManifestDispatcherViewInterface extends Interface {
-  getFunction(nameOrSignature: 'activeRoot' | 'frozen' | 'routes'): FunctionFragment;
+  getFunction(
+    nameOrSignature: "activeRoot" | "frozen" | "routes"
+  ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'activeRoot', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'frozen', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'routes', values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "activeRoot",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "frozen", values?: undefined): string;
+  encodeFunctionData(functionFragment: "routes", values: [BytesLike]): string;
 
-  decodeFunctionResult(functionFragment: 'activeRoot', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'frozen', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'routes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "activeRoot", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "frozen", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "routes", data: BytesLike): Result;
 }
 
 export interface IManifestDispatcherView extends BaseContract {
@@ -40,58 +45,66 @@ export interface IManifestDispatcherView extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  activeRoot: TypedContractMethod<[], [string], 'view'>;
+  activeRoot: TypedContractMethod<[], [string], "view">;
 
-  frozen: TypedContractMethod<[], [boolean], 'view'>;
+  frozen: TypedContractMethod<[], [boolean], "view">;
 
   routes: TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    'view'
+    "view"
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  getFunction(nameOrSignature: 'activeRoot'): TypedContractMethod<[], [string], 'view'>;
-  getFunction(nameOrSignature: 'frozen'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: 'routes',
+    nameOrSignature: "activeRoot"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "frozen"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "routes"
   ): TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    'view'
+    "view"
   >;
 
   filters: {};

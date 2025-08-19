@@ -26,7 +26,6 @@ npm run ai:lint
 ```
 
 This checks:
-
 - ✅ Size limits (EIP-170)
 - ✅ No loupe functions in facets
 - ✅ Selector parity

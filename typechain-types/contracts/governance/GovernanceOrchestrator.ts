@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export declare namespace ManifestTypes {
   export type GovernanceProposalStruct = {
@@ -45,7 +45,7 @@ export declare namespace ManifestTypes {
     forVotes: bigint,
     againstVotes: bigint,
     abstainVotes: bigint,
-    executed: boolean,
+    executed: boolean
   ] & {
     proposalId: string;
     proposer: string;
@@ -62,85 +62,190 @@ export declare namespace ManifestTypes {
 export interface GovernanceOrchestratorInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'EMERGENCY_ROLE'
-      | 'MAX_VOTING_PERIOD'
-      | 'MIN_VOTING_PERIOD'
-      | 'PROPOSER_ROLE'
-      | 'allProposals'
-      | 'castVote'
-      | 'checkProposalStatus'
-      | 'createProposal'
-      | 'executeProposal'
-      | 'executedProposals'
-      | 'getProposal'
-      | 'getProposalCount'
-      | 'proposals'
-      | 'quorumThreshold'
-      | 'totalVotingSupply'
-      | 'updateQuorumThreshold'
-      | 'updateVotingPower'
-      | 'voteSupport'
-      | 'votes'
-      | 'votingPower',
+      | "EMERGENCY_ROLE"
+      | "MAX_VOTING_PERIOD"
+      | "MIN_VOTING_PERIOD"
+      | "PROPOSER_ROLE"
+      | "allProposals"
+      | "castVote"
+      | "checkProposalStatus"
+      | "createProposal"
+      | "executeProposal"
+      | "executedProposals"
+      | "getProposal"
+      | "getProposalCount"
+      | "proposals"
+      | "quorumThreshold"
+      | "totalVotingSupply"
+      | "updateQuorumThreshold"
+      | "updateVotingPower"
+      | "voteSupport"
+      | "votes"
+      | "votingPower"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | 'GovernanceVoteCast'
-      | 'ProposalCreated'
-      | 'ProposalExecuted'
-      | 'QuorumThresholdUpdated'
-      | 'VoteCast'
-      | 'VotingPowerUpdated',
+      | "GovernanceVoteCast"
+      | "ProposalCreated"
+      | "ProposalExecuted"
+      | "QuorumThresholdUpdated"
+      | "VoteCast"
+      | "VotingPowerUpdated"
   ): EventFragment;
 
-  encodeFunctionData(functionFragment: 'EMERGENCY_ROLE', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'MAX_VOTING_PERIOD', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'MIN_VOTING_PERIOD', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'PROPOSER_ROLE', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'allProposals', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'castVote', values: [BytesLike, boolean]): string;
-  encodeFunctionData(functionFragment: 'checkProposalStatus', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: 'createProposal',
-    values: [BytesLike, string, BytesLike[], BigNumberish],
+    functionFragment: "EMERGENCY_ROLE",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'executeProposal', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'executedProposals', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'getProposal', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'getProposalCount', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'proposals', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'quorumThreshold', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'totalVotingSupply', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'updateQuorumThreshold', values: [BigNumberish]): string;
   encodeFunctionData(
-    functionFragment: 'updateVotingPower',
-    values: [AddressLike, BigNumberish],
+    functionFragment: "MAX_VOTING_PERIOD",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'voteSupport', values: [BytesLike, AddressLike]): string;
-  encodeFunctionData(functionFragment: 'votes', values: [BytesLike, AddressLike]): string;
-  encodeFunctionData(functionFragment: 'votingPower', values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: "MIN_VOTING_PERIOD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PROPOSER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allProposals",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "castVote",
+    values: [BytesLike, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkProposalStatus",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createProposal",
+    values: [BytesLike, string, BytesLike[], BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "executeProposal",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "executedProposals",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getProposal",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getProposalCount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "proposals",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "quorumThreshold",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalVotingSupply",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateQuorumThreshold",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateVotingPower",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "voteSupport",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "votes",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "votingPower",
+    values: [AddressLike]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'EMERGENCY_ROLE', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'MAX_VOTING_PERIOD', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'MIN_VOTING_PERIOD', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'PROPOSER_ROLE', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'allProposals', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'castVote', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'checkProposalStatus', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'createProposal', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'executeProposal', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'executedProposals', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getProposal', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getProposalCount', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'proposals', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'quorumThreshold', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'totalVotingSupply', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'updateQuorumThreshold', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'updateVotingPower', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'voteSupport', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'votes', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'votingPower', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "EMERGENCY_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_VOTING_PERIOD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MIN_VOTING_PERIOD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PROPOSER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "allProposals",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "castVote", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "checkProposalStatus",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "executeProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "executedProposals",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getProposal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getProposalCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "proposals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "quorumThreshold",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalVotingSupply",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateQuorumThreshold",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateVotingPower",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "voteSupport",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "votes", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "votingPower",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace GovernanceVoteCastEvent {
@@ -148,9 +253,14 @@ export namespace GovernanceVoteCastEvent {
     proposalId: BytesLike,
     voter: AddressLike,
     support: boolean,
-    weight: BigNumberish,
+    weight: BigNumberish
   ];
-  export type OutputTuple = [proposalId: string, voter: string, support: boolean, weight: bigint];
+  export type OutputTuple = [
+    proposalId: string,
+    voter: string,
+    support: boolean,
+    weight: bigint
+  ];
   export interface OutputObject {
     proposalId: string;
     voter: string;
@@ -168,13 +278,13 @@ export namespace ProposalCreatedEvent {
     proposalId: BytesLike,
     proposer: AddressLike,
     description: string,
-    votingDeadline: BigNumberish,
+    votingDeadline: BigNumberish
   ];
   export type OutputTuple = [
     proposalId: string,
     proposer: string,
     description: string,
-    votingDeadline: bigint,
+    votingDeadline: bigint
   ];
   export interface OutputObject {
     proposalId: string;
@@ -202,7 +312,10 @@ export namespace ProposalExecutedEvent {
 }
 
 export namespace QuorumThresholdUpdatedEvent {
-  export type InputTuple = [oldThreshold: BigNumberish, newThreshold: BigNumberish];
+  export type InputTuple = [
+    oldThreshold: BigNumberish,
+    newThreshold: BigNumberish
+  ];
   export type OutputTuple = [oldThreshold: bigint, newThreshold: bigint];
   export interface OutputObject {
     oldThreshold: bigint;
@@ -219,9 +332,14 @@ export namespace VoteCastEvent {
     proposalId: BytesLike,
     voter: AddressLike,
     support: boolean,
-    weight: BigNumberish,
+    weight: BigNumberish
   ];
-  export type OutputTuple = [proposalId: string, voter: string, support: boolean, weight: bigint];
+  export type OutputTuple = [
+    proposalId: string,
+    voter: string,
+    support: boolean,
+    weight: bigint
+  ];
   export interface OutputObject {
     proposalId: string;
     voter: string;
@@ -235,8 +353,16 @@ export namespace VoteCastEvent {
 }
 
 export namespace VotingPowerUpdatedEvent {
-  export type InputTuple = [account: AddressLike, oldPower: BigNumberish, newPower: BigNumberish];
-  export type OutputTuple = [account: string, oldPower: bigint, newPower: bigint];
+  export type InputTuple = [
+    account: AddressLike,
+    oldPower: BigNumberish,
+    newPower: BigNumberish
+  ];
+  export type OutputTuple = [
+    account: string,
+    oldPower: bigint,
+    newPower: bigint
+  ];
   export interface OutputObject {
     account: string;
     oldPower: bigint;
@@ -257,74 +383,88 @@ export interface GovernanceOrchestrator extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  EMERGENCY_ROLE: TypedContractMethod<[], [string], 'view'>;
+  EMERGENCY_ROLE: TypedContractMethod<[], [string], "view">;
 
-  MAX_VOTING_PERIOD: TypedContractMethod<[], [bigint], 'view'>;
+  MAX_VOTING_PERIOD: TypedContractMethod<[], [bigint], "view">;
 
-  MIN_VOTING_PERIOD: TypedContractMethod<[], [bigint], 'view'>;
+  MIN_VOTING_PERIOD: TypedContractMethod<[], [bigint], "view">;
 
-  PROPOSER_ROLE: TypedContractMethod<[], [string], 'view'>;
+  PROPOSER_ROLE: TypedContractMethod<[], [string], "view">;
 
-  allProposals: TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
+  allProposals: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
-  castVote: TypedContractMethod<[proposalId: BytesLike, support: boolean], [void], 'nonpayable'>;
+  castVote: TypedContractMethod<
+    [proposalId: BytesLike, support: boolean],
+    [void],
+    "nonpayable"
+  >;
 
-  checkProposalStatus: TypedContractMethod<[proposalId: BytesLike], [boolean], 'view'>;
+  checkProposalStatus: TypedContractMethod<
+    [proposalId: BytesLike],
+    [boolean],
+    "view"
+  >;
 
   createProposal: TypedContractMethod<
     [
       proposalId: BytesLike,
       description: string,
       targetHashes: BytesLike[],
-      votingPeriod: BigNumberish,
+      votingPeriod: BigNumberish
     ],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
 
-  executeProposal: TypedContractMethod<[proposalId: BytesLike], [void], 'nonpayable'>;
+  executeProposal: TypedContractMethod<
+    [proposalId: BytesLike],
+    [void],
+    "nonpayable"
+  >;
 
-  executedProposals: TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
+  executedProposals: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
 
   getProposal: TypedContractMethod<
     [proposalId: BytesLike],
     [ManifestTypes.GovernanceProposalStructOutput],
-    'view'
+    "view"
   >;
 
-  getProposalCount: TypedContractMethod<[], [bigint], 'view'>;
+  getProposalCount: TypedContractMethod<[], [bigint], "view">;
 
   proposals: TypedContractMethod<
     [arg0: BytesLike],
@@ -338,71 +478,101 @@ export interface GovernanceOrchestrator extends BaseContract {
         againstVotes: bigint;
         abstainVotes: bigint;
         executed: boolean;
-      },
+      }
     ],
-    'view'
+    "view"
   >;
 
-  quorumThreshold: TypedContractMethod<[], [bigint], 'view'>;
+  quorumThreshold: TypedContractMethod<[], [bigint], "view">;
 
-  totalVotingSupply: TypedContractMethod<[], [bigint], 'view'>;
+  totalVotingSupply: TypedContractMethod<[], [bigint], "view">;
 
-  updateQuorumThreshold: TypedContractMethod<[newThreshold: BigNumberish], [void], 'nonpayable'>;
+  updateQuorumThreshold: TypedContractMethod<
+    [newThreshold: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   updateVotingPower: TypedContractMethod<
     [account: AddressLike, newPower: BigNumberish],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
 
-  voteSupport: TypedContractMethod<[arg0: BytesLike, arg1: AddressLike], [boolean], 'view'>;
+  voteSupport: TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-  votes: TypedContractMethod<[arg0: BytesLike, arg1: AddressLike], [bigint], 'view'>;
+  votes: TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [bigint],
+    "view"
+  >;
 
-  votingPower: TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
+  votingPower: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  getFunction(nameOrSignature: 'EMERGENCY_ROLE'): TypedContractMethod<[], [string], 'view'>;
-  getFunction(nameOrSignature: 'MAX_VOTING_PERIOD'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'MIN_VOTING_PERIOD'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'PROPOSER_ROLE'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: 'allProposals',
-  ): TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
+    nameOrSignature: "EMERGENCY_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'castVote',
-  ): TypedContractMethod<[proposalId: BytesLike, support: boolean], [void], 'nonpayable'>;
+    nameOrSignature: "MAX_VOTING_PERIOD"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'checkProposalStatus',
-  ): TypedContractMethod<[proposalId: BytesLike], [boolean], 'view'>;
+    nameOrSignature: "MIN_VOTING_PERIOD"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'createProposal',
+    nameOrSignature: "PROPOSER_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "allProposals"
+  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  getFunction(
+    nameOrSignature: "castVote"
+  ): TypedContractMethod<
+    [proposalId: BytesLike, support: boolean],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "checkProposalStatus"
+  ): TypedContractMethod<[proposalId: BytesLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "createProposal"
   ): TypedContractMethod<
     [
       proposalId: BytesLike,
       description: string,
       targetHashes: BytesLike[],
-      votingPeriod: BigNumberish,
+      votingPeriod: BigNumberish
     ],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
   getFunction(
-    nameOrSignature: 'executeProposal',
-  ): TypedContractMethod<[proposalId: BytesLike], [void], 'nonpayable'>;
+    nameOrSignature: "executeProposal"
+  ): TypedContractMethod<[proposalId: BytesLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'executedProposals',
-  ): TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
+    nameOrSignature: "executedProposals"
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: 'getProposal',
+    nameOrSignature: "getProposal"
   ): TypedContractMethod<
     [proposalId: BytesLike],
     [ManifestTypes.GovernanceProposalStructOutput],
-    'view'
+    "view"
   >;
-  getFunction(nameOrSignature: 'getProposalCount'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'proposals'): TypedContractMethod<
+  getFunction(
+    nameOrSignature: "getProposalCount"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "proposals"
+  ): TypedContractMethod<
     [arg0: BytesLike],
     [
       [string, string, string, bigint, bigint, bigint, bigint, boolean] & {
@@ -414,65 +584,81 @@ export interface GovernanceOrchestrator extends BaseContract {
         againstVotes: bigint;
         abstainVotes: bigint;
         executed: boolean;
-      },
+      }
     ],
-    'view'
+    "view"
   >;
-  getFunction(nameOrSignature: 'quorumThreshold'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'totalVotingSupply'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: 'updateQuorumThreshold',
-  ): TypedContractMethod<[newThreshold: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "quorumThreshold"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'updateVotingPower',
-  ): TypedContractMethod<[account: AddressLike, newPower: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "totalVotingSupply"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: 'voteSupport',
-  ): TypedContractMethod<[arg0: BytesLike, arg1: AddressLike], [boolean], 'view'>;
+    nameOrSignature: "updateQuorumThreshold"
+  ): TypedContractMethod<[newThreshold: BigNumberish], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'votes',
-  ): TypedContractMethod<[arg0: BytesLike, arg1: AddressLike], [bigint], 'view'>;
+    nameOrSignature: "updateVotingPower"
+  ): TypedContractMethod<
+    [account: AddressLike, newPower: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: 'votingPower',
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
+    nameOrSignature: "voteSupport"
+  ): TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "votes"
+  ): TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [bigint],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "votingPower"
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
 
   getEvent(
-    key: 'GovernanceVoteCast',
+    key: "GovernanceVoteCast"
   ): TypedContractEvent<
     GovernanceVoteCastEvent.InputTuple,
     GovernanceVoteCastEvent.OutputTuple,
     GovernanceVoteCastEvent.OutputObject
   >;
   getEvent(
-    key: 'ProposalCreated',
+    key: "ProposalCreated"
   ): TypedContractEvent<
     ProposalCreatedEvent.InputTuple,
     ProposalCreatedEvent.OutputTuple,
     ProposalCreatedEvent.OutputObject
   >;
   getEvent(
-    key: 'ProposalExecuted',
+    key: "ProposalExecuted"
   ): TypedContractEvent<
     ProposalExecutedEvent.InputTuple,
     ProposalExecutedEvent.OutputTuple,
     ProposalExecutedEvent.OutputObject
   >;
   getEvent(
-    key: 'QuorumThresholdUpdated',
+    key: "QuorumThresholdUpdated"
   ): TypedContractEvent<
     QuorumThresholdUpdatedEvent.InputTuple,
     QuorumThresholdUpdatedEvent.OutputTuple,
     QuorumThresholdUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: 'VoteCast',
+    key: "VoteCast"
   ): TypedContractEvent<
     VoteCastEvent.InputTuple,
     VoteCastEvent.OutputTuple,
     VoteCastEvent.OutputObject
   >;
   getEvent(
-    key: 'VotingPowerUpdated',
+    key: "VotingPowerUpdated"
   ): TypedContractEvent<
     VotingPowerUpdatedEvent.InputTuple,
     VotingPowerUpdatedEvent.OutputTuple,
@@ -480,7 +666,7 @@ export interface GovernanceOrchestrator extends BaseContract {
   >;
 
   filters: {
-    'GovernanceVoteCast(bytes32,address,bool,uint256)': TypedContractEvent<
+    "GovernanceVoteCast(bytes32,address,bool,uint256)": TypedContractEvent<
       GovernanceVoteCastEvent.InputTuple,
       GovernanceVoteCastEvent.OutputTuple,
       GovernanceVoteCastEvent.OutputObject
@@ -491,7 +677,7 @@ export interface GovernanceOrchestrator extends BaseContract {
       GovernanceVoteCastEvent.OutputObject
     >;
 
-    'ProposalCreated(bytes32,address,string,uint256)': TypedContractEvent<
+    "ProposalCreated(bytes32,address,string,uint256)": TypedContractEvent<
       ProposalCreatedEvent.InputTuple,
       ProposalCreatedEvent.OutputTuple,
       ProposalCreatedEvent.OutputObject
@@ -502,7 +688,7 @@ export interface GovernanceOrchestrator extends BaseContract {
       ProposalCreatedEvent.OutputObject
     >;
 
-    'ProposalExecuted(bytes32,bool)': TypedContractEvent<
+    "ProposalExecuted(bytes32,bool)": TypedContractEvent<
       ProposalExecutedEvent.InputTuple,
       ProposalExecutedEvent.OutputTuple,
       ProposalExecutedEvent.OutputObject
@@ -513,7 +699,7 @@ export interface GovernanceOrchestrator extends BaseContract {
       ProposalExecutedEvent.OutputObject
     >;
 
-    'QuorumThresholdUpdated(uint256,uint256)': TypedContractEvent<
+    "QuorumThresholdUpdated(uint256,uint256)": TypedContractEvent<
       QuorumThresholdUpdatedEvent.InputTuple,
       QuorumThresholdUpdatedEvent.OutputTuple,
       QuorumThresholdUpdatedEvent.OutputObject
@@ -524,7 +710,7 @@ export interface GovernanceOrchestrator extends BaseContract {
       QuorumThresholdUpdatedEvent.OutputObject
     >;
 
-    'VoteCast(bytes32,address,bool,uint256)': TypedContractEvent<
+    "VoteCast(bytes32,address,bool,uint256)": TypedContractEvent<
       VoteCastEvent.InputTuple,
       VoteCastEvent.OutputTuple,
       VoteCastEvent.OutputObject
@@ -535,7 +721,7 @@ export interface GovernanceOrchestrator extends BaseContract {
       VoteCastEvent.OutputObject
     >;
 
-    'VotingPowerUpdated(address,uint256,uint256)': TypedContractEvent<
+    "VotingPowerUpdated(address,uint256,uint256)": TypedContractEvent<
       VotingPowerUpdatedEvent.InputTuple,
       VotingPowerUpdatedEvent.OutputTuple,
       VotingPowerUpdatedEvent.OutputObject

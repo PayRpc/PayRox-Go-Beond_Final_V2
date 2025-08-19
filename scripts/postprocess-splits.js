@@ -56,10 +56,7 @@ function normalizeSolText(text) {
   // collapse 3+ blank lines into two
   s = s.replace(/\n{3,}/g, '\n\n');
   // trim trailing spaces on each line
-  s = s
-    .split('\n')
-    .map((l) => l.replace(/[ \t]+$/g, ''))
-    .join('\n');
+  s = s.split('\n').map((l) => l.replace(/[ \t]+$/g, '')).join('\n');
   return s;
 }
 
@@ -111,14 +108,11 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
     if (fs.existsSync(nodeSplitter)) {
       try {
         // Write a temporary cleaned copy where accidental mid-identifier newlines are rejoined
-        const cleaned = normalizeSolText(solText);
-        const tmpPath = solPath + '.cleaned.tmp.sol';
-        fs.writeFileSync(tmpPath, cleaned, 'utf8');
-        const child = require('child_process').spawnSync('node', [nodeSplitter, tmpPath], {
-          encoding: 'utf8',
-          timeout: 20000,
-        });
-        if (child.status === 0 && child.stdout) {
+  const cleaned = normalizeSolText(solText);
+  const tmpPath = solPath + '.cleaned.tmp.sol';
+  fs.writeFileSync(tmpPath, cleaned, 'utf8');
+        const child = require('child_process').spawnSync('node', [nodeSplitter, tmpPath], { encoding: 'utf8', timeout: 20000 });
+  if (child.status === 0 && child.stdout) {
           const data = JSON.parse(child.stdout);
           // Map AST fragments into same shape as generated parts
           let generated = data.map((frag, idx) => {
@@ -212,10 +206,7 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
         const cleaned = normalizeSolText(solText);
         const tmpPath = solPath + '.cleaned.tmp.sol';
         fs.writeFileSync(tmpPath, cleaned, 'utf8');
-        const child = require('child_process').spawnSync('node', [nodeSplitter, tmpPath], {
-          encoding: 'utf8',
-          timeout: 20000,
-        });
+        const child = require('child_process').spawnSync('node', [nodeSplitter, tmpPath], { encoding: 'utf8', timeout: 20000 });
         if (child.status === 0 && child.stdout) {
           const data = JSON.parse(child.stdout);
           const generated = data.map((frag, idx) => {
@@ -246,9 +237,7 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
         console.warn(`WARN: AST splitter failed for ${solPath}: ${e && e.message}`);
       }
     }
-    console.warn(
-      `WARN: couldn't find contract end in ${solPath}; attempting best-effort tail-scan`,
-    );
+    console.warn(`WARN: couldn't find contract end in ${solPath}; attempting best-effort tail-scan`);
     // Best-effort: treat rest of file as body (no footer) and continue
     const header = solText.slice(0, openIdx + 1);
     const footer = '';
@@ -339,7 +328,7 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
     fs.writeFileSync(newSolPath, newSol, 'utf8');
     const selectors = (jsonInfo.selectors || []).slice(
       i * Math.ceil(jsonInfo.selectors.length / chunks.length),
-      (i + 1) * Math.ceil(jsonInfo.selectors.length / chunks.length),
+      (i + 1) * Math.ceil(jsonInfo.selectors.length / chunks.length)
     );
     const meta = {
       name: jsonInfo.name || newNameBase,
@@ -347,14 +336,8 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
       size: Buffer.byteLength(newSol, 'utf8'),
     };
     fs.writeFileSync(newJsonPath, JSON.stringify(meta, null, 2), 'utf8');
-    generated.push({
-      file: path.basename(newSolPath),
-      json: path.basename(newJsonPath),
-      selectors: selectors,
-    });
-    console.log(
-      `✂ created ${path.basename(newSolPath)} (${meta.size} bytes, ${selectors.length} selectors)`,
-    );
+    generated.push({ file: path.basename(newSolPath), json: path.basename(newJsonPath), selectors: selectors });
+    console.log(`✂ created ${path.basename(newSolPath)} (${meta.size} bytes, ${selectors.length} selectors)`);
   }
   // If any generated part is still large, try recursive split (limited depth)
   if (recDepth < 3) {
@@ -367,12 +350,8 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
           const info = { name: g.file, selectors: g.selectors || [] };
           const sub = splitOversizedPart(gsol, info, recDepth + 1);
           if (sub && sub.length > 0) {
-            try {
-              fs.unlinkSync(gsol);
-            } catch (_) {}
-            try {
-              fs.unlinkSync(path.join(outDir, g.json));
-            } catch (_) {}
+            try { fs.unlinkSync(gsol); } catch (_) {}
+            try { fs.unlinkSync(path.join(outDir, g.json)); } catch (_) {}
             sub.forEach((s) => finalGen.push(s));
             continue;
           }
@@ -413,12 +392,8 @@ function ensureFullySplit(solPath, jsonInfo, maxIter = 4) {
     }
 
     // remove original
-    try {
-      fs.unlinkSync(sol);
-    } catch (_) {}
-    try {
-      fs.unlinkSync(path.join(outDir, info && info.json ? info.json : ''));
-    } catch (_) {}
+    try { fs.unlinkSync(sol); } catch (_) {}
+    try { fs.unlinkSync(path.join(outDir, info && info.json ? info.json : '')); } catch (_) {}
 
     // push generated items back to queue to ensure they are small enough
     for (const g of gen) {
@@ -437,7 +412,7 @@ function ensureFullySplit(solPath, jsonInfo, maxIter = 4) {
   }
   return result;
 }
-// Now, attempt to split any oversized kept parts
+  // Now, attempt to split any oversized kept parts
 let finalParts = [];
 for (const p of kept) {
   const solPath = path.join(outDir, p.file);
@@ -451,26 +426,15 @@ for (const p of kept) {
       const ensured = ensureFullySplit(solPath, info, 5);
       if (ensured && ensured.length > 0) {
         // remove original files if they still exist
-        try {
-          fs.unlinkSync(solPath);
-        } catch (e) {}
-        try {
-          fs.unlinkSync(jsonPath);
-        } catch (e) {}
+        try { fs.unlinkSync(solPath); } catch (e) {}
+        try { fs.unlinkSync(jsonPath); } catch (e) {}
 
         // add generated parts from ensured results
         ensured.forEach((it) => {
           const fname = path.basename(it.sol);
           const jname = path.basename(fname.replace(/\.sol$/i, '.json'));
-          finalParts.push({
-            name: (it.info && it.info.name) || fname,
-            file: fname,
-            json: jname,
-            selectors: (it.info && it.info.selectors) || [],
-          });
-          ((it.info && it.info.selectors) || []).forEach((s) =>
-            allSelectors.add(String(s).toLowerCase()),
-          );
+          finalParts.push({ name: (it.info && it.info.name) || fname, file: fname, json: jname, selectors: (it.info && it.info.selectors) || [] });
+          ((it.info && it.info.selectors) || []).forEach((s) => allSelectors.add(String(s).toLowerCase()));
         });
         continue;
       }
@@ -483,14 +447,10 @@ for (const p of kept) {
 
 const rewritten = {
   ...(typeof combined === 'object' ? combined : {}),
-  parts: finalParts.filter((p) => (p.selectors || []).length > 0),
+  parts: finalParts.filter(p => (p.selectors || []).length > 0),
   selectors: [...allSelectors],
-  by_part: finalParts
-    .filter((p) => (p.selectors || []).length > 0)
-    .map((p) => ({ file: p.file, functions: (p.selectors || []).length })),
+  by_part: finalParts.filter(p => (p.selectors || []).length > 0).map(p => ({ file: p.file, functions: (p.selectors || []).length }))
 };
 
 fs.writeFileSync(combinedPath, JSON.stringify(rewritten, null, 2));
-console.log(
-  `✅ postprocess complete: kept ${finalParts.length} parts, ${allSelectors.size} selectors`,
-);
+console.log(`✅ postprocess complete: kept ${finalParts.length} parts, ${allSelectors.size} selectors`);

@@ -47,9 +47,7 @@ library OrderedMerkle {
         unchecked {
             for (uint256 i; i < n; ++i) {
                 bool isRight = (positions >> i) & 1 == 1;
-                computed = isRight
-                    ? _hashNode(computed, proof[i])
-                    : _hashNode(proof[i], computed);
+                computed = isRight ? _hashNode(computed, proof[i]) : _hashNode(proof[i], computed);
             }
         }
     }
@@ -69,12 +67,7 @@ library OrderedMerkle {
         address facet,
         bytes32 codehash
     ) internal pure returns (bytes32) {
-        return keccak256(abi.encodePacked(
-            bytes1(0x00),
-            selector,
-            facet,
-            codehash
-        ));
+        return keccak256(abi.encodePacked(bytes1(0x00), selector, facet, codehash));
     }
 
     /**

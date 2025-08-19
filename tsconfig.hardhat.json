@@ -4,10 +4,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "target": "ES2020",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
     "types": ["node", "mocha", "chai"]
   },
-  "include": ["hardhat.config.ts", "scripts", "test", "typechain-types", "types"]
+  "include": ["hardhat.config.ts", "scripts", "test", "types"]
 }

@@ -67,13 +67,8 @@ function findArtifactByName(root, name) {
 
 function filterZeroArgViews(abi) {
   return abi
-    .filter(
-      (x) =>
-        x.type === 'function' &&
-        (x.stateMutability === 'view' || x.stateMutability === 'pure') &&
-        (x.inputs || []).length === 0,
-    )
-    .map((x) => {
+    .filter(x => x.type === 'function' && (x.stateMutability === 'view' || x.stateMutability === 'pure') && (x.inputs || []).length === 0)
+    .map(x => {
       const sig = `${x.name}()`;
       return { name: x.name, signature: sig, stateMutability: x.stateMutability };
     });
@@ -147,7 +142,7 @@ function main() {
     diamondArtifact: artD ? artD.path : null,
     outDir: path.resolve(outDir),
     warnings: [],
-    files: [],
+    files: []
   };
 
   if (!artO || !artD) {
@@ -166,16 +161,13 @@ function main() {
   generateHarnessJS(outDir, opts.contract, artO.abi, path.basename(probesPath));
   report.files.push(path.join(outDir, 'harness.js'));
 
-  const readme =
-    `# Regression Harness (auto-generated)
+  const readme = `# Regression Harness (auto-generated)
 
 Contract: **${opts.contract}**
 
 ## What it does
 - Calls all zero-argument view/pure functions on both ORIGINAL and DIAMOND addresses and compares results.
-- Writes a JSON report to ` +
-    '`report.json`' +
-    `.
+- Writes a JSON report to ` + "`report.json`" + `.
 
 ## How to run
 \`\`\`powershell
@@ -203,9 +195,7 @@ Get-Content ${path.basename(outDir)}/report.json
   console.log(JSON.stringify(report, null, 2));
 }
 
-try {
-  main();
-} catch (e) {
-  console.error(JSON.stringify({ ok: false, error: String((e && e.message) || e) }));
+try { main(); } catch (e) {
+  console.error(JSON.stringify({ ok:false, error: String(e && e.message || e) }));
   process.exit(1);
 }

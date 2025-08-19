@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\audit\\AuditRegistry.sol": {
-      "lastModificationDate": 1755581543753,
-      "contentHash": "6832cf1da913606d6c72e139e34478fd",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "f0c61db5ce189adb0fcce98d553bac78",
       "sourceName": "contracts/audit/AuditRegistry.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -44,8 +44,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxAccessControlStorage.sol": {
-      "lastModificationDate": 1755581657460,
-      "contentHash": "16167ab581ffdec41f3b57486c294877",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "a21b3ebf318ef82d6e062aaaa930c8d4",
       "sourceName": "contracts/libraries/PayRoxAccessControlStorage.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -81,8 +81,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxPauseStorage.sol": {
-      "lastModificationDate": 1755581659064,
-      "contentHash": "a37181d86d5b9d104fcb5096d9529268",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "91ace6d67e330a08c6d7c6f8a2a43554",
       "sourceName": "contracts/libraries/PayRoxPauseStorage.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -118,8 +118,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\manifest\\ManifestTypes.sol": {
-      "lastModificationDate": 1755397458737,
-      "contentHash": "7ad4adc78e1d9e9af6aa7f05f735dc63",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "68042377b28629d8f9ca468060ee08a4",
       "sourceName": "contracts/manifest/ManifestTypes.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -155,8 +155,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\manifest\\ManifestUtils.sol": {
-      "lastModificationDate": 1755397458752,
-      "contentHash": "d77faf7b5a037342abdf93524e57908b",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "b09d83f4842a8889e62a436bf91baf0c",
       "sourceName": "contracts/manifest/ManifestUtils.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -194,8 +194,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\governance\\GovernanceOrchestrator.sol": {
-      "lastModificationDate": 1755581547873,
-      "contentHash": "3d4e0083b1fe59763a65b02736342f1f",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "6956630c0ebf73c5075e16c53f79e9ac",
       "sourceName": "contracts/governance/GovernanceOrchestrator.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -274,8 +274,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\factory\\DeterministicChunkFactory.sol": {
-      "lastModificationDate": 1755581561765,
-      "contentHash": "4f48f25eac00a326e0202f063446a9f1",
+      "lastModificationDate": 1755586893543,
+      "contentHash": "35e3a6e021c3c61a7202a500c2a42665",
       "sourceName": "contracts/factory/DeterministicChunkFactory.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -318,8 +318,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IChunkFactory.sol": {
-      "lastModificationDate": 1755580509625,
-      "contentHash": "a2ed48902e955612df9c92c8be002d31",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "5e3fa01bfdcd3531812c7a3eab8989f0",
       "sourceName": "contracts/interfaces/IChunkFactory.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -355,8 +355,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IManifestDispatcher.sol": {
-      "lastModificationDate": 1755580506402,
-      "contentHash": "99f27d6aeaf73183282f0c475e5c206e",
+      "lastModificationDate": 1755585803666,
+      "contentHash": "87f35848eb8b71147a28903c24369017",
       "sourceName": "contracts/interfaces/IManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -392,8 +392,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\utils\\ChunkFactoryLib.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "1ecfcdb04af32ab3802367cea7eccec2",
+      "lastModificationDate": 1755585804339,
+      "contentHash": "103d216571902d0db77a622ec15bc051",
       "sourceName": "contracts/utils/ChunkFactoryLib.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -429,8 +429,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\MockManifestDispatcher.sol": {
-      "lastModificationDate": 1755581598970,
-      "contentHash": "cced3cefe7ff898d3604e0fc71b7f8fb",
+      "lastModificationDate": 1755586893558,
+      "contentHash": "bd50877dd6a63d70a43871e577640815",
       "sourceName": "contracts/Tests/MockManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -468,8 +468,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\MockManifestDispatcher.sol": {
-      "lastModificationDate": 1755581637381,
-      "contentHash": "2eb2642cb815b588494d0e11f5831da6",
+      "lastModificationDate": 1755586893583,
+      "contentHash": "8809081ecb64489308d7b50829cfcc25",
       "sourceName": "contracts/test/MockManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -507,8 +507,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\orchestrator\\Orchestrator.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "af4d83758d6110365ac36e99825e9894",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "33e6e02154d70fe4fd6daec34762fe6d",
       "sourceName": "contracts/orchestrator/Orchestrator.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -547,8 +547,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ChunkFactoryFacet.sol": {
-      "lastModificationDate": 1755581565781,
-      "contentHash": "6d5edf12ec4ec1c051d835c6ac9169cb",
+      "lastModificationDate": 1755586893543,
+      "contentHash": "54493cc3424dcb8598122cd312cf8192",
       "sourceName": "contracts/facets/ChunkFactoryFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -587,8 +587,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\MaliciousFacet.sol": {
-      "lastModificationDate": 1755395235957,
-      "contentHash": "128757b20f8720f76a33f2fd158c55fa",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "9c9ef0122dd6f695e71f25a26cf8910b",
       "sourceName": "contracts/facets/MaliciousFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -626,8 +626,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispacher.sol": {
-      "lastModificationDate": 1755581560262,
-      "contentHash": "5932bbe384e4ff795f7c4e4d6356d7cc",
+      "lastModificationDate": 1755586893543,
+      "contentHash": "b4c0e5475fb21bfcf002a3a182b3f718",
       "sourceName": "contracts/dispacher/ManifestDispacher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -672,8 +672,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IDiamondLoupe.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "d46c0347a189ab8384e5b611c140ee9a",
+      "lastModificationDate": 1755585803624,
+      "contentHash": "7b34af59f1721ff5559860820e823ae5",
       "sourceName": "contracts/interfaces/IDiamondLoupe.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -709,8 +709,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IDiamondLoupeEx.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "439cae77eaf4be9867e42685b1721098",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "55d64da436503410d360d728aeb3a331",
       "sourceName": "contracts/interfaces/IDiamondLoupeEx.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -746,8 +746,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\utils\\OrderedMerkle.sol": {
-      "lastModificationDate": 1755395235985,
-      "contentHash": "26f3ed2fd05991d28687732032f2746f",
+      "lastModificationDate": 1755585804468,
+      "contentHash": "49ba1bf10f293fbe3dfac8ab148e1785",
       "sourceName": "contracts/utils/OrderedMerkle.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -783,7 +783,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\RefactorSafetyLib.sol": {
-      "lastModificationDate": 1755504532241,
+      "lastModificationDate": 1755586893575,
       "contentHash": "11841140031fbd2f6fe15c2bc262cee9",
       "sourceName": "contracts/libraries/RefactorSafetyLib.sol",
       "solcConfig": {
@@ -820,8 +820,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Refactor\\SampleFacet.sol": {
-      "lastModificationDate": 1755581620248,
-      "contentHash": "c973807ffd17815dd3346fb6cedb5c4a",
+      "lastModificationDate": 1755586893575,
+      "contentHash": "edf4c35d6a9fbf0d2f73b4031bca6f9c",
       "sourceName": "contracts/test/Refactor/SampleFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -859,8 +859,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\RefactorSafeFacetBase.sol": {
-      "lastModificationDate": 1755505040769,
-      "contentHash": "11cf47e8bfd1318b44ff8c95338789b9",
+      "lastModificationDate": 1755586893575,
+      "contentHash": "7b5959ff1f0fa13770b27a22b4fa4b31",
       "sourceName": "contracts/libraries/RefactorSafeFacetBase.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -898,8 +898,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\RefactorSafetyFacet.sol": {
-      "lastModificationDate": 1755580513742,
-      "contentHash": "23f468e32240e96b5e65c4904cd93d08",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "8349849491771161c6d858c8f0d851fa",
       "sourceName": "contracts/facets/RefactorSafetyFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -937,8 +937,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PayRoxAdminFacet.sol": {
-      "lastModificationDate": 1755580617194,
-      "contentHash": "64fbedf8c39aefd1bdf68d5ca6d7c44f",
+      "lastModificationDate": 1755586893583,
+      "contentHash": "3d06fe8d2ab8482552711cadaa4eabe0",
       "sourceName": "contracts/facets/PayRoxAdminFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -978,7 +978,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxStorage.sol": {
-      "lastModificationDate": 1755580614741,
+      "lastModificationDate": 1755586893583,
       "contentHash": "cc48e2af225a67ccd8adf3fa019c62e5",
       "sourceName": "contracts/libraries/PayRoxStorage.sol",
       "solcConfig": {
@@ -1015,8 +1015,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\initializers\\PayRoxDiamondInit.sol": {
-      "lastModificationDate": 1755581656067,
-      "contentHash": "3e1dd51bdd0c82e3671dcda0e169c4e3",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "91bcb3d0d70597f52b14d0fd70b29d61",
       "sourceName": "contracts/initializers/PayRoxDiamondInit.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1061,8 +1061,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\PayRoxERC165Storage.sol": {
-      "lastModificationDate": 1755581653267,
-      "contentHash": "87a5955f360528e66e43bcdb7e69b82d",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "82273963755205e20c5fd28db8a491c7",
       "sourceName": "contracts/libraries/PayRoxERC165Storage.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1098,8 +1098,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PauseFacet.sol": {
-      "lastModificationDate": 1755581662504,
-      "contentHash": "a1e794790e2d51d9fbdb2aac00f40db1",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "b4c410e924ebc58b36c8a3e53d52f033",
       "sourceName": "contracts/facets/PauseFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1138,8 +1138,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\AccessControlFacet.sol": {
-      "lastModificationDate": 1755581660752,
-      "contentHash": "e423624f57dfb2ea973618a8ccc57ac5",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "c799629ef9fbc58efc4811c6690d3379",
       "sourceName": "contracts/facets/AccessControlFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1177,8 +1177,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ERC165Facet.sol": {
-      "lastModificationDate": 1755581654730,
-      "contentHash": "6d8bc5ee79a6d64320b4bc1ed794ce2e",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "e081d934cf16aaa7346f5f45eea0e26f",
       "sourceName": "contracts/facets/ERC165Facet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1217,8 +1217,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\PayRoxPaymentsFacet.sol": {
-      "lastModificationDate": 1755580621390,
-      "contentHash": "5857e9e30a1fe5e950bffb26389e37ef",
+      "lastModificationDate": 1755586893583,
+      "contentHash": "64e1beae161527ef0cb9a84aeb772fd9",
       "sourceName": "contracts/facets/PayRoxPaymentsFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1257,7 +1257,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetB.sol": {
-      "lastModificationDate": 1755580605623,
+      "lastModificationDate": 1755586893575,
       "contentHash": "6cec1df9d079933aae64c90c873a7829",
       "sourceName": "contracts/facets/ExampleFacetB.sol",
       "solcConfig": {
@@ -1722,7 +1722,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetA.sol": {
-      "lastModificationDate": 1755581622133,
+      "lastModificationDate": 1755586893575,
       "contentHash": "946954ff7e353303bf889427baa06683",
       "sourceName": "contracts/facets/ExampleFacetA.sol",
       "solcConfig": {
@@ -1763,8 +1763,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\utils\\GasOptimizationUtils.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "e6adc8818a6371b937e02f4693d0aeb3",
+      "lastModificationDate": 1755585804376,
+      "contentHash": "c29d05aad564e32575aaf57811c42d79",
       "sourceName": "contracts/utils/GasOptimizationUtils.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1800,8 +1800,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\DiamondWithEpoch.sol": {
-      "lastModificationDate": 1755497681432,
-      "contentHash": "61244332753dce5df01b7e7fcc84e081",
+      "lastModificationDate": 1755586893572,
+      "contentHash": "eabd407dc52d0a50c0ac1b6b208c495f",
       "sourceName": "contracts/test/DiamondWithEpoch.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1840,8 +1840,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\EpochManager.sol": {
-      "lastModificationDate": 1755497681412,
-      "contentHash": "2c846cb39c612d83aee088374f59c254",
+      "lastModificationDate": 1755586893572,
+      "contentHash": "25a6d107c6eb1273cbc860ca007b6618",
       "sourceName": "contracts/test/EpochManager.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1877,8 +1877,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond.sol": {
-      "lastModificationDate": 1755581618648,
-      "contentHash": "ae2ddd9804ab4dcb41e70a80ca383ccb",
+      "lastModificationDate": 1755587042566,
+      "contentHash": "c36f815a95881df393570db09a78bfb9",
       "sourceName": "contracts/test/Diamond.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1916,7 +1916,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SecurityFacet.sol": {
-      "lastModificationDate": 1755581573633,
+      "lastModificationDate": 1755586893543,
       "contentHash": "0a404db408c582df1fd6da30eaa23662",
       "sourceName": "contracts/facets/SecurityFacet.sol",
       "solcConfig": {
@@ -1957,8 +1957,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\security\\LibSecurityStorage.sol": {
-      "lastModificationDate": 1755395235972,
-      "contentHash": "cd640fb60f2ef9cd18c4c38e867da775",
+      "lastModificationDate": 1755585803964,
+      "contentHash": "146cec7c5b3345e7a7663892f7b54486",
       "sourceName": "contracts/security/LibSecurityStorage.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2031,8 +2031,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispatcher.sol": {
-      "lastModificationDate": 1755580543743,
-      "contentHash": "2ce7dcdb85bea214ef8c3c82716d5df0",
+      "lastModificationDate": 1755586893575,
+      "contentHash": "915ca134a167b9459fddd9e174070922",
       "sourceName": "contracts/dispacher/ManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2066,8 +2066,8 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispatcher\\interfaces\\IManifestDispatcher.sol": {
-      "lastModificationDate": 1755395235957,
-      "contentHash": "be9612a9143f784a53865627e69316ff",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "5079d0153f65bf362a55529873afe853",
       "sourceName": "contracts/dispatcher/interfaces/IManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2103,8 +2103,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\LoupeFacet.sol": {
-      "lastModificationDate": 1755580550241,
-      "contentHash": "0ac4844a644fd8d632dcf5985911081e",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "4071a5eda5c2c85ad3d271ac70977b9a",
       "sourceName": "contracts/facets/LoupeFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2138,8 +2138,8 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SaltViewFacet.sol": {
-      "lastModificationDate": 1755581682915,
-      "contentHash": "a7605e21bdf5a49963d586b0e47d1f20",
+      "lastModificationDate": 1755586893609,
+      "contentHash": "a3741dbe5cfa3e14706ffd0a775e59a3",
       "sourceName": "contracts/facets/SaltViewFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2178,8 +2178,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\ISaltView.sol": {
-      "lastModificationDate": 1755581681379,
-      "contentHash": "5807a5dd60f3e1a54e042efac56d7080",
+      "lastModificationDate": 1755585803672,
+      "contentHash": "67411e494b6dd8d4633f970eacedd22f",
       "sourceName": "contracts/interfaces/ISaltView.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2215,8 +2215,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\libraries\\SaltPolicyLib.sol": {
-      "lastModificationDate": 1755581679833,
-      "contentHash": "4f6f82577077a32ff1075e34910b08de",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "9a00117ad6a70b27eda3dbb387bffd88",
       "sourceName": "contracts/libraries/SaltPolicyLib.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2252,8 +2252,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBot.sol": {
-      "lastModificationDate": 1755459811068,
-      "contentHash": "563653b0dea8667bbf02e6e333ac1ef3",
+      "lastModificationDate": 1755585803565,
+      "contentHash": "ea0f31492dc5e49d85403a68183c6831",
       "sourceName": "contracts/interfaces/IAntiBot.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2289,8 +2289,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBotFacet.sol": {
-      "lastModificationDate": 1755580567935,
-      "contentHash": "5c6c3bd97e9a4d272c6b9ecd64d8e12f",
+      "lastModificationDate": 1755586893591,
+      "contentHash": "36ef99b2fc81dae49c529c8aae6bee9f",
       "sourceName": "contracts/interfaces/IAntiBotFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2324,8 +2324,8 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IERC20Upgradeable.sol": {
-      "lastModificationDate": 1755581586214,
-      "contentHash": "06aa5a3500a9ed011e181b2e4bf40188",
+      "lastModificationDate": 1755585803652,
+      "contentHash": "d165610e924f2d2aa5721d3c63396456",
       "sourceName": "contracts/interfaces/IERC20Upgradeable.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2359,8 +2359,8 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Proxy\\PayRoxProxyRouter.sol": {
-      "lastModificationDate": 1755395235957,
-      "contentHash": "16196998a14aefc378df60e1400e9e48",
+      "lastModificationDate": 1755586893527,
+      "contentHash": "8d9e25e791363678b965b2862a9bd670",
       "sourceName": "contracts/Proxy/PayRoxProxyRouter.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2397,8 +2397,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond_new.sol": {
-      "lastModificationDate": 1755580571218,
-      "contentHash": "98cf762a02dec579acbca40ad46fd517",
+      "lastModificationDate": 1755586893575,
+      "contentHash": "26929cab1f5cf60e35ffdd8a869604f1",
       "sourceName": "contracts/test/Diamond_new.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2432,8 +2432,8 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\FacetA.sol": {
-      "lastModificationDate": 1755497681412,
-      "contentHash": "765f1508d713d7a2b399e0b98d446ea2",
+      "lastModificationDate": 1755586893572,
+      "contentHash": "e8d7bf3db1f6207b0e83659931bf14de",
       "sourceName": "contracts/test/FacetA.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2469,8 +2469,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\FacetB.sol": {
-      "lastModificationDate": 1755497681412,
-      "contentHash": "ded19b828f6fd9aa24b907b358762ec2",
+      "lastModificationDate": 1755586893572,
+      "contentHash": "5e54213448cba71f7c592258343103d1",
       "sourceName": "contracts/test/FacetB.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2506,8 +2506,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\interfaces\\IDiamondCut.sol": {
-      "lastModificationDate": 1755498263030,
-      "contentHash": "b58d32344c7062824ced0253211028e1",
+      "lastModificationDate": 1755586893575,
+      "contentHash": "50efedbdaa96c9cdad9585d704a2c166",
       "sourceName": "contracts/test/interfaces/IDiamondCut.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2543,8 +2543,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\utils\\ManifestDispatcherLib.sol": {
-      "lastModificationDate": 1755395235984,
-      "contentHash": "b793b89dc524dc5dc06700f7e304470c",
+      "lastModificationDate": 1755585804387,
+      "contentHash": "be477edfcaba44d99e260b7f56ab69ee",
       "sourceName": "contracts/utils/ManifestDispatcherLib.sol",
       "solcConfig": {
         "version": "0.8.30",

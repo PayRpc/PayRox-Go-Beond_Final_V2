@@ -10,13 +10,11 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- Node.js 18+
+- Node.js 18+ 
 - Python 3.9+
 - Git
 
 ### Installation
-
 ```bash
 # Clone the repository
 git clone https://github.com/PayRpc/PayRox-Go-Beond_Final_V2.git
@@ -34,7 +32,6 @@ npm run payrox:self-check
 ```
 
 ### Start Development Server
-
 ```bash
 # Start FastAPI backend
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
@@ -51,14 +48,13 @@ open http://127.0.0.1:8000/docs
 ### Core Components
 
 - **🔷 Diamond Pattern Contracts**: EIP-2535 compliant modular proxy system
-- **🏭 Factory System**: CREATE2 deterministic deployment with integrity verification
+- **🏭 Factory System**: CREATE2 deterministic deployment with integrity verification  
 - **🤖 AI Refactor Copilot**: Self-correcting Diamond Pattern code generation
 - **📊 FastAPI Backend**: RAG-enhanced API with Ollama LLM integration
 - **🧪 Testing Suite**: Comprehensive validation for Diamond compliance
 - **🚀 Deployment Tools**: Multi-network deployment with CI/CD integration
 
 ### Tech Stack
-
 - **Smart Contracts**: Solidity 0.8.30, Hardhat, OpenZeppelin
 - **Backend**: Python FastAPI, Ollama, BM25 RAG
 - **Frontend Tools**: TypeScript, ESLint, Prettier
@@ -68,7 +64,6 @@ open http://127.0.0.1:8000/docs
 ## 📋 Key Features
 
 ### Diamond Pattern (EIP-2535)
-
 - ✅ Modular facet system with upgradeable logic
 - ✅ Standard and Enhanced Loupe implementations
 - ✅ EXTCODEHASH gating for security
@@ -76,15 +71,13 @@ open http://127.0.0.1:8000/docs
 - ✅ Emergency pause/freeze mechanisms
 
 ### AI-Powered Development
-
 - ✅ Self-correcting refactor copilot
-- ✅ EIP-170 size limit enforcement
+- ✅ EIP-170 size limit enforcement  
 - ✅ Automatic selector collision detection
 - ✅ Gas optimization analysis
 - ✅ Behavior preservation validation
 
 ### Deployment & Security
-
 - ✅ CREATE2 deterministic addresses
 - ✅ Integrity verification system
 - ✅ Multi-network deployment scripts
@@ -94,7 +87,6 @@ open http://127.0.0.1:8000/docs
 ## 🛠️ Development Workflow
 
 ### Smart Contract Development
-
 ```bash
 # Compile contracts
 npm run compile
@@ -107,7 +99,6 @@ npm run sol:lint
 ```
 
 ### AI-Powered Refactoring
-
 ```bash
 # Basic refactor to Diamond Pattern
 npx ts-node tools/ai-refactor-copilot.ts "Refactor MyContract to Diamond facets"
@@ -120,7 +111,6 @@ npm run ai:validate
 ```
 
 ### API Development
-
 ```bash
 # Start development server
 python -m uvicorn app.main:app --reload
@@ -135,7 +125,6 @@ curl http://localhost:8000/health
 ## 📊 Testing
 
 ### Contract Tests
-
 ```bash
 npm run test:integrity    # System integrity verification
 npm run test:loupe       # EIP-2535 compliance
@@ -145,13 +134,11 @@ npm run test:size        # Size limit enforcement
 ```
 
 ### Comprehensive Validation
-
 ```bash
 npm run payrox:self-check  # Full test suite
 ```
 
 ### API Tests
-
 ```bash
 python -m pytest tests/   # Python API tests
 ```
@@ -159,17 +146,15 @@ python -m pytest tests/   # Python API tests
 ## 🚀 Deployment
 
 ### Local Development
-
 ```bash
 # Deploy to local network
 npm run deploy:local
 
-# Setup dispatcher roles
+# Setup dispatcher roles  
 npm run deploy:setup-roles
 ```
 
 ### Production Deployment
-
 ```bash
 # Set environment variables
 cp .env.example .env
@@ -183,7 +168,6 @@ npm run verify:mainnet
 ```
 
 ### Using Docker
-
 ```bash
 # Start all services
 docker-compose up -d
@@ -203,7 +187,6 @@ docker-compose ps
 ## 🔧 Configuration
 
 ### Environment Variables
-
 Key configuration options (see `.env.example` for complete list):
 
 ```bash
@@ -211,7 +194,7 @@ Key configuration options (see `.env.example` for complete list):
 DEFAULT_NETWORK=localhost
 MAINNET_RPC_URL=https://eth.llamarpc.com
 
-# AI Configuration
+# AI Configuration  
 OLLAMA_HOST=http://127.0.0.1:11434
 AI_ENABLED=true
 
@@ -225,7 +208,6 @@ CORS_ORIGINS=http://localhost:3000
 ```
 
 ### Run API (Windows)
-
 ```powershell
 Set-Location 'C:\\PayRox-Go-Beyond-Ollama'
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload --log-level debug
@@ -238,9 +220,7 @@ python scripts\smoke_api.py
 ```
 
 ### Facts Configuration
-
 Enhanced configuration management:
-
 ```bash
 # Upgrade facts.json with PayRox defaults
 curl -X POST http://localhost:8000/arch/facts/upgrade
@@ -252,7 +232,6 @@ curl http://localhost:8000/arch/facts
 ## 🤝 Contributing
 
 ### Development Setup
-
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Install dependencies: `npm install && pip install -r requirements.txt`
@@ -262,7 +241,6 @@ curl http://localhost:8000/arch/facts
 7. Open a Pull Request
 
 ### Code Standards
-
 - **Solidity**: Follow OpenZeppelin standards, use Solhint
 - **TypeScript**: ESLint + Prettier configuration
 - **Python**: Black formatting, type hints
@@ -276,7 +254,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🏆 Acknowledgments
 
 - **EIP-2535**: Diamond Pattern specification
-- **OpenZeppelin**: Security-focused contract libraries
+- **OpenZeppelin**: Security-focused contract libraries  
 - **Hardhat**: Ethereum development environment
 - **FastAPI**: Modern Python web framework
 - **Ollama**: Local LLM inference
@@ -289,4 +267,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**PayRox Go Beyond** - _Advancing blockchain development with AI-powered Diamond Pattern implementations._
+**PayRox Go Beyond** - *Advancing blockchain development with AI-powered Diamond Pattern implementations.*

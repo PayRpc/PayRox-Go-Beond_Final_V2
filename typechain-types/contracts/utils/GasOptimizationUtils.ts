@@ -11,21 +11,27 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export interface GasOptimizationUtilsInterface extends Interface {
-  getFunction(nameOrSignature: 'packStorage'): FunctionFragment;
+  getFunction(nameOrSignature: "packStorage"): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'packStorage', values: [BigNumberish[]]): string;
+  encodeFunctionData(
+    functionFragment: "packStorage",
+    values: [BigNumberish[]]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'packStorage', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "packStorage",
+    data: BytesLike
+  ): Result;
 }
 
 export interface GasOptimizationUtils extends BaseContract {
@@ -37,45 +43,49 @@ export interface GasOptimizationUtils extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  packStorage: TypedContractMethod<[values: BigNumberish[]], [string], 'view'>;
+  packStorage: TypedContractMethod<[values: BigNumberish[]], [string], "view">;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
   getFunction(
-    nameOrSignature: 'packStorage',
-  ): TypedContractMethod<[values: BigNumberish[]], [string], 'view'>;
+    nameOrSignature: "packStorage"
+  ): TypedContractMethod<[values: BigNumberish[]], [string], "view">;
 
   filters: {};
 }

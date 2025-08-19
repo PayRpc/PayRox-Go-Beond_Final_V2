@@ -67,7 +67,7 @@ function collectFacetArtifacts() {
       if (!art?.abi) continue;
       if (!isFacetArtifact(art)) continue;
       result.push({ file: f, art });
-    } catch (_) {}
+    } catch (_) { }
   }
   return result;
 }
@@ -78,12 +78,12 @@ function buildManifest() {
     console.warn('⚠️  No facet artifacts found in', ARTIFACTS_ROOT);
   }
 
-  const manifest = { version: '1.0.0', facets: {} };
+  const manifest = { version: "1.0.0", facets: {} };
   const selectorOwners = new Map();
 
   for (const { art } of artifacts) {
     const facetName = art.contractName;
-    const funcs = art.abi.filter((i) => i.type === 'function');
+    const funcs = art.abi.filter(i => i.type === 'function');
     const sels = new Set();
 
     for (const fn of funcs) {
@@ -114,7 +114,7 @@ function buildManifest() {
   const selectorMap = {};
   for (const { art } of artifacts) {
     const facetName = art.contractName;
-    for (const fn of art.abi.filter((i) => i.type === 'function')) {
+    for (const fn of art.abi.filter(i => i.type === 'function')) {
       const sig = funcSignature(fn);
       const sel = selector(sig);
       selectorMap[sel] = `${facetName}.${sig}`;

@@ -30,8 +30,7 @@ try {
   fatal('failed to parse combined.json: ' + e.message);
 }
 
-if (!Array.isArray(combined.parts) || combined.parts.length === 0)
-  fatal('combined.parts empty or missing');
+if (!Array.isArray(combined.parts) || combined.parts.length === 0) fatal('combined.parts empty or missing');
 
 function normalizeSignature(sig) {
   return String(sig).replace(/\s+/g, ' ').trim();
@@ -65,6 +64,4 @@ for (const f of Object.keys(facets)) {
 const manifest = { version: '1.0.0', facets };
 const outPath = path.resolve(argv.out);
 fs.writeFileSync(outPath, JSON.stringify(manifest, null, 2));
-console.log(
-  `Canonical manifest written: ${outPath} (facets=${Object.keys(facets).length}, selectors=${total})`,
-);
+console.log(`Canonical manifest written: ${outPath} (facets=${Object.keys(facets).length}, selectors=${total})`);

@@ -7,9 +7,7 @@ const dirs = [
 ];
 
 function normalizeSelector(s) {
-  return String(s || '')
-    .replace(/\s+/g, '')
-    .toLowerCase();
+  return String(s || '').replace(/\s+/g, '').toLowerCase();
 }
 
 for (const dir of dirs) {
@@ -44,7 +42,7 @@ for (const dir of dirs) {
     continue;
   }
 
-  const keptParts = (combined.parts || []).filter((p) => !/part_2/i.test(p.file || ''));
+  const keptParts = (combined.parts || []).filter(p => !/part_2/i.test(p.file || ''));
   // rebuild selectors from kept parts
   const selectorsSet = new Set();
   for (const p of keptParts) {

@@ -97,28 +97,33 @@ The system runs this validation sequence:
 
 Every refactor produces:
 
-1. **Facets** (facets/\*.sol)
+1. **Facets** (facets/*.sol)
+
    - Namespaced storage structs
    - Custom error definitions
    - Proper access control modifiers
    - NO loupe function claims
 
 2. **Manifest** (payrox-manifest.json)
+
    - Facet → selector mappings
    - Routing configuration
    - Optional codehash verification
    - Deployment metadata
 
 3. **Selector Map** (selector_map.json)
+
    - Complete selector inventory
    - Collision detection report
 
 4. **Deploy Scripts**
+
    - Deterministic deployment via factory
    - Dispatcher registration
    - Verification routines
 
 5. **Tests**
+
    - Loupe functionality validation
    - Selector routing tests
    - Role assignment verification
@@ -182,14 +187,17 @@ npx hardhat test --grep "(loupe|selectors)"     # Test only
 ### Common Issues
 
 1. **Size Limit Exceeded**
+
    - Error: Facet XYZ runtime 28000 > 24576 bytes
    - Solution: AI splits facet into smaller components
 
 2. **Loupe Function in Facet**
+
    - Error: Facet XYZ MUST NOT implement loupe function facets()
    - Solution: AI removes loupe claims from facet
 
 3. **Selector Collision**
+
    - Error: Selector collision: 0x12345678 in FacetA and FacetB
    - Solution: AI renames conflicting functions
 

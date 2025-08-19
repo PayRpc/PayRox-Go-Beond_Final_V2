@@ -11,26 +11,30 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedLogDescription,
   TypedListener,
-} from '../../common';
+} from "../../common";
 
 export interface RefactorSafetyLibInterface extends Interface {
   getEvent(
     nameOrSignatureOrTopic:
-      | 'RefactorSafetyCheck'
-      | 'SelectorCompatibilityVerified'
-      | 'StorageLayoutValidated',
+      | "RefactorSafetyCheck"
+      | "SelectorCompatibilityVerified"
+      | "StorageLayoutValidated"
   ): EventFragment;
 }
 
 export namespace RefactorSafetyCheckEvent {
-  export type InputTuple = [facetId: BytesLike, version: BigNumberish, passed: boolean];
+  export type InputTuple = [
+    facetId: BytesLike,
+    version: BigNumberish,
+    passed: boolean
+  ];
   export type OutputTuple = [facetId: string, version: bigint, passed: boolean];
   export interface OutputObject {
     facetId: string;
@@ -78,56 +82,60 @@ export interface RefactorSafetyLib extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
   getEvent(
-    key: 'RefactorSafetyCheck',
+    key: "RefactorSafetyCheck"
   ): TypedContractEvent<
     RefactorSafetyCheckEvent.InputTuple,
     RefactorSafetyCheckEvent.OutputTuple,
     RefactorSafetyCheckEvent.OutputObject
   >;
   getEvent(
-    key: 'SelectorCompatibilityVerified',
+    key: "SelectorCompatibilityVerified"
   ): TypedContractEvent<
     SelectorCompatibilityVerifiedEvent.InputTuple,
     SelectorCompatibilityVerifiedEvent.OutputTuple,
     SelectorCompatibilityVerifiedEvent.OutputObject
   >;
   getEvent(
-    key: 'StorageLayoutValidated',
+    key: "StorageLayoutValidated"
   ): TypedContractEvent<
     StorageLayoutValidatedEvent.InputTuple,
     StorageLayoutValidatedEvent.OutputTuple,
@@ -135,7 +143,7 @@ export interface RefactorSafetyLib extends BaseContract {
   >;
 
   filters: {
-    'RefactorSafetyCheck(bytes32,uint256,bool)': TypedContractEvent<
+    "RefactorSafetyCheck(bytes32,uint256,bool)": TypedContractEvent<
       RefactorSafetyCheckEvent.InputTuple,
       RefactorSafetyCheckEvent.OutputTuple,
       RefactorSafetyCheckEvent.OutputObject
@@ -146,7 +154,7 @@ export interface RefactorSafetyLib extends BaseContract {
       RefactorSafetyCheckEvent.OutputObject
     >;
 
-    'SelectorCompatibilityVerified(bytes4[],bool)': TypedContractEvent<
+    "SelectorCompatibilityVerified(bytes4[],bool)": TypedContractEvent<
       SelectorCompatibilityVerifiedEvent.InputTuple,
       SelectorCompatibilityVerifiedEvent.OutputTuple,
       SelectorCompatibilityVerifiedEvent.OutputObject
@@ -157,7 +165,7 @@ export interface RefactorSafetyLib extends BaseContract {
       SelectorCompatibilityVerifiedEvent.OutputObject
     >;
 
-    'StorageLayoutValidated(bytes32,bytes32)': TypedContractEvent<
+    "StorageLayoutValidated(bytes32,bytes32)": TypedContractEvent<
       StorageLayoutValidatedEvent.InputTuple,
       StorageLayoutValidatedEvent.OutputTuple,
       StorageLayoutValidatedEvent.OutputObject

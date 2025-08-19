@@ -2,62 +2,62 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from 'ethers';
+import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   IManifestDispatcherView,
   IManifestDispatcherViewInterface,
-} from '../../../../contracts/Proxy/PayRoxProxyRouter.sol/IManifestDispatcherView';
+} from "../../../../contracts/Proxy/PayRoxProxyRouter.sol/IManifestDispatcherView";
 
 const _abi = [
   {
     inputs: [],
-    name: 'activeRoot',
+    name: "activeRoot",
     outputs: [
       {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],
-    name: 'frozen',
+    name: "frozen",
     outputs: [
       {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'bytes4',
-        name: 'selector',
-        type: 'bytes4',
+        internalType: "bytes4",
+        name: "selector",
+        type: "bytes4",
       },
     ],
-    name: 'routes',
+    name: "routes",
     outputs: [
       {
-        internalType: 'address',
-        name: 'facet',
-        type: 'address',
+        internalType: "address",
+        name: "facet",
+        type: "address",
       },
       {
-        internalType: 'bytes32',
-        name: 'codehash',
-        type: 'bytes32',
+        internalType: "bytes32",
+        name: "codehash",
+        type: "bytes32",
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
 ] as const;
 
@@ -66,7 +66,14 @@ export class IManifestDispatcherView__factory {
   static createInterface(): IManifestDispatcherViewInterface {
     return new Interface(_abi) as IManifestDispatcherViewInterface;
   }
-  static connect(address: string, runner?: ContractRunner | null): IManifestDispatcherView {
-    return new Contract(address, _abi, runner) as unknown as IManifestDispatcherView;
+  static connect(
+    address: string,
+    runner?: ContractRunner | null
+  ): IManifestDispatcherView {
+    return new Contract(
+      address,
+      _abi,
+      runner
+    ) as unknown as IManifestDispatcherView;
   }
 }

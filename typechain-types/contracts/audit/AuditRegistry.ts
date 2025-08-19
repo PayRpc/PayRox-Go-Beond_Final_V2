@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export declare namespace ManifestTypes {
   export type AuditInfoStruct = {
@@ -37,7 +37,7 @@ export declare namespace ManifestTypes {
     auditHash: string,
     auditTimestamp: bigint,
     passed: boolean,
-    reportUri: string,
+    reportUri: string
   ] & {
     auditor: string;
     auditHash: string;
@@ -50,87 +50,206 @@ export declare namespace ManifestTypes {
 export interface AuditRegistryInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'AUDITOR_ROLE'
-      | 'AUDIT_ADMIN_ROLE'
-      | 'MAX_AUDIT_VALIDITY'
-      | 'MIN_AUDIT_VALIDITY'
-      | 'auditExpiration'
-      | 'auditValidityPeriod'
-      | 'auditedManifests'
-      | 'auditorStats'
-      | 'audits'
-      | 'certifiedAuditors'
-      | 'certifyAuditor'
-      | 'getAuditCount'
-      | 'getAuditStatus'
-      | 'getAuditedManifests'
-      | 'getAuditorInfo'
-      | 'markExpiredAudits'
-      | 'requiresAudit'
-      | 'revokeAuditor'
-      | 'submitAudit'
-      | 'updateAuditValidityPeriod',
+      | "AUDITOR_ROLE"
+      | "AUDIT_ADMIN_ROLE"
+      | "MAX_AUDIT_VALIDITY"
+      | "MIN_AUDIT_VALIDITY"
+      | "auditExpiration"
+      | "auditValidityPeriod"
+      | "auditedManifests"
+      | "auditorStats"
+      | "audits"
+      | "certifiedAuditors"
+      | "certifyAuditor"
+      | "getAuditCount"
+      | "getAuditStatus"
+      | "getAuditedManifests"
+      | "getAuditorInfo"
+      | "markExpiredAudits"
+      | "requiresAudit"
+      | "revokeAuditor"
+      | "submitAudit"
+      | "updateAuditValidityPeriod"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | 'AuditCompleted'
-      | 'AuditExpired'
-      | 'AuditSubmitted'
-      | 'AuditValidityUpdated'
-      | 'AuditorCertified'
-      | 'AuditorRevoked',
+      | "AuditCompleted"
+      | "AuditExpired"
+      | "AuditSubmitted"
+      | "AuditValidityUpdated"
+      | "AuditorCertified"
+      | "AuditorRevoked"
   ): EventFragment;
 
-  encodeFunctionData(functionFragment: 'AUDITOR_ROLE', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'AUDIT_ADMIN_ROLE', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'MAX_AUDIT_VALIDITY', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'MIN_AUDIT_VALIDITY', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'auditExpiration', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'auditValidityPeriod', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'auditedManifests', values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: 'auditorStats', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'audits', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'certifiedAuditors', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'certifyAuditor', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'getAuditCount', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getAuditStatus', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: 'getAuditedManifests',
-    values: [BigNumberish, BigNumberish],
+    functionFragment: "AUDITOR_ROLE",
+    values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: 'getAuditorInfo', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'markExpiredAudits', values: [BytesLike[]]): string;
-  encodeFunctionData(functionFragment: 'requiresAudit', values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: 'revokeAuditor', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'submitAudit', values: [BytesLike, boolean, string]): string;
-  encodeFunctionData(functionFragment: 'updateAuditValidityPeriod', values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "AUDIT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_AUDIT_VALIDITY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MIN_AUDIT_VALIDITY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "auditExpiration",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "auditValidityPeriod",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "auditedManifests",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "auditorStats",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(functionFragment: "audits", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "certifiedAuditors",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "certifyAuditor",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAuditCount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAuditStatus",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAuditedManifests",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAuditorInfo",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "markExpiredAudits",
+    values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "requiresAudit",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeAuditor",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "submitAudit",
+    values: [BytesLike, boolean, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateAuditValidityPeriod",
+    values: [BigNumberish]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'AUDITOR_ROLE', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'AUDIT_ADMIN_ROLE', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'MAX_AUDIT_VALIDITY', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'MIN_AUDIT_VALIDITY', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'auditExpiration', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'auditValidityPeriod', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'auditedManifests', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'auditorStats', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'audits', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'certifiedAuditors', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'certifyAuditor', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getAuditCount', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getAuditStatus', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getAuditedManifests', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'getAuditorInfo', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'markExpiredAudits', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'requiresAudit', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'revokeAuditor', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'submitAudit', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'updateAuditValidityPeriod', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "AUDITOR_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "AUDIT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_AUDIT_VALIDITY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MIN_AUDIT_VALIDITY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "auditExpiration",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "auditValidityPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "auditedManifests",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "auditorStats",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "audits", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "certifiedAuditors",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "certifyAuditor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAuditCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAuditStatus",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAuditedManifests",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAuditorInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "markExpiredAudits",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "requiresAudit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "revokeAuditor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "submitAudit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateAuditValidityPeriod",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace AuditCompletedEvent {
-  export type InputTuple = [manifestHash: BytesLike, auditor: AddressLike, passed: boolean];
-  export type OutputTuple = [manifestHash: string, auditor: string, passed: boolean];
+  export type InputTuple = [
+    manifestHash: BytesLike,
+    auditor: AddressLike,
+    passed: boolean
+  ];
+  export type OutputTuple = [
+    manifestHash: string,
+    auditor: string,
+    passed: boolean
+  ];
   export interface OutputObject {
     manifestHash: string;
     auditor: string;
@@ -160,13 +279,13 @@ export namespace AuditSubmittedEvent {
     manifestHash: BytesLike,
     auditor: AddressLike,
     passed: boolean,
-    reportUri: string,
+    reportUri: string
   ];
   export type OutputTuple = [
     manifestHash: string,
     auditor: string,
     passed: boolean,
-    reportUri: string,
+    reportUri: string
   ];
   export interface OutputObject {
     manifestHash: string;
@@ -228,53 +347,55 @@ export interface AuditRegistry extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  AUDITOR_ROLE: TypedContractMethod<[], [string], 'view'>;
+  AUDITOR_ROLE: TypedContractMethod<[], [string], "view">;
 
-  AUDIT_ADMIN_ROLE: TypedContractMethod<[], [string], 'view'>;
+  AUDIT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
 
-  MAX_AUDIT_VALIDITY: TypedContractMethod<[], [bigint], 'view'>;
+  MAX_AUDIT_VALIDITY: TypedContractMethod<[], [bigint], "view">;
 
-  MIN_AUDIT_VALIDITY: TypedContractMethod<[], [bigint], 'view'>;
+  MIN_AUDIT_VALIDITY: TypedContractMethod<[], [bigint], "view">;
 
-  auditExpiration: TypedContractMethod<[arg0: BytesLike], [bigint], 'view'>;
+  auditExpiration: TypedContractMethod<[arg0: BytesLike], [bigint], "view">;
 
-  auditValidityPeriod: TypedContractMethod<[], [bigint], 'view'>;
+  auditValidityPeriod: TypedContractMethod<[], [bigint], "view">;
 
-  auditedManifests: TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
+  auditedManifests: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
-  auditorStats: TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
+  auditorStats: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
 
   audits: TypedContractMethod<
     [arg0: BytesLike],
@@ -285,16 +406,24 @@ export interface AuditRegistry extends BaseContract {
         auditTimestamp: bigint;
         passed: boolean;
         reportUri: string;
-      },
+      }
     ],
-    'view'
+    "view"
   >;
 
-  certifiedAuditors: TypedContractMethod<[arg0: AddressLike], [boolean], 'view'>;
+  certifiedAuditors: TypedContractMethod<
+    [arg0: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-  certifyAuditor: TypedContractMethod<[auditor: AddressLike], [void], 'nonpayable'>;
+  certifyAuditor: TypedContractMethod<
+    [auditor: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  getAuditCount: TypedContractMethod<[], [bigint], 'view'>;
+  getAuditCount: TypedContractMethod<[], [bigint], "view">;
 
   getAuditStatus: TypedContractMethod<
     [manifestHash: BytesLike],
@@ -302,54 +431,84 @@ export interface AuditRegistry extends BaseContract {
       [boolean, ManifestTypes.AuditInfoStructOutput] & {
         isValid: boolean;
         auditInfo: ManifestTypes.AuditInfoStructOutput;
-      },
+      }
     ],
-    'view'
+    "view"
   >;
 
   getAuditedManifests: TypedContractMethod<
     [offset: BigNumberish, limit: BigNumberish],
     [[string[], bigint] & { manifests: string[]; total: bigint }],
-    'view'
+    "view"
   >;
 
   getAuditorInfo: TypedContractMethod<
     [auditor: AddressLike],
     [[boolean, bigint] & { isCertified: boolean; auditCount: bigint }],
-    'view'
+    "view"
   >;
 
-  markExpiredAudits: TypedContractMethod<[manifestHashes: BytesLike[]], [void], 'nonpayable'>;
+  markExpiredAudits: TypedContractMethod<
+    [manifestHashes: BytesLike[]],
+    [void],
+    "nonpayable"
+  >;
 
-  requiresAudit: TypedContractMethod<[manifestHash: BytesLike], [boolean], 'view'>;
+  requiresAudit: TypedContractMethod<
+    [manifestHash: BytesLike],
+    [boolean],
+    "view"
+  >;
 
-  revokeAuditor: TypedContractMethod<[auditor: AddressLike], [void], 'nonpayable'>;
+  revokeAuditor: TypedContractMethod<
+    [auditor: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   submitAudit: TypedContractMethod<
     [manifestHash: BytesLike, passed: boolean, reportUri: string],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
 
-  updateAuditValidityPeriod: TypedContractMethod<[newPeriod: BigNumberish], [void], 'nonpayable'>;
+  updateAuditValidityPeriod: TypedContractMethod<
+    [newPeriod: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  getFunction(nameOrSignature: 'AUDITOR_ROLE'): TypedContractMethod<[], [string], 'view'>;
-  getFunction(nameOrSignature: 'AUDIT_ADMIN_ROLE'): TypedContractMethod<[], [string], 'view'>;
-  getFunction(nameOrSignature: 'MAX_AUDIT_VALIDITY'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'MIN_AUDIT_VALIDITY'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: 'auditExpiration',
-  ): TypedContractMethod<[arg0: BytesLike], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'auditValidityPeriod'): TypedContractMethod<[], [bigint], 'view'>;
+    nameOrSignature: "AUDITOR_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'auditedManifests',
-  ): TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
+    nameOrSignature: "AUDIT_ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'auditorStats',
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'audits'): TypedContractMethod<
+    nameOrSignature: "MAX_AUDIT_VALIDITY"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "MIN_AUDIT_VALIDITY"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "auditExpiration"
+  ): TypedContractMethod<[arg0: BytesLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "auditValidityPeriod"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "auditedManifests"
+  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  getFunction(
+    nameOrSignature: "auditorStats"
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "audits"
+  ): TypedContractMethod<
     [arg0: BytesLike],
     [
       [string, string, bigint, boolean, string] & {
@@ -358,98 +517,102 @@ export interface AuditRegistry extends BaseContract {
         auditTimestamp: bigint;
         passed: boolean;
         reportUri: string;
-      },
+      }
     ],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'certifiedAuditors',
-  ): TypedContractMethod<[arg0: AddressLike], [boolean], 'view'>;
+    nameOrSignature: "certifiedAuditors"
+  ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: 'certifyAuditor',
-  ): TypedContractMethod<[auditor: AddressLike], [void], 'nonpayable'>;
-  getFunction(nameOrSignature: 'getAuditCount'): TypedContractMethod<[], [bigint], 'view'>;
-  getFunction(nameOrSignature: 'getAuditStatus'): TypedContractMethod<
+    nameOrSignature: "certifyAuditor"
+  ): TypedContractMethod<[auditor: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "getAuditCount"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getAuditStatus"
+  ): TypedContractMethod<
     [manifestHash: BytesLike],
     [
       [boolean, ManifestTypes.AuditInfoStructOutput] & {
         isValid: boolean;
         auditInfo: ManifestTypes.AuditInfoStructOutput;
-      },
+      }
     ],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'getAuditedManifests',
+    nameOrSignature: "getAuditedManifests"
   ): TypedContractMethod<
     [offset: BigNumberish, limit: BigNumberish],
     [[string[], bigint] & { manifests: string[]; total: bigint }],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'getAuditorInfo',
+    nameOrSignature: "getAuditorInfo"
   ): TypedContractMethod<
     [auditor: AddressLike],
     [[boolean, bigint] & { isCertified: boolean; auditCount: bigint }],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'markExpiredAudits',
-  ): TypedContractMethod<[manifestHashes: BytesLike[]], [void], 'nonpayable'>;
+    nameOrSignature: "markExpiredAudits"
+  ): TypedContractMethod<[manifestHashes: BytesLike[]], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'requiresAudit',
-  ): TypedContractMethod<[manifestHash: BytesLike], [boolean], 'view'>;
+    nameOrSignature: "requiresAudit"
+  ): TypedContractMethod<[manifestHash: BytesLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: 'revokeAuditor',
-  ): TypedContractMethod<[auditor: AddressLike], [void], 'nonpayable'>;
+    nameOrSignature: "revokeAuditor"
+  ): TypedContractMethod<[auditor: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: 'submitAudit',
+    nameOrSignature: "submitAudit"
   ): TypedContractMethod<
     [manifestHash: BytesLike, passed: boolean, reportUri: string],
     [void],
-    'nonpayable'
+    "nonpayable"
   >;
   getFunction(
-    nameOrSignature: 'updateAuditValidityPeriod',
-  ): TypedContractMethod<[newPeriod: BigNumberish], [void], 'nonpayable'>;
+    nameOrSignature: "updateAuditValidityPeriod"
+  ): TypedContractMethod<[newPeriod: BigNumberish], [void], "nonpayable">;
 
   getEvent(
-    key: 'AuditCompleted',
+    key: "AuditCompleted"
   ): TypedContractEvent<
     AuditCompletedEvent.InputTuple,
     AuditCompletedEvent.OutputTuple,
     AuditCompletedEvent.OutputObject
   >;
   getEvent(
-    key: 'AuditExpired',
+    key: "AuditExpired"
   ): TypedContractEvent<
     AuditExpiredEvent.InputTuple,
     AuditExpiredEvent.OutputTuple,
     AuditExpiredEvent.OutputObject
   >;
   getEvent(
-    key: 'AuditSubmitted',
+    key: "AuditSubmitted"
   ): TypedContractEvent<
     AuditSubmittedEvent.InputTuple,
     AuditSubmittedEvent.OutputTuple,
     AuditSubmittedEvent.OutputObject
   >;
   getEvent(
-    key: 'AuditValidityUpdated',
+    key: "AuditValidityUpdated"
   ): TypedContractEvent<
     AuditValidityUpdatedEvent.InputTuple,
     AuditValidityUpdatedEvent.OutputTuple,
     AuditValidityUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: 'AuditorCertified',
+    key: "AuditorCertified"
   ): TypedContractEvent<
     AuditorCertifiedEvent.InputTuple,
     AuditorCertifiedEvent.OutputTuple,
     AuditorCertifiedEvent.OutputObject
   >;
   getEvent(
-    key: 'AuditorRevoked',
+    key: "AuditorRevoked"
   ): TypedContractEvent<
     AuditorRevokedEvent.InputTuple,
     AuditorRevokedEvent.OutputTuple,
@@ -457,7 +620,7 @@ export interface AuditRegistry extends BaseContract {
   >;
 
   filters: {
-    'AuditCompleted(bytes32,address,bool)': TypedContractEvent<
+    "AuditCompleted(bytes32,address,bool)": TypedContractEvent<
       AuditCompletedEvent.InputTuple,
       AuditCompletedEvent.OutputTuple,
       AuditCompletedEvent.OutputObject
@@ -468,7 +631,7 @@ export interface AuditRegistry extends BaseContract {
       AuditCompletedEvent.OutputObject
     >;
 
-    'AuditExpired(bytes32,address)': TypedContractEvent<
+    "AuditExpired(bytes32,address)": TypedContractEvent<
       AuditExpiredEvent.InputTuple,
       AuditExpiredEvent.OutputTuple,
       AuditExpiredEvent.OutputObject
@@ -479,7 +642,7 @@ export interface AuditRegistry extends BaseContract {
       AuditExpiredEvent.OutputObject
     >;
 
-    'AuditSubmitted(bytes32,address,bool,string)': TypedContractEvent<
+    "AuditSubmitted(bytes32,address,bool,string)": TypedContractEvent<
       AuditSubmittedEvent.InputTuple,
       AuditSubmittedEvent.OutputTuple,
       AuditSubmittedEvent.OutputObject
@@ -490,7 +653,7 @@ export interface AuditRegistry extends BaseContract {
       AuditSubmittedEvent.OutputObject
     >;
 
-    'AuditValidityUpdated(uint256,uint256)': TypedContractEvent<
+    "AuditValidityUpdated(uint256,uint256)": TypedContractEvent<
       AuditValidityUpdatedEvent.InputTuple,
       AuditValidityUpdatedEvent.OutputTuple,
       AuditValidityUpdatedEvent.OutputObject
@@ -501,7 +664,7 @@ export interface AuditRegistry extends BaseContract {
       AuditValidityUpdatedEvent.OutputObject
     >;
 
-    'AuditorCertified(address,address)': TypedContractEvent<
+    "AuditorCertified(address,address)": TypedContractEvent<
       AuditorCertifiedEvent.InputTuple,
       AuditorCertifiedEvent.OutputTuple,
       AuditorCertifiedEvent.OutputObject
@@ -512,7 +675,7 @@ export interface AuditRegistry extends BaseContract {
       AuditorCertifiedEvent.OutputObject
     >;
 
-    'AuditorRevoked(address,address)': TypedContractEvent<
+    "AuditorRevoked(address,address)": TypedContractEvent<
       AuditorRevokedEvent.InputTuple,
       AuditorRevokedEvent.OutputTuple,
       AuditorRevokedEvent.OutputObject

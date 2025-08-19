@@ -28,9 +28,7 @@ function findDiamondTests() {
 function main() {
   const files = findDiamondTests();
   if (files.length === 0) {
-    console.log(
-      'No files found under tests/diamond-compliance — falling back to `npx hardhat test`',
-    );
+    console.log('No files found under tests/diamond-compliance — falling back to `npx hardhat test`');
     const r = spawnSync('npx', ['hardhat', 'test'], { stdio: 'inherit', shell: true });
     process.exit(r.status === null ? 1 : r.status);
   }

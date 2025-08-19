@@ -10,11 +10,7 @@ const mf = path.resolve('./manifests/cross-network-registry.json');
 if (!fs.existsSync(mf)) fail('manifest not found: ' + mf);
 const raw = fs.readFileSync(mf, 'utf8');
 let j;
-try {
-  j = JSON.parse(raw);
-} catch (e) {
-  fail('manifest not valid JSON');
-}
+try { j = JSON.parse(raw); } catch (e) { fail('manifest not valid JSON'); }
 
 // Basic checks
 if (!j.initCodeHashes || !j.salts) fail('missing hashes or salts');

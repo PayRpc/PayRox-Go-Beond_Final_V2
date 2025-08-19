@@ -12,42 +12,57 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export interface ISaltViewInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'eip2470'
-      | 'factorySalt'
-      | 'hashInitCode'
-      | 'predictCreate2'
-      | 'universalSalt',
+      | "eip2470"
+      | "factorySalt"
+      | "hashInitCode"
+      | "predictCreate2"
+      | "universalSalt"
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'eip2470', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'factorySalt', values: [string]): string;
-  encodeFunctionData(functionFragment: 'hashInitCode', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: "eip2470", values?: undefined): string;
+  encodeFunctionData(functionFragment: "factorySalt", values: [string]): string;
   encodeFunctionData(
-    functionFragment: 'predictCreate2',
-    values: [AddressLike, BytesLike, BytesLike],
+    functionFragment: "hashInitCode",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'universalSalt',
-    values: [AddressLike, string, BigNumberish, string],
+    functionFragment: "predictCreate2",
+    values: [AddressLike, BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "universalSalt",
+    values: [AddressLike, string, BigNumberish, string]
   ): string;
 
-  decodeFunctionResult(functionFragment: 'eip2470', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'factorySalt', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'hashInitCode', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'predictCreate2', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'universalSalt', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "eip2470", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "factorySalt",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "hashInitCode",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "predictCreate2",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "universalSalt",
+    data: BytesLike
+  ): Result;
 }
 
 export interface ISaltView extends BaseContract {
@@ -59,78 +74,94 @@ export interface ISaltView extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  eip2470: TypedContractMethod<[], [string], 'view'>;
+  eip2470: TypedContractMethod<[], [string], "view">;
 
-  factorySalt: TypedContractMethod<[version: string], [string], 'view'>;
+  factorySalt: TypedContractMethod<[version: string], [string], "view">;
 
-  hashInitCode: TypedContractMethod<[initCode: BytesLike], [string], 'view'>;
+  hashInitCode: TypedContractMethod<[initCode: BytesLike], [string], "view">;
 
   predictCreate2: TypedContractMethod<
     [deployer: AddressLike, salt: BytesLike, initCodeHash: BytesLike],
     [string],
-    'view'
+    "view"
   >;
 
   universalSalt: TypedContractMethod<
-    [deployer: AddressLike, content: string, crossNonce: BigNumberish, version: string],
+    [
+      deployer: AddressLike,
+      content: string,
+      crossNonce: BigNumberish,
+      version: string
+    ],
     [string],
-    'view'
+    "view"
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  getFunction(nameOrSignature: 'eip2470'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: 'factorySalt',
-  ): TypedContractMethod<[version: string], [string], 'view'>;
+    nameOrSignature: "eip2470"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: 'hashInitCode',
-  ): TypedContractMethod<[initCode: BytesLike], [string], 'view'>;
+    nameOrSignature: "factorySalt"
+  ): TypedContractMethod<[version: string], [string], "view">;
   getFunction(
-    nameOrSignature: 'predictCreate2',
+    nameOrSignature: "hashInitCode"
+  ): TypedContractMethod<[initCode: BytesLike], [string], "view">;
+  getFunction(
+    nameOrSignature: "predictCreate2"
   ): TypedContractMethod<
     [deployer: AddressLike, salt: BytesLike, initCodeHash: BytesLike],
     [string],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'universalSalt',
+    nameOrSignature: "universalSalt"
   ): TypedContractMethod<
-    [deployer: AddressLike, content: string, crossNonce: BigNumberish, version: string],
+    [
+      deployer: AddressLike,
+      content: string,
+      crossNonce: BigNumberish,
+      version: string
+    ],
     [string],
-    'view'
+    "view"
   >;
 
   filters: {};

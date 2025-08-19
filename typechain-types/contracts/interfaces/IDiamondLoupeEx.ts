@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from 'ethers';
+} from "ethers";
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from '../../common';
+} from "../../common";
 
 export declare namespace IDiamondLoupeEx {
   export type FacetMetadataStruct = {
@@ -35,7 +35,7 @@ export declare namespace IDiamondLoupeEx {
     name: string,
     category: string,
     dependencies: string[],
-    isUpgradeable: boolean,
+    isUpgradeable: boolean
   ] & {
     name: string;
     category: string;
@@ -54,7 +54,7 @@ export declare namespace IDiamondLoupeEx {
     facetAddress: string,
     functionSelectors: string[],
     versionTag: string,
-    securityLevel: bigint,
+    securityLevel: bigint
   ] & {
     facetAddress: string;
     functionSelectors: string[];
@@ -66,52 +66,114 @@ export declare namespace IDiamondLoupeEx {
 export interface IDiamondLoupeExInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | 'checkStorageConflicts'
-      | 'facetAddressEx'
-      | 'facetAddressesBatchEx'
-      | 'facetAddressesEx'
-      | 'facetFunctionSelectorsEx'
-      | 'facetHash'
-      | 'facetImplementation'
-      | 'facetMetadata'
-      | 'facetProvenance'
-      | 'facetsEx'
-      | 'selectorHash',
+      | "checkStorageConflicts"
+      | "facetAddressEx"
+      | "facetAddressesBatchEx"
+      | "facetAddressesEx"
+      | "facetFunctionSelectorsEx"
+      | "facetHash"
+      | "facetImplementation"
+      | "facetMetadata"
+      | "facetProvenance"
+      | "facetsEx"
+      | "selectorHash"
   ): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: 'SelectorConflict'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SelectorConflict"): EventFragment;
 
-  encodeFunctionData(functionFragment: 'checkStorageConflicts', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'facetAddressEx', values: [BytesLike, BytesLike]): string;
-  encodeFunctionData(functionFragment: 'facetAddressesBatchEx', values: [BytesLike[]]): string;
-  encodeFunctionData(functionFragment: 'facetAddressesEx', values: [boolean]): string;
   encodeFunctionData(
-    functionFragment: 'facetFunctionSelectorsEx',
-    values: [AddressLike, BigNumberish],
+    functionFragment: "checkStorageConflicts",
+    values: [AddressLike]
   ): string;
-  encodeFunctionData(functionFragment: 'facetHash', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'facetImplementation', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'facetMetadata', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'facetProvenance', values: [AddressLike]): string;
-  encodeFunctionData(functionFragment: 'facetsEx', values: [boolean]): string;
-  encodeFunctionData(functionFragment: 'selectorHash', values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: "facetAddressEx",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetAddressesBatchEx",
+    values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetAddressesEx",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetFunctionSelectorsEx",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetHash",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetImplementation",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetMetadata",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "facetProvenance",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(functionFragment: "facetsEx", values: [boolean]): string;
+  encodeFunctionData(
+    functionFragment: "selectorHash",
+    values: [AddressLike]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'checkStorageConflicts', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetAddressEx', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetAddressesBatchEx', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetAddressesEx', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetFunctionSelectorsEx', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetHash', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetImplementation', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetMetadata', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetProvenance', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'facetsEx', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'selectorHash', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "checkStorageConflicts",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "facetAddressEx",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "facetAddressesBatchEx",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "facetAddressesEx",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "facetFunctionSelectorsEx",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "facetHash", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "facetImplementation",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "facetMetadata",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "facetProvenance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "facetsEx", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "selectorHash",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace SelectorConflictEvent {
-  export type InputTuple = [selector: BytesLike, existingFacet: AddressLike, newFacet: AddressLike];
-  export type OutputTuple = [selector: string, existingFacet: string, newFacet: string];
+  export type InputTuple = [
+    selector: BytesLike,
+    existingFacet: AddressLike,
+    newFacet: AddressLike
+  ];
+  export type OutputTuple = [
+    selector: string,
+    existingFacet: string,
+    newFacet: string
+  ];
   export interface OutputObject {
     selector: string;
     existingFacet: string;
@@ -132,130 +194,158 @@ export interface IDiamondLoupeEx extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  checkStorageConflicts: TypedContractMethod<[facet: AddressLike], [string[]], 'view'>;
+  checkStorageConflicts: TypedContractMethod<
+    [facet: AddressLike],
+    [string[]],
+    "view"
+  >;
 
   facetAddressEx: TypedContractMethod<
     [functionSelector: BytesLike, requiredVersion: BytesLike],
     [string],
-    'view'
+    "view"
   >;
 
-  facetAddressesBatchEx: TypedContractMethod<[functionSelectors: BytesLike[]], [string[]], 'view'>;
+  facetAddressesBatchEx: TypedContractMethod<
+    [functionSelectors: BytesLike[]],
+    [string[]],
+    "view"
+  >;
 
-  facetAddressesEx: TypedContractMethod<[includeUnsafe: boolean], [string[]], 'view'>;
+  facetAddressesEx: TypedContractMethod<
+    [includeUnsafe: boolean],
+    [string[]],
+    "view"
+  >;
 
   facetFunctionSelectorsEx: TypedContractMethod<
     [facet: AddressLike, minSecurityLevel: BigNumberish],
     [string[]],
-    'view'
+    "view"
   >;
 
-  facetHash: TypedContractMethod<[facet: AddressLike], [string], 'view'>;
+  facetHash: TypedContractMethod<[facet: AddressLike], [string], "view">;
 
-  facetImplementation: TypedContractMethod<[facet: AddressLike], [string], 'view'>;
+  facetImplementation: TypedContractMethod<
+    [facet: AddressLike],
+    [string],
+    "view"
+  >;
 
   facetMetadata: TypedContractMethod<
     [facet: AddressLike],
     [IDiamondLoupeEx.FacetMetadataStructOutput],
-    'view'
+    "view"
   >;
 
   facetProvenance: TypedContractMethod<
     [facet: AddressLike],
     [[string, bigint] & { deployer: string; deployTimestamp: bigint }],
-    'view'
+    "view"
   >;
 
   facetsEx: TypedContractMethod<
     [includeMetadata: boolean],
     [IDiamondLoupeEx.FacetExStructOutput[]],
-    'view'
+    "view"
   >;
 
-  selectorHash: TypedContractMethod<[facet: AddressLike], [string], 'view'>;
+  selectorHash: TypedContractMethod<[facet: AddressLike], [string], "view">;
 
-  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
   getFunction(
-    nameOrSignature: 'checkStorageConflicts',
-  ): TypedContractMethod<[facet: AddressLike], [string[]], 'view'>;
+    nameOrSignature: "checkStorageConflicts"
+  ): TypedContractMethod<[facet: AddressLike], [string[]], "view">;
   getFunction(
-    nameOrSignature: 'facetAddressEx',
+    nameOrSignature: "facetAddressEx"
   ): TypedContractMethod<
     [functionSelector: BytesLike, requiredVersion: BytesLike],
     [string],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'facetAddressesBatchEx',
-  ): TypedContractMethod<[functionSelectors: BytesLike[]], [string[]], 'view'>;
+    nameOrSignature: "facetAddressesBatchEx"
+  ): TypedContractMethod<[functionSelectors: BytesLike[]], [string[]], "view">;
   getFunction(
-    nameOrSignature: 'facetAddressesEx',
-  ): TypedContractMethod<[includeUnsafe: boolean], [string[]], 'view'>;
+    nameOrSignature: "facetAddressesEx"
+  ): TypedContractMethod<[includeUnsafe: boolean], [string[]], "view">;
   getFunction(
-    nameOrSignature: 'facetFunctionSelectorsEx',
-  ): TypedContractMethod<[facet: AddressLike, minSecurityLevel: BigNumberish], [string[]], 'view'>;
+    nameOrSignature: "facetFunctionSelectorsEx"
+  ): TypedContractMethod<
+    [facet: AddressLike, minSecurityLevel: BigNumberish],
+    [string[]],
+    "view"
+  >;
   getFunction(
-    nameOrSignature: 'facetHash',
-  ): TypedContractMethod<[facet: AddressLike], [string], 'view'>;
+    nameOrSignature: "facetHash"
+  ): TypedContractMethod<[facet: AddressLike], [string], "view">;
   getFunction(
-    nameOrSignature: 'facetImplementation',
-  ): TypedContractMethod<[facet: AddressLike], [string], 'view'>;
+    nameOrSignature: "facetImplementation"
+  ): TypedContractMethod<[facet: AddressLike], [string], "view">;
   getFunction(
-    nameOrSignature: 'facetMetadata',
-  ): TypedContractMethod<[facet: AddressLike], [IDiamondLoupeEx.FacetMetadataStructOutput], 'view'>;
+    nameOrSignature: "facetMetadata"
+  ): TypedContractMethod<
+    [facet: AddressLike],
+    [IDiamondLoupeEx.FacetMetadataStructOutput],
+    "view"
+  >;
   getFunction(
-    nameOrSignature: 'facetProvenance',
+    nameOrSignature: "facetProvenance"
   ): TypedContractMethod<
     [facet: AddressLike],
     [[string, bigint] & { deployer: string; deployTimestamp: bigint }],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'facetsEx',
+    nameOrSignature: "facetsEx"
   ): TypedContractMethod<
     [includeMetadata: boolean],
     [IDiamondLoupeEx.FacetExStructOutput[]],
-    'view'
+    "view"
   >;
   getFunction(
-    nameOrSignature: 'selectorHash',
-  ): TypedContractMethod<[facet: AddressLike], [string], 'view'>;
+    nameOrSignature: "selectorHash"
+  ): TypedContractMethod<[facet: AddressLike], [string], "view">;
 
   getEvent(
-    key: 'SelectorConflict',
+    key: "SelectorConflict"
   ): TypedContractEvent<
     SelectorConflictEvent.InputTuple,
     SelectorConflictEvent.OutputTuple,
@@ -263,7 +353,7 @@ export interface IDiamondLoupeEx extends BaseContract {
   >;
 
   filters: {
-    'SelectorConflict(bytes4,address,address)': TypedContractEvent<
+    "SelectorConflict(bytes4,address,address)": TypedContractEvent<
       SelectorConflictEvent.InputTuple,
       SelectorConflictEvent.OutputTuple,
       SelectorConflictEvent.OutputObject

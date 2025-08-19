@@ -8,24 +8,15 @@ const fs = require('fs');
 const path = require('path');
 const solc = require('solc');
 const { keccak256, toUtf8Bytes } = require('ethers');
-const argv = require('minimist')(process.argv.slice(2), {
-  string: ['source', 'combined'],
-  alias: { s: 'source', c: 'combined' },
-});
+const argv = require('minimist')(process.argv.slice(2), { string: ['source', 'combined'], alias: { s: 'source', c: 'combined' } });
 
 if (!argv.source || !argv.combined) {
-  console.error(
-    'Usage: node scripts/diagnose-manifest-mismatch.js --source <file.sol> --combined <manifest.json>',
-  );
+  console.error('Usage: node scripts/diagnose-manifest-mismatch.js --source <file.sol> --combined <manifest.json>');
   process.exit(2);
 }
 
 function readFileSafely(p) {
-  try {
-    return fs.readFileSync(p, 'utf8');
-  } catch {
-    return null;
-  }
+  try { return fs.readFileSync(p, 'utf8'); } catch { return null; }
 }
 
 const SOURCE_PATH = path.resolve(argv.source);
@@ -48,11 +39,7 @@ function findImports(importPath) {
 }
 
 // compile source
-const input = {
-  language: 'Solidity',
-  sources: { [path.basename(SOURCE_PATH)]: { content: readFileSafely(SOURCE_PATH) } },
-  settings: { outputSelection: { '*': { '*': ['abi'] } } },
-};
+const input = { language: 'Solidity', sources: { [path.basename(SOURCE_PATH)]: { content: readFileSafely(SOURCE_PATH) } }, settings: { outputSelection: { '*': { '*': ['abi'] } } } };
 const output = JSON.parse(solc.compile(JSON.stringify(input), { import: findImports }));
 if (output.errors) {
   const fatal = output.errors.filter((e) => e.severity === 'error');
@@ -76,22 +63,12 @@ function normalizeSignature(sig) {
   const inner = m[2].trim();
   if (inner === '') return `${name}()`;
   const parts = [];
-  let depth = 0;
-  let cur = '';
+  let depth = 0; let cur = '';
   for (let i = 0; i < inner.length; i++) {
-    const ch = inner[i];
-    if (ch === '(') depth++;
-    if (ch === ')') depth--;
-    if (ch === ',' && depth === 0) {
-      parts.push(cur);
-      cur = '';
-    } else cur += ch;
+    const ch = inner[i]; if (ch === '(') depth++; if (ch === ')') depth--; if (ch === ',' && depth === 0) { parts.push(cur); cur = ''; } else cur += ch;
   }
   if (cur) parts.push(cur);
-  const types = parts.map((p) => {
-    const tok = p.trim().split(/\s+/)[0] || '';
-    return tok.trim();
-  });
+  const types = parts.map((p) => { const tok = p.trim().split(/\s+/)[0] || ''; return tok.trim(); });
   return `${name}(${types.join(',')})`;
 }
 
@@ -100,23 +77,19 @@ function sigToSelector(sig) {
   function resolveAgainstAbi(canonicalSig) {
     const m = canonicalSig.match(/^([^()]+)\((.*)\)$/);
     if (!m) return canonicalSig;
-    const name = m[1];
-    const inner = m[2];
-    const wantedTypes = inner === '' ? [] : inner.split(',').map((t) => t.trim());
+    const name = m[1]; const inner = m[2]; const wantedTypes = inner === '' ? [] : inner.split(',').map((t) => t.trim());
     for (const item of abis) {
       if (item.type !== 'function' || !item.name || !Array.isArray(item.inputs)) continue;
       if (item.name === name) {
         const types = item.inputs.map((i) => i.type.trim());
-        if (types.length === wantedTypes.length && types.every((t, i) => t === wantedTypes[i]))
-          return `${item.name}(${types.join(',')})`;
+        if (types.length === wantedTypes.length && types.every((t, i) => t === wantedTypes[i])) return `${item.name}(${types.join(',')})`;
       }
     }
     for (const item of abis) {
       if (item.type !== 'function' || !item.name || !Array.isArray(item.inputs)) continue;
       if (item.name.toLowerCase() === name.toLowerCase()) {
         const types = item.inputs.map((i) => i.type.trim());
-        if (types.length === wantedTypes.length && types.every((t, i) => t === wantedTypes[i]))
-          return `${item.name}(${types.join(',')})`;
+        if (types.length === wantedTypes.length && types.every((t, i) => t === wantedTypes[i])) return `${item.name}(${types.join(',')})`;
       }
     }
     return canonicalSig;
@@ -130,11 +103,7 @@ function manifestSelectorsToHex(manifestJson) {
   const hex = new Set();
   const isHexSelector = (s) => /^0x[0-9a-fA-F]{8}$/.test(String(s).trim());
   const push = (s) => hex.add(String(s).toLowerCase());
-  const pushMaybeSig = (s) => {
-    const t = String(s).trim();
-    if (isHexSelector(t)) push(t);
-    else push(sigToSelector(t));
-  };
+  const pushMaybeSig = (s) => { const t = String(s).trim(); if (isHexSelector(t)) push(t); else push(sigToSelector(t)); };
   const pushSig = (sig) => push(sigToSelector(sig));
   if (!manifestJson) return hex;
   if (manifestJson.facets && typeof manifestJson.facets === 'object') {
@@ -145,13 +114,8 @@ function manifestSelectorsToHex(manifestJson) {
     return hex;
   }
   if (Array.isArray(manifestJson.selectors)) manifestJson.selectors.forEach((s) => pushMaybeSig(s));
-  if (Array.isArray(manifestJson.signatures))
-    manifestJson.signatures.forEach((sig) => pushSig(sig));
-  if (Array.isArray(manifestJson.parts))
-    for (const p of manifestJson.parts) {
-      (p.selectors || []).forEach((s) => pushMaybeSig(s));
-      (p.signatures || []).forEach((sig) => pushSig(sig));
-    }
+  if (Array.isArray(manifestJson.signatures)) manifestJson.signatures.forEach((sig) => pushSig(sig));
+  if (Array.isArray(manifestJson.parts)) for (const p of manifestJson.parts) { (p.selectors || []).forEach((s) => pushMaybeSig(s)); (p.signatures || []).forEach((sig) => pushSig(sig)); }
   return hex;
 }
 
@@ -174,16 +138,9 @@ const manifestSet = manifestSelectorsToHex(manifestJson);
 const missingInManifest = [...compiledSet].filter((sel) => !manifestSet.has(sel));
 const missingInAbi = [...manifestSet].filter((sel) => !compiledSet.has(sel));
 
-const report = {
-  compiled: [...compiledSet].sort(),
-  manifest: [...manifestSet].sort(),
-  missingInManifest,
-  missingInAbi,
-};
+const report = { compiled: [...compiledSet].sort(), manifest: [...manifestSet].sort(), missingInManifest, missingInAbi };
 const outDir = path.resolve('artifacts', 'diagnostics');
-try {
-  fs.mkdirSync(outDir, { recursive: true });
-} catch {}
+try { fs.mkdirSync(outDir, { recursive: true }); } catch {}
 const outPath = path.join(outDir, 'manifest-diff.json');
 fs.writeFileSync(outPath, JSON.stringify(report, null, 2));
 

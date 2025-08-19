@@ -1,11 +1,7 @@
 // scripts/validate-split.js
 const fs = require('fs');
 const path = require('path');
-const argv = require('minimist')(process.argv.slice(2), {
-  string: ['dir'],
-  alias: { d: 'dir' },
-  default: { dir: 'artifacts/splits' },
-});
+const argv = require('minimist')(process.argv.slice(2), { string: ['dir'], alias: { d: 'dir' }, default: { dir: 'artifacts/splits' } });
 
 const OUT = path.resolve(argv.dir);
 const combined = JSON.parse(fs.readFileSync(path.join(OUT, 'combined.json'), 'utf8'));

@@ -23,12 +23,8 @@ function run(cmd) {
   console.log('Found facets:', facetNames.join(', '));
 
   // No interface names (starting with 'I')
-  const bad = facetNames.filter((n) => n.startsWith('I'));
-  assert.strictEqual(
-    bad.length,
-    0,
-    `Manifest contains interface-like artifacts: ${bad.join(', ')}`,
-  );
+  const bad = facetNames.filter(n => n.startsWith('I'));
+  assert.strictEqual(bad.length, 0, `Manifest contains interface-like artifacts: ${bad.join(', ')}`);
 
   console.log('Running triage...');
   try {

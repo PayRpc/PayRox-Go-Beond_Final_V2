@@ -1,7 +1,6 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-ethers';
 import '@nomicfoundation/hardhat-chai-matchers';
-import '@typechain/hardhat';
 
 // Import tasks
 import './tasks/prx.chunk';
@@ -21,7 +20,7 @@ const config: HardhatUserConfig = {
   },
   paths: {
     sources: './contracts',
-    tests: './tests',
+  tests: './tests',
     cache: './cache',
     artifacts: './artifacts',
   },

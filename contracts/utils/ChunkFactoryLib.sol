@@ -80,28 +80,32 @@ library ChunkFactoryLib {
             // Creation code size is 7 bytes for PUSH1 variant
             creationCodeSize = 7;
             creationCode = abi.encodePacked(
-                hex"60", uint8(runtimeSize),    // PUSH1 size
-                hex"80",                        // DUP1 (copy size to stack)
-                hex"60", uint8(creationCodeSize), // PUSH1 creationCodeSize (offset where runtime starts)
-                hex"6000",                      // PUSH1 0 (destOffset)
-                hex"39",                        // CODECOPY
-                hex"6000",                      // PUSH1 0
-                hex"f3"                         // RETURN
+                hex'60',
+                uint8(runtimeSize), // PUSH1 size
+                hex'80', // DUP1 (copy size to stack)
+                hex'60',
+                uint8(creationCodeSize), // PUSH1 creationCodeSize (offset where runtime starts)
+                hex'6000', // PUSH1 0 (destOffset)
+                hex'39', // CODECOPY
+                hex'6000', // PUSH1 0
+                hex'f3' // RETURN
             );
         } else if (runtimeSize <= 0xffff) {
             // Creation code size is 9 bytes for PUSH2 variant
             creationCodeSize = 9;
             creationCode = abi.encodePacked(
-                hex"61", uint16(runtimeSize),   // PUSH2 size
-                hex"80",                        // DUP1
-                hex"61", uint16(creationCodeSize), // PUSH2 creationCodeSize
-                hex"6000",                      // PUSH1 0
-                hex"39",                        // CODECOPY
-                hex"6000",                      // PUSH1 0
-                hex"f3"                         // RETURN
+                hex'61',
+                uint16(runtimeSize), // PUSH2 size
+                hex'80', // DUP1
+                hex'61',
+                uint16(creationCodeSize), // PUSH2 creationCodeSize
+                hex'6000', // PUSH1 0
+                hex'39', // CODECOPY
+                hex'6000', // PUSH1 0
+                hex'f3' // RETURN
             );
         } else {
-            revert("Data too large");
+            revert('Data too large');
         }
 
         initCode = abi.encodePacked(creationCode, runtimeCode);
@@ -138,7 +142,7 @@ library ChunkFactoryLib {
     /// @return salt The CREATE2 salt
     function computeSalt(bytes calldata data) internal pure returns (bytes32 salt) {
         bytes32 dataHash = keccak256(data);
-        salt = keccak256(abi.encodePacked("chunk:", dataHash));
+        salt = keccak256(abi.encodePacked('chunk:', dataHash));
     }
 
     /// @notice Predicts the deployment address for given salt and init code
@@ -151,12 +155,9 @@ library ChunkFactoryLib {
         bytes32 salt,
         bytes32 initCodeHash
     ) internal pure returns (address predicted) {
-        predicted = address(uint160(uint256(keccak256(abi.encodePacked(
-            hex"ff",
-            deployer,
-            salt,
-            initCodeHash
-        )))));
+        predicted = address(
+            uint160(uint256(keccak256(abi.encodePacked(hex'ff', deployer, salt, initCodeHash))))
+        );
     }
 
     /// @notice Deploy deterministic contract with system integrity checks
@@ -176,10 +177,13 @@ library ChunkFactoryLib {
         bytes32 expectedFactory
     ) internal returns (address deployed) {
         // Verify system integrity
-        require(verifySystemIntegrity(dispatcher, expectedManifest, expectedFactory, deployer), "System integrity failed");
+        require(
+            verifySystemIntegrity(dispatcher, expectedManifest, expectedFactory, deployer),
+            'System integrity failed'
+        );
 
         // Validate bytecode size
-        require(validateBytecodeSize(initCode), "Bytecode too large");
+        require(validateBytecodeSize(initCode), 'Bytecode too large');
 
         bytes32 codeHash = keccak256(initCode);
         deployed = predictAddress(deployer, salt, codeHash);
@@ -188,8 +192,8 @@ library ChunkFactoryLib {
             assembly {
                 deployed := create2(0, add(initCode, 0x20), mload(initCode), salt)
             }
-            require(deployed != address(0), "Deployment failed");
-            require(deployed == predictAddress(deployer, salt, codeHash), "Address mismatch");
+            require(deployed != address(0), 'Deployment failed');
+            require(deployed == predictAddress(deployer, salt, codeHash), 'Address mismatch');
         }
     }
 
@@ -203,7 +207,7 @@ library ChunkFactoryLib {
         bytes32[] memory salts,
         bytes32[] memory codeHashes
     ) internal pure returns (address[] memory predicted) {
-        require(salts.length == codeHashes.length, "Array length mismatch");
+        require(salts.length == codeHashes.length, 'Array length mismatch');
         predicted = new address[](salts.length);
 
         for (uint256 i = 0; i < salts.length; i++) {
@@ -214,13 +218,13 @@ library ChunkFactoryLib {
     /// @dev Encodes data size as minimal PUSH instruction
     function _encodeDataSize(uint256 size) private pure returns (bytes memory) {
         if (size <= 0xff) {
-            return abi.encodePacked(hex"60", uint8(size)); // PUSH1
+            return abi.encodePacked(hex'60', uint8(size)); // PUSH1
         } else if (size <= 0xffff) {
-            return abi.encodePacked(hex"61", uint16(size)); // PUSH2
+            return abi.encodePacked(hex'61', uint16(size)); // PUSH2
         } else if (size <= 0xffffff) {
-            return abi.encodePacked(hex"62", uint24(size)); // PUSH3
+            return abi.encodePacked(hex'62', uint24(size)); // PUSH3
         } else {
-            return abi.encodePacked(hex"63", uint32(size)); // PUSH4
+            return abi.encodePacked(hex'63', uint32(size)); // PUSH4
         }
     }
 }

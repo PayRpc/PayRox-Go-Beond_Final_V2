@@ -2,92 +2,95 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from 'ethers';
-import type { IAntiBot, IAntiBotInterface } from '../../../contracts/interfaces/IAntiBot';
+import { Contract, Interface, type ContractRunner } from "ethers";
+import type {
+  IAntiBot,
+  IAntiBotInterface,
+} from "../../../contracts/interfaces/IAntiBot";
 
 const _abi = [
   {
     inputs: [],
-    name: 'checkPriceImpact',
+    name: "checkPriceImpact",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
+        internalType: "address",
+        name: "account",
+        type: "address",
       },
       {
-        internalType: 'bytes32',
-        name: 'salt',
-        type: 'bytes32',
+        internalType: "bytes32",
+        name: "salt",
+        type: "bytes32",
       },
     ],
-    name: 'commitWhitelistAdd',
+    name: "commitWhitelistAdd",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'bytes32',
-        name: 'hashedData',
-        type: 'bytes32',
+        internalType: "bytes32",
+        name: "hashedData",
+        type: "bytes32",
       },
     ],
-    name: 'createCommit',
+    name: "createCommit",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'int256',
-        name: 'price',
-        type: 'int256',
+        internalType: "int256",
+        name: "price",
+        type: "int256",
       },
     ],
-    name: 'emergencyPriceOverride',
+    name: "emergencyPriceOverride",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'bytes',
-        name: 'data',
-        type: 'bytes',
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
       },
       {
-        internalType: 'bytes32',
-        name: 'salt',
-        type: 'bytes32',
+        internalType: "bytes32",
+        name: "salt",
+        type: "bytes32",
       },
     ],
-    name: 'executeCommit',
+    name: "executeCommit",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [],
-    name: 'voteToActivateFailsafeMode',
+    name: "voteToActivateFailsafeMode",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [],
-    name: 'voteToDeactivateFailsafeMode',
+    name: "voteToDeactivateFailsafeMode",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
 ] as const;
 

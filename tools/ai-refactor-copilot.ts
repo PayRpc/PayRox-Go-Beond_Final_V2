@@ -2,7 +2,7 @@
 
 /**
  * PayRox AI Refactor Copilot
- *
+ * 
  * Self-correcting AI system for Diamond Pattern refactoring with strict validation.
  * Enforces EIP-170 size limits, EIP-2535 compliance, and behavior preservation.
  */
@@ -52,11 +52,7 @@ class PayRoxRefactorCopilot {
     return fs.readFileSync(this.systemPromptPath, 'utf-8');
   }
 
-  private async generateRefactor(
-    prompt: string,
-    context: string = '',
-    attempt: number = 1,
-  ): Promise<string> {
+  private async generateRefactor(prompt: string, context: string = '', attempt: number = 1): Promise<string> {
     const systemPrompt = this.loadSystemPrompt();
     const fullPrompt = `
 ${systemPrompt}
@@ -83,7 +79,7 @@ End with the mandatory SELF-CHECK footer with all boxes ticked.
     // Placeholder for AI service integration
     // In real implementation, this would call Ollama or other AI service
     console.log('🤖 Calling AI service for refactor generation...');
-
+    
     // Simulate AI call - in real implementation, replace with actual AI service
     return `
 # PayRox Diamond Refactor Output
@@ -194,9 +190,9 @@ contract CoreFacet {
     // Run critical tests
     try {
       console.log('🧪 Running critical tests...');
-      execSync('npx hardhat test --grep "(loupe|selectors|epoch|roles)"', {
-        stdio: 'pipe',
-        cwd: process.cwd(),
+      execSync('npx hardhat test --grep "(loupe|selectors|epoch|roles)"', { 
+        stdio: 'pipe', 
+        cwd: process.cwd() 
       });
     } catch (error) {
       errors.push(`Critical tests failed: ${error}`);
@@ -205,13 +201,12 @@ contract CoreFacet {
     return {
       success: errors.length === 0,
       errors,
-      warnings,
+      warnings
     };
   }
 
   private validateSelfCheck(output: string): boolean {
-    const selfCheckRegex =
-      /--- SELF-CHECK \(tick before submit\) ---\s*\[✓\] Size OK\s*\[✓\] No Loupe in Facets\s*\[✓\] Selectors Parity\s*\[✓\] Roles→Dispatcher\s*\[✓\] Epoch Rules\s*\[✓\] Refund Math\s*\[✓\] Init Guard/;
+    const selfCheckRegex = /--- SELF-CHECK \(tick before submit\) ---\s*\[✓\] Size OK\s*\[✓\] No Loupe in Facets\s*\[✓\] Selectors Parity\s*\[✓\] Roles→Dispatcher\s*\[✓\] Epoch Rules\s*\[✓\] Refund Math\s*\[✓\] Init Guard/;
     return selfCheckRegex.test(output);
   }
 
@@ -224,7 +219,7 @@ contract CoreFacet {
 
   public async refactor(options: RefactorOptions): Promise<void> {
     console.log('🚀 Starting PayRox Diamond Pattern Refactor...');
-
+    
     let context = '';
     if (options.file) {
       if (!fs.existsSync(options.file)) {
@@ -235,11 +230,11 @@ contract CoreFacet {
 
     for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
       console.log(`\n🔄 Attempt ${attempt}/${this.maxRetries}`);
-
+      
       try {
         // Generate refactor
         const output = await this.generateRefactor(options.prompt, context, attempt);
-
+        
         if (options.dryRun) {
           console.log('🏃‍♂️ Dry run mode - skipping validation');
           console.log(output);
@@ -257,13 +252,13 @@ contract CoreFacet {
           console.log('🎉 Refactor completed successfully!');
           if (validation.warnings.length > 0) {
             console.log('⚠️  Warnings:');
-            validation.warnings.forEach((warning) => console.log(`   ${warning}`));
+            validation.warnings.forEach(warning => console.log(`   ${warning}`));
           }
           return;
         } else {
           console.log('❌ Validation failed:');
-          validation.errors.forEach((error) => console.log(`   ${error}`));
-
+          validation.errors.forEach(error => console.log(`   ${error}`));
+          
           if (attempt < this.maxRetries) {
             console.log('🔧 Preparing retry with error feedback...');
             context += `\n\nPREVIOUS ATTEMPT ERRORS:\n${validation.errors.join('\n')}`;
@@ -302,7 +297,7 @@ program
         output: options.output,
         retries: parseInt(options.retries),
         model: options.model,
-        dryRun: options.dryRun,
+        dryRun: options.dryRun
       });
 
       await copilot.refactor({
@@ -311,7 +306,7 @@ program
         output: options.output,
         retries: parseInt(options.retries),
         model: options.model,
-        dryRun: options.dryRun,
+        dryRun: options.dryRun
       });
     } catch (error) {
       console.error('💥 Refactor failed:', error);
