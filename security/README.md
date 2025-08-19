@@ -39,9 +39,9 @@ Outputs
 - `security/mythril-reports/mythril-summary.md` — human-readable Markdown summary suitable for PR comments.
 
 CI behavior
-- The included GitHub Actions workflow (`.github/workflows/security-mythril.yml`) runs on PRs touching Solidity files or the `security/` folder.
-- By default the job does not fail the build on findings; it posts a sticky PR comment with `mythril-summary.md` and uploads artifacts.
-- To make the job fail when High-severity issues are detected, set the repository environment variable `PRX_MYTHRIL_FAIL_ON_HIGH=true`.
+- Mythril is integrated into the project's Refactor Gate workflow (`.github/workflows/payrox-refactor-gate.yml`) under the `security-scan` job.
+- The job runs Mythril on changed Solidity files (PRs) or on all facets for non-PR runs. It uploads `security/mythril-reports/` as artifacts and posts `mythril-summary.md` as a sticky PR comment.
+- By default the job does not fail the build on findings; to fail on High-severity findings set the repository environment variable `PRX_MYTHRIL_FAIL_ON_HIGH=true`.
 
 Notes and troubleshooting
 - Mythril can be sensitive to solc version and imports. The runner uses `--include-path node_modules` for npm-installed imports; ensure `npm ci` has been run.
