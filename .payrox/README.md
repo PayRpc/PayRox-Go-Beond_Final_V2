@@ -6,6 +6,7 @@ considered part of the main `contracts/` tree; keep generated interfaces,
 facets, and reports here.
 
 Files moved/generated here in recent work:
+
 - `.payrox/generated/interfaces/` — generated interface placeholders moved from `contracts/interfaces/`.
 - `.payrox/pinned-go-beyond.md` — small pinned facts pack loaded by the server.
 

@@ -2,17 +2,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   ReentrancyGuard,
   ReentrancyGuardInterface,
-} from "../../../../@openzeppelin/contracts/utils/ReentrancyGuard";
+} from '../../../../@openzeppelin/contracts/utils/ReentrancyGuard';
 
 const _abi = [
   {
     inputs: [],
-    name: "ReentrancyGuardReentrantCall",
-    type: "error",
+    name: 'ReentrancyGuardReentrantCall',
+    type: 'error',
   },
 ] as const;
 
@@ -21,10 +21,7 @@ export class ReentrancyGuard__factory {
   static createInterface(): ReentrancyGuardInterface {
     return new Interface(_abi) as ReentrancyGuardInterface;
   }
-  static connect(
-    address: string,
-    runner?: ContractRunner | null
-  ): ReentrancyGuard {
+  static connect(address: string, runner?: ContractRunner | null): ReentrancyGuard {
     return new Contract(address, _abi, runner) as unknown as ReentrancyGuard;
   }
 }

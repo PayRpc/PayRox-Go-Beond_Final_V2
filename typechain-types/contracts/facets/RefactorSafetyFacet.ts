@@ -12,7 +12,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -20,36 +20,22 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface RefactorSafetyFacetInterface extends Interface {
   getFunction(
-    nameOrSignature: "emergencyRefactorValidation" | "getRefactorSafetyVersion"
+    nameOrSignature: 'emergencyRefactorValidation' | 'getRefactorSafetyVersion',
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic:
-      | "RefactorSafetyInitialized"
-      | "RefactorValidationPassed"
+    nameOrSignatureOrTopic: 'RefactorSafetyInitialized' | 'RefactorValidationPassed',
   ): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "emergencyRefactorValidation",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRefactorSafetyVersion",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: 'emergencyRefactorValidation', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getRefactorSafetyVersion', values?: undefined): string;
 
-  decodeFunctionResult(
-    functionFragment: "emergencyRefactorValidation",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRefactorSafetyVersion",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'emergencyRefactorValidation', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRefactorSafetyVersion', data: BytesLike): Result;
 }
 
 export namespace RefactorSafetyInitializedEvent {
@@ -87,64 +73,60 @@ export interface RefactorSafetyFacet extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  emergencyRefactorValidation: TypedContractMethod<[], [boolean], "view">;
+  emergencyRefactorValidation: TypedContractMethod<[], [boolean], 'view'>;
 
-  getRefactorSafetyVersion: TypedContractMethod<[], [bigint], "view">;
+  getRefactorSafetyVersion: TypedContractMethod<[], [bigint], 'view'>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
   getFunction(
-    nameOrSignature: "emergencyRefactorValidation"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'emergencyRefactorValidation',
+  ): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "getRefactorSafetyVersion"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'getRefactorSafetyVersion',
+  ): TypedContractMethod<[], [bigint], 'view'>;
 
   getEvent(
-    key: "RefactorSafetyInitialized"
+    key: 'RefactorSafetyInitialized',
   ): TypedContractEvent<
     RefactorSafetyInitializedEvent.InputTuple,
     RefactorSafetyInitializedEvent.OutputTuple,
     RefactorSafetyInitializedEvent.OutputObject
   >;
   getEvent(
-    key: "RefactorValidationPassed"
+    key: 'RefactorValidationPassed',
   ): TypedContractEvent<
     RefactorValidationPassedEvent.InputTuple,
     RefactorValidationPassedEvent.OutputTuple,
@@ -152,7 +134,7 @@ export interface RefactorSafetyFacet extends BaseContract {
   >;
 
   filters: {
-    "RefactorSafetyInitialized(uint256,bytes32)": TypedContractEvent<
+    'RefactorSafetyInitialized(uint256,bytes32)': TypedContractEvent<
       RefactorSafetyInitializedEvent.InputTuple,
       RefactorSafetyInitializedEvent.OutputTuple,
       RefactorSafetyInitializedEvent.OutputObject
@@ -163,7 +145,7 @@ export interface RefactorSafetyFacet extends BaseContract {
       RefactorSafetyInitializedEvent.OutputObject
     >;
 
-    "RefactorValidationPassed(bytes32,string)": TypedContractEvent<
+    'RefactorValidationPassed(bytes32,string)': TypedContractEvent<
       RefactorValidationPassedEvent.InputTuple,
       RefactorValidationPassedEvent.OutputTuple,
       RefactorValidationPassedEvent.OutputObject

@@ -2,41 +2,41 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   IERC7913SignatureVerifier,
   IERC7913SignatureVerifierInterface,
-} from "../../../../../@openzeppelin/contracts/interfaces/IERC7913.sol/IERC7913SignatureVerifier";
+} from '../../../../../@openzeppelin/contracts/interfaces/IERC7913.sol/IERC7913SignatureVerifier';
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes",
-        name: "key",
-        type: "bytes",
+        internalType: 'bytes',
+        name: 'key',
+        type: 'bytes',
       },
       {
-        internalType: "bytes32",
-        name: "hash",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: 'hash',
+        type: 'bytes32',
       },
       {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
+        internalType: 'bytes',
+        name: 'signature',
+        type: 'bytes',
       },
     ],
-    name: "verify",
+    name: 'verify',
     outputs: [
       {
-        internalType: "bytes4",
-        name: "",
-        type: "bytes4",
+        internalType: 'bytes4',
+        name: '',
+        type: 'bytes4',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 
@@ -45,14 +45,7 @@ export class IERC7913SignatureVerifier__factory {
   static createInterface(): IERC7913SignatureVerifierInterface {
     return new Interface(_abi) as IERC7913SignatureVerifierInterface;
   }
-  static connect(
-    address: string,
-    runner?: ContractRunner | null
-  ): IERC7913SignatureVerifier {
-    return new Contract(
-      address,
-      _abi,
-      runner
-    ) as unknown as IERC7913SignatureVerifier;
+  static connect(address: string, runner?: ContractRunner | null): IERC7913SignatureVerifier {
+    return new Contract(address, _abi, runner) as unknown as IERC7913SignatureVerifier;
   }
 }

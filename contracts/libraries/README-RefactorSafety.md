@@ -1,6 +1,7 @@
 # RefactorSafety library and base contract
 
 ## What and why
+
 - `RefactorSafetyLib.sol` provides lightweight, internal-only helpers for off-chain or deploy-time
   validation when refactoring or splitting monolithic contracts into facets.
   - Storage layout hashing & validation
@@ -17,6 +18,7 @@
     slot for compatibility checks.
 
 ## How to use
+
 - For tests: inherit `RefactorSafeFacetBase` on your facet. Override `_getStorageNamespace()` and
   optionally `_getVersion()` or `_getExpectedCodeHash()` in local tests to assert behavior.
 - Use `_performMigrationSafety(from, to, dataHash)` to emit a migration audit event and enforce
@@ -25,9 +27,11 @@
   to validate codehash & selector compatibility before wiring routes.
 
 ## Safety notes
+
 - `RefactorSafetyLib` is intended for off-chain or deployment-time checks. Do not rely on
   local codehash assertions in production facets under delegatecall.
 - `RefactorSafeFacetBase` keeps enforcement opt-in via defaults; this keeps facet setup terse.
 
 ## Running tests
+
 - Run `npm run test:refactor` to execute the sample `SampleFacet` tests which exercise base helpers.

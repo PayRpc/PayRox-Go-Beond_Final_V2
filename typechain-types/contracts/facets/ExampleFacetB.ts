@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export declare namespace ExampleFacetB {
   export type OperationDataStruct = {
@@ -37,7 +37,7 @@ export declare namespace ExampleFacetB {
     timestamp: bigint,
     executor: string,
     executed: boolean,
-    data: string
+    data: string,
   ] & {
     operationType: bigint;
     timestamp: bigint;
@@ -50,174 +50,95 @@ export declare namespace ExampleFacetB {
 export interface ExampleFacetBInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "batchExecuteB"
-      | "complexCalculation"
-      | "executeB"
-      | "getAdvancedAnalytics"
-      | "getFacetInfoB"
-      | "getGovernance"
-      | "getInitNonce"
-      | "getOperation"
-      | "getStateSummary"
-      | "getUserOperations"
-      | "getUserStatistics"
-      | "initializeFacetB"
-      | "rotateGovernance"
-      | "rotateOperator"
-      | "simulateOperation"
-      | "validateOperation"
+      | 'batchExecuteB'
+      | 'complexCalculation'
+      | 'executeB'
+      | 'getAdvancedAnalytics'
+      | 'getFacetInfoB'
+      | 'getGovernance'
+      | 'getInitNonce'
+      | 'getOperation'
+      | 'getStateSummary'
+      | 'getUserOperations'
+      | 'getUserStatistics'
+      | 'initializeFacetB'
+      | 'rotateGovernance'
+      | 'rotateOperator'
+      | 'simulateOperation'
+      | 'validateOperation',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "BatchOperationCompleted"
-      | "FacetBExecuted"
-      | "GovernanceRotated"
-      | "Initialized"
-      | "OperatorRotated"
-      | "PausedSet"
-      | "StateChanged"
+      | 'BatchOperationCompleted'
+      | 'FacetBExecuted'
+      | 'GovernanceRotated'
+      | 'Initialized'
+      | 'OperatorRotated'
+      | 'PausedSet'
+      | 'StateChanged',
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "batchExecuteB",
-    values: [BigNumberish[], BytesLike[]]
+    functionFragment: 'batchExecuteB',
+    values: [BigNumberish[], BytesLike[]],
+  ): string;
+  encodeFunctionData(functionFragment: 'complexCalculation', values: [BigNumberish[]]): string;
+  encodeFunctionData(functionFragment: 'executeB', values: [BigNumberish, BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getAdvancedAnalytics', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getFacetInfoB', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getGovernance', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getInitNonce', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getOperation', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getStateSummary', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getUserOperations', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'getUserStatistics', values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: 'initializeFacetB',
+    values: [AddressLike, AddressLike, BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "complexCalculation",
-    values: [BigNumberish[]]
+    functionFragment: 'rotateGovernance',
+    values: [AddressLike, BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "executeB",
-    values: [BigNumberish, BytesLike]
+    functionFragment: 'rotateOperator',
+    values: [AddressLike, BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "getAdvancedAnalytics",
-    values?: undefined
+    functionFragment: 'simulateOperation',
+    values: [BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "getFacetInfoB",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getGovernance",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getInitNonce",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getOperation",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getStateSummary",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getUserOperations",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getUserStatistics",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "initializeFacetB",
-    values: [AddressLike, AddressLike, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "rotateGovernance",
-    values: [AddressLike, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "rotateOperator",
-    values: [AddressLike, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "simulateOperation",
-    values: [BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "validateOperation",
-    values: [BigNumberish, BytesLike]
+    functionFragment: 'validateOperation',
+    values: [BigNumberish, BytesLike],
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "batchExecuteB",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "complexCalculation",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "executeB", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getAdvancedAnalytics",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getFacetInfoB",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getGovernance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getInitNonce",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getOperation",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getStateSummary",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getUserOperations",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getUserStatistics",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "initializeFacetB",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "rotateGovernance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "rotateOperator",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "simulateOperation",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "validateOperation",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'batchExecuteB', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'complexCalculation', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'executeB', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getAdvancedAnalytics', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getFacetInfoB', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getGovernance', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getInitNonce', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getOperation', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getStateSummary', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getUserOperations', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getUserStatistics', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'initializeFacetB', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'rotateGovernance', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'rotateOperator', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'simulateOperation', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'validateOperation', data: BytesLike): Result;
 }
 
 export namespace BatchOperationCompletedEvent {
   export type InputTuple = [
     operationCount: BigNumberish,
     successCount: BigNumberish,
-    executor: AddressLike
+    executor: AddressLike,
   ];
-  export type OutputTuple = [
-    operationCount: bigint,
-    successCount: bigint,
-    executor: string
-  ];
+  export type OutputTuple = [operationCount: bigint, successCount: bigint, executor: string];
   export interface OutputObject {
     operationCount: bigint;
     successCount: bigint;
@@ -230,16 +151,8 @@ export namespace BatchOperationCompletedEvent {
 }
 
 export namespace FacetBExecutedEvent {
-  export type InputTuple = [
-    caller: AddressLike,
-    operationType: BigNumberish,
-    dataHash: BytesLike
-  ];
-  export type OutputTuple = [
-    caller: string,
-    operationType: bigint,
-    dataHash: string
-  ];
+  export type InputTuple = [caller: AddressLike, operationType: BigNumberish, dataHash: BytesLike];
+  export type OutputTuple = [caller: string, operationType: bigint, dataHash: string];
   export interface OutputObject {
     caller: string;
     operationType: bigint;
@@ -252,10 +165,7 @@ export namespace FacetBExecutedEvent {
 }
 
 export namespace GovernanceRotatedEvent {
-  export type InputTuple = [
-    oldGovernance: AddressLike,
-    newGovernance: AddressLike
-  ];
+  export type InputTuple = [oldGovernance: AddressLike, newGovernance: AddressLike];
   export type OutputTuple = [oldGovernance: string, newGovernance: string];
   export interface OutputObject {
     oldGovernance: string;
@@ -306,16 +216,8 @@ export namespace PausedSetEvent {
 }
 
 export namespace StateChangedEvent {
-  export type InputTuple = [
-    oldValue: BigNumberish,
-    newValue: BigNumberish,
-    changer: AddressLike
-  ];
-  export type OutputTuple = [
-    oldValue: bigint,
-    newValue: bigint,
-    changer: string
-  ];
+  export type InputTuple = [oldValue: BigNumberish, newValue: BigNumberish, changer: AddressLike];
+  export type OutputTuple = [oldValue: bigint, newValue: bigint, changer: string];
   export interface OutputObject {
     oldValue: bigint;
     newValue: bigint;
@@ -336,56 +238,50 @@ export interface ExampleFacetB extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
   batchExecuteB: TypedContractMethod<
     [operations: BigNumberish[], dataArray: BytesLike[]],
     [string[]],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  complexCalculation: TypedContractMethod<
-    [inputs: BigNumberish[]],
-    [bigint],
-    "view"
-  >;
+  complexCalculation: TypedContractMethod<[inputs: BigNumberish[]], [bigint], 'view'>;
 
   executeB: TypedContractMethod<
     [operationType: BigNumberish, data: BytesLike],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
 
   getAdvancedAnalytics: TypedContractMethod<
@@ -399,9 +295,9 @@ export interface ExampleFacetB extends BaseContract {
         isInitialized: boolean;
         operatorAddr: string;
         governanceAddr: string;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
   getFacetInfoB: TypedContractMethod<
@@ -411,19 +307,19 @@ export interface ExampleFacetB extends BaseContract {
         name: string;
         version: string;
         selectors: string[];
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  getGovernance: TypedContractMethod<[], [string], "view">;
+  getGovernance: TypedContractMethod<[], [string], 'view'>;
 
-  getInitNonce: TypedContractMethod<[], [bigint], "view">;
+  getInitNonce: TypedContractMethod<[], [bigint], 'view'>;
 
   getOperation: TypedContractMethod<
     [operationId: BytesLike],
     [ExampleFacetB.OperationDataStructOutput],
-    "view"
+    'view'
   >;
 
   getStateSummary: TypedContractMethod<
@@ -434,16 +330,12 @@ export interface ExampleFacetB extends BaseContract {
         operations: bigint;
         executor: string;
         paused: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  getUserOperations: TypedContractMethod<
-    [user: AddressLike],
-    [bigint[]],
-    "view"
-  >;
+  getUserOperations: TypedContractMethod<[user: AddressLike], [bigint[]], 'view'>;
 
   getUserStatistics: TypedContractMethod<
     [user: AddressLike],
@@ -452,9 +344,9 @@ export interface ExampleFacetB extends BaseContract {
         totalUserOps: bigint;
         mostRecentOp: bigint;
         uniqueOpTypes: bigint;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
   initializeFacetB: TypedContractMethod<
@@ -462,60 +354,52 @@ export interface ExampleFacetB extends BaseContract {
       operator_: AddressLike,
       governance_: AddressLike,
       deadline: BigNumberish,
-      signature: BytesLike
+      signature: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   rotateGovernance: TypedContractMethod<
     [newGovernance: AddressLike, deadline: BigNumberish, signature: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   rotateOperator: TypedContractMethod<
     [newOperator: AddressLike, deadline: BigNumberish, signature: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   simulateOperation: TypedContractMethod<
     [operationType: BigNumberish, data: BytesLike],
     [[bigint, bigint] & { newValue: bigint; gasEstimate: bigint }],
-    "view"
+    'view'
   >;
 
   validateOperation: TypedContractMethod<
     [operationType: BigNumberish, data: BytesLike],
     [[boolean, bigint] & { isValid: boolean; reason: bigint }],
-    "view"
+    'view'
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
   getFunction(
-    nameOrSignature: "batchExecuteB"
+    nameOrSignature: 'batchExecuteB',
   ): TypedContractMethod<
     [operations: BigNumberish[], dataArray: BytesLike[]],
     [string[]],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "complexCalculation"
-  ): TypedContractMethod<[inputs: BigNumberish[]], [bigint], "view">;
+    nameOrSignature: 'complexCalculation',
+  ): TypedContractMethod<[inputs: BigNumberish[]], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "executeB"
-  ): TypedContractMethod<
-    [operationType: BigNumberish, data: BytesLike],
-    [string],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "getAdvancedAnalytics"
-  ): TypedContractMethod<
+    nameOrSignature: 'executeB',
+  ): TypedContractMethod<[operationType: BigNumberish, data: BytesLike], [string], 'nonpayable'>;
+  getFunction(nameOrSignature: 'getAdvancedAnalytics'): TypedContractMethod<
     [],
     [
       [bigint, bigint, string, boolean, boolean, string, string] & {
@@ -526,39 +410,31 @@ export interface ExampleFacetB extends BaseContract {
         isInitialized: boolean;
         operatorAddr: string;
         governanceAddr: string;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
-  getFunction(
-    nameOrSignature: "getFacetInfoB"
-  ): TypedContractMethod<
+  getFunction(nameOrSignature: 'getFacetInfoB'): TypedContractMethod<
     [],
     [
       [string, string, string[]] & {
         name: string;
         version: string;
         selectors: string[];
-      }
+      },
     ],
-    "view"
+    'view'
   >;
+  getFunction(nameOrSignature: 'getGovernance'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'getInitNonce'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "getGovernance"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "getInitNonce"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "getOperation"
+    nameOrSignature: 'getOperation',
   ): TypedContractMethod<
     [operationId: BytesLike],
     [ExampleFacetB.OperationDataStructOutput],
-    "view"
+    'view'
   >;
-  getFunction(
-    nameOrSignature: "getStateSummary"
-  ): TypedContractMethod<
+  getFunction(nameOrSignature: 'getStateSummary'): TypedContractMethod<
     [],
     [
       [bigint, bigint, string, boolean] & {
@@ -566,111 +442,109 @@ export interface ExampleFacetB extends BaseContract {
         operations: bigint;
         executor: string;
         paused: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "getUserOperations"
-  ): TypedContractMethod<[user: AddressLike], [bigint[]], "view">;
-  getFunction(
-    nameOrSignature: "getUserStatistics"
-  ): TypedContractMethod<
+    nameOrSignature: 'getUserOperations',
+  ): TypedContractMethod<[user: AddressLike], [bigint[]], 'view'>;
+  getFunction(nameOrSignature: 'getUserStatistics'): TypedContractMethod<
     [user: AddressLike],
     [
       [bigint, bigint, bigint] & {
         totalUserOps: bigint;
         mostRecentOp: bigint;
         uniqueOpTypes: bigint;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "initializeFacetB"
+    nameOrSignature: 'initializeFacetB',
   ): TypedContractMethod<
     [
       operator_: AddressLike,
       governance_: AddressLike,
       deadline: BigNumberish,
-      signature: BytesLike
+      signature: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "rotateGovernance"
+    nameOrSignature: 'rotateGovernance',
   ): TypedContractMethod<
     [newGovernance: AddressLike, deadline: BigNumberish, signature: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "rotateOperator"
+    nameOrSignature: 'rotateOperator',
   ): TypedContractMethod<
     [newOperator: AddressLike, deadline: BigNumberish, signature: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "simulateOperation"
+    nameOrSignature: 'simulateOperation',
   ): TypedContractMethod<
     [operationType: BigNumberish, data: BytesLike],
     [[bigint, bigint] & { newValue: bigint; gasEstimate: bigint }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "validateOperation"
+    nameOrSignature: 'validateOperation',
   ): TypedContractMethod<
     [operationType: BigNumberish, data: BytesLike],
     [[boolean, bigint] & { isValid: boolean; reason: bigint }],
-    "view"
+    'view'
   >;
 
   getEvent(
-    key: "BatchOperationCompleted"
+    key: 'BatchOperationCompleted',
   ): TypedContractEvent<
     BatchOperationCompletedEvent.InputTuple,
     BatchOperationCompletedEvent.OutputTuple,
     BatchOperationCompletedEvent.OutputObject
   >;
   getEvent(
-    key: "FacetBExecuted"
+    key: 'FacetBExecuted',
   ): TypedContractEvent<
     FacetBExecutedEvent.InputTuple,
     FacetBExecutedEvent.OutputTuple,
     FacetBExecutedEvent.OutputObject
   >;
   getEvent(
-    key: "GovernanceRotated"
+    key: 'GovernanceRotated',
   ): TypedContractEvent<
     GovernanceRotatedEvent.InputTuple,
     GovernanceRotatedEvent.OutputTuple,
     GovernanceRotatedEvent.OutputObject
   >;
   getEvent(
-    key: "Initialized"
+    key: 'Initialized',
   ): TypedContractEvent<
     InitializedEvent.InputTuple,
     InitializedEvent.OutputTuple,
     InitializedEvent.OutputObject
   >;
   getEvent(
-    key: "OperatorRotated"
+    key: 'OperatorRotated',
   ): TypedContractEvent<
     OperatorRotatedEvent.InputTuple,
     OperatorRotatedEvent.OutputTuple,
     OperatorRotatedEvent.OutputObject
   >;
   getEvent(
-    key: "PausedSet"
+    key: 'PausedSet',
   ): TypedContractEvent<
     PausedSetEvent.InputTuple,
     PausedSetEvent.OutputTuple,
     PausedSetEvent.OutputObject
   >;
   getEvent(
-    key: "StateChanged"
+    key: 'StateChanged',
   ): TypedContractEvent<
     StateChangedEvent.InputTuple,
     StateChangedEvent.OutputTuple,
@@ -678,7 +552,7 @@ export interface ExampleFacetB extends BaseContract {
   >;
 
   filters: {
-    "BatchOperationCompleted(uint256,uint256,address)": TypedContractEvent<
+    'BatchOperationCompleted(uint256,uint256,address)': TypedContractEvent<
       BatchOperationCompletedEvent.InputTuple,
       BatchOperationCompletedEvent.OutputTuple,
       BatchOperationCompletedEvent.OutputObject
@@ -689,7 +563,7 @@ export interface ExampleFacetB extends BaseContract {
       BatchOperationCompletedEvent.OutputObject
     >;
 
-    "FacetBExecuted(address,uint256,bytes32)": TypedContractEvent<
+    'FacetBExecuted(address,uint256,bytes32)': TypedContractEvent<
       FacetBExecutedEvent.InputTuple,
       FacetBExecutedEvent.OutputTuple,
       FacetBExecutedEvent.OutputObject
@@ -700,7 +574,7 @@ export interface ExampleFacetB extends BaseContract {
       FacetBExecutedEvent.OutputObject
     >;
 
-    "GovernanceRotated(address,address)": TypedContractEvent<
+    'GovernanceRotated(address,address)': TypedContractEvent<
       GovernanceRotatedEvent.InputTuple,
       GovernanceRotatedEvent.OutputTuple,
       GovernanceRotatedEvent.OutputObject
@@ -711,7 +585,7 @@ export interface ExampleFacetB extends BaseContract {
       GovernanceRotatedEvent.OutputObject
     >;
 
-    "Initialized(address)": TypedContractEvent<
+    'Initialized(address)': TypedContractEvent<
       InitializedEvent.InputTuple,
       InitializedEvent.OutputTuple,
       InitializedEvent.OutputObject
@@ -722,7 +596,7 @@ export interface ExampleFacetB extends BaseContract {
       InitializedEvent.OutputObject
     >;
 
-    "OperatorRotated(address,address)": TypedContractEvent<
+    'OperatorRotated(address,address)': TypedContractEvent<
       OperatorRotatedEvent.InputTuple,
       OperatorRotatedEvent.OutputTuple,
       OperatorRotatedEvent.OutputObject
@@ -733,7 +607,7 @@ export interface ExampleFacetB extends BaseContract {
       OperatorRotatedEvent.OutputObject
     >;
 
-    "PausedSet(bool,address)": TypedContractEvent<
+    'PausedSet(bool,address)': TypedContractEvent<
       PausedSetEvent.InputTuple,
       PausedSetEvent.OutputTuple,
       PausedSetEvent.OutputObject
@@ -744,7 +618,7 @@ export interface ExampleFacetB extends BaseContract {
       PausedSetEvent.OutputObject
     >;
 
-    "StateChanged(uint256,uint256,address)": TypedContractEvent<
+    'StateChanged(uint256,uint256,address)': TypedContractEvent<
       StateChangedEvent.InputTuple,
       StateChangedEvent.OutputTuple,
       StateChangedEvent.OutputObject

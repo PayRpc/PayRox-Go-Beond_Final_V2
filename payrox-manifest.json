@@ -2,12 +2,7 @@
   "version": "1.0.0",
   "facets": {
     "AccessControlFacet": {
-      "selectors": [
-        "0x248a9ca3",
-        "0x2f2ff15d",
-        "0x91d14854",
-        "0xd547741f"
-      ]
+      "selectors": ["0x248a9ca3", "0x2f2ff15d", "0x91d14854", "0xd547741f"]
     },
     "ChunkFactoryFacet": {
       "selectors": [
@@ -48,50 +43,25 @@
       ]
     },
     "ERC165Facet": {
-      "selectors": [
-        "0x01ffc9a7"
-      ]
+      "selectors": ["0x01ffc9a7"]
     },
     "MaliciousFacet": {
-      "selectors": [
-        "0xd018db3e"
-      ]
+      "selectors": ["0xd018db3e"]
     },
     "PauseFacet": {
-      "selectors": [
-        "0x8456cb59",
-        "0x5c975abb",
-        "0x3f4ba83a"
-      ]
+      "selectors": ["0x8456cb59", "0x5c975abb", "0x3f4ba83a"]
     },
     "PayRoxAdminFacet": {
-      "selectors": [
-        "0xc3f909d4",
-        "0x9159aba8",
-        "0x8e005553"
-      ]
+      "selectors": ["0xc3f909d4", "0x9159aba8", "0x8e005553"]
     },
     "PayRoxPaymentsFacet": {
-      "selectors": [
-        "0x498ae704",
-        "0xe66eefc8",
-        "0x325fda8a"
-      ]
+      "selectors": ["0x498ae704", "0xe66eefc8", "0x325fda8a"]
     },
     "RefactorSafetyFacet": {
-      "selectors": [
-        "0xe623a87c",
-        "0xc34c492f"
-      ]
+      "selectors": ["0xe623a87c", "0xc34c492f"]
     },
     "SaltViewFacet": {
-      "selectors": [
-        "0x279e8f3e",
-        "0x3bef06b4",
-        "0x8e6a2c1d",
-        "0xeb117be8",
-        "0x6a9f1e16"
-      ]
+      "selectors": ["0x279e8f3e", "0x3bef06b4", "0x8e6a2c1d", "0xeb117be8", "0x6a9f1e16"]
     },
     "SecurityFacet": {
       "selectors": [

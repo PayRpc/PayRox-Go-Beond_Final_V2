@@ -41,10 +41,10 @@ export async function deployDiamond(hre?: HardhatRuntimeEnvironment) {
 
   const facets: Record<string, Address> = {};
   for (const name of facetNames) {
-  const Fac: ContractFactory = await ethers.getContractFactory(name);
-  const f: any = await Fac.deploy();
-  await f.waitForDeployment();
-  const addr = await f.getAddress();
+    const Fac: ContractFactory = await ethers.getContractFactory(name);
+    const f: any = await Fac.deploy();
+    await f.waitForDeployment();
+    const addr = await f.getAddress();
     facets[name] = addr;
     console.log(`🧩 ${name}: ${addr}`);
   }

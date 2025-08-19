@@ -2,11 +2,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   RefactorSafeFacetBase,
   RefactorSafeFacetBaseInterface,
-} from "../../../contracts/libraries/RefactorSafeFacetBase";
+} from '../../../contracts/libraries/RefactorSafeFacetBase';
 
 const _abi = [
   {
@@ -14,51 +14,51 @@ const _abi = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint256",
-        name: "version",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'version',
+        type: 'uint256',
       },
       {
         indexed: false,
-        internalType: "bytes32",
-        name: "codeHash",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: 'codeHash',
+        type: 'bytes32',
       },
     ],
-    name: "RefactorSafetyInitialized",
-    type: "event",
+    name: 'RefactorSafetyInitialized',
+    type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        internalType: "bytes32",
-        name: "checkId",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: 'checkId',
+        type: 'bytes32',
       },
       {
         indexed: false,
-        internalType: "string",
-        name: "checkType",
-        type: "string",
+        internalType: 'string',
+        name: 'checkType',
+        type: 'string',
       },
     ],
-    name: "RefactorValidationPassed",
-    type: "event",
+    name: 'RefactorValidationPassed',
+    type: 'event',
   },
   {
     inputs: [],
-    name: "emergencyRefactorValidation",
+    name: 'emergencyRefactorValidation',
     outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 
@@ -67,14 +67,7 @@ export class RefactorSafeFacetBase__factory {
   static createInterface(): RefactorSafeFacetBaseInterface {
     return new Interface(_abi) as RefactorSafeFacetBaseInterface;
   }
-  static connect(
-    address: string,
-    runner?: ContractRunner | null
-  ): RefactorSafeFacetBase {
-    return new Contract(
-      address,
-      _abi,
-      runner
-    ) as unknown as RefactorSafeFacetBase;
+  static connect(address: string, runner?: ContractRunner | null): RefactorSafeFacetBase {
+    return new Contract(address, _abi, runner) as unknown as RefactorSafeFacetBase;
   }
 }

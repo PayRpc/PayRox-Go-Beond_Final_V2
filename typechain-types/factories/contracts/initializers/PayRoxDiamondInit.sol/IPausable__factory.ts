@@ -2,25 +2,25 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   IPausable,
   IPausableInterface,
-} from "../../../../contracts/initializers/PayRoxDiamondInit.sol/IPausable";
+} from '../../../../contracts/initializers/PayRoxDiamondInit.sol/IPausable';
 
 const _abi = [
   {
     inputs: [],
-    name: "paused",
+    name: 'paused',
     outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 

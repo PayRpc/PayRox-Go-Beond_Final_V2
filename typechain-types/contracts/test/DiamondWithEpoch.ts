@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export declare namespace IDiamondLoupe {
   export type FacetStruct = {
@@ -29,10 +29,10 @@ export declare namespace IDiamondLoupe {
     functionSelectors: BytesLike[];
   };
 
-  export type FacetStructOutput = [
-    facetAddress: string,
-    functionSelectors: string[]
-  ] & { facetAddress: string; functionSelectors: string[] };
+  export type FacetStructOutput = [facetAddress: string, functionSelectors: string[]] & {
+    facetAddress: string;
+    functionSelectors: string[];
+  };
 }
 
 export declare namespace DiamondWithEpoch {
@@ -53,167 +53,89 @@ export declare namespace DiamondWithEpoch {
     epoch: BigNumberish;
   };
 
-  export type RoutingHistoryEntryStructOutput = [
-    facetAddress: string,
-    epoch: bigint
-  ] & { facetAddress: string; epoch: bigint };
+  export type RoutingHistoryEntryStructOutput = [facetAddress: string, epoch: bigint] & {
+    facetAddress: string;
+    epoch: bigint;
+  };
 }
 
 export interface DiamondWithEpochInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "MAX_EPOCH_JUMP"
-      | "commitFacetUpdate"
-      | "commitmentHistory"
-      | "commitments"
-      | "dispatcher"
-      | "emergencyEpochReset"
-      | "emergencyPause"
-      | "epochManager"
-      | "facetAddress"
-      | "facetAddresses"
-      | "facetFunctionSelectors"
-      | "facets"
-      | "getCommitmentHistory"
-      | "getEpochCommitment"
-      | "getRoutingHistory"
-      | "onEpochAdvanced"
-      | "paused"
-      | "validateEpochConsistency"
+      | 'MAX_EPOCH_JUMP'
+      | 'commitFacetUpdate'
+      | 'commitmentHistory'
+      | 'commitments'
+      | 'dispatcher'
+      | 'emergencyEpochReset'
+      | 'emergencyPause'
+      | 'epochManager'
+      | 'facetAddress'
+      | 'facetAddresses'
+      | 'facetFunctionSelectors'
+      | 'facets'
+      | 'getCommitmentHistory'
+      | 'getEpochCommitment'
+      | 'getRoutingHistory'
+      | 'onEpochAdvanced'
+      | 'paused'
+      | 'validateEpochConsistency',
   ): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: "CommitmentOverwritten"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'CommitmentOverwritten'): EventFragment;
 
+  encodeFunctionData(functionFragment: 'MAX_EPOCH_JUMP', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "MAX_EPOCH_JUMP",
-    values?: undefined
+    functionFragment: 'commitFacetUpdate',
+    values: [AddressLike, BytesLike[], BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "commitFacetUpdate",
-    values: [AddressLike, BytesLike[], BigNumberish]
+    functionFragment: 'commitmentHistory',
+    values: [BigNumberish, BytesLike, BigNumberish],
+  ): string;
+  encodeFunctionData(functionFragment: 'commitments', values: [BigNumberish, BytesLike]): string;
+  encodeFunctionData(functionFragment: 'dispatcher', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'emergencyEpochReset', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'emergencyPause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'epochManager', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'facetAddress', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'facetAddresses', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'facetFunctionSelectors', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'facets', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'getCommitmentHistory',
+    values: [BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "commitmentHistory",
-    values: [BigNumberish, BytesLike, BigNumberish]
+    functionFragment: 'getEpochCommitment',
+    values: [BigNumberish, BytesLike],
   ): string;
+  encodeFunctionData(functionFragment: 'getRoutingHistory', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "commitments",
-    values: [BigNumberish, BytesLike]
+    functionFragment: 'onEpochAdvanced',
+    values: [BigNumberish, BigNumberish],
   ): string;
-  encodeFunctionData(
-    functionFragment: "dispatcher",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "emergencyEpochReset",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "emergencyPause",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "epochManager",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddress",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddresses",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetFunctionSelectors",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "facets", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getCommitmentHistory",
-    values: [BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getEpochCommitment",
-    values: [BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoutingHistory",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "onEpochAdvanced",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "validateEpochConsistency",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'validateEpochConsistency', values?: undefined): string;
 
-  decodeFunctionResult(
-    functionFragment: "MAX_EPOCH_JUMP",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "commitFacetUpdate",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "commitmentHistory",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "commitments",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "dispatcher", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "emergencyEpochReset",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "emergencyPause",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "epochManager",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddresses",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetFunctionSelectors",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "facets", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getCommitmentHistory",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getEpochCommitment",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoutingHistory",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "onEpochAdvanced",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "validateEpochConsistency",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'MAX_EPOCH_JUMP', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'commitFacetUpdate', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'commitmentHistory', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'commitments', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'dispatcher', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'emergencyEpochReset', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'emergencyPause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'epochManager', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddress', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddresses', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetFunctionSelectors', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facets', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getCommitmentHistory', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getEpochCommitment', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoutingHistory', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'onEpochAdvanced', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'validateEpochConsistency', data: BytesLike): Result;
 }
 
 export namespace CommitmentOverwrittenEvent {
@@ -221,14 +143,9 @@ export namespace CommitmentOverwrittenEvent {
     epoch: BigNumberish,
     selector: BytesLike,
     oldFacet: AddressLike,
-    newFacet: AddressLike
+    newFacet: AddressLike,
   ];
-  export type OutputTuple = [
-    epoch: bigint,
-    selector: string,
-    oldFacet: string,
-    newFacet: string
-  ];
+  export type OutputTuple = [epoch: bigint, selector: string, oldFacet: string, newFacet: string];
   export interface OutputObject {
     epoch: bigint;
     selector: string;
@@ -250,201 +167,165 @@ export interface DiamondWithEpoch extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  MAX_EPOCH_JUMP: TypedContractMethod<[], [bigint], "view">;
+  MAX_EPOCH_JUMP: TypedContractMethod<[], [bigint], 'view'>;
 
   commitFacetUpdate: TypedContractMethod<
     [facet: AddressLike, selectors: BytesLike[], epoch: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   commitmentHistory: TypedContractMethod<
     [arg0: BigNumberish, arg1: BytesLike, arg2: BigNumberish],
     [string],
-    "view"
+    'view'
   >;
 
-  commitments: TypedContractMethod<
-    [arg0: BigNumberish, arg1: BytesLike],
-    [string],
-    "view"
-  >;
+  commitments: TypedContractMethod<[arg0: BigNumberish, arg1: BytesLike], [string], 'view'>;
 
-  dispatcher: TypedContractMethod<[], [string], "view">;
+  dispatcher: TypedContractMethod<[], [string], 'view'>;
 
-  emergencyEpochReset: TypedContractMethod<[], [void], "nonpayable">;
+  emergencyEpochReset: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  emergencyPause: TypedContractMethod<[], [void], "nonpayable">;
+  emergencyPause: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  epochManager: TypedContractMethod<[], [string], "view">;
+  epochManager: TypedContractMethod<[], [string], 'view'>;
 
-  facetAddress: TypedContractMethod<
-    [_functionSelector: BytesLike],
-    [string],
-    "view"
-  >;
+  facetAddress: TypedContractMethod<[_functionSelector: BytesLike], [string], 'view'>;
 
-  facetAddresses: TypedContractMethod<[], [string[]], "view">;
+  facetAddresses: TypedContractMethod<[], [string[]], 'view'>;
 
-  facetFunctionSelectors: TypedContractMethod<
-    [_facet: AddressLike],
-    [string[]],
-    "view"
-  >;
+  facetFunctionSelectors: TypedContractMethod<[_facet: AddressLike], [string[]], 'view'>;
 
-  facets: TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], "view">;
+  facets: TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], 'view'>;
 
   getCommitmentHistory: TypedContractMethod<
     [epoch: BigNumberish, selector: BytesLike],
     [DiamondWithEpoch.CommitmentEntryStructOutput[]],
-    "view"
+    'view'
   >;
 
   getEpochCommitment: TypedContractMethod<
     [epoch: BigNumberish, selector: BytesLike],
     [DiamondWithEpoch.CommitmentStructOutput],
-    "view"
+    'view'
   >;
 
   getRoutingHistory: TypedContractMethod<
     [selector: BytesLike],
     [DiamondWithEpoch.RoutingHistoryEntryStructOutput[]],
-    "view"
+    'view'
   >;
 
   onEpochAdvanced: TypedContractMethod<
     [arg0: BigNumberish, newEpoch: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  paused: TypedContractMethod<[], [boolean], "view">;
+  paused: TypedContractMethod<[], [boolean], 'view'>;
 
-  validateEpochConsistency: TypedContractMethod<[], [boolean], "view">;
+  validateEpochConsistency: TypedContractMethod<[], [boolean], 'view'>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
+  getFunction(nameOrSignature: 'MAX_EPOCH_JUMP'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "MAX_EPOCH_JUMP"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "commitFacetUpdate"
+    nameOrSignature: 'commitFacetUpdate',
   ): TypedContractMethod<
     [facet: AddressLike, selectors: BytesLike[], epoch: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "commitmentHistory"
+    nameOrSignature: 'commitmentHistory',
   ): TypedContractMethod<
     [arg0: BigNumberish, arg1: BytesLike, arg2: BigNumberish],
     [string],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "commitments"
-  ): TypedContractMethod<
-    [arg0: BigNumberish, arg1: BytesLike],
-    [string],
-    "view"
-  >;
+    nameOrSignature: 'commitments',
+  ): TypedContractMethod<[arg0: BigNumberish, arg1: BytesLike], [string], 'view'>;
+  getFunction(nameOrSignature: 'dispatcher'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "dispatcher"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'emergencyEpochReset',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'emergencyPause'): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'epochManager'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "emergencyEpochReset"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'facetAddress',
+  ): TypedContractMethod<[_functionSelector: BytesLike], [string], 'view'>;
+  getFunction(nameOrSignature: 'facetAddresses'): TypedContractMethod<[], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "emergencyPause"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'facetFunctionSelectors',
+  ): TypedContractMethod<[_facet: AddressLike], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "epochManager"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'facets',
+  ): TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetAddress"
-  ): TypedContractMethod<[_functionSelector: BytesLike], [string], "view">;
-  getFunction(
-    nameOrSignature: "facetAddresses"
-  ): TypedContractMethod<[], [string[]], "view">;
-  getFunction(
-    nameOrSignature: "facetFunctionSelectors"
-  ): TypedContractMethod<[_facet: AddressLike], [string[]], "view">;
-  getFunction(
-    nameOrSignature: "facets"
-  ): TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], "view">;
-  getFunction(
-    nameOrSignature: "getCommitmentHistory"
+    nameOrSignature: 'getCommitmentHistory',
   ): TypedContractMethod<
     [epoch: BigNumberish, selector: BytesLike],
     [DiamondWithEpoch.CommitmentEntryStructOutput[]],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "getEpochCommitment"
+    nameOrSignature: 'getEpochCommitment',
   ): TypedContractMethod<
     [epoch: BigNumberish, selector: BytesLike],
     [DiamondWithEpoch.CommitmentStructOutput],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "getRoutingHistory"
+    nameOrSignature: 'getRoutingHistory',
   ): TypedContractMethod<
     [selector: BytesLike],
     [DiamondWithEpoch.RoutingHistoryEntryStructOutput[]],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "onEpochAdvanced"
-  ): TypedContractMethod<
-    [arg0: BigNumberish, newEpoch: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'onEpochAdvanced',
+  ): TypedContractMethod<[arg0: BigNumberish, newEpoch: BigNumberish], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'paused'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "paused"
-  ): TypedContractMethod<[], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "validateEpochConsistency"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'validateEpochConsistency',
+  ): TypedContractMethod<[], [boolean], 'view'>;
 
   getEvent(
-    key: "CommitmentOverwritten"
+    key: 'CommitmentOverwritten',
   ): TypedContractEvent<
     CommitmentOverwrittenEvent.InputTuple,
     CommitmentOverwrittenEvent.OutputTuple,
@@ -452,7 +333,7 @@ export interface DiamondWithEpoch extends BaseContract {
   >;
 
   filters: {
-    "CommitmentOverwritten(uint64,bytes4,address,address)": TypedContractEvent<
+    'CommitmentOverwritten(uint64,bytes4,address,address)': TypedContractEvent<
       CommitmentOverwrittenEvent.InputTuple,
       CommitmentOverwrittenEvent.OutputTuple,
       CommitmentOverwrittenEvent.OutputObject

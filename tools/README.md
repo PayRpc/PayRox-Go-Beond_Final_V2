@@ -7,12 +7,14 @@ This directory contains the PayRox AI-powered Diamond Pattern refactoring system
 ### 🤖 AI Refactor Copilot (`ai-refactor-copilot.ts`)
 
 The main orchestrator that:
+
 - Takes refactor prompts and generates Diamond Pattern facets
 - Runs self-correction loops with validation feedback
 - Enforces EIP-170 and EIP-2535 compliance
 - Outputs complete refactor packages
 
 **Usage:**
+
 ```bash
 # Basic refactor
 npx ts-node tools/ai-refactor-copilot.ts "Refactor MyContract to Diamond facets"
@@ -27,13 +29,15 @@ npx ts-node tools/ai-refactor-copilot.ts --retries 5 "Complex refactor"
 ### 🔍 Refactor Linter (`refactor-lint.ts`)
 
 Validates Diamond Pattern refactors for:
+
 - ✅ EIP-170 bytecode size limits (≤ 24,576 bytes per facet)
-- ✅ No loupe functions in facets 
+- ✅ No loupe functions in facets
 - ✅ Selector parity and collision detection
 - ✅ Proper role assignments
 - ✅ Manifest structure validation
 
 **Usage:**
+
 ```bash
 # Run full validation
 npm run ai:lint
@@ -45,6 +49,7 @@ npx ts-node tools/refactor-lint.ts --facets ./custom-facets --manifest ./custom-
 ### 📋 AI Rulebook (`ai-rulebook/`)
 
 Contains the locked system prompt with:
+
 - Hard constraints that AI cannot violate
 - EIP-170 and EIP-2535 compliance rules
 - Required output specifications
@@ -74,6 +79,7 @@ npm run test:size            # Test size and gas limits
 ### CI/CD Pipeline
 
 The `.github/workflows/payrox-refactor-gate.yml` workflow:
+
 - Runs on every push/PR
 - Validates refactor compliance
 - Blocks non-compliant changes
@@ -82,16 +88,19 @@ The `.github/workflows/payrox-refactor-gate.yml` workflow:
 ### Development Workflow
 
 1. **Generate Refactor**
+
    ```bash
    npx ts-node tools/ai-refactor-copilot.ts "Your refactor request"
    ```
 
 2. **Validate Output**
+
    ```bash
    npm run ai:validate
    ```
 
 3. **Fix Issues** (if any)
+
    ```bash
    npm run ai:lint  # See specific errors
    ```
@@ -115,7 +124,7 @@ User Prompt → AI Generate → Validate → Pass? → Done
 ### Validation Pipeline
 
 1. **Compile** - Ensure code compiles
-2. **Lint** - Check size/compliance rules  
+2. **Lint** - Check size/compliance rules
 3. **Test** - Run critical test suites
 4. **Self-Check** - Validate AI footer
 
@@ -131,12 +140,12 @@ User Prompt → AI Generate → Validate → Pass? → Done
 
 ### Common Issues
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| Size Limit Exceeded | Facet >24KB | AI splits into smaller facets |
-| Loupe in Facet | Facet claims loupe interface | AI removes loupe claims |
-| Selector Collision | Same selector in multiple facets | AI renames functions |
-| Role Assignment Error | Roles granted to facet | AI fixes role setup |
+| Error                 | Cause                            | Solution                      |
+| --------------------- | -------------------------------- | ----------------------------- |
+| Size Limit Exceeded   | Facet >24KB                      | AI splits into smaller facets |
+| Loupe in Facet        | Facet claims loupe interface     | AI removes loupe claims       |
+| Selector Collision    | Same selector in multiple facets | AI renames functions          |
+| Role Assignment Error | Roles granted to facet           | AI fixes role setup           |
 
 ### Debug Commands
 
@@ -161,7 +170,7 @@ Every successful refactor generates:
 ```
 facets/
 ├── AdminFacet.sol           # Administrative functions
-├── CoreFacet.sol            # Core business logic  
+├── CoreFacet.sol            # Core business logic
 ├── libraries/
 │   ├── LibAdmin.sol         # Admin storage/logic
 │   └── LibCore.sol          # Core storage/logic
@@ -197,13 +206,13 @@ REPO_ROOT=.                           # Repository root
 ### Template Files
 
 - `payrox-manifest.json.template` - Manifest structure template
-- `selector_map.json.template` - Selector map template  
+- `selector_map.json.template` - Selector map template
 - `facets/README.md` - Facets directory guide
 
 ## Best Practices
 
 1. **Always validate** before committing refactored code
-2. **Review the report.md** to understand changes  
+2. **Review the report.md** to understand changes
 3. **Test on localhost** before mainnet deployment
 4. **Backup original contracts** before refactoring
 5. **Use descriptive prompts** for better AI results
@@ -219,16 +228,19 @@ REPO_ROOT=.                           # Repository root
 ## Troubleshooting
 
 ### AI Output Rejected
+
 - Check for missing SELF-CHECK footer
 - Verify all checkboxes are ticked
 - Run `npm run ai:validate` for details
 
-### Compilation Failures  
+### Compilation Failures
+
 - Ensure Hardhat config is correct
 - Check for missing dependencies
 - Verify Solidity version compatibility
 
 ### Lint Failures
+
 - Review `tools/refactor-lint.ts` output
 - Check manifest format and content
 - Verify artifact generation

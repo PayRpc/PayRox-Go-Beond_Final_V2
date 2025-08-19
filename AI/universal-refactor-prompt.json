@@ -5,10 +5,7 @@
   "purpose": "Refactor arbitrary monolithic Solidity contracts into EIP-2535 diamond facets",
   "inputs": {
     "primary": "Monolith source (Solidity ≥ 0.8.20)",
-    "optional": [
-      "Facet plan (facet → functions)",
-      "Options (limits, tags)"
-    ]
+    "optional": ["Facet plan (facet → functions)", "Options (limits, tags)"]
   },
   "requiredOutputs": {
     "compilableFiles": [
@@ -49,11 +46,7 @@
     }
   },
   "upgradeableMapping": {
-    "removeMixins": [
-      "Initializable",
-      "UUPSUpgradeable",
-      "etc."
-    ],
+    "removeMixins": ["Initializable", "UUPSUpgradeable", "etc."],
     "migrateConstructor": "constructor/initialize() to Init<Module>.sol via diamondCut _init/_calldata",
     "reentrancyGuard": "Add tiny lock in storage or reuse project’s guard"
   },

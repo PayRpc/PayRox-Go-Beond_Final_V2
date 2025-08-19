@@ -2,218 +2,218 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   IAntiBotFacet,
   IAntiBotFacetInterface,
-} from "../../../contracts/facets/IAntiBotFacet";
+} from '../../../contracts/facets/IAntiBotFacet';
 
 const _abi = [
   {
     inputs: [],
-    name: "BadThresholds",
-    type: "error",
+    name: 'BadThresholds',
+    type: 'error',
   },
   {
     inputs: [],
-    name: "CircuitBreakerActive",
-    type: "error",
+    name: 'CircuitBreakerActive',
+    type: 'error',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "user",
-        type: "address",
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
       },
       {
-        internalType: "uint256",
-        name: "untilBlock",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'untilBlock',
+        type: 'uint256',
       },
     ],
-    name: "TransactionThrottled",
-    type: "error",
+    name: 'TransactionThrottled',
+    type: 'error',
   },
   {
     inputs: [],
-    name: "GOVERNANCE_ROLE",
+    name: 'GOVERNANCE_ROLE',
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "MONITOR_ROLE",
+    name: 'MONITOR_ROLE',
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "a",
-        type: "address",
+        internalType: 'address',
+        name: 'a',
+        type: 'address',
       },
     ],
-    name: "addTrusted",
+    name: 'addTrusted',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "ensureBuybackAllowed",
+    name: 'ensureBuybackAllowed',
     outputs: [
       {
-        internalType: "bool",
-        name: "ok",
-        type: "bool",
+        internalType: 'bool',
+        name: 'ok',
+        type: 'bool',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "a",
-        type: "address",
+        internalType: 'address',
+        name: 'a',
+        type: 'address',
       },
     ],
-    name: "isTrusted",
+    name: 'isTrusted',
     outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "a",
-        type: "address",
+        internalType: 'address',
+        name: 'a',
+        type: 'address',
       },
     ],
-    name: "removeTrusted",
+    name: 'removeTrusted',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "int256",
-        name: "moveBps",
-        type: "int256",
+        internalType: 'int256',
+        name: 'moveBps',
+        type: 'int256',
       },
     ],
-    name: "reportMarketMove",
+    name: 'reportMarketMove',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "resetCircuitBreaker",
+    name: 'resetCircuitBreaker',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "bool",
-        name: "paused",
-        type: "bool",
+        internalType: 'bool',
+        name: 'paused',
+        type: 'bool',
       },
     ],
-    name: "setBuybackPaused",
+    name: 'setBuybackPaused',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "bool",
-        name: "enabled",
-        type: "bool",
+        internalType: 'bool',
+        name: 'enabled',
+        type: 'bool',
       },
     ],
-    name: "setEnabled",
+    name: 'setEnabled',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "pauseBps_",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'pauseBps_',
+        type: 'uint256',
       },
       {
-        internalType: "uint256",
-        name: "circuitBps_",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'circuitBps_',
+        type: 'uint256',
       },
     ],
-    name: "setThresholds",
+    name: 'setThresholds',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "blocks_",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'blocks_',
+        type: 'uint256',
       },
     ],
-    name: "setThrottleBlocks",
+    name: 'setThrottleBlocks',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "sender",
-        type: "address",
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
       },
     ],
-    name: "validateTransaction",
+    name: 'validateTransaction',
     outputs: [
       {
-        internalType: "bool",
-        name: "ok",
-        type: "bool",
+        internalType: 'bool',
+        name: 'ok',
+        type: 'bool',
       },
     ],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ] as const;
 
@@ -222,10 +222,7 @@ export class IAntiBotFacet__factory {
   static createInterface(): IAntiBotFacetInterface {
     return new Interface(_abi) as IAntiBotFacetInterface;
   }
-  static connect(
-    address: string,
-    runner?: ContractRunner | null
-  ): IAntiBotFacet {
+  static connect(address: string, runner?: ContractRunner | null): IAntiBotFacet {
     return new Contract(address, _abi, runner) as unknown as IAntiBotFacet;
   }
 }

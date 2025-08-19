@@ -2,88 +2,88 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
+import { Contract, Interface, type ContractRunner } from 'ethers';
 import type {
   IDiamondLoupe,
   IDiamondLoupeInterface,
-} from "../../../contracts/interfaces/IDiamondLoupe";
+} from '../../../contracts/interfaces/IDiamondLoupe';
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes4",
-        name: "_functionSelector",
-        type: "bytes4",
+        internalType: 'bytes4',
+        name: '_functionSelector',
+        type: 'bytes4',
       },
     ],
-    name: "facetAddress",
+    name: 'facetAddress',
     outputs: [
       {
-        internalType: "address",
-        name: "facetAddress_",
-        type: "address",
+        internalType: 'address',
+        name: 'facetAddress_',
+        type: 'address',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "facetAddresses",
+    name: 'facetAddresses',
     outputs: [
       {
-        internalType: "address[]",
-        name: "facetAddresses_",
-        type: "address[]",
+        internalType: 'address[]',
+        name: 'facetAddresses_',
+        type: 'address[]',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_facet",
-        type: "address",
+        internalType: 'address',
+        name: '_facet',
+        type: 'address',
       },
     ],
-    name: "facetFunctionSelectors",
+    name: 'facetFunctionSelectors',
     outputs: [
       {
-        internalType: "bytes4[]",
-        name: "facetFunctionSelectors_",
-        type: "bytes4[]",
+        internalType: 'bytes4[]',
+        name: 'facetFunctionSelectors_',
+        type: 'bytes4[]',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "facets",
+    name: 'facets',
     outputs: [
       {
         components: [
           {
-            internalType: "address",
-            name: "facetAddress",
-            type: "address",
+            internalType: 'address',
+            name: 'facetAddress',
+            type: 'address',
           },
           {
-            internalType: "bytes4[]",
-            name: "functionSelectors",
-            type: "bytes4[]",
+            internalType: 'bytes4[]',
+            name: 'functionSelectors',
+            type: 'bytes4[]',
           },
         ],
-        internalType: "struct IDiamondLoupe.Facet[]",
-        name: "facets_",
-        type: "tuple[]",
+        internalType: 'struct IDiamondLoupe.Facet[]',
+        name: 'facets_',
+        type: 'tuple[]',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 
@@ -92,10 +92,7 @@ export class IDiamondLoupe__factory {
   static createInterface(): IDiamondLoupeInterface {
     return new Interface(_abi) as IDiamondLoupeInterface;
   }
-  static connect(
-    address: string,
-    runner?: ContractRunner | null
-  ): IDiamondLoupe {
+  static connect(address: string, runner?: ContractRunner | null): IDiamondLoupe {
     return new Contract(address, _abi, runner) as unknown as IDiamondLoupe;
   }
 }

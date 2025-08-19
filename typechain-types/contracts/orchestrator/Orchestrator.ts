@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,205 +21,114 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface OrchestratorInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "activateCommittedRoot"
-      | "admin"
-      | "authorized"
-      | "complete"
-      | "dispatcher"
-      | "emergencyPaused"
-      | "factory"
-      | "getIntegrationAddresses"
-      | "getPlan"
-      | "globalEmergencyPause"
-      | "isAuthorized"
-      | "isPlanActive"
-      | "noteComponent"
-      | "orchestrateManifestUpdate"
-      | "orchestrateStage"
-      | "orchestrateStageBatch"
-      | "plans"
-      | "setAuthorized"
-      | "setGlobalEmergencyPause"
-      | "setPlanEmergencyPause"
-      | "startOrchestration"
-      | "startOrchestrationSecure"
-      | "validateOrchestration"
+      | 'activateCommittedRoot'
+      | 'admin'
+      | 'authorized'
+      | 'complete'
+      | 'dispatcher'
+      | 'emergencyPaused'
+      | 'factory'
+      | 'getIntegrationAddresses'
+      | 'getPlan'
+      | 'globalEmergencyPause'
+      | 'isAuthorized'
+      | 'isPlanActive'
+      | 'noteComponent'
+      | 'orchestrateManifestUpdate'
+      | 'orchestrateStage'
+      | 'orchestrateStageBatch'
+      | 'plans'
+      | 'setAuthorized'
+      | 'setGlobalEmergencyPause'
+      | 'setPlanEmergencyPause'
+      | 'startOrchestration'
+      | 'startOrchestrationSecure'
+      | 'validateOrchestration',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "ChunksStaged"
-      | "ComponentNoted"
-      | "EmergencyPause"
-      | "OrchestrationCompleted"
-      | "OrchestrationStarted"
-      | "PlanEmergencyPause"
+      | 'ChunksStaged'
+      | 'ComponentNoted'
+      | 'EmergencyPause'
+      | 'OrchestrationCompleted'
+      | 'OrchestrationStarted'
+      | 'PlanEmergencyPause',
   ): EventFragment;
 
+  encodeFunctionData(functionFragment: 'activateCommittedRoot', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'admin', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'authorized', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'complete', values: [BytesLike, boolean]): string;
+  encodeFunctionData(functionFragment: 'dispatcher', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'emergencyPaused', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'factory', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getIntegrationAddresses', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getPlan', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'globalEmergencyPause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'isAuthorized', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'isPlanActive', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "activateCommittedRoot",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(functionFragment: "admin", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "authorized",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "complete",
-    values: [BytesLike, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "dispatcher",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "emergencyPaused",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(functionFragment: "factory", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getIntegrationAddresses",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "getPlan", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "globalEmergencyPause",
-    values?: undefined
+    functionFragment: 'noteComponent',
+    values: [BytesLike, AddressLike, string],
   ): string;
   encodeFunctionData(
-    functionFragment: "isAuthorized",
-    values: [AddressLike]
+    functionFragment: 'orchestrateManifestUpdate',
+    values: [BytesLike, BytesLike[], AddressLike[], BytesLike[], BytesLike[][], boolean[][]],
+  ): string;
+  encodeFunctionData(functionFragment: 'orchestrateStage', values: [BytesLike, BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: 'orchestrateStageBatch',
+    values: [BytesLike, BytesLike[]],
+  ): string;
+  encodeFunctionData(functionFragment: 'plans', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'setAuthorized', values: [AddressLike, boolean]): string;
+  encodeFunctionData(functionFragment: 'setGlobalEmergencyPause', values: [boolean]): string;
+  encodeFunctionData(
+    functionFragment: 'setPlanEmergencyPause',
+    values: [BytesLike, boolean],
   ): string;
   encodeFunctionData(
-    functionFragment: "isPlanActive",
-    values: [BytesLike]
+    functionFragment: 'startOrchestration',
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "noteComponent",
-    values: [BytesLike, AddressLike, string]
+    functionFragment: 'startOrchestrationSecure',
+    values: [BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "orchestrateManifestUpdate",
-    values: [
-      BytesLike,
-      BytesLike[],
-      AddressLike[],
-      BytesLike[],
-      BytesLike[][],
-      boolean[][]
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "orchestrateStage",
-    values: [BytesLike, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "orchestrateStageBatch",
-    values: [BytesLike, BytesLike[]]
-  ): string;
-  encodeFunctionData(functionFragment: "plans", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "setAuthorized",
-    values: [AddressLike, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setGlobalEmergencyPause",
-    values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setPlanEmergencyPause",
-    values: [BytesLike, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "startOrchestration",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "startOrchestrationSecure",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "validateOrchestration",
-    values: [BytesLike, BigNumberish, AddressLike]
+    functionFragment: 'validateOrchestration',
+    values: [BytesLike, BigNumberish, AddressLike],
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "activateCommittedRoot",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "authorized", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "complete", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "dispatcher", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "emergencyPaused",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "factory", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getIntegrationAddresses",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getPlan", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "globalEmergencyPause",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "isAuthorized",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "isPlanActive",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "noteComponent",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "orchestrateManifestUpdate",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "orchestrateStage",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "orchestrateStageBatch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "plans", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setAuthorized",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setGlobalEmergencyPause",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setPlanEmergencyPause",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "startOrchestration",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "startOrchestrationSecure",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "validateOrchestration",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'activateCommittedRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'admin', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'authorized', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'complete', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'dispatcher', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'emergencyPaused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'factory', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getIntegrationAddresses', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getPlan', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'globalEmergencyPause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isAuthorized', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isPlanActive', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'noteComponent', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'orchestrateManifestUpdate', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'orchestrateStage', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'orchestrateStageBatch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'plans', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setAuthorized', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setGlobalEmergencyPause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setPlanEmergencyPause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'startOrchestration', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'startOrchestrationSecure', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'validateOrchestration', data: BytesLike): Result;
 }
 
 export namespace ChunksStagedEvent {
@@ -227,14 +136,9 @@ export namespace ChunksStagedEvent {
     id: BytesLike,
     count: BigNumberish,
     gasUsed: BigNumberish,
-    feePaid: BigNumberish
+    feePaid: BigNumberish,
   ];
-  export type OutputTuple = [
-    id: string,
-    count: bigint,
-    gasUsed: bigint,
-    feePaid: bigint
-  ];
+  export type OutputTuple = [id: string, count: bigint, gasUsed: bigint, feePaid: bigint];
   export interface OutputObject {
     id: string;
     count: bigint;
@@ -288,11 +192,7 @@ export namespace OrchestrationCompletedEvent {
 }
 
 export namespace OrchestrationStartedEvent {
-  export type InputTuple = [
-    id: BytesLike,
-    initiator: AddressLike,
-    timestamp: BigNumberish
-  ];
+  export type InputTuple = [id: BytesLike, initiator: AddressLike, timestamp: BigNumberish];
   export type OutputTuple = [id: string, initiator: string, timestamp: bigint];
   export interface OutputObject {
     id: string;
@@ -327,66 +227,56 @@ export interface Orchestrator extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  activateCommittedRoot: TypedContractMethod<
-    [id: BytesLike],
-    [void],
-    "nonpayable"
-  >;
+  activateCommittedRoot: TypedContractMethod<[id: BytesLike], [void], 'nonpayable'>;
 
-  admin: TypedContractMethod<[], [string], "view">;
+  admin: TypedContractMethod<[], [string], 'view'>;
 
-  authorized: TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+  authorized: TypedContractMethod<[arg0: AddressLike], [boolean], 'view'>;
 
-  complete: TypedContractMethod<
-    [id: BytesLike, success: boolean],
-    [void],
-    "nonpayable"
-  >;
+  complete: TypedContractMethod<[id: BytesLike, success: boolean], [void], 'nonpayable'>;
 
-  dispatcher: TypedContractMethod<[], [string], "view">;
+  dispatcher: TypedContractMethod<[], [string], 'view'>;
 
-  emergencyPaused: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+  emergencyPaused: TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
 
-  factory: TypedContractMethod<[], [string], "view">;
+  factory: TypedContractMethod<[], [string], 'view'>;
 
   getIntegrationAddresses: TypedContractMethod<
     [],
     [[string, string] & { factoryAddr: string; dispatcherAddr: string }],
-    "view"
+    'view'
   >;
 
   getPlan: TypedContractMethod<
@@ -396,21 +286,21 @@ export interface Orchestrator extends BaseContract {
         initiator: string;
         gasLimit: bigint;
         completed: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  globalEmergencyPause: TypedContractMethod<[], [boolean], "view">;
+  globalEmergencyPause: TypedContractMethod<[], [boolean], 'view'>;
 
-  isAuthorized: TypedContractMethod<[who: AddressLike], [boolean], "view">;
+  isAuthorized: TypedContractMethod<[who: AddressLike], [boolean], 'view'>;
 
-  isPlanActive: TypedContractMethod<[id: BytesLike], [boolean], "view">;
+  isPlanActive: TypedContractMethod<[id: BytesLike], [boolean], 'view'>;
 
   noteComponent: TypedContractMethod<
     [id: BytesLike, component: AddressLike, tag: string],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   orchestrateManifestUpdate: TypedContractMethod<
@@ -420,22 +310,22 @@ export interface Orchestrator extends BaseContract {
       facets: AddressLike[],
       codehashes: BytesLike[],
       proofs: BytesLike[][],
-      isRight: boolean[][]
+      isRight: boolean[][],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   orchestrateStage: TypedContractMethod<
     [id: BytesLike, data: BytesLike],
     [[string, string] & { chunk: string; hash: string }],
-    "payable"
+    'payable'
   >;
 
   orchestrateStageBatch: TypedContractMethod<
     [id: BytesLike, blobs: BytesLike[]],
     [[string[], string[]] & { chunks: string[]; hashes: string[] }],
-    "payable"
+    'payable'
   >;
 
   plans: TypedContractMethod<
@@ -445,114 +335,90 @@ export interface Orchestrator extends BaseContract {
         initiator: string;
         gasLimit: bigint;
         completed: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  setAuthorized: TypedContractMethod<
-    [who: AddressLike, ok: boolean],
-    [void],
-    "nonpayable"
-  >;
+  setAuthorized: TypedContractMethod<[who: AddressLike, ok: boolean], [void], 'nonpayable'>;
 
-  setGlobalEmergencyPause: TypedContractMethod<
-    [paused: boolean],
-    [void],
-    "nonpayable"
-  >;
+  setGlobalEmergencyPause: TypedContractMethod<[paused: boolean], [void], 'nonpayable'>;
 
   setPlanEmergencyPause: TypedContractMethod<
     [id: BytesLike, paused: boolean],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   startOrchestration: TypedContractMethod<
     [id: BytesLike, gasLimit: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   startOrchestrationSecure: TypedContractMethod<
     [id: BytesLike, gasLimit: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   validateOrchestration: TypedContractMethod<
     [id: BytesLike, gasLimit: BigNumberish, initiator: AddressLike],
     [[boolean, string] & { isValid: boolean; reason: string }],
-    "view"
+    'view'
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
   getFunction(
-    nameOrSignature: "activateCommittedRoot"
-  ): TypedContractMethod<[id: BytesLike], [void], "nonpayable">;
+    nameOrSignature: 'activateCommittedRoot',
+  ): TypedContractMethod<[id: BytesLike], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'admin'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "admin"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'authorized',
+  ): TypedContractMethod<[arg0: AddressLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "authorized"
-  ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+    nameOrSignature: 'complete',
+  ): TypedContractMethod<[id: BytesLike, success: boolean], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'dispatcher'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "complete"
-  ): TypedContractMethod<
-    [id: BytesLike, success: boolean],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'emergencyPaused',
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
+  getFunction(nameOrSignature: 'factory'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "dispatcher"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "emergencyPaused"
-  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "factory"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "getIntegrationAddresses"
+    nameOrSignature: 'getIntegrationAddresses',
   ): TypedContractMethod<
     [],
     [[string, string] & { factoryAddr: string; dispatcherAddr: string }],
-    "view"
+    'view'
   >;
-  getFunction(
-    nameOrSignature: "getPlan"
-  ): TypedContractMethod<
+  getFunction(nameOrSignature: 'getPlan'): TypedContractMethod<
     [id: BytesLike],
     [
       [string, bigint, boolean] & {
         initiator: string;
         gasLimit: bigint;
         completed: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
+  getFunction(nameOrSignature: 'globalEmergencyPause'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "globalEmergencyPause"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'isAuthorized',
+  ): TypedContractMethod<[who: AddressLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isAuthorized"
-  ): TypedContractMethod<[who: AddressLike], [boolean], "view">;
+    nameOrSignature: 'isPlanActive',
+  ): TypedContractMethod<[id: BytesLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isPlanActive"
-  ): TypedContractMethod<[id: BytesLike], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "noteComponent"
+    nameOrSignature: 'noteComponent',
   ): TypedContractMethod<
     [id: BytesLike, component: AddressLike, tag: string],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "orchestrateManifestUpdate"
+    nameOrSignature: 'orchestrateManifestUpdate',
   ): TypedContractMethod<
     [
       id: BytesLike,
@@ -560,110 +426,96 @@ export interface Orchestrator extends BaseContract {
       facets: AddressLike[],
       codehashes: BytesLike[],
       proofs: BytesLike[][],
-      isRight: boolean[][]
+      isRight: boolean[][],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "orchestrateStage"
+    nameOrSignature: 'orchestrateStage',
   ): TypedContractMethod<
     [id: BytesLike, data: BytesLike],
     [[string, string] & { chunk: string; hash: string }],
-    "payable"
+    'payable'
   >;
   getFunction(
-    nameOrSignature: "orchestrateStageBatch"
+    nameOrSignature: 'orchestrateStageBatch',
   ): TypedContractMethod<
     [id: BytesLike, blobs: BytesLike[]],
     [[string[], string[]] & { chunks: string[]; hashes: string[] }],
-    "payable"
+    'payable'
   >;
-  getFunction(
-    nameOrSignature: "plans"
-  ): TypedContractMethod<
+  getFunction(nameOrSignature: 'plans'): TypedContractMethod<
     [arg0: BytesLike],
     [
       [string, bigint, boolean] & {
         initiator: string;
         gasLimit: bigint;
         completed: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "setAuthorized"
-  ): TypedContractMethod<[who: AddressLike, ok: boolean], [void], "nonpayable">;
+    nameOrSignature: 'setAuthorized',
+  ): TypedContractMethod<[who: AddressLike, ok: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setGlobalEmergencyPause"
-  ): TypedContractMethod<[paused: boolean], [void], "nonpayable">;
+    nameOrSignature: 'setGlobalEmergencyPause',
+  ): TypedContractMethod<[paused: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setPlanEmergencyPause"
-  ): TypedContractMethod<
-    [id: BytesLike, paused: boolean],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'setPlanEmergencyPause',
+  ): TypedContractMethod<[id: BytesLike, paused: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "startOrchestration"
-  ): TypedContractMethod<
-    [id: BytesLike, gasLimit: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'startOrchestration',
+  ): TypedContractMethod<[id: BytesLike, gasLimit: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "startOrchestrationSecure"
-  ): TypedContractMethod<
-    [id: BytesLike, gasLimit: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'startOrchestrationSecure',
+  ): TypedContractMethod<[id: BytesLike, gasLimit: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "validateOrchestration"
+    nameOrSignature: 'validateOrchestration',
   ): TypedContractMethod<
     [id: BytesLike, gasLimit: BigNumberish, initiator: AddressLike],
     [[boolean, string] & { isValid: boolean; reason: string }],
-    "view"
+    'view'
   >;
 
   getEvent(
-    key: "ChunksStaged"
+    key: 'ChunksStaged',
   ): TypedContractEvent<
     ChunksStagedEvent.InputTuple,
     ChunksStagedEvent.OutputTuple,
     ChunksStagedEvent.OutputObject
   >;
   getEvent(
-    key: "ComponentNoted"
+    key: 'ComponentNoted',
   ): TypedContractEvent<
     ComponentNotedEvent.InputTuple,
     ComponentNotedEvent.OutputTuple,
     ComponentNotedEvent.OutputObject
   >;
   getEvent(
-    key: "EmergencyPause"
+    key: 'EmergencyPause',
   ): TypedContractEvent<
     EmergencyPauseEvent.InputTuple,
     EmergencyPauseEvent.OutputTuple,
     EmergencyPauseEvent.OutputObject
   >;
   getEvent(
-    key: "OrchestrationCompleted"
+    key: 'OrchestrationCompleted',
   ): TypedContractEvent<
     OrchestrationCompletedEvent.InputTuple,
     OrchestrationCompletedEvent.OutputTuple,
     OrchestrationCompletedEvent.OutputObject
   >;
   getEvent(
-    key: "OrchestrationStarted"
+    key: 'OrchestrationStarted',
   ): TypedContractEvent<
     OrchestrationStartedEvent.InputTuple,
     OrchestrationStartedEvent.OutputTuple,
     OrchestrationStartedEvent.OutputObject
   >;
   getEvent(
-    key: "PlanEmergencyPause"
+    key: 'PlanEmergencyPause',
   ): TypedContractEvent<
     PlanEmergencyPauseEvent.InputTuple,
     PlanEmergencyPauseEvent.OutputTuple,
@@ -671,7 +523,7 @@ export interface Orchestrator extends BaseContract {
   >;
 
   filters: {
-    "ChunksStaged(bytes32,uint256,uint256,uint256)": TypedContractEvent<
+    'ChunksStaged(bytes32,uint256,uint256,uint256)': TypedContractEvent<
       ChunksStagedEvent.InputTuple,
       ChunksStagedEvent.OutputTuple,
       ChunksStagedEvent.OutputObject
@@ -682,7 +534,7 @@ export interface Orchestrator extends BaseContract {
       ChunksStagedEvent.OutputObject
     >;
 
-    "ComponentNoted(bytes32,address,string)": TypedContractEvent<
+    'ComponentNoted(bytes32,address,string)': TypedContractEvent<
       ComponentNotedEvent.InputTuple,
       ComponentNotedEvent.OutputTuple,
       ComponentNotedEvent.OutputObject
@@ -693,7 +545,7 @@ export interface Orchestrator extends BaseContract {
       ComponentNotedEvent.OutputObject
     >;
 
-    "EmergencyPause(bool,address)": TypedContractEvent<
+    'EmergencyPause(bool,address)': TypedContractEvent<
       EmergencyPauseEvent.InputTuple,
       EmergencyPauseEvent.OutputTuple,
       EmergencyPauseEvent.OutputObject
@@ -704,7 +556,7 @@ export interface Orchestrator extends BaseContract {
       EmergencyPauseEvent.OutputObject
     >;
 
-    "OrchestrationCompleted(bytes32,bool)": TypedContractEvent<
+    'OrchestrationCompleted(bytes32,bool)': TypedContractEvent<
       OrchestrationCompletedEvent.InputTuple,
       OrchestrationCompletedEvent.OutputTuple,
       OrchestrationCompletedEvent.OutputObject
@@ -715,7 +567,7 @@ export interface Orchestrator extends BaseContract {
       OrchestrationCompletedEvent.OutputObject
     >;
 
-    "OrchestrationStarted(bytes32,address,uint256)": TypedContractEvent<
+    'OrchestrationStarted(bytes32,address,uint256)': TypedContractEvent<
       OrchestrationStartedEvent.InputTuple,
       OrchestrationStartedEvent.OutputTuple,
       OrchestrationStartedEvent.OutputObject
@@ -726,7 +578,7 @@ export interface Orchestrator extends BaseContract {
       OrchestrationStartedEvent.OutputObject
     >;
 
-    "PlanEmergencyPause(bytes32,bool)": TypedContractEvent<
+    'PlanEmergencyPause(bytes32,bool)': TypedContractEvent<
       PlanEmergencyPauseEvent.InputTuple,
       PlanEmergencyPauseEvent.OutputTuple,
       PlanEmergencyPauseEvent.OutputObject

@@ -12,36 +12,28 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedLogDescription,
   TypedListener,
-} from "../../common";
+} from '../../common';
 
 export interface ManifestTypesInterface extends Interface {
   getEvent(
     nameOrSignatureOrTopic:
-      | "AuditCompleted"
-      | "AuditRegistered"
-      | "GovernanceProposalCreated"
-      | "GovernanceVoteCast"
+      | 'AuditCompleted'
+      | 'AuditRegistered'
+      | 'GovernanceProposalCreated'
+      | 'GovernanceVoteCast',
   ): EventFragment;
 }
 
 export namespace AuditCompletedEvent {
-  export type InputTuple = [
-    manifestHash: BytesLike,
-    auditor: AddressLike,
-    passed: boolean
-  ];
-  export type OutputTuple = [
-    manifestHash: string,
-    auditor: string,
-    passed: boolean
-  ];
+  export type InputTuple = [manifestHash: BytesLike, auditor: AddressLike, passed: boolean];
+  export type OutputTuple = [manifestHash: string, auditor: string, passed: boolean];
   export interface OutputObject {
     manifestHash: string;
     auditor: string;
@@ -54,11 +46,7 @@ export namespace AuditCompletedEvent {
 }
 
 export namespace AuditRegisteredEvent {
-  export type InputTuple = [
-    auditId: BytesLike,
-    auditor: AddressLike,
-    passed: boolean
-  ];
+  export type InputTuple = [auditId: BytesLike, auditor: AddressLike, passed: boolean];
   export type OutputTuple = [auditId: string, auditor: string, passed: boolean];
   export interface OutputObject {
     auditId: string;
@@ -77,14 +65,14 @@ export namespace GovernanceProposalCreatedEvent {
     proposer: AddressLike,
     startBlock: BigNumberish,
     endBlock: BigNumberish,
-    quorumBps: BigNumberish
+    quorumBps: BigNumberish,
   ];
   export type OutputTuple = [
     id: string,
     proposer: string,
     startBlock: bigint,
     endBlock: bigint,
-    quorumBps: bigint
+    quorumBps: bigint,
   ];
   export interface OutputObject {
     id: string;
@@ -104,14 +92,9 @@ export namespace GovernanceVoteCastEvent {
     proposalId: BytesLike,
     voter: AddressLike,
     support: boolean,
-    weight: BigNumberish
+    weight: BigNumberish,
   ];
-  export type OutputTuple = [
-    proposalId: string,
-    voter: string,
-    support: boolean,
-    weight: bigint
-  ];
+  export type OutputTuple = [proposalId: string, voter: string, support: boolean, weight: bigint];
   export interface OutputObject {
     proposalId: string;
     voter: string;
@@ -133,67 +116,63 @@ export interface ManifestTypes extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
   getEvent(
-    key: "AuditCompleted"
+    key: 'AuditCompleted',
   ): TypedContractEvent<
     AuditCompletedEvent.InputTuple,
     AuditCompletedEvent.OutputTuple,
     AuditCompletedEvent.OutputObject
   >;
   getEvent(
-    key: "AuditRegistered"
+    key: 'AuditRegistered',
   ): TypedContractEvent<
     AuditRegisteredEvent.InputTuple,
     AuditRegisteredEvent.OutputTuple,
     AuditRegisteredEvent.OutputObject
   >;
   getEvent(
-    key: "GovernanceProposalCreated"
+    key: 'GovernanceProposalCreated',
   ): TypedContractEvent<
     GovernanceProposalCreatedEvent.InputTuple,
     GovernanceProposalCreatedEvent.OutputTuple,
     GovernanceProposalCreatedEvent.OutputObject
   >;
   getEvent(
-    key: "GovernanceVoteCast"
+    key: 'GovernanceVoteCast',
   ): TypedContractEvent<
     GovernanceVoteCastEvent.InputTuple,
     GovernanceVoteCastEvent.OutputTuple,
@@ -201,7 +180,7 @@ export interface ManifestTypes extends BaseContract {
   >;
 
   filters: {
-    "AuditCompleted(bytes32,address,bool)": TypedContractEvent<
+    'AuditCompleted(bytes32,address,bool)': TypedContractEvent<
       AuditCompletedEvent.InputTuple,
       AuditCompletedEvent.OutputTuple,
       AuditCompletedEvent.OutputObject
@@ -212,7 +191,7 @@ export interface ManifestTypes extends BaseContract {
       AuditCompletedEvent.OutputObject
     >;
 
-    "AuditRegistered(bytes32,address,bool)": TypedContractEvent<
+    'AuditRegistered(bytes32,address,bool)': TypedContractEvent<
       AuditRegisteredEvent.InputTuple,
       AuditRegisteredEvent.OutputTuple,
       AuditRegisteredEvent.OutputObject
@@ -223,7 +202,7 @@ export interface ManifestTypes extends BaseContract {
       AuditRegisteredEvent.OutputObject
     >;
 
-    "GovernanceProposalCreated(bytes32,address,uint256,uint256,uint16)": TypedContractEvent<
+    'GovernanceProposalCreated(bytes32,address,uint256,uint256,uint16)': TypedContractEvent<
       GovernanceProposalCreatedEvent.InputTuple,
       GovernanceProposalCreatedEvent.OutputTuple,
       GovernanceProposalCreatedEvent.OutputObject
@@ -234,7 +213,7 @@ export interface ManifestTypes extends BaseContract {
       GovernanceProposalCreatedEvent.OutputObject
     >;
 
-    "GovernanceVoteCast(bytes32,address,bool,uint256)": TypedContractEvent<
+    'GovernanceVoteCast(bytes32,address,bool,uint256)': TypedContractEvent<
       GovernanceVoteCastEvent.InputTuple,
       GovernanceVoteCastEvent.OutputTuple,
       GovernanceVoteCastEvent.OutputObject

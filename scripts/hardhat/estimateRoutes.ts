@@ -32,7 +32,10 @@ async function main() {
       gasLibAddress = await gasLib.getAddress();
       console.log('Deployed GasOptimizationUtils at', gasLibAddress);
     } catch (linkErr) {
-      console.warn('GasOptimizationUtils deploy/link skipped:', (linkErr as any)?.message || linkErr);
+      console.warn(
+        'GasOptimizationUtils deploy/link skipped:',
+        (linkErr as any)?.message || linkErr,
+      );
     }
 
     let FacetFactory;
@@ -50,7 +53,8 @@ async function main() {
     facet = { address: await facetCtr.getAddress() };
     console.log('Deployed ExampleFacetA at', facet.address);
   } catch (err) {
-    console.warn('ExampleFacetA not found or failed to deploy, falling back to deployer as facet (may revert)',
+    console.warn(
+      'ExampleFacetA not found or failed to deploy, falling back to deployer as facet (may revert)',
       (err as any)?.message || err,
     );
     facet = { address: await deployer.getAddress() };

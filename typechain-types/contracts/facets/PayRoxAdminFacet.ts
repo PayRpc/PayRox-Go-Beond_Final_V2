@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,28 +21,23 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface PayRoxAdminFacetInterface extends Interface {
-  getFunction(
-    nameOrSignature: "getConfig" | "initPayRox" | "setFee"
-  ): FunctionFragment;
+  getFunction(nameOrSignature: 'getConfig' | 'initPayRox' | 'setFee'): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: "StorageLayoutValidated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'StorageLayoutValidated'): EventFragment;
 
-  encodeFunctionData(functionFragment: "getConfig", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getConfig', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "initPayRox",
-    values: [AddressLike, AddressLike, BigNumberish, BytesLike]
+    functionFragment: 'initPayRox',
+    values: [AddressLike, AddressLike, BigNumberish, BytesLike],
   ): string;
-  encodeFunctionData(
-    functionFragment: "setFee",
-    values: [BigNumberish]
-  ): string;
+  encodeFunctionData(functionFragment: 'setFee', values: [BigNumberish]): string;
 
-  decodeFunctionResult(functionFragment: "getConfig", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "initPayRox", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getConfig', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'initPayRox', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setFee', data: BytesLike): Result;
 }
 
 export namespace StorageLayoutValidatedEvent {
@@ -67,39 +62,37 @@ export interface PayRoxAdminFacet extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
   getConfig: TypedContractMethod<
     [],
@@ -109,9 +102,9 @@ export interface PayRoxAdminFacet extends BaseContract {
         treasury: string;
         feeBps: bigint;
         paused: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
   initPayRox: TypedContractMethod<
@@ -119,21 +112,17 @@ export interface PayRoxAdminFacet extends BaseContract {
       owner: AddressLike,
       treasury: AddressLike,
       feeBps: BigNumberish,
-      expectedStructHash: BytesLike
+      expectedStructHash: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  setFee: TypedContractMethod<[feeBps: BigNumberish], [void], "nonpayable">;
+  setFee: TypedContractMethod<[feeBps: BigNumberish], [void], 'nonpayable'>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
-  getFunction(
-    nameOrSignature: "getConfig"
-  ): TypedContractMethod<
+  getFunction(nameOrSignature: 'getConfig'): TypedContractMethod<
     [],
     [
       [string, string, bigint, boolean] & {
@@ -141,28 +130,28 @@ export interface PayRoxAdminFacet extends BaseContract {
         treasury: string;
         feeBps: bigint;
         paused: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "initPayRox"
+    nameOrSignature: 'initPayRox',
   ): TypedContractMethod<
     [
       owner: AddressLike,
       treasury: AddressLike,
       feeBps: BigNumberish,
-      expectedStructHash: BytesLike
+      expectedStructHash: BytesLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "setFee"
-  ): TypedContractMethod<[feeBps: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'setFee',
+  ): TypedContractMethod<[feeBps: BigNumberish], [void], 'nonpayable'>;
 
   getEvent(
-    key: "StorageLayoutValidated"
+    key: 'StorageLayoutValidated',
   ): TypedContractEvent<
     StorageLayoutValidatedEvent.InputTuple,
     StorageLayoutValidatedEvent.OutputTuple,
@@ -170,7 +159,7 @@ export interface PayRoxAdminFacet extends BaseContract {
   >;
 
   filters: {
-    "StorageLayoutValidated(bytes32,bytes32)": TypedContractEvent<
+    'StorageLayoutValidated(bytes32,bytes32)': TypedContractEvent<
       StorageLayoutValidatedEvent.InputTuple,
       StorageLayoutValidatedEvent.OutputTuple,
       StorageLayoutValidatedEvent.OutputObject

@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,64 +21,37 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface EpochManagerInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "MAX_EPOCH_JUMP"
-      | "advanceEpoch"
-      | "getCurrentEpoch"
-      | "listener"
-      | "owner"
-      | "registerListener"
-      | "setEpoch"
+      | 'MAX_EPOCH_JUMP'
+      | 'advanceEpoch'
+      | 'getCurrentEpoch'
+      | 'listener'
+      | 'owner'
+      | 'registerListener'
+      | 'setEpoch',
   ): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: "EpochAdvanced"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'EpochAdvanced'): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "MAX_EPOCH_JUMP",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "advanceEpoch",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getCurrentEpoch",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "listener", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "registerListener",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setEpoch",
-    values: [BigNumberish]
-  ): string;
+  encodeFunctionData(functionFragment: 'MAX_EPOCH_JUMP', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'advanceEpoch', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getCurrentEpoch', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'listener', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'registerListener', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'setEpoch', values: [BigNumberish]): string;
 
-  decodeFunctionResult(
-    functionFragment: "MAX_EPOCH_JUMP",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "advanceEpoch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getCurrentEpoch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "listener", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "registerListener",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setEpoch", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'MAX_EPOCH_JUMP', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'advanceEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getCurrentEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'listener', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'registerListener', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setEpoch', data: BytesLike): Result;
 }
 
 export namespace EpochAdvancedEvent {
@@ -103,82 +76,68 @@ export interface EpochManager extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  MAX_EPOCH_JUMP: TypedContractMethod<[], [bigint], "view">;
+  MAX_EPOCH_JUMP: TypedContractMethod<[], [bigint], 'view'>;
 
-  advanceEpoch: TypedContractMethod<[], [boolean], "nonpayable">;
+  advanceEpoch: TypedContractMethod<[], [boolean], 'nonpayable'>;
 
-  getCurrentEpoch: TypedContractMethod<[], [bigint], "view">;
+  getCurrentEpoch: TypedContractMethod<[], [bigint], 'view'>;
 
-  listener: TypedContractMethod<[], [string], "view">;
+  listener: TypedContractMethod<[], [string], 'view'>;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  owner: TypedContractMethod<[], [string], 'view'>;
 
-  registerListener: TypedContractMethod<[l: AddressLike], [void], "nonpayable">;
+  registerListener: TypedContractMethod<[l: AddressLike], [void], 'nonpayable'>;
 
-  setEpoch: TypedContractMethod<[newEpoch: BigNumberish], [void], "nonpayable">;
+  setEpoch: TypedContractMethod<[newEpoch: BigNumberish], [void], 'nonpayable'>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
+  getFunction(nameOrSignature: 'MAX_EPOCH_JUMP'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'advanceEpoch'): TypedContractMethod<[], [boolean], 'nonpayable'>;
+  getFunction(nameOrSignature: 'getCurrentEpoch'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'listener'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'owner'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "MAX_EPOCH_JUMP"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'registerListener',
+  ): TypedContractMethod<[l: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "advanceEpoch"
-  ): TypedContractMethod<[], [boolean], "nonpayable">;
-  getFunction(
-    nameOrSignature: "getCurrentEpoch"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "listener"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "registerListener"
-  ): TypedContractMethod<[l: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setEpoch"
-  ): TypedContractMethod<[newEpoch: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'setEpoch',
+  ): TypedContractMethod<[newEpoch: BigNumberish], [void], 'nonpayable'>;
 
   getEvent(
-    key: "EpochAdvanced"
+    key: 'EpochAdvanced',
   ): TypedContractEvent<
     EpochAdvancedEvent.InputTuple,
     EpochAdvancedEvent.OutputTuple,
@@ -186,7 +145,7 @@ export interface EpochManager extends BaseContract {
   >;
 
   filters: {
-    "EpochAdvanced(uint64,uint64)": TypedContractEvent<
+    'EpochAdvanced(uint64,uint64)': TypedContractEvent<
       EpochAdvancedEvent.InputTuple,
       EpochAdvancedEvent.OutputTuple,
       EpochAdvancedEvent.OutputObject

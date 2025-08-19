@@ -259,9 +259,7 @@
           ]
         }
       ],
-      "storageSlots": [
-        "payrox.securityfacet.v1"
-      ],
+      "storageSlots": ["payrox.securityfacet.v1"],
       "interfaceId": "0x3e24a067"
     }
   ],
@@ -276,13 +274,9 @@
   ],
   "deploymentStrategy": {
     "mainContract": "SecurityFacet",
-    "facets": [
-      "SecurityFacet"
-    ],
+    "facets": ["SecurityFacet"],
     "libraries": [],
-    "deploymentOrder": [
-      "SecurityFacet"
-    ],
+    "deploymentOrder": ["SecurityFacet"],
     "crossReferences": {}
   },
   "diamondCut": [

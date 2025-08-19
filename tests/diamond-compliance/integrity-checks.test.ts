@@ -20,7 +20,9 @@ describe('System Integrity Checks', function () {
     // Deploy factory with integrity parameters
     const Factory = await ethers.getContractFactory('DeterministicChunkFactory');
     const manifestHash = ethers.keccak256(ethers.toUtf8Bytes('test-manifest'));
-    const dispatcherCodehash = await ethers.provider.getCode(dispatcher.target).then(code => ethers.keccak256(code));
+    const dispatcherCodehash = await ethers.provider
+      .getCode(dispatcher.target)
+      .then((code) => ethers.keccak256(code));
     const factoryCodehash = ethers.keccak256(ethers.toUtf8Bytes('factory-code'));
 
     factory = await Factory.deploy(
@@ -30,7 +32,7 @@ describe('System Integrity Checks', function () {
       dispatcherCodehash, // dispatcherCodehash
       factoryCodehash, // factoryBytecodeHash (this will fail real check)
       ethers.parseEther('0.01'), // baseFeeWei
-      true // feesEnabled
+      true, // feesEnabled
     );
     await factory.waitForDeployment();
   });
@@ -88,7 +90,7 @@ describe('System Integrity Checks', function () {
     });
 
     it('should accept chunks within size limit', async function () {
-      // Skip for now - need proper staging method  
+      // Skip for now - need proper staging method
       this.skip();
     });
   });

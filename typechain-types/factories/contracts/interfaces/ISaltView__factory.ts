@@ -2,126 +2,123 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Interface, type ContractRunner } from "ethers";
-import type {
-  ISaltView,
-  ISaltViewInterface,
-} from "../../../contracts/interfaces/ISaltView";
+import { Contract, Interface, type ContractRunner } from 'ethers';
+import type { ISaltView, ISaltViewInterface } from '../../../contracts/interfaces/ISaltView';
 
 const _abi = [
   {
     inputs: [],
-    name: "eip2470",
+    name: 'eip2470',
     outputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "string",
-        name: "version",
-        type: "string",
+        internalType: 'string',
+        name: 'version',
+        type: 'string',
       },
     ],
-    name: "factorySalt",
+    name: 'factorySalt',
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "bytes",
-        name: "initCode",
-        type: "bytes",
+        internalType: 'bytes',
+        name: 'initCode',
+        type: 'bytes',
       },
     ],
-    name: "hashInitCode",
+    name: 'hashInitCode',
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "deployer",
-        type: "address",
+        internalType: 'address',
+        name: 'deployer',
+        type: 'address',
       },
       {
-        internalType: "bytes32",
-        name: "salt",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: 'salt',
+        type: 'bytes32',
       },
       {
-        internalType: "bytes32",
-        name: "initCodeHash",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: 'initCodeHash',
+        type: 'bytes32',
       },
     ],
-    name: "predictCreate2",
+    name: 'predictCreate2',
     outputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address",
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "deployer",
-        type: "address",
+        internalType: 'address',
+        name: 'deployer',
+        type: 'address',
       },
       {
-        internalType: "string",
-        name: "content",
-        type: "string",
+        internalType: 'string',
+        name: 'content',
+        type: 'string',
       },
       {
-        internalType: "uint256",
-        name: "crossNonce",
-        type: "uint256",
+        internalType: 'uint256',
+        name: 'crossNonce',
+        type: 'uint256',
       },
       {
-        internalType: "string",
-        name: "version",
-        type: "string",
+        internalType: 'string',
+        name: 'version',
+        type: 'string',
       },
     ],
-    name: "universalSalt",
+    name: 'universalSalt',
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
       },
     ],
-    stateMutability: "pure",
-    type: "function",
+    stateMutability: 'pure',
+    type: 'function',
   },
 ] as const;
 

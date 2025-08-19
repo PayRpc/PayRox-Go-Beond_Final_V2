@@ -2,1034 +2,1034 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 import {
   DeployContractOptions,
   FactoryOptions,
   HardhatEthersHelpers as HardhatEthersHelpersBase,
-} from "@nomicfoundation/hardhat-ethers/types";
+} from '@nomicfoundation/hardhat-ethers/types';
 
-import * as Contracts from ".";
+import * as Contracts from '.';
 
-declare module "hardhat/types/runtime" {
+declare module 'hardhat/types/runtime' {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "IERC1271",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IERC1271',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC1271__factory>;
     getContractFactory(
-      name: "IERC7913SignatureVerifier",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IERC7913SignatureVerifier',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC7913SignatureVerifier__factory>;
     getContractFactory(
-      name: "ECDSA",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ECDSA',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ECDSA__factory>;
     getContractFactory(
-      name: "SafeCast",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'SafeCast',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.SafeCast__factory>;
     getContractFactory(
-      name: "ReentrancyGuard",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ReentrancyGuard',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ReentrancyGuard__factory>;
     getContractFactory(
-      name: "Strings",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'Strings',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Strings__factory>;
     getContractFactory(
-      name: "AuditRegistry",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'AuditRegistry',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.AuditRegistry__factory>;
     getContractFactory(
-      name: "ManifestDispatcher",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ManifestDispatcher',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ManifestDispatcher__factory>;
     getContractFactory(
-      name: "IManifestDispatcher",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IManifestDispatcher',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IManifestDispatcher__factory>;
     getContractFactory(
-      name: "AccessControlFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'AccessControlFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.AccessControlFacet__factory>;
     getContractFactory(
-      name: "ChunkFactoryFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ChunkFactoryFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ChunkFactoryFacet__factory>;
     getContractFactory(
-      name: "ERC165Facet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ERC165Facet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC165Facet__factory>;
     getContractFactory(
-      name: "IERC165",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IERC165',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "ExampleFacetA",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ExampleFacetA',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ExampleFacetA__factory>;
     getContractFactory(
-      name: "ExampleFacetB",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ExampleFacetB',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ExampleFacetB__factory>;
     getContractFactory(
-      name: "IAntiBotFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IAntiBotFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IAntiBotFacet__factory>;
     getContractFactory(
-      name: "MaliciousFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'MaliciousFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MaliciousFacet__factory>;
     getContractFactory(
-      name: "PauseFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'PauseFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.PauseFacet__factory>;
     getContractFactory(
-      name: "PayRoxAdminFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'PayRoxAdminFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.PayRoxAdminFacet__factory>;
     getContractFactory(
-      name: "PayRoxPaymentsFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'PayRoxPaymentsFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.PayRoxPaymentsFacet__factory>;
     getContractFactory(
-      name: "RefactorSafetyFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'RefactorSafetyFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.RefactorSafetyFacet__factory>;
     getContractFactory(
-      name: "SaltViewFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'SaltViewFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.SaltViewFacet__factory>;
     getContractFactory(
-      name: "SecurityFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'SecurityFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.SecurityFacet__factory>;
     getContractFactory(
-      name: "DeterministicChunkFactory",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'DeterministicChunkFactory',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.DeterministicChunkFactory__factory>;
     getContractFactory(
-      name: "GovernanceOrchestrator",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'GovernanceOrchestrator',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.GovernanceOrchestrator__factory>;
     getContractFactory(
-      name: "IAccessControl",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IAccessControl',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IAccessControl__factory>;
     getContractFactory(
-      name: "IDiamondLoupe",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IDiamondLoupe',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IDiamondLoupe__factory>;
     getContractFactory(
-      name: "IERC165",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IERC165',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "IERC173",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IERC173',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC173__factory>;
     getContractFactory(
-      name: "IPausable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IPausable',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IPausable__factory>;
     getContractFactory(
-      name: "PayRoxDiamondInit",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'PayRoxDiamondInit',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.PayRoxDiamondInit__factory>;
     getContractFactory(
-      name: "IAntiBot",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IAntiBot',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IAntiBot__factory>;
     getContractFactory(
-      name: "IChunkFactory",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IChunkFactory',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IChunkFactory__factory>;
     getContractFactory(
-      name: "IDiamondLoupe",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IDiamondLoupe',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IDiamondLoupe__factory>;
     getContractFactory(
-      name: "IDiamondLoupeEx",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IDiamondLoupeEx',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IDiamondLoupeEx__factory>;
     getContractFactory(
-      name: "IManifestDispatcher",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IManifestDispatcher',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IManifestDispatcher__factory>;
     getContractFactory(
-      name: "ISaltView",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ISaltView',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ISaltView__factory>;
     getContractFactory(
-      name: "RefactorSafeFacetBase",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'RefactorSafeFacetBase',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.RefactorSafeFacetBase__factory>;
     getContractFactory(
-      name: "RefactorSafetyLib",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'RefactorSafetyLib',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.RefactorSafetyLib__factory>;
     getContractFactory(
-      name: "ManifestTypes",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ManifestTypes',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ManifestTypes__factory>;
     getContractFactory(
-      name: "Orchestrator",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'Orchestrator',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Orchestrator__factory>;
     getContractFactory(
-      name: "IManifestDispatcherView",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IManifestDispatcherView',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IManifestDispatcherView__factory>;
     getContractFactory(
-      name: "PayRoxProxyRouter",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'PayRoxProxyRouter',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.PayRoxProxyRouter__factory>;
     getContractFactory(
-      name: "Diamond",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'Diamond',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Diamond__factory>;
     getContractFactory(
-      name: "DiamondWithEpoch",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'DiamondWithEpoch',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.DiamondWithEpoch__factory>;
     getContractFactory(
-      name: "EpochManager",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'EpochManager',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.EpochManager__factory>;
     getContractFactory(
-      name: "FacetA",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'FacetA',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.FacetA__factory>;
     getContractFactory(
-      name: "FacetB",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'FacetB',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.FacetB__factory>;
     getContractFactory(
-      name: "IDiamondCut",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'IDiamondCut',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IDiamondCut__factory>;
     getContractFactory(
-      name: "MockManifestDispatcher",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'MockManifestDispatcher',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MockManifestDispatcher__factory>;
     getContractFactory(
-      name: "SampleFacet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'SampleFacet',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.SampleFacet__factory>;
     getContractFactory(
-      name: "MockManifestDispatcher",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'MockManifestDispatcher',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MockManifestDispatcher__factory>;
     getContractFactory(
-      name: "ChunkFactoryLib",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'ChunkFactoryLib',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ChunkFactoryLib__factory>;
     getContractFactory(
-      name: "GasOptimizationUtils",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'GasOptimizationUtils',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.GasOptimizationUtils__factory>;
     getContractFactory(
-      name: "OrderedMerkle",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      name: 'OrderedMerkle',
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.OrderedMerkle__factory>;
 
     getContractAt(
-      name: "IERC1271",
+      name: 'IERC1271',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IERC1271>;
     getContractAt(
-      name: "IERC7913SignatureVerifier",
+      name: 'IERC7913SignatureVerifier',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IERC7913SignatureVerifier>;
     getContractAt(
-      name: "ECDSA",
+      name: 'ECDSA',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ECDSA>;
     getContractAt(
-      name: "SafeCast",
+      name: 'SafeCast',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.SafeCast>;
     getContractAt(
-      name: "ReentrancyGuard",
+      name: 'ReentrancyGuard',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ReentrancyGuard>;
     getContractAt(
-      name: "Strings",
+      name: 'Strings',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.Strings>;
     getContractAt(
-      name: "AuditRegistry",
+      name: 'AuditRegistry',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.AuditRegistry>;
     getContractAt(
-      name: "ManifestDispatcher",
+      name: 'ManifestDispatcher',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ManifestDispatcher>;
     getContractAt(
-      name: "IManifestDispatcher",
+      name: 'IManifestDispatcher',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IManifestDispatcher>;
     getContractAt(
-      name: "AccessControlFacet",
+      name: 'AccessControlFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.AccessControlFacet>;
     getContractAt(
-      name: "ChunkFactoryFacet",
+      name: 'ChunkFactoryFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ChunkFactoryFacet>;
     getContractAt(
-      name: "ERC165Facet",
+      name: 'ERC165Facet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ERC165Facet>;
     getContractAt(
-      name: "IERC165",
+      name: 'IERC165',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "ExampleFacetA",
+      name: 'ExampleFacetA',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ExampleFacetA>;
     getContractAt(
-      name: "ExampleFacetB",
+      name: 'ExampleFacetB',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ExampleFacetB>;
     getContractAt(
-      name: "IAntiBotFacet",
+      name: 'IAntiBotFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IAntiBotFacet>;
     getContractAt(
-      name: "MaliciousFacet",
+      name: 'MaliciousFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.MaliciousFacet>;
     getContractAt(
-      name: "PauseFacet",
+      name: 'PauseFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.PauseFacet>;
     getContractAt(
-      name: "PayRoxAdminFacet",
+      name: 'PayRoxAdminFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.PayRoxAdminFacet>;
     getContractAt(
-      name: "PayRoxPaymentsFacet",
+      name: 'PayRoxPaymentsFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.PayRoxPaymentsFacet>;
     getContractAt(
-      name: "RefactorSafetyFacet",
+      name: 'RefactorSafetyFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.RefactorSafetyFacet>;
     getContractAt(
-      name: "SaltViewFacet",
+      name: 'SaltViewFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.SaltViewFacet>;
     getContractAt(
-      name: "SecurityFacet",
+      name: 'SecurityFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.SecurityFacet>;
     getContractAt(
-      name: "DeterministicChunkFactory",
+      name: 'DeterministicChunkFactory',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.DeterministicChunkFactory>;
     getContractAt(
-      name: "GovernanceOrchestrator",
+      name: 'GovernanceOrchestrator',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.GovernanceOrchestrator>;
     getContractAt(
-      name: "IAccessControl",
+      name: 'IAccessControl',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IAccessControl>;
     getContractAt(
-      name: "IDiamondLoupe",
+      name: 'IDiamondLoupe',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IDiamondLoupe>;
     getContractAt(
-      name: "IERC165",
+      name: 'IERC165',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "IERC173",
+      name: 'IERC173',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IERC173>;
     getContractAt(
-      name: "IPausable",
+      name: 'IPausable',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IPausable>;
     getContractAt(
-      name: "PayRoxDiamondInit",
+      name: 'PayRoxDiamondInit',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.PayRoxDiamondInit>;
     getContractAt(
-      name: "IAntiBot",
+      name: 'IAntiBot',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IAntiBot>;
     getContractAt(
-      name: "IChunkFactory",
+      name: 'IChunkFactory',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IChunkFactory>;
     getContractAt(
-      name: "IDiamondLoupe",
+      name: 'IDiamondLoupe',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IDiamondLoupe>;
     getContractAt(
-      name: "IDiamondLoupeEx",
+      name: 'IDiamondLoupeEx',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IDiamondLoupeEx>;
     getContractAt(
-      name: "IManifestDispatcher",
+      name: 'IManifestDispatcher',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IManifestDispatcher>;
     getContractAt(
-      name: "ISaltView",
+      name: 'ISaltView',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ISaltView>;
     getContractAt(
-      name: "RefactorSafeFacetBase",
+      name: 'RefactorSafeFacetBase',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.RefactorSafeFacetBase>;
     getContractAt(
-      name: "RefactorSafetyLib",
+      name: 'RefactorSafetyLib',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.RefactorSafetyLib>;
     getContractAt(
-      name: "ManifestTypes",
+      name: 'ManifestTypes',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ManifestTypes>;
     getContractAt(
-      name: "Orchestrator",
+      name: 'Orchestrator',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.Orchestrator>;
     getContractAt(
-      name: "IManifestDispatcherView",
+      name: 'IManifestDispatcherView',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IManifestDispatcherView>;
     getContractAt(
-      name: "PayRoxProxyRouter",
+      name: 'PayRoxProxyRouter',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.PayRoxProxyRouter>;
     getContractAt(
-      name: "Diamond",
+      name: 'Diamond',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.Diamond>;
     getContractAt(
-      name: "DiamondWithEpoch",
+      name: 'DiamondWithEpoch',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.DiamondWithEpoch>;
     getContractAt(
-      name: "EpochManager",
+      name: 'EpochManager',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.EpochManager>;
     getContractAt(
-      name: "FacetA",
+      name: 'FacetA',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.FacetA>;
     getContractAt(
-      name: "FacetB",
+      name: 'FacetB',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.FacetB>;
     getContractAt(
-      name: "IDiamondCut",
+      name: 'IDiamondCut',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.IDiamondCut>;
     getContractAt(
-      name: "MockManifestDispatcher",
+      name: 'MockManifestDispatcher',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.MockManifestDispatcher>;
     getContractAt(
-      name: "SampleFacet",
+      name: 'SampleFacet',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.SampleFacet>;
     getContractAt(
-      name: "MockManifestDispatcher",
+      name: 'MockManifestDispatcher',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.MockManifestDispatcher>;
     getContractAt(
-      name: "ChunkFactoryLib",
+      name: 'ChunkFactoryLib',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.ChunkFactoryLib>;
     getContractAt(
-      name: "GasOptimizationUtils",
+      name: 'GasOptimizationUtils',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.GasOptimizationUtils>;
     getContractAt(
-      name: "OrderedMerkle",
+      name: 'OrderedMerkle',
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<Contracts.OrderedMerkle>;
 
     deployContract(
-      name: "IERC1271",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IERC1271',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC1271>;
     deployContract(
-      name: "IERC7913SignatureVerifier",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IERC7913SignatureVerifier',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC7913SignatureVerifier>;
     deployContract(
-      name: "ECDSA",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ECDSA',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ECDSA>;
     deployContract(
-      name: "SafeCast",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'SafeCast',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SafeCast>;
     deployContract(
-      name: "ReentrancyGuard",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ReentrancyGuard',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ReentrancyGuard>;
     deployContract(
-      name: "Strings",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'Strings',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "AuditRegistry",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'AuditRegistry',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.AuditRegistry>;
     deployContract(
-      name: "ManifestDispatcher",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ManifestDispatcher',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ManifestDispatcher>;
     deployContract(
-      name: "IManifestDispatcher",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IManifestDispatcher',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IManifestDispatcher>;
     deployContract(
-      name: "AccessControlFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'AccessControlFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.AccessControlFacet>;
     deployContract(
-      name: "ChunkFactoryFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ChunkFactoryFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ChunkFactoryFacet>;
     deployContract(
-      name: "ERC165Facet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ERC165Facet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ERC165Facet>;
     deployContract(
-      name: "IERC165",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IERC165',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC165>;
     deployContract(
-      name: "ExampleFacetA",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ExampleFacetA',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ExampleFacetA>;
     deployContract(
-      name: "ExampleFacetB",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ExampleFacetB',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ExampleFacetB>;
     deployContract(
-      name: "IAntiBotFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IAntiBotFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IAntiBotFacet>;
     deployContract(
-      name: "MaliciousFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'MaliciousFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.MaliciousFacet>;
     deployContract(
-      name: "PauseFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'PauseFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PauseFacet>;
     deployContract(
-      name: "PayRoxAdminFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'PayRoxAdminFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxAdminFacet>;
     deployContract(
-      name: "PayRoxPaymentsFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'PayRoxPaymentsFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxPaymentsFacet>;
     deployContract(
-      name: "RefactorSafetyFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'RefactorSafetyFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.RefactorSafetyFacet>;
     deployContract(
-      name: "SaltViewFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'SaltViewFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SaltViewFacet>;
     deployContract(
-      name: "SecurityFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'SecurityFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SecurityFacet>;
     deployContract(
-      name: "DeterministicChunkFactory",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'DeterministicChunkFactory',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.DeterministicChunkFactory>;
     deployContract(
-      name: "GovernanceOrchestrator",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'GovernanceOrchestrator',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.GovernanceOrchestrator>;
     deployContract(
-      name: "IAccessControl",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IAccessControl',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IAccessControl>;
     deployContract(
-      name: "IDiamondLoupe",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IDiamondLoupe',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondLoupe>;
     deployContract(
-      name: "IERC165",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IERC165',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC165>;
     deployContract(
-      name: "IERC173",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IERC173',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC173>;
     deployContract(
-      name: "IPausable",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IPausable',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IPausable>;
     deployContract(
-      name: "PayRoxDiamondInit",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'PayRoxDiamondInit',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxDiamondInit>;
     deployContract(
-      name: "IAntiBot",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IAntiBot',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IAntiBot>;
     deployContract(
-      name: "IChunkFactory",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IChunkFactory',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IChunkFactory>;
     deployContract(
-      name: "IDiamondLoupe",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IDiamondLoupe',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondLoupe>;
     deployContract(
-      name: "IDiamondLoupeEx",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IDiamondLoupeEx',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondLoupeEx>;
     deployContract(
-      name: "IManifestDispatcher",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IManifestDispatcher',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IManifestDispatcher>;
     deployContract(
-      name: "ISaltView",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ISaltView',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ISaltView>;
     deployContract(
-      name: "RefactorSafeFacetBase",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'RefactorSafeFacetBase',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.RefactorSafeFacetBase>;
     deployContract(
-      name: "RefactorSafetyLib",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'RefactorSafetyLib',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.RefactorSafetyLib>;
     deployContract(
-      name: "ManifestTypes",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ManifestTypes',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ManifestTypes>;
     deployContract(
-      name: "Orchestrator",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'Orchestrator',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.Orchestrator>;
     deployContract(
-      name: "IManifestDispatcherView",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IManifestDispatcherView',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IManifestDispatcherView>;
     deployContract(
-      name: "PayRoxProxyRouter",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'PayRoxProxyRouter',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxProxyRouter>;
     deployContract(
-      name: "Diamond",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'Diamond',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.Diamond>;
     deployContract(
-      name: "DiamondWithEpoch",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'DiamondWithEpoch',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.DiamondWithEpoch>;
     deployContract(
-      name: "EpochManager",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'EpochManager',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.EpochManager>;
     deployContract(
-      name: "FacetA",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'FacetA',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.FacetA>;
     deployContract(
-      name: "FacetB",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'FacetB',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.FacetB>;
     deployContract(
-      name: "IDiamondCut",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'IDiamondCut',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondCut>;
     deployContract(
-      name: "MockManifestDispatcher",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'MockManifestDispatcher',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.MockManifestDispatcher>;
     deployContract(
-      name: "SampleFacet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'SampleFacet',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SampleFacet>;
     deployContract(
-      name: "MockManifestDispatcher",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'MockManifestDispatcher',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.MockManifestDispatcher>;
     deployContract(
-      name: "ChunkFactoryLib",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'ChunkFactoryLib',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ChunkFactoryLib>;
     deployContract(
-      name: "GasOptimizationUtils",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'GasOptimizationUtils',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.GasOptimizationUtils>;
     deployContract(
-      name: "OrderedMerkle",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      name: 'OrderedMerkle',
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.OrderedMerkle>;
 
     deployContract(
-      name: "IERC1271",
+      name: 'IERC1271',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC1271>;
     deployContract(
-      name: "IERC7913SignatureVerifier",
+      name: 'IERC7913SignatureVerifier',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC7913SignatureVerifier>;
     deployContract(
-      name: "ECDSA",
+      name: 'ECDSA',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ECDSA>;
     deployContract(
-      name: "SafeCast",
+      name: 'SafeCast',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SafeCast>;
     deployContract(
-      name: "ReentrancyGuard",
+      name: 'ReentrancyGuard',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ReentrancyGuard>;
     deployContract(
-      name: "Strings",
+      name: 'Strings',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "AuditRegistry",
+      name: 'AuditRegistry',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.AuditRegistry>;
     deployContract(
-      name: "ManifestDispatcher",
+      name: 'ManifestDispatcher',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ManifestDispatcher>;
     deployContract(
-      name: "IManifestDispatcher",
+      name: 'IManifestDispatcher',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IManifestDispatcher>;
     deployContract(
-      name: "AccessControlFacet",
+      name: 'AccessControlFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.AccessControlFacet>;
     deployContract(
-      name: "ChunkFactoryFacet",
+      name: 'ChunkFactoryFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ChunkFactoryFacet>;
     deployContract(
-      name: "ERC165Facet",
+      name: 'ERC165Facet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ERC165Facet>;
     deployContract(
-      name: "IERC165",
+      name: 'IERC165',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC165>;
     deployContract(
-      name: "ExampleFacetA",
+      name: 'ExampleFacetA',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ExampleFacetA>;
     deployContract(
-      name: "ExampleFacetB",
+      name: 'ExampleFacetB',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ExampleFacetB>;
     deployContract(
-      name: "IAntiBotFacet",
+      name: 'IAntiBotFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IAntiBotFacet>;
     deployContract(
-      name: "MaliciousFacet",
+      name: 'MaliciousFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.MaliciousFacet>;
     deployContract(
-      name: "PauseFacet",
+      name: 'PauseFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PauseFacet>;
     deployContract(
-      name: "PayRoxAdminFacet",
+      name: 'PayRoxAdminFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxAdminFacet>;
     deployContract(
-      name: "PayRoxPaymentsFacet",
+      name: 'PayRoxPaymentsFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxPaymentsFacet>;
     deployContract(
-      name: "RefactorSafetyFacet",
+      name: 'RefactorSafetyFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.RefactorSafetyFacet>;
     deployContract(
-      name: "SaltViewFacet",
+      name: 'SaltViewFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SaltViewFacet>;
     deployContract(
-      name: "SecurityFacet",
+      name: 'SecurityFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SecurityFacet>;
     deployContract(
-      name: "DeterministicChunkFactory",
+      name: 'DeterministicChunkFactory',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.DeterministicChunkFactory>;
     deployContract(
-      name: "GovernanceOrchestrator",
+      name: 'GovernanceOrchestrator',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.GovernanceOrchestrator>;
     deployContract(
-      name: "IAccessControl",
+      name: 'IAccessControl',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IAccessControl>;
     deployContract(
-      name: "IDiamondLoupe",
+      name: 'IDiamondLoupe',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondLoupe>;
     deployContract(
-      name: "IERC165",
+      name: 'IERC165',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC165>;
     deployContract(
-      name: "IERC173",
+      name: 'IERC173',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IERC173>;
     deployContract(
-      name: "IPausable",
+      name: 'IPausable',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IPausable>;
     deployContract(
-      name: "PayRoxDiamondInit",
+      name: 'PayRoxDiamondInit',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxDiamondInit>;
     deployContract(
-      name: "IAntiBot",
+      name: 'IAntiBot',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IAntiBot>;
     deployContract(
-      name: "IChunkFactory",
+      name: 'IChunkFactory',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IChunkFactory>;
     deployContract(
-      name: "IDiamondLoupe",
+      name: 'IDiamondLoupe',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondLoupe>;
     deployContract(
-      name: "IDiamondLoupeEx",
+      name: 'IDiamondLoupeEx',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondLoupeEx>;
     deployContract(
-      name: "IManifestDispatcher",
+      name: 'IManifestDispatcher',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IManifestDispatcher>;
     deployContract(
-      name: "ISaltView",
+      name: 'ISaltView',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ISaltView>;
     deployContract(
-      name: "RefactorSafeFacetBase",
+      name: 'RefactorSafeFacetBase',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.RefactorSafeFacetBase>;
     deployContract(
-      name: "RefactorSafetyLib",
+      name: 'RefactorSafetyLib',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.RefactorSafetyLib>;
     deployContract(
-      name: "ManifestTypes",
+      name: 'ManifestTypes',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ManifestTypes>;
     deployContract(
-      name: "Orchestrator",
+      name: 'Orchestrator',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.Orchestrator>;
     deployContract(
-      name: "IManifestDispatcherView",
+      name: 'IManifestDispatcherView',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IManifestDispatcherView>;
     deployContract(
-      name: "PayRoxProxyRouter",
+      name: 'PayRoxProxyRouter',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.PayRoxProxyRouter>;
     deployContract(
-      name: "Diamond",
+      name: 'Diamond',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.Diamond>;
     deployContract(
-      name: "DiamondWithEpoch",
+      name: 'DiamondWithEpoch',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.DiamondWithEpoch>;
     deployContract(
-      name: "EpochManager",
+      name: 'EpochManager',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.EpochManager>;
     deployContract(
-      name: "FacetA",
+      name: 'FacetA',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.FacetA>;
     deployContract(
-      name: "FacetB",
+      name: 'FacetB',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.FacetB>;
     deployContract(
-      name: "IDiamondCut",
+      name: 'IDiamondCut',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.IDiamondCut>;
     deployContract(
-      name: "MockManifestDispatcher",
+      name: 'MockManifestDispatcher',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.MockManifestDispatcher>;
     deployContract(
-      name: "SampleFacet",
+      name: 'SampleFacet',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.SampleFacet>;
     deployContract(
-      name: "MockManifestDispatcher",
+      name: 'MockManifestDispatcher',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.MockManifestDispatcher>;
     deployContract(
-      name: "ChunkFactoryLib",
+      name: 'ChunkFactoryLib',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.ChunkFactoryLib>;
     deployContract(
-      name: "GasOptimizationUtils",
+      name: 'GasOptimizationUtils',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.GasOptimizationUtils>;
     deployContract(
-      name: "OrderedMerkle",
+      name: 'OrderedMerkle',
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<Contracts.OrderedMerkle>;
 
     // default types
     getContractFactory(
       name: string,
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<ethers.ContractFactory>;
     getContractFactory(
       abi: any[],
       bytecode: ethers.BytesLike,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<ethers.ContractFactory>;
     getContractAt(
       nameOrAbi: string | any[],
       address: string | ethers.Addressable,
-      signer?: ethers.Signer
+      signer?: ethers.Signer,
     ): Promise<ethers.Contract>;
     deployContract(
       name: string,
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<ethers.Contract>;
     deployContract(
       name: string,
       args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions,
     ): Promise<ethers.Contract>;
   }
 }

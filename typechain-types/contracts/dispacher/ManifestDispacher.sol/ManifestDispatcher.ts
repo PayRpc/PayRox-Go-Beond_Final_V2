@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from '../../../common';
 
 export declare namespace IDiamondLoupeEx {
   export type FacetMetadataStruct = {
@@ -35,7 +35,7 @@ export declare namespace IDiamondLoupeEx {
     name: string,
     category: string,
     dependencies: string[],
-    isUpgradeable: boolean
+    isUpgradeable: boolean,
   ] & {
     name: string;
     category: string;
@@ -54,7 +54,7 @@ export declare namespace IDiamondLoupeEx {
     facetAddress: string,
     functionSelectors: string[],
     versionTag: string,
-    securityLevel: bigint
+    securityLevel: bigint,
   ] & {
     facetAddress: string;
     functionSelectors: string[];
@@ -69,10 +69,10 @@ export declare namespace IDiamondLoupe {
     functionSelectors: BytesLike[];
   };
 
-  export type FacetStructOutput = [
-    facetAddress: string,
-    functionSelectors: string[]
-  ] & { facetAddress: string; functionSelectors: string[] };
+  export type FacetStructOutput = [facetAddress: string, functionSelectors: string[]] & {
+    facetAddress: string;
+    functionSelectors: string[];
+  };
 }
 
 export declare namespace IManifestDispatcher {
@@ -87,7 +87,7 @@ export declare namespace IManifestDispatcher {
     hash: string,
     version: bigint,
     timestamp: bigint,
-    selectorCount: bigint
+    selectorCount: bigint,
   ] & {
     hash: string;
     version: bigint;
@@ -99,409 +99,196 @@ export declare namespace IManifestDispatcher {
 export interface ManifestDispatcherInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "APPLY_ROLE"
-      | "COMMIT_ROLE"
-      | "EMERGENCY_ROLE"
-      | "activateCommittedRoot"
-      | "activationDelay"
-      | "activeEpoch"
-      | "activeRoot"
-      | "adminRegisterUnsafe"
-      | "applyRouteOne"
-      | "applyRoutes"
-      | "checkStorageConflicts"
-      | "commitRoot"
-      | "facetAddress"
-      | "facetAddressEx"
-      | "facetAddresses"
-      | "facetAddressesBatchEx"
-      | "facetAddressesEx"
-      | "facetFunctionSelectors"
-      | "facetFunctionSelectorsEx"
-      | "facetHash"
-      | "facetImplementation"
-      | "facetMetadata"
-      | "facetProvenance"
-      | "facetSecurityLevel"
-      | "facetSelectors"
-      | "facetVersionTag"
-      | "facets"
-      | "facetsEx"
-      | "freeze"
-      | "frozen"
-      | "getLimits"
-      | "getManifestInfo"
-      | "getManifestVersion"
-      | "getRoute"
-      | "getRouteCount"
-      | "manifest"
-      | "pendingEpoch"
-      | "pendingRoot"
-      | "pendingSince"
-      | "preflightCheckFacet"
-      | "registeredSelectors"
-      | "removeRoutes"
-      | "routeCount"
-      | "routes"
-      | "selectorHash"
-      | "setActivationDelay"
-      | "setFacetSecurityLevel"
-      | "setFacetVersionTag"
-      | "verifyManifest"
+      | 'APPLY_ROLE'
+      | 'COMMIT_ROLE'
+      | 'EMERGENCY_ROLE'
+      | 'activateCommittedRoot'
+      | 'activationDelay'
+      | 'activeEpoch'
+      | 'activeRoot'
+      | 'adminRegisterUnsafe'
+      | 'applyRouteOne'
+      | 'applyRoutes'
+      | 'checkStorageConflicts'
+      | 'commitRoot'
+      | 'facetAddress'
+      | 'facetAddressEx'
+      | 'facetAddresses'
+      | 'facetAddressesBatchEx'
+      | 'facetAddressesEx'
+      | 'facetFunctionSelectors'
+      | 'facetFunctionSelectorsEx'
+      | 'facetHash'
+      | 'facetImplementation'
+      | 'facetMetadata'
+      | 'facetProvenance'
+      | 'facetSecurityLevel'
+      | 'facetSelectors'
+      | 'facetVersionTag'
+      | 'facets'
+      | 'facetsEx'
+      | 'freeze'
+      | 'frozen'
+      | 'getLimits'
+      | 'getManifestInfo'
+      | 'getManifestVersion'
+      | 'getRoute'
+      | 'getRouteCount'
+      | 'manifest'
+      | 'pendingEpoch'
+      | 'pendingRoot'
+      | 'pendingSince'
+      | 'preflightCheckFacet'
+      | 'registeredSelectors'
+      | 'removeRoutes'
+      | 'routeCount'
+      | 'routes'
+      | 'selectorHash'
+      | 'setActivationDelay'
+      | 'setFacetSecurityLevel'
+      | 'setFacetVersionTag'
+      | 'verifyManifest',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "ActivationDelaySet"
-      | "FacetSecurityLevelSet"
-      | "FacetVersionTagSet"
-      | "Frozen"
-      | "ManifestVersionUpdated"
-      | "RootActivated"
-      | "RootCommitted"
-      | "RouteAdded"
-      | "RouteRemoved"
-      | "RouteUpdated"
-      | "RoutesRemoved"
-      | "SelectorConflict"
+      | 'ActivationDelaySet'
+      | 'FacetSecurityLevelSet'
+      | 'FacetVersionTagSet'
+      | 'Frozen'
+      | 'ManifestVersionUpdated'
+      | 'RootActivated'
+      | 'RootCommitted'
+      | 'RouteAdded'
+      | 'RouteRemoved'
+      | 'RouteUpdated'
+      | 'RoutesRemoved'
+      | 'SelectorConflict',
   ): EventFragment;
 
+  encodeFunctionData(functionFragment: 'APPLY_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'COMMIT_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'EMERGENCY_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activateCommittedRoot', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activationDelay', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activeEpoch', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activeRoot', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "APPLY_ROLE",
-    values?: undefined
+    functionFragment: 'adminRegisterUnsafe',
+    values: [AddressLike[], BytesLike[][]],
   ): string;
   encodeFunctionData(
-    functionFragment: "COMMIT_ROLE",
-    values?: undefined
+    functionFragment: 'applyRouteOne',
+    values: [BytesLike, AddressLike, BytesLike, BytesLike[], boolean[]],
   ): string;
   encodeFunctionData(
-    functionFragment: "EMERGENCY_ROLE",
-    values?: undefined
+    functionFragment: 'applyRoutes',
+    values: [BytesLike[], AddressLike[], BytesLike[], BytesLike[][], boolean[][]],
+  ): string;
+  encodeFunctionData(functionFragment: 'checkStorageConflicts', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'commitRoot', values: [BytesLike, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'facetAddress', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'facetAddressEx', values: [BytesLike, BytesLike]): string;
+  encodeFunctionData(functionFragment: 'facetAddresses', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'facetAddressesBatchEx', values: [BytesLike[]]): string;
+  encodeFunctionData(functionFragment: 'facetAddressesEx', values: [boolean]): string;
+  encodeFunctionData(functionFragment: 'facetFunctionSelectors', values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: 'facetFunctionSelectorsEx',
+    values: [AddressLike, BigNumberish],
+  ): string;
+  encodeFunctionData(functionFragment: 'facetHash', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'facetImplementation', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'facetMetadata', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'facetProvenance', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'facetSecurityLevel', values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: 'facetSelectors',
+    values: [AddressLike, BigNumberish],
+  ): string;
+  encodeFunctionData(functionFragment: 'facetVersionTag', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'facets', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'facetsEx', values: [boolean]): string;
+  encodeFunctionData(functionFragment: 'freeze', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'frozen', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getLimits', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getManifestInfo', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getManifestVersion', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getRoute', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getRouteCount', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'manifest', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pendingEpoch', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pendingRoot', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pendingSince', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'preflightCheckFacet',
+    values: [AddressLike, BytesLike, BytesLike[], boolean],
+  ): string;
+  encodeFunctionData(functionFragment: 'registeredSelectors', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'removeRoutes', values: [BytesLike[]]): string;
+  encodeFunctionData(functionFragment: 'routeCount', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'routes', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'selectorHash', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'setActivationDelay', values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: 'setFacetSecurityLevel',
+    values: [AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "activateCommittedRoot",
-    values?: undefined
+    functionFragment: 'setFacetVersionTag',
+    values: [AddressLike, BytesLike],
   ): string;
-  encodeFunctionData(
-    functionFragment: "activationDelay",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "activeEpoch",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "activeRoot",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "adminRegisterUnsafe",
-    values: [AddressLike[], BytesLike[][]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "applyRouteOne",
-    values: [BytesLike, AddressLike, BytesLike, BytesLike[], boolean[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "applyRoutes",
-    values: [
-      BytesLike[],
-      AddressLike[],
-      BytesLike[],
-      BytesLike[][],
-      boolean[][]
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "checkStorageConflicts",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "commitRoot",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddress",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddressEx",
-    values: [BytesLike, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddresses",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddressesBatchEx",
-    values: [BytesLike[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetAddressesEx",
-    values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetFunctionSelectors",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetFunctionSelectorsEx",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetHash",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetImplementation",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetMetadata",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetProvenance",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetSecurityLevel",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetSelectors",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "facetVersionTag",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "facets", values?: undefined): string;
-  encodeFunctionData(functionFragment: "facetsEx", values: [boolean]): string;
-  encodeFunctionData(functionFragment: "freeze", values?: undefined): string;
-  encodeFunctionData(functionFragment: "frozen", values?: undefined): string;
-  encodeFunctionData(functionFragment: "getLimits", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getManifestInfo",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getManifestVersion",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "getRoute", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "getRouteCount",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "manifest", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "pendingEpoch",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pendingRoot",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pendingSince",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "preflightCheckFacet",
-    values: [AddressLike, BytesLike, BytesLike[], boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "registeredSelectors",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removeRoutes",
-    values: [BytesLike[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "routeCount",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "routes", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "selectorHash",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setActivationDelay",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setFacetSecurityLevel",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setFacetVersionTag",
-    values: [AddressLike, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "verifyManifest",
-    values: [BytesLike]
-  ): string;
+  encodeFunctionData(functionFragment: 'verifyManifest', values: [BytesLike]): string;
 
-  decodeFunctionResult(functionFragment: "APPLY_ROLE", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "COMMIT_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "EMERGENCY_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "activateCommittedRoot",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "activationDelay",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "activeEpoch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "activeRoot", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "adminRegisterUnsafe",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "applyRouteOne",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "applyRoutes",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "checkStorageConflicts",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "commitRoot", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddressEx",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddresses",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddressesBatchEx",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetAddressesEx",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetFunctionSelectors",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetFunctionSelectorsEx",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "facetHash", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "facetImplementation",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetMetadata",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetProvenance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetSecurityLevel",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetSelectors",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "facetVersionTag",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "facets", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "facetsEx", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "freeze", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "frozen", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getLimits", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getManifestInfo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getManifestVersion",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getRoute", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getRouteCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "manifest", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingEpoch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingRoot",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingSince",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "preflightCheckFacet",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "registeredSelectors",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "removeRoutes",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "routeCount", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "routes", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "selectorHash",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setActivationDelay",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setFacetSecurityLevel",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setFacetVersionTag",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "verifyManifest",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'APPLY_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'COMMIT_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'EMERGENCY_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activateCommittedRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activationDelay', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activeEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activeRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'adminRegisterUnsafe', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'applyRouteOne', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'applyRoutes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'checkStorageConflicts', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'commitRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddress', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddressEx', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddresses', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddressesBatchEx', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetAddressesEx', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetFunctionSelectors', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetFunctionSelectorsEx', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetHash', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetImplementation', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetMetadata', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetProvenance', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetSecurityLevel', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetSelectors', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetVersionTag', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facets', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'facetsEx', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'freeze', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'frozen', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getLimits', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getManifestInfo', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getManifestVersion', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoute', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRouteCount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'manifest', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pendingEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pendingRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pendingSince', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'preflightCheckFacet', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'registeredSelectors', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'removeRoutes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'routeCount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'routes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'selectorHash', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setActivationDelay', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setFacetSecurityLevel', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setFacetVersionTag', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'verifyManifest', data: BytesLike): Result;
 }
 
 export namespace ActivationDelaySetEvent {
@@ -593,11 +380,7 @@ export namespace RootCommittedEvent {
 }
 
 export namespace RouteAddedEvent {
-  export type InputTuple = [
-    selector: BytesLike,
-    facet: AddressLike,
-    codehash: BytesLike
-  ];
+  export type InputTuple = [selector: BytesLike, facet: AddressLike, codehash: BytesLike];
   export type OutputTuple = [selector: string, facet: string, codehash: string];
   export interface OutputObject {
     selector: string;
@@ -623,16 +406,8 @@ export namespace RouteRemovedEvent {
 }
 
 export namespace RouteUpdatedEvent {
-  export type InputTuple = [
-    selector: BytesLike,
-    oldFacet: AddressLike,
-    newFacet: AddressLike
-  ];
-  export type OutputTuple = [
-    selector: string,
-    oldFacet: string,
-    newFacet: string
-  ];
+  export type InputTuple = [selector: BytesLike, oldFacet: AddressLike, newFacet: AddressLike];
+  export type OutputTuple = [selector: string, oldFacet: string, newFacet: string];
   export interface OutputObject {
     selector: string;
     oldFacet: string;
@@ -657,16 +432,8 @@ export namespace RoutesRemovedEvent {
 }
 
 export namespace SelectorConflictEvent {
-  export type InputTuple = [
-    selector: BytesLike,
-    existingFacet: AddressLike,
-    newFacet: AddressLike
-  ];
-  export type OutputTuple = [
-    selector: string,
-    existingFacet: string,
-    newFacet: string
-  ];
+  export type InputTuple = [selector: BytesLike, existingFacet: AddressLike, newFacet: AddressLike];
+  export type OutputTuple = [selector: string, existingFacet: string, newFacet: string];
   export interface OutputObject {
     selector: string;
     existingFacet: string;
@@ -687,58 +454,56 @@ export interface ManifestDispatcher extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  APPLY_ROLE: TypedContractMethod<[], [string], "view">;
+  APPLY_ROLE: TypedContractMethod<[], [string], 'view'>;
 
-  COMMIT_ROLE: TypedContractMethod<[], [string], "view">;
+  COMMIT_ROLE: TypedContractMethod<[], [string], 'view'>;
 
-  EMERGENCY_ROLE: TypedContractMethod<[], [string], "view">;
+  EMERGENCY_ROLE: TypedContractMethod<[], [string], 'view'>;
 
-  activateCommittedRoot: TypedContractMethod<[], [void], "nonpayable">;
+  activateCommittedRoot: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  activationDelay: TypedContractMethod<[], [bigint], "view">;
+  activationDelay: TypedContractMethod<[], [bigint], 'view'>;
 
-  activeEpoch: TypedContractMethod<[], [bigint], "view">;
+  activeEpoch: TypedContractMethod<[], [bigint], 'view'>;
 
-  activeRoot: TypedContractMethod<[], [string], "view">;
+  activeRoot: TypedContractMethod<[], [string], 'view'>;
 
   adminRegisterUnsafe: TypedContractMethod<
     [facets_: AddressLike[], selectors_: BytesLike[][]],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   applyRouteOne: TypedContractMethod<
@@ -747,10 +512,10 @@ export interface ManifestDispatcher extends BaseContract {
       facetAddr: AddressLike,
       codehash: BytesLike,
       proof: BytesLike[],
-      isRight_: boolean[]
+      isRight_: boolean[],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   applyRoutes: TypedContractMethod<
@@ -759,103 +524,71 @@ export interface ManifestDispatcher extends BaseContract {
       facetAddrs: AddressLike[],
       codehashes: BytesLike[],
       proofs: BytesLike[][],
-      isRight: boolean[][]
+      isRight: boolean[][],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  checkStorageConflicts: TypedContractMethod<
-    [arg0: AddressLike],
-    [string[]],
-    "view"
-  >;
+  checkStorageConflicts: TypedContractMethod<[arg0: AddressLike], [string[]], 'view'>;
 
   commitRoot: TypedContractMethod<
     [newRoot: BytesLike, newEpoch: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  facetAddress: TypedContractMethod<[selector: BytesLike], [string], "view">;
+  facetAddress: TypedContractMethod<[selector: BytesLike], [string], 'view'>;
 
   facetAddressEx: TypedContractMethod<
     [functionSelector: BytesLike, requiredVersion: BytesLike],
     [string],
-    "view"
+    'view'
   >;
 
-  facetAddresses: TypedContractMethod<[], [string[]], "view">;
+  facetAddresses: TypedContractMethod<[], [string[]], 'view'>;
 
-  facetAddressesBatchEx: TypedContractMethod<
-    [functionSelectors: BytesLike[]],
-    [string[]],
-    "view"
-  >;
+  facetAddressesBatchEx: TypedContractMethod<[functionSelectors: BytesLike[]], [string[]], 'view'>;
 
-  facetAddressesEx: TypedContractMethod<
-    [includeUnsafe: boolean],
-    [string[]],
-    "view"
-  >;
+  facetAddressesEx: TypedContractMethod<[includeUnsafe: boolean], [string[]], 'view'>;
 
-  facetFunctionSelectors: TypedContractMethod<
-    [facet: AddressLike],
-    [string[]],
-    "view"
-  >;
+  facetFunctionSelectors: TypedContractMethod<[facet: AddressLike], [string[]], 'view'>;
 
   facetFunctionSelectorsEx: TypedContractMethod<
     [facet: AddressLike, minSecurityLevel: BigNumberish],
     [string[]],
-    "view"
+    'view'
   >;
 
-  facetHash: TypedContractMethod<[facet: AddressLike], [string], "view">;
+  facetHash: TypedContractMethod<[facet: AddressLike], [string], 'view'>;
 
-  facetImplementation: TypedContractMethod<
-    [arg0: AddressLike],
-    [string],
-    "view"
-  >;
+  facetImplementation: TypedContractMethod<[arg0: AddressLike], [string], 'view'>;
 
   facetMetadata: TypedContractMethod<
     [arg0: AddressLike],
     [IDiamondLoupeEx.FacetMetadataStructOutput],
-    "view"
+    'view'
   >;
 
   facetProvenance: TypedContractMethod<
     [facet: AddressLike],
     [[string, bigint] & { deployer: string; deployTimestamp: bigint }],
-    "view"
+    'view'
   >;
 
-  facetSecurityLevel: TypedContractMethod<
-    [facet: AddressLike],
-    [bigint],
-    "view"
-  >;
+  facetSecurityLevel: TypedContractMethod<[facet: AddressLike], [bigint], 'view'>;
 
-  facetSelectors: TypedContractMethod<
-    [arg0: AddressLike, arg1: BigNumberish],
-    [string],
-    "view"
-  >;
+  facetSelectors: TypedContractMethod<[arg0: AddressLike, arg1: BigNumberish], [string], 'view'>;
 
-  facetVersionTag: TypedContractMethod<[facet: AddressLike], [string], "view">;
+  facetVersionTag: TypedContractMethod<[facet: AddressLike], [string], 'view'>;
 
-  facets: TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], "view">;
+  facets: TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], 'view'>;
 
-  facetsEx: TypedContractMethod<
-    [arg0: boolean],
-    [IDiamondLoupeEx.FacetExStructOutput[]],
-    "view"
-  >;
+  facetsEx: TypedContractMethod<[arg0: boolean], [IDiamondLoupeEx.FacetExStructOutput[]], 'view'>;
 
-  freeze: TypedContractMethod<[], [void], "nonpayable">;
+  freeze: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  frozen: TypedContractMethod<[], [boolean], "view">;
+  frozen: TypedContractMethod<[], [boolean], 'view'>;
 
   getLimits: TypedContractMethod<
     [],
@@ -864,22 +597,18 @@ export interface ManifestDispatcher extends BaseContract {
         maxBatch: bigint;
         maxFacetCode: bigint;
         maxActivationDelay: bigint;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  getManifestInfo: TypedContractMethod<
-    [],
-    [IManifestDispatcher.ManifestInfoStructOutput],
-    "view"
-  >;
+  getManifestInfo: TypedContractMethod<[], [IManifestDispatcher.ManifestInfoStructOutput], 'view'>;
 
-  getManifestVersion: TypedContractMethod<[], [bigint], "view">;
+  getManifestVersion: TypedContractMethod<[], [bigint], 'view'>;
 
-  getRoute: TypedContractMethod<[selector: BytesLike], [string], "view">;
+  getRoute: TypedContractMethod<[selector: BytesLike], [string], 'view'>;
 
-  getRouteCount: TypedContractMethod<[], [bigint], "view">;
+  getRouteCount: TypedContractMethod<[], [bigint], 'view'>;
 
   manifest: TypedContractMethod<
     [],
@@ -892,252 +621,184 @@ export interface ManifestDispatcher extends BaseContract {
         activationDelay: bigint;
         manifestVersion: bigint;
         frozen: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
 
-  pendingEpoch: TypedContractMethod<[], [bigint], "view">;
+  pendingEpoch: TypedContractMethod<[], [bigint], 'view'>;
 
-  pendingRoot: TypedContractMethod<[], [string], "view">;
+  pendingRoot: TypedContractMethod<[], [string], 'view'>;
 
-  pendingSince: TypedContractMethod<[], [bigint], "view">;
+  pendingSince: TypedContractMethod<[], [bigint], 'view'>;
 
   preflightCheckFacet: TypedContractMethod<
     [
       facet: AddressLike,
       expectedCodeHash: BytesLike,
       claimedSelectors: BytesLike[],
-      allowAdditions: boolean
+      allowAdditions: boolean,
     ],
     [[boolean, string] & { ok: boolean; selectorHashEx: string }],
-    "view"
+    'view'
   >;
 
-  registeredSelectors: TypedContractMethod<
-    [arg0: BytesLike],
-    [boolean],
-    "view"
-  >;
+  registeredSelectors: TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
 
-  removeRoutes: TypedContractMethod<
-    [selectors: BytesLike[]],
-    [void],
-    "nonpayable"
-  >;
+  removeRoutes: TypedContractMethod<[selectors: BytesLike[]], [void], 'nonpayable'>;
 
-  routeCount: TypedContractMethod<[], [bigint], "view">;
+  routeCount: TypedContractMethod<[], [bigint], 'view'>;
 
   routes: TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    "view"
+    'view'
   >;
 
-  selectorHash: TypedContractMethod<[facet: AddressLike], [string], "view">;
+  selectorHash: TypedContractMethod<[facet: AddressLike], [string], 'view'>;
 
-  setActivationDelay: TypedContractMethod<
-    [newDelay: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+  setActivationDelay: TypedContractMethod<[newDelay: BigNumberish], [void], 'nonpayable'>;
 
   setFacetSecurityLevel: TypedContractMethod<
     [facet: AddressLike, level: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   setFacetVersionTag: TypedContractMethod<
     [facet: AddressLike, tag: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   verifyManifest: TypedContractMethod<
     [manifestHash: BytesLike],
     [[boolean, string] & { ok: boolean; current: string }],
-    "view"
+    'view'
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
+  getFunction(nameOrSignature: 'APPLY_ROLE'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'COMMIT_ROLE'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'EMERGENCY_ROLE'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "APPLY_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'activateCommittedRoot',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'activationDelay'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'activeEpoch'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'activeRoot'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "COMMIT_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'adminRegisterUnsafe',
+  ): TypedContractMethod<[facets_: AddressLike[], selectors_: BytesLike[][]], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "EMERGENCY_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "activateCommittedRoot"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "activationDelay"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "activeEpoch"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "activeRoot"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "adminRegisterUnsafe"
-  ): TypedContractMethod<
-    [facets_: AddressLike[], selectors_: BytesLike[][]],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "applyRouteOne"
+    nameOrSignature: 'applyRouteOne',
   ): TypedContractMethod<
     [
       selector: BytesLike,
       facetAddr: AddressLike,
       codehash: BytesLike,
       proof: BytesLike[],
-      isRight_: boolean[]
+      isRight_: boolean[],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "applyRoutes"
+    nameOrSignature: 'applyRoutes',
   ): TypedContractMethod<
     [
       selectors: BytesLike[],
       facetAddrs: AddressLike[],
       codehashes: BytesLike[],
       proofs: BytesLike[][],
-      isRight: boolean[][]
+      isRight: boolean[][],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "checkStorageConflicts"
-  ): TypedContractMethod<[arg0: AddressLike], [string[]], "view">;
+    nameOrSignature: 'checkStorageConflicts',
+  ): TypedContractMethod<[arg0: AddressLike], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "commitRoot"
-  ): TypedContractMethod<
-    [newRoot: BytesLike, newEpoch: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'commitRoot',
+  ): TypedContractMethod<[newRoot: BytesLike, newEpoch: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "facetAddress"
-  ): TypedContractMethod<[selector: BytesLike], [string], "view">;
+    nameOrSignature: 'facetAddress',
+  ): TypedContractMethod<[selector: BytesLike], [string], 'view'>;
   getFunction(
-    nameOrSignature: "facetAddressEx"
+    nameOrSignature: 'facetAddressEx',
   ): TypedContractMethod<
     [functionSelector: BytesLike, requiredVersion: BytesLike],
     [string],
-    "view"
+    'view'
   >;
+  getFunction(nameOrSignature: 'facetAddresses'): TypedContractMethod<[], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetAddresses"
-  ): TypedContractMethod<[], [string[]], "view">;
+    nameOrSignature: 'facetAddressesBatchEx',
+  ): TypedContractMethod<[functionSelectors: BytesLike[]], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetAddressesBatchEx"
-  ): TypedContractMethod<[functionSelectors: BytesLike[]], [string[]], "view">;
+    nameOrSignature: 'facetAddressesEx',
+  ): TypedContractMethod<[includeUnsafe: boolean], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetAddressesEx"
-  ): TypedContractMethod<[includeUnsafe: boolean], [string[]], "view">;
+    nameOrSignature: 'facetFunctionSelectors',
+  ): TypedContractMethod<[facet: AddressLike], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetFunctionSelectors"
-  ): TypedContractMethod<[facet: AddressLike], [string[]], "view">;
+    nameOrSignature: 'facetFunctionSelectorsEx',
+  ): TypedContractMethod<[facet: AddressLike, minSecurityLevel: BigNumberish], [string[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetFunctionSelectorsEx"
-  ): TypedContractMethod<
-    [facet: AddressLike, minSecurityLevel: BigNumberish],
-    [string[]],
-    "view"
-  >;
+    nameOrSignature: 'facetHash',
+  ): TypedContractMethod<[facet: AddressLike], [string], 'view'>;
   getFunction(
-    nameOrSignature: "facetHash"
-  ): TypedContractMethod<[facet: AddressLike], [string], "view">;
+    nameOrSignature: 'facetImplementation',
+  ): TypedContractMethod<[arg0: AddressLike], [string], 'view'>;
   getFunction(
-    nameOrSignature: "facetImplementation"
-  ): TypedContractMethod<[arg0: AddressLike], [string], "view">;
+    nameOrSignature: 'facetMetadata',
+  ): TypedContractMethod<[arg0: AddressLike], [IDiamondLoupeEx.FacetMetadataStructOutput], 'view'>;
   getFunction(
-    nameOrSignature: "facetMetadata"
-  ): TypedContractMethod<
-    [arg0: AddressLike],
-    [IDiamondLoupeEx.FacetMetadataStructOutput],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "facetProvenance"
+    nameOrSignature: 'facetProvenance',
   ): TypedContractMethod<
     [facet: AddressLike],
     [[string, bigint] & { deployer: string; deployTimestamp: bigint }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "facetSecurityLevel"
-  ): TypedContractMethod<[facet: AddressLike], [bigint], "view">;
+    nameOrSignature: 'facetSecurityLevel',
+  ): TypedContractMethod<[facet: AddressLike], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "facetSelectors"
-  ): TypedContractMethod<
-    [arg0: AddressLike, arg1: BigNumberish],
-    [string],
-    "view"
-  >;
+    nameOrSignature: 'facetSelectors',
+  ): TypedContractMethod<[arg0: AddressLike, arg1: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "facetVersionTag"
-  ): TypedContractMethod<[facet: AddressLike], [string], "view">;
+    nameOrSignature: 'facetVersionTag',
+  ): TypedContractMethod<[facet: AddressLike], [string], 'view'>;
   getFunction(
-    nameOrSignature: "facets"
-  ): TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], "view">;
+    nameOrSignature: 'facets',
+  ): TypedContractMethod<[], [IDiamondLoupe.FacetStructOutput[]], 'view'>;
   getFunction(
-    nameOrSignature: "facetsEx"
-  ): TypedContractMethod<
-    [arg0: boolean],
-    [IDiamondLoupeEx.FacetExStructOutput[]],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "freeze"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "frozen"
-  ): TypedContractMethod<[], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "getLimits"
-  ): TypedContractMethod<
+    nameOrSignature: 'facetsEx',
+  ): TypedContractMethod<[arg0: boolean], [IDiamondLoupeEx.FacetExStructOutput[]], 'view'>;
+  getFunction(nameOrSignature: 'freeze'): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'frozen'): TypedContractMethod<[], [boolean], 'view'>;
+  getFunction(nameOrSignature: 'getLimits'): TypedContractMethod<
     [],
     [
       [bigint, bigint, bigint] & {
         maxBatch: bigint;
         maxFacetCode: bigint;
         maxActivationDelay: bigint;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "getManifestInfo"
-  ): TypedContractMethod<
-    [],
-    [IManifestDispatcher.ManifestInfoStructOutput],
-    "view"
-  >;
+    nameOrSignature: 'getManifestInfo',
+  ): TypedContractMethod<[], [IManifestDispatcher.ManifestInfoStructOutput], 'view'>;
+  getFunction(nameOrSignature: 'getManifestVersion'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "getManifestVersion"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "getRoute"
-  ): TypedContractMethod<[selector: BytesLike], [string], "view">;
-  getFunction(
-    nameOrSignature: "getRouteCount"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "manifest"
-  ): TypedContractMethod<
+    nameOrSignature: 'getRoute',
+  ): TypedContractMethod<[selector: BytesLike], [string], 'view'>;
+  getFunction(nameOrSignature: 'getRouteCount'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'manifest'): TypedContractMethod<
     [],
     [
       [string, string, bigint, bigint, bigint, bigint, boolean] & {
@@ -1148,154 +809,134 @@ export interface ManifestDispatcher extends BaseContract {
         activationDelay: bigint;
         manifestVersion: bigint;
         frozen: boolean;
-      }
+      },
     ],
-    "view"
+    'view'
   >;
+  getFunction(nameOrSignature: 'pendingEpoch'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'pendingRoot'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'pendingSince'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "pendingEpoch"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "pendingRoot"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "pendingSince"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "preflightCheckFacet"
+    nameOrSignature: 'preflightCheckFacet',
   ): TypedContractMethod<
     [
       facet: AddressLike,
       expectedCodeHash: BytesLike,
       claimedSelectors: BytesLike[],
-      allowAdditions: boolean
+      allowAdditions: boolean,
     ],
     [[boolean, string] & { ok: boolean; selectorHashEx: string }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "registeredSelectors"
-  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+    nameOrSignature: 'registeredSelectors',
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "removeRoutes"
-  ): TypedContractMethod<[selectors: BytesLike[]], [void], "nonpayable">;
+    nameOrSignature: 'removeRoutes',
+  ): TypedContractMethod<[selectors: BytesLike[]], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'routeCount'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "routeCount"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "routes"
+    nameOrSignature: 'routes',
   ): TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "selectorHash"
-  ): TypedContractMethod<[facet: AddressLike], [string], "view">;
+    nameOrSignature: 'selectorHash',
+  ): TypedContractMethod<[facet: AddressLike], [string], 'view'>;
   getFunction(
-    nameOrSignature: "setActivationDelay"
-  ): TypedContractMethod<[newDelay: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'setActivationDelay',
+  ): TypedContractMethod<[newDelay: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setFacetSecurityLevel"
-  ): TypedContractMethod<
-    [facet: AddressLike, level: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'setFacetSecurityLevel',
+  ): TypedContractMethod<[facet: AddressLike, level: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setFacetVersionTag"
-  ): TypedContractMethod<
-    [facet: AddressLike, tag: BytesLike],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'setFacetVersionTag',
+  ): TypedContractMethod<[facet: AddressLike, tag: BytesLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "verifyManifest"
+    nameOrSignature: 'verifyManifest',
   ): TypedContractMethod<
     [manifestHash: BytesLike],
     [[boolean, string] & { ok: boolean; current: string }],
-    "view"
+    'view'
   >;
 
   getEvent(
-    key: "ActivationDelaySet"
+    key: 'ActivationDelaySet',
   ): TypedContractEvent<
     ActivationDelaySetEvent.InputTuple,
     ActivationDelaySetEvent.OutputTuple,
     ActivationDelaySetEvent.OutputObject
   >;
   getEvent(
-    key: "FacetSecurityLevelSet"
+    key: 'FacetSecurityLevelSet',
   ): TypedContractEvent<
     FacetSecurityLevelSetEvent.InputTuple,
     FacetSecurityLevelSetEvent.OutputTuple,
     FacetSecurityLevelSetEvent.OutputObject
   >;
   getEvent(
-    key: "FacetVersionTagSet"
+    key: 'FacetVersionTagSet',
   ): TypedContractEvent<
     FacetVersionTagSetEvent.InputTuple,
     FacetVersionTagSetEvent.OutputTuple,
     FacetVersionTagSetEvent.OutputObject
   >;
   getEvent(
-    key: "Frozen"
-  ): TypedContractEvent<
-    FrozenEvent.InputTuple,
-    FrozenEvent.OutputTuple,
-    FrozenEvent.OutputObject
-  >;
+    key: 'Frozen',
+  ): TypedContractEvent<FrozenEvent.InputTuple, FrozenEvent.OutputTuple, FrozenEvent.OutputObject>;
   getEvent(
-    key: "ManifestVersionUpdated"
+    key: 'ManifestVersionUpdated',
   ): TypedContractEvent<
     ManifestVersionUpdatedEvent.InputTuple,
     ManifestVersionUpdatedEvent.OutputTuple,
     ManifestVersionUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "RootActivated"
+    key: 'RootActivated',
   ): TypedContractEvent<
     RootActivatedEvent.InputTuple,
     RootActivatedEvent.OutputTuple,
     RootActivatedEvent.OutputObject
   >;
   getEvent(
-    key: "RootCommitted"
+    key: 'RootCommitted',
   ): TypedContractEvent<
     RootCommittedEvent.InputTuple,
     RootCommittedEvent.OutputTuple,
     RootCommittedEvent.OutputObject
   >;
   getEvent(
-    key: "RouteAdded"
+    key: 'RouteAdded',
   ): TypedContractEvent<
     RouteAddedEvent.InputTuple,
     RouteAddedEvent.OutputTuple,
     RouteAddedEvent.OutputObject
   >;
   getEvent(
-    key: "RouteRemoved"
+    key: 'RouteRemoved',
   ): TypedContractEvent<
     RouteRemovedEvent.InputTuple,
     RouteRemovedEvent.OutputTuple,
     RouteRemovedEvent.OutputObject
   >;
   getEvent(
-    key: "RouteUpdated"
+    key: 'RouteUpdated',
   ): TypedContractEvent<
     RouteUpdatedEvent.InputTuple,
     RouteUpdatedEvent.OutputTuple,
     RouteUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "RoutesRemoved"
+    key: 'RoutesRemoved',
   ): TypedContractEvent<
     RoutesRemovedEvent.InputTuple,
     RoutesRemovedEvent.OutputTuple,
     RoutesRemovedEvent.OutputObject
   >;
   getEvent(
-    key: "SelectorConflict"
+    key: 'SelectorConflict',
   ): TypedContractEvent<
     SelectorConflictEvent.InputTuple,
     SelectorConflictEvent.OutputTuple,
@@ -1303,7 +944,7 @@ export interface ManifestDispatcher extends BaseContract {
   >;
 
   filters: {
-    "ActivationDelaySet(uint64,uint64)": TypedContractEvent<
+    'ActivationDelaySet(uint64,uint64)': TypedContractEvent<
       ActivationDelaySetEvent.InputTuple,
       ActivationDelaySetEvent.OutputTuple,
       ActivationDelaySetEvent.OutputObject
@@ -1314,7 +955,7 @@ export interface ManifestDispatcher extends BaseContract {
       ActivationDelaySetEvent.OutputObject
     >;
 
-    "FacetSecurityLevelSet(address,uint8)": TypedContractEvent<
+    'FacetSecurityLevelSet(address,uint8)': TypedContractEvent<
       FacetSecurityLevelSetEvent.InputTuple,
       FacetSecurityLevelSetEvent.OutputTuple,
       FacetSecurityLevelSetEvent.OutputObject
@@ -1325,7 +966,7 @@ export interface ManifestDispatcher extends BaseContract {
       FacetSecurityLevelSetEvent.OutputObject
     >;
 
-    "FacetVersionTagSet(address,bytes32)": TypedContractEvent<
+    'FacetVersionTagSet(address,bytes32)': TypedContractEvent<
       FacetVersionTagSetEvent.InputTuple,
       FacetVersionTagSetEvent.OutputTuple,
       FacetVersionTagSetEvent.OutputObject
@@ -1336,7 +977,7 @@ export interface ManifestDispatcher extends BaseContract {
       FacetVersionTagSetEvent.OutputObject
     >;
 
-    "Frozen()": TypedContractEvent<
+    'Frozen()': TypedContractEvent<
       FrozenEvent.InputTuple,
       FrozenEvent.OutputTuple,
       FrozenEvent.OutputObject
@@ -1347,7 +988,7 @@ export interface ManifestDispatcher extends BaseContract {
       FrozenEvent.OutputObject
     >;
 
-    "ManifestVersionUpdated(uint64,uint64)": TypedContractEvent<
+    'ManifestVersionUpdated(uint64,uint64)': TypedContractEvent<
       ManifestVersionUpdatedEvent.InputTuple,
       ManifestVersionUpdatedEvent.OutputTuple,
       ManifestVersionUpdatedEvent.OutputObject
@@ -1358,7 +999,7 @@ export interface ManifestDispatcher extends BaseContract {
       ManifestVersionUpdatedEvent.OutputObject
     >;
 
-    "RootActivated(bytes32,uint64)": TypedContractEvent<
+    'RootActivated(bytes32,uint64)': TypedContractEvent<
       RootActivatedEvent.InputTuple,
       RootActivatedEvent.OutputTuple,
       RootActivatedEvent.OutputObject
@@ -1369,7 +1010,7 @@ export interface ManifestDispatcher extends BaseContract {
       RootActivatedEvent.OutputObject
     >;
 
-    "RootCommitted(bytes32,uint64)": TypedContractEvent<
+    'RootCommitted(bytes32,uint64)': TypedContractEvent<
       RootCommittedEvent.InputTuple,
       RootCommittedEvent.OutputTuple,
       RootCommittedEvent.OutputObject
@@ -1380,7 +1021,7 @@ export interface ManifestDispatcher extends BaseContract {
       RootCommittedEvent.OutputObject
     >;
 
-    "RouteAdded(bytes4,address,bytes32)": TypedContractEvent<
+    'RouteAdded(bytes4,address,bytes32)': TypedContractEvent<
       RouteAddedEvent.InputTuple,
       RouteAddedEvent.OutputTuple,
       RouteAddedEvent.OutputObject
@@ -1391,7 +1032,7 @@ export interface ManifestDispatcher extends BaseContract {
       RouteAddedEvent.OutputObject
     >;
 
-    "RouteRemoved(bytes4)": TypedContractEvent<
+    'RouteRemoved(bytes4)': TypedContractEvent<
       RouteRemovedEvent.InputTuple,
       RouteRemovedEvent.OutputTuple,
       RouteRemovedEvent.OutputObject
@@ -1402,7 +1043,7 @@ export interface ManifestDispatcher extends BaseContract {
       RouteRemovedEvent.OutputObject
     >;
 
-    "RouteUpdated(bytes4,address,address)": TypedContractEvent<
+    'RouteUpdated(bytes4,address,address)': TypedContractEvent<
       RouteUpdatedEvent.InputTuple,
       RouteUpdatedEvent.OutputTuple,
       RouteUpdatedEvent.OutputObject
@@ -1413,7 +1054,7 @@ export interface ManifestDispatcher extends BaseContract {
       RouteUpdatedEvent.OutputObject
     >;
 
-    "RoutesRemoved(bytes4[])": TypedContractEvent<
+    'RoutesRemoved(bytes4[])': TypedContractEvent<
       RoutesRemovedEvent.InputTuple,
       RoutesRemovedEvent.OutputTuple,
       RoutesRemovedEvent.OutputObject
@@ -1424,7 +1065,7 @@ export interface ManifestDispatcher extends BaseContract {
       RoutesRemovedEvent.OutputObject
     >;
 
-    "SelectorConflict(bytes4,address,address)": TypedContractEvent<
+    'SelectorConflict(bytes4,address,address)': TypedContractEvent<
       SelectorConflictEvent.InputTuple,
       SelectorConflictEvent.OutputTuple,
       SelectorConflictEvent.OutputObject

@@ -28,6 +28,6 @@ describe('Ordered Merkle (2-leaf) roundtrip', () => {
     const positionsHex = '0x01';
 
     const recomputed = processOrderedProof(leafHashA, proof, positionsHex);
-  expect(recomputed.toLowerCase()).to.equal(root.toLowerCase());
+    expect(recomputed.toLowerCase()).to.equal(root.toLowerCase());
   });
 });

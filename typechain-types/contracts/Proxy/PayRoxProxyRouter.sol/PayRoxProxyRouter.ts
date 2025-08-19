@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from '../../../common';
 
 export type BatchCallStruct = { selector: BytesLike; data: BytesLike };
 
@@ -33,194 +33,106 @@ export type BatchCallStructOutput = [selector: string, data: string] & {
 export interface PayRoxProxyRouterInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "MAX_BATCH_SIZE"
-      | "batchCallSameFunction"
-      | "batchExecute"
-      | "dispatcher"
-      | "dispatcherCodehash"
-      | "freeze"
-      | "frozen"
-      | "getActiveManifestRoot"
-      | "getRoute"
-      | "initializeProxyRouter"
-      | "isDispatcherFrozen"
-      | "isForbidden"
-      | "owner"
-      | "paused"
-      | "renounceOwnership"
-      | "setDispatcher"
-      | "setDispatcherCodehash"
-      | "setForbiddenSelectors"
-      | "setPaused"
-      | "setStrictCodehash"
-      | "strictCodehash"
-      | "transferOwnership"
+      | 'MAX_BATCH_SIZE'
+      | 'batchCallSameFunction'
+      | 'batchExecute'
+      | 'dispatcher'
+      | 'dispatcherCodehash'
+      | 'freeze'
+      | 'frozen'
+      | 'getActiveManifestRoot'
+      | 'getRoute'
+      | 'initializeProxyRouter'
+      | 'isDispatcherFrozen'
+      | 'isForbidden'
+      | 'owner'
+      | 'paused'
+      | 'renounceOwnership'
+      | 'setDispatcher'
+      | 'setDispatcherCodehash'
+      | 'setForbiddenSelectors'
+      | 'setPaused'
+      | 'setStrictCodehash'
+      | 'strictCodehash'
+      | 'transferOwnership',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "BatchExecuted"
-      | "DispatcherCodehashSet"
-      | "DispatcherUpdated"
-      | "Frozen"
-      | "OwnershipTransferred"
-      | "PausedSet"
-      | "PayRoxProxyRouterInitialized"
-      | "SelectorsForbidden"
-      | "StrictCodehashSet"
+      | 'BatchExecuted'
+      | 'DispatcherCodehashSet'
+      | 'DispatcherUpdated'
+      | 'Frozen'
+      | 'OwnershipTransferred'
+      | 'PausedSet'
+      | 'PayRoxProxyRouterInitialized'
+      | 'SelectorsForbidden'
+      | 'StrictCodehashSet',
   ): EventFragment;
 
+  encodeFunctionData(functionFragment: 'MAX_BATCH_SIZE', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "MAX_BATCH_SIZE",
-    values?: undefined
+    functionFragment: 'batchCallSameFunction',
+    values: [BytesLike, BytesLike[]],
   ): string;
+  encodeFunctionData(functionFragment: 'batchExecute', values: [BatchCallStruct[]]): string;
+  encodeFunctionData(functionFragment: 'dispatcher', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'dispatcherCodehash', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'freeze', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'frozen', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getActiveManifestRoot', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getRoute', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "batchCallSameFunction",
-    values: [BytesLike, BytesLike[]]
+    functionFragment: 'initializeProxyRouter',
+    values: [AddressLike, AddressLike, BytesLike, boolean],
   ): string;
+  encodeFunctionData(functionFragment: 'isDispatcherFrozen', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'isForbidden', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'setDispatcher', values: [AddressLike, BytesLike]): string;
+  encodeFunctionData(functionFragment: 'setDispatcherCodehash', values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "batchExecute",
-    values: [BatchCallStruct[]]
+    functionFragment: 'setForbiddenSelectors',
+    values: [BytesLike[], boolean],
   ): string;
-  encodeFunctionData(
-    functionFragment: "dispatcher",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "dispatcherCodehash",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "freeze", values?: undefined): string;
-  encodeFunctionData(functionFragment: "frozen", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getActiveManifestRoot",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "getRoute", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "initializeProxyRouter",
-    values: [AddressLike, AddressLike, BytesLike, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isDispatcherFrozen",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isForbidden",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setDispatcher",
-    values: [AddressLike, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setDispatcherCodehash",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setForbiddenSelectors",
-    values: [BytesLike[], boolean]
-  ): string;
-  encodeFunctionData(functionFragment: "setPaused", values: [boolean]): string;
-  encodeFunctionData(
-    functionFragment: "setStrictCodehash",
-    values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "strictCodehash",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
+  encodeFunctionData(functionFragment: 'setPaused', values: [boolean]): string;
+  encodeFunctionData(functionFragment: 'setStrictCodehash', values: [boolean]): string;
+  encodeFunctionData(functionFragment: 'strictCodehash', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'transferOwnership', values: [AddressLike]): string;
 
-  decodeFunctionResult(
-    functionFragment: "MAX_BATCH_SIZE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "batchCallSameFunction",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "batchExecute",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "dispatcher", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "dispatcherCodehash",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "freeze", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "frozen", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getActiveManifestRoot",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getRoute", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "initializeProxyRouter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "isDispatcherFrozen",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "isForbidden",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setDispatcher",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setDispatcherCodehash",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setForbiddenSelectors",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setPaused", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setStrictCodehash",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "strictCodehash",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'MAX_BATCH_SIZE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'batchCallSameFunction', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'batchExecute', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'dispatcher', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'dispatcherCodehash', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'freeze', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'frozen', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getActiveManifestRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoute', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'initializeProxyRouter', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isDispatcherFrozen', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isForbidden', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setDispatcher', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setDispatcherCodehash', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setForbiddenSelectors', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setPaused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setStrictCodehash', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'strictCodehash', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
 }
 
 export namespace BatchExecutedEvent {
   export type InputTuple = [
     callCount: BigNumberish,
     gasUsed: BigNumberish,
-    timestamp: BigNumberish
+    timestamp: BigNumberish,
   ];
-  export type OutputTuple = [
-    callCount: bigint,
-    gasUsed: bigint,
-    timestamp: bigint
-  ];
+  export type OutputTuple = [callCount: bigint, gasUsed: bigint, timestamp: bigint];
   export interface OutputObject {
     callCount: bigint;
     gasUsed: bigint;
@@ -249,13 +161,9 @@ export namespace DispatcherUpdatedEvent {
   export type InputTuple = [
     oldDispatcher: AddressLike,
     newDispatcher: AddressLike,
-    codehash: BytesLike
+    codehash: BytesLike,
   ];
-  export type OutputTuple = [
-    oldDispatcher: string,
-    newDispatcher: string,
-    codehash: string
-  ];
+  export type OutputTuple = [oldDispatcher: string, newDispatcher: string, codehash: string];
   export interface OutputObject {
     oldDispatcher: string;
     newDispatcher: string;
@@ -307,13 +215,13 @@ export namespace PayRoxProxyRouterInitializedEvent {
     owner: AddressLike,
     dispatcher: AddressLike,
     dispatcherCodehash: BytesLike,
-    strictCodehash: boolean
+    strictCodehash: boolean,
   ];
   export type OutputTuple = [
     owner: string,
     dispatcher: string,
     dispatcherCodehash: string,
-    strictCodehash: boolean
+    strictCodehash: boolean,
   ];
   export interface OutputObject {
     owner: string;
@@ -361,68 +269,62 @@ export interface PayRoxProxyRouter extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  MAX_BATCH_SIZE: TypedContractMethod<[], [bigint], "view">;
+  MAX_BATCH_SIZE: TypedContractMethod<[], [bigint], 'view'>;
 
   batchCallSameFunction: TypedContractMethod<
     [selector: BytesLike, datas: BytesLike[]],
     [string[]],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  batchExecute: TypedContractMethod<
-    [calls: BatchCallStruct[]],
-    [string[]],
-    "nonpayable"
-  >;
+  batchExecute: TypedContractMethod<[calls: BatchCallStruct[]], [string[]], 'nonpayable'>;
 
-  dispatcher: TypedContractMethod<[], [string], "view">;
+  dispatcher: TypedContractMethod<[], [string], 'view'>;
 
-  dispatcherCodehash: TypedContractMethod<[], [string], "view">;
+  dispatcherCodehash: TypedContractMethod<[], [string], 'view'>;
 
-  freeze: TypedContractMethod<[], [void], "nonpayable">;
+  freeze: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  frozen: TypedContractMethod<[], [boolean], "view">;
+  frozen: TypedContractMethod<[], [boolean], 'view'>;
 
-  getActiveManifestRoot: TypedContractMethod<[], [string], "view">;
+  getActiveManifestRoot: TypedContractMethod<[], [string], 'view'>;
 
   getRoute: TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    "view"
+    'view'
   >;
 
   initializeProxyRouter: TypedContractMethod<
@@ -430,210 +332,162 @@ export interface PayRoxProxyRouter extends BaseContract {
       owner_: AddressLike,
       dispatcher_: AddressLike,
       expectedCodehash: BytesLike,
-      strictCodehash_: boolean
+      strictCodehash_: boolean,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  isDispatcherFrozen: TypedContractMethod<[], [boolean], "view">;
+  isDispatcherFrozen: TypedContractMethod<[], [boolean], 'view'>;
 
-  isForbidden: TypedContractMethod<[selector: BytesLike], [boolean], "view">;
+  isForbidden: TypedContractMethod<[selector: BytesLike], [boolean], 'view'>;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  owner: TypedContractMethod<[], [string], 'view'>;
 
-  paused: TypedContractMethod<[], [boolean], "view">;
+  paused: TypedContractMethod<[], [boolean], 'view'>;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceOwnership: TypedContractMethod<[], [void], 'nonpayable'>;
 
   setDispatcher: TypedContractMethod<
     [dispatcher_: AddressLike, expectedCodehash: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  setDispatcherCodehash: TypedContractMethod<
-    [expected: BytesLike],
-    [void],
-    "nonpayable"
-  >;
+  setDispatcherCodehash: TypedContractMethod<[expected: BytesLike], [void], 'nonpayable'>;
 
   setForbiddenSelectors: TypedContractMethod<
     [selectors: BytesLike[], forbidden: boolean],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  setPaused: TypedContractMethod<[paused_: boolean], [void], "nonpayable">;
+  setPaused: TypedContractMethod<[paused_: boolean], [void], 'nonpayable'>;
 
-  setStrictCodehash: TypedContractMethod<
-    [enabled: boolean],
-    [void],
-    "nonpayable"
-  >;
+  setStrictCodehash: TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
 
-  strictCodehash: TypedContractMethod<[], [boolean], "view">;
+  strictCodehash: TypedContractMethod<[], [boolean], 'view'>;
 
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+  transferOwnership: TypedContractMethod<[newOwner: AddressLike], [void], 'nonpayable'>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
+  getFunction(nameOrSignature: 'MAX_BATCH_SIZE'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "MAX_BATCH_SIZE"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'batchCallSameFunction',
+  ): TypedContractMethod<[selector: BytesLike, datas: BytesLike[]], [string[]], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "batchCallSameFunction"
-  ): TypedContractMethod<
-    [selector: BytesLike, datas: BytesLike[]],
-    [string[]],
-    "nonpayable"
-  >;
+    nameOrSignature: 'batchExecute',
+  ): TypedContractMethod<[calls: BatchCallStruct[]], [string[]], 'nonpayable'>;
+  getFunction(nameOrSignature: 'dispatcher'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'dispatcherCodehash'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'freeze'): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'frozen'): TypedContractMethod<[], [boolean], 'view'>;
+  getFunction(nameOrSignature: 'getActiveManifestRoot'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "batchExecute"
-  ): TypedContractMethod<[calls: BatchCallStruct[]], [string[]], "nonpayable">;
-  getFunction(
-    nameOrSignature: "dispatcher"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "dispatcherCodehash"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "freeze"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "frozen"
-  ): TypedContractMethod<[], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "getActiveManifestRoot"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "getRoute"
+    nameOrSignature: 'getRoute',
   ): TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "initializeProxyRouter"
+    nameOrSignature: 'initializeProxyRouter',
   ): TypedContractMethod<
     [
       owner_: AddressLike,
       dispatcher_: AddressLike,
       expectedCodehash: BytesLike,
-      strictCodehash_: boolean
+      strictCodehash_: boolean,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
+  getFunction(nameOrSignature: 'isDispatcherFrozen'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "isDispatcherFrozen"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'isForbidden',
+  ): TypedContractMethod<[selector: BytesLike], [boolean], 'view'>;
+  getFunction(nameOrSignature: 'owner'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'paused'): TypedContractMethod<[], [boolean], 'view'>;
+  getFunction(nameOrSignature: 'renounceOwnership'): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "isForbidden"
-  ): TypedContractMethod<[selector: BytesLike], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "paused"
-  ): TypedContractMethod<[], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setDispatcher"
+    nameOrSignature: 'setDispatcher',
   ): TypedContractMethod<
     [dispatcher_: AddressLike, expectedCodehash: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "setDispatcherCodehash"
-  ): TypedContractMethod<[expected: BytesLike], [void], "nonpayable">;
+    nameOrSignature: 'setDispatcherCodehash',
+  ): TypedContractMethod<[expected: BytesLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setForbiddenSelectors"
-  ): TypedContractMethod<
-    [selectors: BytesLike[], forbidden: boolean],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'setForbiddenSelectors',
+  ): TypedContractMethod<[selectors: BytesLike[], forbidden: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setPaused"
-  ): TypedContractMethod<[paused_: boolean], [void], "nonpayable">;
+    nameOrSignature: 'setPaused',
+  ): TypedContractMethod<[paused_: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "setStrictCodehash"
-  ): TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
+    nameOrSignature: 'setStrictCodehash',
+  ): TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'strictCodehash'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "strictCodehash"
-  ): TypedContractMethod<[], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'transferOwnership',
+  ): TypedContractMethod<[newOwner: AddressLike], [void], 'nonpayable'>;
 
   getEvent(
-    key: "BatchExecuted"
+    key: 'BatchExecuted',
   ): TypedContractEvent<
     BatchExecutedEvent.InputTuple,
     BatchExecutedEvent.OutputTuple,
     BatchExecutedEvent.OutputObject
   >;
   getEvent(
-    key: "DispatcherCodehashSet"
+    key: 'DispatcherCodehashSet',
   ): TypedContractEvent<
     DispatcherCodehashSetEvent.InputTuple,
     DispatcherCodehashSetEvent.OutputTuple,
     DispatcherCodehashSetEvent.OutputObject
   >;
   getEvent(
-    key: "DispatcherUpdated"
+    key: 'DispatcherUpdated',
   ): TypedContractEvent<
     DispatcherUpdatedEvent.InputTuple,
     DispatcherUpdatedEvent.OutputTuple,
     DispatcherUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "Frozen"
-  ): TypedContractEvent<
-    FrozenEvent.InputTuple,
-    FrozenEvent.OutputTuple,
-    FrozenEvent.OutputObject
-  >;
+    key: 'Frozen',
+  ): TypedContractEvent<FrozenEvent.InputTuple, FrozenEvent.OutputTuple, FrozenEvent.OutputObject>;
   getEvent(
-    key: "OwnershipTransferred"
+    key: 'OwnershipTransferred',
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
     OwnershipTransferredEvent.OutputTuple,
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
-    key: "PausedSet"
+    key: 'PausedSet',
   ): TypedContractEvent<
     PausedSetEvent.InputTuple,
     PausedSetEvent.OutputTuple,
     PausedSetEvent.OutputObject
   >;
   getEvent(
-    key: "PayRoxProxyRouterInitialized"
+    key: 'PayRoxProxyRouterInitialized',
   ): TypedContractEvent<
     PayRoxProxyRouterInitializedEvent.InputTuple,
     PayRoxProxyRouterInitializedEvent.OutputTuple,
     PayRoxProxyRouterInitializedEvent.OutputObject
   >;
   getEvent(
-    key: "SelectorsForbidden"
+    key: 'SelectorsForbidden',
   ): TypedContractEvent<
     SelectorsForbiddenEvent.InputTuple,
     SelectorsForbiddenEvent.OutputTuple,
     SelectorsForbiddenEvent.OutputObject
   >;
   getEvent(
-    key: "StrictCodehashSet"
+    key: 'StrictCodehashSet',
   ): TypedContractEvent<
     StrictCodehashSetEvent.InputTuple,
     StrictCodehashSetEvent.OutputTuple,
@@ -641,7 +495,7 @@ export interface PayRoxProxyRouter extends BaseContract {
   >;
 
   filters: {
-    "BatchExecuted(uint256,uint256,uint256)": TypedContractEvent<
+    'BatchExecuted(uint256,uint256,uint256)': TypedContractEvent<
       BatchExecutedEvent.InputTuple,
       BatchExecutedEvent.OutputTuple,
       BatchExecutedEvent.OutputObject
@@ -652,7 +506,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       BatchExecutedEvent.OutputObject
     >;
 
-    "DispatcherCodehashSet(bytes32,bytes32)": TypedContractEvent<
+    'DispatcherCodehashSet(bytes32,bytes32)': TypedContractEvent<
       DispatcherCodehashSetEvent.InputTuple,
       DispatcherCodehashSetEvent.OutputTuple,
       DispatcherCodehashSetEvent.OutputObject
@@ -663,7 +517,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       DispatcherCodehashSetEvent.OutputObject
     >;
 
-    "DispatcherUpdated(address,address,bytes32)": TypedContractEvent<
+    'DispatcherUpdated(address,address,bytes32)': TypedContractEvent<
       DispatcherUpdatedEvent.InputTuple,
       DispatcherUpdatedEvent.OutputTuple,
       DispatcherUpdatedEvent.OutputObject
@@ -674,7 +528,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       DispatcherUpdatedEvent.OutputObject
     >;
 
-    "Frozen()": TypedContractEvent<
+    'Frozen()': TypedContractEvent<
       FrozenEvent.InputTuple,
       FrozenEvent.OutputTuple,
       FrozenEvent.OutputObject
@@ -685,7 +539,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       FrozenEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
+    'OwnershipTransferred(address,address)': TypedContractEvent<
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
@@ -696,7 +550,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       OwnershipTransferredEvent.OutputObject
     >;
 
-    "PausedSet(bool)": TypedContractEvent<
+    'PausedSet(bool)': TypedContractEvent<
       PausedSetEvent.InputTuple,
       PausedSetEvent.OutputTuple,
       PausedSetEvent.OutputObject
@@ -707,7 +561,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       PausedSetEvent.OutputObject
     >;
 
-    "PayRoxProxyRouterInitialized(address,address,bytes32,bool)": TypedContractEvent<
+    'PayRoxProxyRouterInitialized(address,address,bytes32,bool)': TypedContractEvent<
       PayRoxProxyRouterInitializedEvent.InputTuple,
       PayRoxProxyRouterInitializedEvent.OutputTuple,
       PayRoxProxyRouterInitializedEvent.OutputObject
@@ -718,7 +572,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       PayRoxProxyRouterInitializedEvent.OutputObject
     >;
 
-    "SelectorsForbidden(bytes4[],bool)": TypedContractEvent<
+    'SelectorsForbidden(bytes4[],bool)': TypedContractEvent<
       SelectorsForbiddenEvent.InputTuple,
       SelectorsForbiddenEvent.OutputTuple,
       SelectorsForbiddenEvent.OutputObject
@@ -729,7 +583,7 @@ export interface PayRoxProxyRouter extends BaseContract {
       SelectorsForbiddenEvent.OutputObject
     >;
 
-    "StrictCodehashSet(bool)": TypedContractEvent<
+    'StrictCodehashSet(bool)': TypedContractEvent<
       StrictCodehashSetEvent.InputTuple,
       StrictCodehashSetEvent.OutputTuple,
       StrictCodehashSetEvent.OutputObject

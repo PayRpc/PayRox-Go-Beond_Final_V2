@@ -12,14 +12,14 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from '../../../common';
 
 export declare namespace IDiamondCut {
   export type FacetCutStruct = {
@@ -31,19 +31,19 @@ export declare namespace IDiamondCut {
   export type FacetCutStructOutput = [
     facetAddress: string,
     action: bigint,
-    functionSelectors: string[]
+    functionSelectors: string[],
   ] & { facetAddress: string; action: bigint; functionSelectors: string[] };
 }
 
 export interface IDiamondCutInterface extends Interface {
-  getFunction(nameOrSignature: "diamondCut"): FunctionFragment;
+  getFunction(nameOrSignature: 'diamondCut'): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "diamondCut",
-    values: [IDiamondCut.FacetCutStruct[], AddressLike, BytesLike]
+    functionFragment: 'diamondCut',
+    values: [IDiamondCut.FacetCutStruct[], AddressLike, BytesLike],
   ): string;
 
-  decodeFunctionResult(functionFragment: "diamondCut", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'diamondCut', data: BytesLike): Result;
 }
 
 export interface IDiamondCut extends BaseContract {
@@ -55,64 +55,52 @@ export interface IDiamondCut extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
   diamondCut: TypedContractMethod<
-    [
-      _diamondCut: IDiamondCut.FacetCutStruct[],
-      _init: AddressLike,
-      _calldata: BytesLike
-    ],
+    [_diamondCut: IDiamondCut.FacetCutStruct[], _init: AddressLike, _calldata: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
   getFunction(
-    nameOrSignature: "diamondCut"
+    nameOrSignature: 'diamondCut',
   ): TypedContractMethod<
-    [
-      _diamondCut: IDiamondCut.FacetCutStruct[],
-      _init: AddressLike,
-      _calldata: BytesLike
-    ],
+    [_diamondCut: IDiamondCut.FacetCutStruct[], _init: AddressLike, _calldata: BytesLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   filters: {};

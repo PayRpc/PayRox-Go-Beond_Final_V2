@@ -12,126 +12,63 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from '../../common';
 
 export interface IAntiBotFacetInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "GOVERNANCE_ROLE"
-      | "MONITOR_ROLE"
-      | "addTrusted"
-      | "ensureBuybackAllowed"
-      | "isTrusted"
-      | "removeTrusted"
-      | "reportMarketMove"
-      | "resetCircuitBreaker"
-      | "setBuybackPaused"
-      | "setEnabled"
-      | "setThresholds"
-      | "setThrottleBlocks"
-      | "validateTransaction"
+      | 'GOVERNANCE_ROLE'
+      | 'MONITOR_ROLE'
+      | 'addTrusted'
+      | 'ensureBuybackAllowed'
+      | 'isTrusted'
+      | 'removeTrusted'
+      | 'reportMarketMove'
+      | 'resetCircuitBreaker'
+      | 'setBuybackPaused'
+      | 'setEnabled'
+      | 'setThresholds'
+      | 'setThrottleBlocks'
+      | 'validateTransaction',
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: 'GOVERNANCE_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'MONITOR_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'addTrusted', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'ensureBuybackAllowed', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'isTrusted', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'removeTrusted', values: [AddressLike]): string;
+  encodeFunctionData(functionFragment: 'reportMarketMove', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'resetCircuitBreaker', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'setBuybackPaused', values: [boolean]): string;
+  encodeFunctionData(functionFragment: 'setEnabled', values: [boolean]): string;
   encodeFunctionData(
-    functionFragment: "GOVERNANCE_ROLE",
-    values?: undefined
+    functionFragment: 'setThresholds',
+    values: [BigNumberish, BigNumberish],
   ): string;
-  encodeFunctionData(
-    functionFragment: "MONITOR_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addTrusted",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "ensureBuybackAllowed",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isTrusted",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removeTrusted",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "reportMarketMove",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "resetCircuitBreaker",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setBuybackPaused",
-    values: [boolean]
-  ): string;
-  encodeFunctionData(functionFragment: "setEnabled", values: [boolean]): string;
-  encodeFunctionData(
-    functionFragment: "setThresholds",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setThrottleBlocks",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "validateTransaction",
-    values: [AddressLike]
-  ): string;
+  encodeFunctionData(functionFragment: 'setThrottleBlocks', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'validateTransaction', values: [AddressLike]): string;
 
-  decodeFunctionResult(
-    functionFragment: "GOVERNANCE_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "MONITOR_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "addTrusted", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "ensureBuybackAllowed",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "isTrusted", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "removeTrusted",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "reportMarketMove",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "resetCircuitBreaker",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setBuybackPaused",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setEnabled", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setThresholds",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setThrottleBlocks",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "validateTransaction",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'GOVERNANCE_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'MONITOR_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'addTrusted', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'ensureBuybackAllowed', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'isTrusted', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'removeTrusted', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'reportMarketMove', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'resetCircuitBreaker', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setBuybackPaused', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setEnabled', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setThresholds', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setThrottleBlocks', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'validateTransaction', data: BytesLike): Result;
 }
 
 export interface IAntiBotFacet extends BaseContract {
@@ -143,133 +80,107 @@ export interface IAntiBotFacet extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  GOVERNANCE_ROLE: TypedContractMethod<[], [string], "view">;
+  GOVERNANCE_ROLE: TypedContractMethod<[], [string], 'view'>;
 
-  MONITOR_ROLE: TypedContractMethod<[], [string], "view">;
+  MONITOR_ROLE: TypedContractMethod<[], [string], 'view'>;
 
-  addTrusted: TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
+  addTrusted: TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
 
-  ensureBuybackAllowed: TypedContractMethod<[], [boolean], "view">;
+  ensureBuybackAllowed: TypedContractMethod<[], [boolean], 'view'>;
 
-  isTrusted: TypedContractMethod<[a: AddressLike], [boolean], "view">;
+  isTrusted: TypedContractMethod<[a: AddressLike], [boolean], 'view'>;
 
-  removeTrusted: TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
+  removeTrusted: TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
 
-  reportMarketMove: TypedContractMethod<
-    [moveBps: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+  reportMarketMove: TypedContractMethod<[moveBps: BigNumberish], [void], 'nonpayable'>;
 
-  resetCircuitBreaker: TypedContractMethod<[], [void], "nonpayable">;
+  resetCircuitBreaker: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  setBuybackPaused: TypedContractMethod<
-    [paused: boolean],
-    [void],
-    "nonpayable"
-  >;
+  setBuybackPaused: TypedContractMethod<[paused: boolean], [void], 'nonpayable'>;
 
-  setEnabled: TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
+  setEnabled: TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
 
   setThresholds: TypedContractMethod<
     [pauseBps_: BigNumberish, circuitBps_: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  setThrottleBlocks: TypedContractMethod<
-    [blocks_: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+  setThrottleBlocks: TypedContractMethod<[blocks_: BigNumberish], [void], 'nonpayable'>;
 
-  validateTransaction: TypedContractMethod<
-    [sender: AddressLike],
-    [boolean],
-    "nonpayable"
-  >;
+  validateTransaction: TypedContractMethod<[sender: AddressLike], [boolean], 'nonpayable'>;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
+  getFunction(nameOrSignature: 'GOVERNANCE_ROLE'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'MONITOR_ROLE'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "GOVERNANCE_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'addTrusted',
+  ): TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'ensureBuybackAllowed'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "MONITOR_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'isTrusted',
+  ): TypedContractMethod<[a: AddressLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "addTrusted"
-  ): TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'removeTrusted',
+  ): TypedContractMethod<[a: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "ensureBuybackAllowed"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'reportMarketMove',
+  ): TypedContractMethod<[moveBps: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "isTrusted"
-  ): TypedContractMethod<[a: AddressLike], [boolean], "view">;
+    nameOrSignature: 'resetCircuitBreaker',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "removeTrusted"
-  ): TypedContractMethod<[a: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'setBuybackPaused',
+  ): TypedContractMethod<[paused: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "reportMarketMove"
-  ): TypedContractMethod<[moveBps: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'setEnabled',
+  ): TypedContractMethod<[enabled: boolean], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "resetCircuitBreaker"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setBuybackPaused"
-  ): TypedContractMethod<[paused: boolean], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setEnabled"
-  ): TypedContractMethod<[enabled: boolean], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setThresholds"
+    nameOrSignature: 'setThresholds',
   ): TypedContractMethod<
     [pauseBps_: BigNumberish, circuitBps_: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "setThrottleBlocks"
-  ): TypedContractMethod<[blocks_: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'setThrottleBlocks',
+  ): TypedContractMethod<[blocks_: BigNumberish], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "validateTransaction"
-  ): TypedContractMethod<[sender: AddressLike], [boolean], "nonpayable">;
+    nameOrSignature: 'validateTransaction',
+  ): TypedContractMethod<[sender: AddressLike], [boolean], 'nonpayable'>;
 
   filters: {};
 }

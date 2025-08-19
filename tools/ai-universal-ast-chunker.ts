@@ -10,10 +10,10 @@
  * - Outputs DiamondCut + manifest stubs
  */
 
-import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { Interface, keccak256, toUtf8Bytes } from 'ethers';
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 
 interface ChunkAnalysis {
   originalFile: string;
@@ -30,7 +30,7 @@ interface ChunkAnalysis {
 
 interface ContractChunk {
   name: string;
-  type: "facet" | "library" | "interface" | "storage" | "init";
+  type: 'facet' | 'library' | 'interface' | 'storage' | 'init';
   content: string;
   size: number;
   runtimeBytes: number;
@@ -44,8 +44,8 @@ interface ContractChunk {
 interface FunctionInfo {
   name: string;
   signature: string; // canonical "name(type1,type2)"
-  selector: string;  // 0xNNNNNNNN
-  stateMutability: "pure" | "view" | "nonpayable" | "payable";
+  selector: string; // 0xNNNNNNNN
+  stateMutability: 'pure' | 'view' | 'nonpayable' | 'payable';
   inputs?: Array<{ name: string; type: string }>;
   outputs?: Array<{ name: string; type: string }>;
 }
@@ -68,7 +68,7 @@ interface DeploymentStrategy {
 
 interface DiamondCutData {
   facet: string;
-  action: "Add" | "Replace" | "Remove";
+  action: 'Add' | 'Replace' | 'Remove';
   selectors: string[];
 }
 
@@ -117,14 +117,16 @@ export class AIUniversalASTChunker {
     iface: Interface;
     functions: FunctionInfo[];
   }> {
-    const contractName = path.basename(contractPath, ".sol");
+    const contractName = path.basename(contractPath, '.sol');
 
     await this.hre.run('compile');
     const artifact = await this.hre.artifacts.readArtifact(contractName);
     const iface = new Interface(artifact.abi);
 
     const fns: FunctionInfo[] = [];
-    const functionFragments = (artifact.abi || []).filter((item: any) => item && item.type === 'function');
+    const functionFragments = (artifact.abi || []).filter(
+      (item: any) => item && item.type === 'function',
+    );
 
     for (const fragment of functionFragments) {
       try {
@@ -137,15 +139,22 @@ export class AIUniversalASTChunker {
         const fullHash = keccak256(toUtf8Bytes(signature));
         const selector = fullHash.slice(0, 10); // 0x + 8 hex chars
 
-        const stateMutability = (fragment.stateMutability || 'nonpayable') as FunctionInfo['stateMutability'];
+        const stateMutability = (fragment.stateMutability ||
+          'nonpayable') as FunctionInfo['stateMutability'];
 
         fns.push({
           name: fnName,
           signature,
           selector,
           stateMutability,
-          inputs: inputs.map((inp: any, idx: number) => ({ name: inp.name || `arg${idx}`, type: inp.type || '' })),
-          outputs: (fragment.outputs || []).map((out: any, idx: number) => ({ name: out.name || `ret${idx}`, type: out.type || '' })),
+          inputs: inputs.map((inp: any, idx: number) => ({
+            name: inp.name || `arg${idx}`,
+            type: inp.type || '',
+          })),
+          outputs: (fragment.outputs || []).map((out: any, idx: number) => ({
+            name: out.name || `ret${idx}`,
+            type: out.type || '',
+          })),
         });
       } catch (err) {
         // eslint-disable-next-line no-console
@@ -158,14 +167,14 @@ export class AIUniversalASTChunker {
 
   private getRuntimeBytes(artifact: any): number {
     const runtime = artifact.deployedBytecode as string;
-    if (!runtime || runtime === "0x") return 0;
+    if (!runtime || runtime === '0x') return 0;
     return (runtime.length - 2) / 2;
   }
 
   async analyzeContract(filePath: string): Promise<ChunkAnalysis> {
-    const content = fs.readFileSync(filePath, "utf8");
+    const content = fs.readFileSync(filePath, 'utf8');
     const stats = fs.statSync(filePath);
-    const lines = content.split("\n").length;
+    const lines = content.split('\n').length;
 
     const abiData = await this.loadAbi(filePath);
     const runtimeBytes = this.getRuntimeBytes(abiData.artifact);
@@ -177,7 +186,7 @@ export class AIUniversalASTChunker {
         stats.size,
         lines,
         abiData,
-        runtimeBytes
+        runtimeBytes,
       );
     }
 
@@ -206,9 +215,9 @@ export class AIUniversalASTChunker {
    */
   private async generateOptimalChunks(
     abiData: { name: string; functions: FunctionInfo[] },
-    originalName: string
+    originalName: string,
   ): Promise<ContractChunk[]> {
-    const baseName = originalName.replace(".sol", "");
+    const baseName = originalName.replace('.sol', '');
     const chunks: ContractChunk[] = [];
 
     const groups = this.groupFunctionsByDomain(abiData.functions);
@@ -219,17 +228,20 @@ export class AIUniversalASTChunker {
     }
 
     // Storage libs
-    for (const c of chunks.filter((x) => x.type === "facet")) {
+    for (const c of chunks.filter((x) => x.type === 'facet')) {
       chunks.push(this.createStorageLibrary(c.name));
     }
 
     // Interfaces
-    for (const c of chunks.filter((x) => x.type === "facet")) {
+    for (const c of chunks.filter((x) => x.type === 'facet')) {
       chunks.push(this.createInterfaceChunk(c.name, c.functions));
     }
 
     // Init contract
-    const initChunk = this.createInitContract(baseName, chunks.filter((c) => c.type === "facet"));
+    const initChunk = this.createInitContract(
+      baseName,
+      chunks.filter((c) => c.type === 'facet'),
+    );
     if (initChunk) chunks.push(initChunk);
 
     return chunks;
@@ -238,21 +250,18 @@ export class AIUniversalASTChunker {
   private groupFunctionsByDomain(functions: FunctionInfo[]) {
     const groups: Array<{ name: string; functions: FunctionInfo[]; type: string }> = [];
 
-    const core = functions.filter(
-      (f) =>
-        /init|owner|admin|pause|upgrade/i.test(f.name)
-    );
-    if (core.length) groups.push({ name: "Core", functions: core, type: "core" });
+    const core = functions.filter((f) => /init|owner|admin|pause|upgrade/i.test(f.name));
+    if (core.length) groups.push({ name: 'Core', functions: core, type: 'core' });
 
     const views = functions.filter(
-      (f) => (f.stateMutability === "view" || f.stateMutability === "pure") && !core.includes(f)
+      (f) => (f.stateMutability === 'view' || f.stateMutability === 'pure') && !core.includes(f),
     );
-    if (views.length) groups.push({ name: "View", functions: views, type: "view" });
+    if (views.length) groups.push({ name: 'View', functions: views, type: 'view' });
 
     const state = functions.filter(
       (f) =>
-        (f.stateMutability === "nonpayable" || f.stateMutability === "payable") &&
-        !core.includes(f)
+        (f.stateMutability === 'nonpayable' || f.stateMutability === 'payable') &&
+        !core.includes(f),
     );
     if (state.length > 20) {
       const parts = Math.ceil(state.length / 20);
@@ -261,11 +270,11 @@ export class AIUniversalASTChunker {
         groups.push({
           name: `Logic${Math.floor(i / chunkSize) + 1}`,
           functions: state.slice(i, i + chunkSize),
-          type: "logic",
+          type: 'logic',
         });
       }
     } else if (state.length) {
-      groups.push({ name: "Logic", functions: state, type: "logic" });
+      groups.push({ name: 'Logic', functions: state, type: 'logic' });
     }
 
     return groups;
@@ -273,7 +282,7 @@ export class AIUniversalASTChunker {
 
   private async packFunctionsIntoFacets(
     group: { name: string; functions: FunctionInfo[]; type: string },
-    baseName: string
+    baseName: string,
   ): Promise<ContractChunk[]> {
     const facets: ContractChunk[] = [];
     let buf: FunctionInfo[] = [];
@@ -282,7 +291,7 @@ export class AIUniversalASTChunker {
     for (const f of group.functions) {
       const test = [...buf, f];
       const code = this.generateFacetCode(`${baseName}${group.name}${idx}Facet`, test);
-      const srcBytes = Buffer.byteLength(code, "utf8");
+      const srcBytes = Buffer.byteLength(code, 'utf8');
 
       if (srcBytes * 3 > this.maxRuntimeBytes && buf.length > 0) {
         const name = `${baseName}${group.name}${idx}Facet`;
@@ -307,9 +316,9 @@ export class AIUniversalASTChunker {
   private mkFacetChunk(name: string, content: string, fns: FunctionInfo[]): ContractChunk {
     return {
       name,
-      type: "facet",
+      type: 'facet',
       content,
-      size: Buffer.byteLength(content, "utf8"),
+      size: Buffer.byteLength(content, 'utf8'),
       runtimeBytes: 0, // can be filled after a compile-in-place step if you want
       estimatedGas: this.estimateDeploymentGas(content),
       dependencies: this.extractDependencies(content),
@@ -326,7 +335,7 @@ export class AIUniversalASTChunker {
     const interfaceName = `I${name}`;
     const storageLibName = `Lib${name}Storage`;
 
-    const body = functions.map((f) => this.generateFunctionStub(f)).join("\n\n");
+    const body = functions.map((f) => this.generateFunctionStub(f)).join('\n\n');
 
     return `// SPDX-License-Identifier: MIT
 pragma solidity ${this.pragmaVersion};
@@ -357,23 +366,23 @@ ${body}
    * Generate a compilable stub with correct signature/visibility/mutability/returns.
    */
   private generateFunctionStub(f: FunctionInfo): string {
-    const params = (f.inputs || []).map((p, i) => `${p.type} ${p.name || `arg${i}`}`).join(", ");
-    const rets = (f.outputs || []).map((o, i) => `${o.type} ${o.name || `ret${i}`}`).join(", ");
+    const params = (f.inputs || []).map((p, i) => `${p.type} ${p.name || `arg${i}`}`).join(', ');
+    const rets = (f.outputs || []).map((o, i) => `${o.type} ${o.name || `ret${i}`}`).join(', ');
 
-    const vis = "external";
+    const vis = 'external';
     const mut =
-      f.stateMutability === "view" || f.stateMutability === "pure"
+      f.stateMutability === 'view' || f.stateMutability === 'pure'
         ? f.stateMutability
-        : f.stateMutability === "payable"
-        ? "payable"
-        : ""; // nonpayable => omit
+        : f.stateMutability === 'payable'
+          ? 'payable'
+          : ''; // nonpayable => omit
     const mod =
-      f.stateMutability === "view" || f.stateMutability === "pure" ? "" : " onlyDispatcher";
+      f.stateMutability === 'view' || f.stateMutability === 'pure' ? '' : ' onlyDispatcher';
 
-    const returnsClause = rets.length ? ` returns (${rets})` : "";
+    const returnsClause = rets.length ? ` returns (${rets})` : '';
 
     // Revert body keeps bytecode tiny and forces migration later.
-    return `    function ${f.name}(${params}) ${vis}${mut ? " " + mut : ""}${mod}${returnsClause} {
+    return `    function ${f.name}(${params}) ${vis}${mut ? ' ' + mut : ''}${mod}${returnsClause} {
         revert("TODO: migrate logic from monolith");
     }`;
   }
@@ -405,15 +414,15 @@ library ${libName} {
 `;
     return {
       name: libName,
-      type: "storage",
+      type: 'storage',
       content,
-      size: Buffer.byteLength(content, "utf8"),
+      size: Buffer.byteLength(content, 'utf8'),
       runtimeBytes: 0,
       estimatedGas: 0,
       dependencies: [],
       functions: [],
       storageSlots: [slot],
-      interfaceId: "0x00000000",
+      interfaceId: '0x00000000',
     };
   }
 
@@ -423,20 +432,18 @@ library ${libName} {
       .map((f) => {
         const params = (f.inputs || [])
           .map((p, i) => `${p.type} ${p.name || `arg${i}`}`)
-          .join(", ");
-        const rets = (f.outputs || [])
-          .map((o, i) => `${o.type} ${o.name || `ret${i}`}`)
-          .join(", ");
+          .join(', ');
+        const rets = (f.outputs || []).map((o, i) => `${o.type} ${o.name || `ret${i}`}`).join(', ');
         const mut =
-          f.stateMutability === "view" || f.stateMutability === "pure"
+          f.stateMutability === 'view' || f.stateMutability === 'pure'
             ? ` ${f.stateMutability}`
-            : f.stateMutability === "payable"
-            ? " payable"
-            : "";
-        const returnsClause = rets.length ? ` returns (${rets})` : "";
+            : f.stateMutability === 'payable'
+              ? ' payable'
+              : '';
+        const returnsClause = rets.length ? ` returns (${rets})` : '';
         return `    function ${f.name}(${params}) external${mut}${returnsClause};`;
       })
-      .join("\n");
+      .join('\n');
 
     const content = `// SPDX-License-Identifier: MIT
 pragma solidity ${this.pragmaVersion};
@@ -451,9 +458,9 @@ ${defs}
 `;
     return {
       name: interfaceName,
-      type: "interface",
+      type: 'interface',
       content,
-      size: Buffer.byteLength(content, "utf8"),
+      size: Buffer.byteLength(content, 'utf8'),
       runtimeBytes: 0,
       estimatedGas: 0,
       dependencies: [],
@@ -468,7 +475,7 @@ ${defs}
     const initName = `Init${baseName}`;
     const imports = facets
       .map((c) => `import {I${c.name}} from "../interfaces/facets/I${c.name}.sol";`)
-      .join("\n");
+      .join('\n');
 
     // NOTE: We do NOT set 165 bits here if ERC-165 is centralized elsewhere.
     const content = `// SPDX-License-Identifier: MIT
@@ -492,26 +499,31 @@ contract ${initName} {
 `;
     return {
       name: initName,
-      type: "init",
+      type: 'init',
       content,
-      size: Buffer.byteLength(content, "utf8"),
+      size: Buffer.byteLength(content, 'utf8'),
       runtimeBytes: 0,
       estimatedGas: this.estimateDeploymentGas(content),
-      dependencies: ["LibDiamond", ...facets.map((c) => `I${c.name}`)],
+      dependencies: ['LibDiamond', ...facets.map((c) => `I${c.name}`)],
       functions: [
-        { name: "init", signature: "init()", selector: "0x8129fc1c", stateMutability: "nonpayable" },
+        {
+          name: 'init',
+          signature: 'init()',
+          selector: '0x8129fc1c',
+          stateMutability: 'nonpayable',
+        },
       ],
       storageSlots: [],
-      interfaceId: "0x00000000",
+      interfaceId: '0x00000000',
     };
   }
 
   private buildCutAndManifest(chunks: ContractChunk[]) {
-    const facets = chunks.filter((c) => c.type === "facet");
+    const facets = chunks.filter((c) => c.type === 'facet');
 
     const diamondCut: DiamondCutData[] = facets.map((f) => ({
       facet: f.name,
-      action: "Add",
+      action: 'Add',
       selectors: f.functions.map((fn) => fn.selector),
     }));
 
@@ -520,8 +532,8 @@ contract ${initName} {
       selectors: f.functions.map((x) => x.selector),
       signatures: f.functions.map((x) => x.signature),
       estimatedSize: f.runtimeBytes,
-      securityLevel: "low",
-      versionTag: "v1",
+      securityLevel: 'low',
+      versionTag: 'v1',
     }));
 
     return { diamondCut, manifest };
@@ -535,29 +547,29 @@ contract ${initName} {
     const a = new Set(originalFns.map((f) => f.selector.toLowerCase()));
     const b = new Set(chunks.flatMap((c) => c.functions.map((f) => f.selector.toLowerCase())));
     const selectorParity = a.size === b.size && [...a].every((x) => b.has(x));
-    if (!selectorParity) errors.push("Selector parity failed");
+    if (!selectorParity) errors.push('Selector parity failed');
 
     // EIP-170 check (runtimeBytes are 0 until you compile generated facets; warn instead of error)
     const sizeViolations = chunks
-      .filter((c) => c.type === "facet")
+      .filter((c) => c.type === 'facet')
       .filter((c) => c.runtimeBytes && c.runtimeBytes > this.maxRuntimeBytes);
     const runtimeSizeOk = sizeViolations.length === 0;
-    if (!runtimeSizeOk) errors.push("One or more facets exceed EIP-170");
+    if (!runtimeSizeOk) errors.push('One or more facets exceed EIP-170');
 
     // loupe ban in facets
-    const loupe = new Set(["0x1f931c1c", "0xcdffacc6", "0x52ef6b2c", "0xadfca15e"]);
+    const loupe = new Set(['0x1f931c1c', '0xcdffacc6', '0x52ef6b2c', '0xadfca15e']);
     const bad = chunks.some(
-      (c) => c.type === "facet" && c.functions.some((f) => loupe.has(f.selector.toLowerCase()))
+      (c) => c.type === 'facet' && c.functions.some((f) => loupe.has(f.selector.toLowerCase())),
     );
     const noLoupeInFacets = !bad;
-    if (!noLoupeInFacets) errors.push("Loupe selectors found in a facet");
+    if (!noLoupeInFacets) errors.push('Loupe selectors found in a facet');
 
     return { selectorParity, runtimeSizeOk, noLoupeInFacets, errors, warnings };
   }
 
   private async estimateGasCosts(chunks: ContractChunk[]): Promise<GasEstimate[]> {
     return chunks
-      .filter((c) => c.type === "facet" || c.type === "init")
+      .filter((c) => c.type === 'facet' || c.type === 'init')
       .map((c) => ({
         chunkName: c.name,
         deploymentGas: this.estimateDeploymentGas(c.content),
@@ -568,34 +580,34 @@ contract ${initName} {
   }
 
   private createDeploymentStrategy(chunks: ContractChunk[]): DeploymentStrategy {
-    const facets = chunks.filter((c) => c.type === "facet").map((c) => c.name);
-    const libraries = chunks.filter((c) => c.type === "storage").map((c) => c.name);
-    const initC = chunks.find((c) => c.type === "init")?.name;
+    const facets = chunks.filter((c) => c.type === 'facet').map((c) => c.name);
+    const libraries = chunks.filter((c) => c.type === 'storage').map((c) => c.name);
+    const initC = chunks.find((c) => c.type === 'init')?.name;
 
     return {
-      mainContract: "Diamond",
+      mainContract: 'Diamond',
       facets,
       libraries,
-      deploymentOrder: [...libraries, ...facets, "Diamond", ...(initC ? [initC] : [])],
+      deploymentOrder: [...libraries, ...facets, 'Diamond', ...(initC ? [initC] : [])],
       crossReferences: {},
     };
   }
 
   private calculateInterfaceId(functions: FunctionInfo[]): string {
-    if (!functions.length) return "0x00000000";
+    if (!functions.length) return '0x00000000';
     let acc = 0n;
     for (const f of functions) {
-      const x = BigInt("0x" + f.selector.slice(2));
+      const x = BigInt('0x' + f.selector.slice(2));
       acc ^= x;
     }
-    const hex = acc.toString(16).padStart(8, "0");
-    return "0x" + hex;
+    const hex = acc.toString(16).padStart(8, '0');
+    return '0x' + hex;
   }
 
   private estimateDeploymentGas(content: string): number {
     const base = 200_000;
     const perByte = 200;
-    return base + Buffer.byteLength(content, "utf8") * perByte;
+    return base + Buffer.byteLength(content, 'utf8') * perByte;
   }
 
   private extractDependencies(src: string): string[] {
@@ -612,13 +624,13 @@ contract ${initName} {
     size: number,
     lines: number,
     abiData: { name: string; functions: FunctionInfo[] },
-    runtimeBytes: number
+    runtimeBytes: number,
   ): ChunkAnalysis {
     const name = abiData.name;
 
     const chunk: ContractChunk = {
       name,
-      type: "facet",
+      type: 'facet',
       content,
       size,
       runtimeBytes,
@@ -654,7 +666,7 @@ contract ${initName} {
       diamondCut: [
         {
           facet: name,
-          action: "Add",
+          action: 'Add',
           selectors: abiData.functions.map((f) => f.selector),
         },
       ],
@@ -664,8 +676,8 @@ contract ${initName} {
           selectors: abiData.functions.map((f) => f.selector),
           signatures: abiData.functions.map((f) => f.signature),
           estimatedSize: runtimeBytes,
-          securityLevel: "low",
-          versionTag: "v1",
+          securityLevel: 'low',
+          versionTag: 'v1',
         },
       ],
       validation: {
@@ -679,19 +691,19 @@ contract ${initName} {
   }
 
   async saveChunks(analysis: ChunkAnalysis, outputDir: string): Promise<void> {
-    const chunksDir = path.join(outputDir, "chunks");
-    fs.mkdirSync(path.join(chunksDir, "facets"), { recursive: true });
-    fs.mkdirSync(path.join(chunksDir, "interfaces", "facets"), { recursive: true });
-    fs.mkdirSync(path.join(chunksDir, "libraries"), { recursive: true });
+    const chunksDir = path.join(outputDir, 'chunks');
+    fs.mkdirSync(path.join(chunksDir, 'facets'), { recursive: true });
+    fs.mkdirSync(path.join(chunksDir, 'interfaces', 'facets'), { recursive: true });
+    fs.mkdirSync(path.join(chunksDir, 'libraries'), { recursive: true });
 
     for (const c of analysis.recommendedChunks) {
-      let out = "";
-      if (c.type === "facet" || c.type === "init") {
-        out = path.join(chunksDir, "facets", `${c.name}.sol`);
-      } else if (c.type === "interface") {
-        out = path.join(chunksDir, "interfaces", "facets", `${c.name}.sol`);
-      } else if (c.type === "storage") {
-        out = path.join(chunksDir, "libraries", `${c.name}.sol`);
+      let out = '';
+      if (c.type === 'facet' || c.type === 'init') {
+        out = path.join(chunksDir, 'facets', `${c.name}.sol`);
+      } else if (c.type === 'interface') {
+        out = path.join(chunksDir, 'interfaces', 'facets', `${c.name}.sol`);
+      } else if (c.type === 'storage') {
+        out = path.join(chunksDir, 'libraries', `${c.name}.sol`);
       } else {
         out = path.join(chunksDir, `${c.name}.sol`);
       }
@@ -700,13 +712,16 @@ contract ${initName} {
       console.log(`✅ ${c.name}.sol → ${out}`);
     }
 
-    const report = path.join(chunksDir, "analysis-report.json");
+    const report = path.join(chunksDir, 'analysis-report.json');
     fs.writeFileSync(report, JSON.stringify(analysis, null, 2));
 
     await this.generateDeploymentScript(analysis, chunksDir);
   }
 
-  private async generateDeploymentScript(analysis: ChunkAnalysis, outputDir: string): Promise<void> {
+  private async generateDeploymentScript(
+    analysis: ChunkAnalysis,
+    outputDir: string,
+  ): Promise<void> {
     const script = `// SPDX-License-Identifier: MIT
 // Auto-generated by AIUniversalASTChunker
 
@@ -722,13 +737,13 @@ export async function deployChunkedSystem(hre: HardhatRuntimeEnvironment) {
     facets,
     diamondCut,
     manifest,
-    initContract: "${analysis.recommendedChunks.find((c) => c.type === "init")?.name || ""}"
+    initContract: "${analysis.recommendedChunks.find((c) => c.type === 'init')?.name || ''}"
   });
   console.log("✅ Deployed Diamond at", diamond.address);
   return diamond;
 }
 `;
-    const p = path.join(outputDir, "deploy-chunked-system.ts");
+    const p = path.join(outputDir, 'deploy-chunked-system.ts');
     fs.writeFileSync(p, script);
   }
 }
@@ -737,13 +752,13 @@ export async function deployChunkedSystem(hre: HardhatRuntimeEnvironment) {
  * CLI entry
  */
 export async function main(hre: HardhatRuntimeEnvironment) {
-  console.log("🤖 PayRox AST Chunker — start");
+  console.log('🤖 PayRox AST Chunker — start');
   const chunker = new AIUniversalASTChunker(hre);
 
   const targets = [
-    "contracts/PayRoxProxyRouter.sol",
-    "contracts/dispatcher/ManifestDispatcher.sol",
-    "contracts/facets/SecurityFacet.sol",
+    'contracts/PayRoxProxyRouter.sol',
+    'contracts/dispatcher/ManifestDispatcher.sol',
+    'contracts/facets/SecurityFacet.sol',
   ];
 
   const results: ChunkAnalysis[] = [];
@@ -756,11 +771,11 @@ export async function main(hre: HardhatRuntimeEnvironment) {
     try {
       const a = await chunker.analyzeContract(abs);
       results.push(a);
-      const out = path.join("deployable-modules", path.basename(rel, ".sol"));
+      const out = path.join('deployable-modules', path.basename(rel, '.sol'));
       await chunker.saveChunks(a, out);
 
       console.log(
-        `✅ ${rel}: size ${(a.originalSize / 1024).toFixed(2)}KB, runtime ${a.originalRuntimeBytes} bytes`
+        `✅ ${rel}: size ${(a.originalSize / 1024).toFixed(2)}KB, runtime ${a.originalRuntimeBytes} bytes`,
       );
     } catch (e) {
       console.log(`❌ Error processing ${rel}:`, e);

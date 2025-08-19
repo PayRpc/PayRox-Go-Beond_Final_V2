@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from '../../../common';
 
 export declare namespace IManifestDispatcher {
   export type ManifestInfoStruct = {
@@ -35,7 +35,7 @@ export declare namespace IManifestDispatcher {
     hash: string,
     version: bigint,
     timestamp: bigint,
-    selectorCount: bigint
+    selectorCount: bigint,
   ] & {
     hash: string;
     version: bigint;
@@ -47,163 +47,82 @@ export declare namespace IManifestDispatcher {
 export interface IManifestDispatcherInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "activateCommittedRoot"
-      | "activationDelay"
-      | "activeEpoch"
-      | "activeRoot"
-      | "applyRoutes"
-      | "commitRoot"
-      | "freeze"
-      | "frozen"
-      | "getManifestInfo"
-      | "getRoute"
-      | "getRouteCount"
-      | "pause"
-      | "pendingEpoch"
-      | "pendingRoot"
-      | "pendingSince"
-      | "removeRoutes"
-      | "routes"
-      | "setActivationDelay"
-      | "unpause"
-      | "verifyManifest"
+      | 'activateCommittedRoot'
+      | 'activationDelay'
+      | 'activeEpoch'
+      | 'activeRoot'
+      | 'applyRoutes'
+      | 'commitRoot'
+      | 'freeze'
+      | 'frozen'
+      | 'getManifestInfo'
+      | 'getRoute'
+      | 'getRouteCount'
+      | 'pause'
+      | 'pendingEpoch'
+      | 'pendingRoot'
+      | 'pendingSince'
+      | 'removeRoutes'
+      | 'routes'
+      | 'setActivationDelay'
+      | 'unpause'
+      | 'verifyManifest',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "ActivationDelaySet"
-      | "Frozen"
-      | "RootActivated"
-      | "RootCommitted"
-      | "RouteAdded"
-      | "RouteRemoved"
+      | 'ActivationDelaySet'
+      | 'Frozen'
+      | 'RootActivated'
+      | 'RootCommitted'
+      | 'RouteAdded'
+      | 'RouteRemoved',
   ): EventFragment;
 
+  encodeFunctionData(functionFragment: 'activateCommittedRoot', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activationDelay', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activeEpoch', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'activeRoot', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "activateCommittedRoot",
-    values?: undefined
+    functionFragment: 'applyRoutes',
+    values: [BytesLike[], AddressLike[], BytesLike[], BytesLike[][], boolean[][]],
   ): string;
-  encodeFunctionData(
-    functionFragment: "activationDelay",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "activeEpoch",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "activeRoot",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "applyRoutes",
-    values: [
-      BytesLike[],
-      AddressLike[],
-      BytesLike[],
-      BytesLike[][],
-      boolean[][]
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "commitRoot",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "freeze", values?: undefined): string;
-  encodeFunctionData(functionFragment: "frozen", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getManifestInfo",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "getRoute", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "getRouteCount",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "pause", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "pendingEpoch",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pendingRoot",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "pendingSince",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removeRoutes",
-    values: [BytesLike[]]
-  ): string;
-  encodeFunctionData(functionFragment: "routes", values: [BytesLike]): string;
-  encodeFunctionData(
-    functionFragment: "setActivationDelay",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "verifyManifest",
-    values: [BytesLike]
-  ): string;
+  encodeFunctionData(functionFragment: 'commitRoot', values: [BytesLike, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'freeze', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'frozen', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getManifestInfo', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getRoute', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getRouteCount', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pendingEpoch', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pendingRoot', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'pendingSince', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'removeRoutes', values: [BytesLike[]]): string;
+  encodeFunctionData(functionFragment: 'routes', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'setActivationDelay', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'unpause', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'verifyManifest', values: [BytesLike]): string;
 
-  decodeFunctionResult(
-    functionFragment: "activateCommittedRoot",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "activationDelay",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "activeEpoch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "activeRoot", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "applyRoutes",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "commitRoot", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "freeze", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "frozen", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getManifestInfo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getRoute", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getRouteCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingEpoch",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingRoot",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "pendingSince",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "removeRoutes",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "routes", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setActivationDelay",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "verifyManifest",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'activateCommittedRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activationDelay', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activeEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'activeRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'applyRoutes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'commitRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'freeze', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'frozen', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getManifestInfo', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoute', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRouteCount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pendingEpoch', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pendingRoot', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'pendingSince', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'removeRoutes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'routes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setActivationDelay', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'unpause', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'verifyManifest', data: BytesLike): Result;
 }
 
 export namespace ActivationDelaySetEvent {
@@ -256,11 +175,7 @@ export namespace RootCommittedEvent {
 }
 
 export namespace RouteAddedEvent {
-  export type InputTuple = [
-    selector: BytesLike,
-    facet: AddressLike,
-    codehash: BytesLike
-  ];
+  export type InputTuple = [selector: BytesLike, facet: AddressLike, codehash: BytesLike];
   export type OutputTuple = [selector: string, facet: string, codehash: string];
   export interface OutputObject {
     selector: string;
@@ -294,47 +209,45 @@ export interface IManifestDispatcher extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
 
-  activateCommittedRoot: TypedContractMethod<[], [void], "nonpayable">;
+  activateCommittedRoot: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  activationDelay: TypedContractMethod<[], [bigint], "view">;
+  activationDelay: TypedContractMethod<[], [bigint], 'view'>;
 
-  activeEpoch: TypedContractMethod<[], [bigint], "view">;
+  activeEpoch: TypedContractMethod<[], [bigint], 'view'>;
 
-  activeRoot: TypedContractMethod<[], [string], "view">;
+  activeRoot: TypedContractMethod<[], [string], 'view'>;
 
   applyRoutes: TypedContractMethod<
     [
@@ -342,194 +255,146 @@ export interface IManifestDispatcher extends BaseContract {
       facetAddrs: AddressLike[],
       codehashes: BytesLike[],
       proofs: BytesLike[][],
-      isRight: boolean[][]
+      isRight: boolean[][],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   commitRoot: TypedContractMethod<
     [newRoot: BytesLike, newEpoch: BigNumberish],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  freeze: TypedContractMethod<[], [void], "nonpayable">;
+  freeze: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  frozen: TypedContractMethod<[], [boolean], "view">;
+  frozen: TypedContractMethod<[], [boolean], 'view'>;
 
-  getManifestInfo: TypedContractMethod<
-    [],
-    [IManifestDispatcher.ManifestInfoStructOutput],
-    "view"
-  >;
+  getManifestInfo: TypedContractMethod<[], [IManifestDispatcher.ManifestInfoStructOutput], 'view'>;
 
-  getRoute: TypedContractMethod<[selector: BytesLike], [string], "view">;
+  getRoute: TypedContractMethod<[selector: BytesLike], [string], 'view'>;
 
-  getRouteCount: TypedContractMethod<[], [bigint], "view">;
+  getRouteCount: TypedContractMethod<[], [bigint], 'view'>;
 
-  pause: TypedContractMethod<[], [void], "nonpayable">;
+  pause: TypedContractMethod<[], [void], 'nonpayable'>;
 
-  pendingEpoch: TypedContractMethod<[], [bigint], "view">;
+  pendingEpoch: TypedContractMethod<[], [bigint], 'view'>;
 
-  pendingRoot: TypedContractMethod<[], [string], "view">;
+  pendingRoot: TypedContractMethod<[], [string], 'view'>;
 
-  pendingSince: TypedContractMethod<[], [bigint], "view">;
+  pendingSince: TypedContractMethod<[], [bigint], 'view'>;
 
-  removeRoutes: TypedContractMethod<
-    [selectors: BytesLike[]],
-    [void],
-    "nonpayable"
-  >;
+  removeRoutes: TypedContractMethod<[selectors: BytesLike[]], [void], 'nonpayable'>;
 
   routes: TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    "view"
+    'view'
   >;
 
-  setActivationDelay: TypedContractMethod<
-    [newDelay: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+  setActivationDelay: TypedContractMethod<[newDelay: BigNumberish], [void], 'nonpayable'>;
 
-  unpause: TypedContractMethod<[], [void], "nonpayable">;
+  unpause: TypedContractMethod<[], [void], 'nonpayable'>;
 
   verifyManifest: TypedContractMethod<
     [manifestHash: BytesLike],
     [[boolean, string] & { ok: boolean; current: string }],
-    "view"
+    'view'
   >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+  getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
 
   getFunction(
-    nameOrSignature: "activateCommittedRoot"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'activateCommittedRoot',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'activationDelay'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'activeEpoch'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'activeRoot'): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "activationDelay"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "activeEpoch"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "activeRoot"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "applyRoutes"
+    nameOrSignature: 'applyRoutes',
   ): TypedContractMethod<
     [
       selectors: BytesLike[],
       facetAddrs: AddressLike[],
       codehashes: BytesLike[],
       proofs: BytesLike[][],
-      isRight: boolean[][]
+      isRight: boolean[][],
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "commitRoot"
-  ): TypedContractMethod<
-    [newRoot: BytesLike, newEpoch: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: 'commitRoot',
+  ): TypedContractMethod<[newRoot: BytesLike, newEpoch: BigNumberish], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'freeze'): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'frozen'): TypedContractMethod<[], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "freeze"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'getManifestInfo',
+  ): TypedContractMethod<[], [IManifestDispatcher.ManifestInfoStructOutput], 'view'>;
   getFunction(
-    nameOrSignature: "frozen"
-  ): TypedContractMethod<[], [boolean], "view">;
+    nameOrSignature: 'getRoute',
+  ): TypedContractMethod<[selector: BytesLike], [string], 'view'>;
+  getFunction(nameOrSignature: 'getRouteCount'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'pause'): TypedContractMethod<[], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'pendingEpoch'): TypedContractMethod<[], [bigint], 'view'>;
+  getFunction(nameOrSignature: 'pendingRoot'): TypedContractMethod<[], [string], 'view'>;
+  getFunction(nameOrSignature: 'pendingSince'): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "getManifestInfo"
-  ): TypedContractMethod<
-    [],
-    [IManifestDispatcher.ManifestInfoStructOutput],
-    "view"
-  >;
+    nameOrSignature: 'removeRoutes',
+  ): TypedContractMethod<[selectors: BytesLike[]], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "getRoute"
-  ): TypedContractMethod<[selector: BytesLike], [string], "view">;
-  getFunction(
-    nameOrSignature: "getRouteCount"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "pause"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "pendingEpoch"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "pendingRoot"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "pendingSince"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "removeRoutes"
-  ): TypedContractMethod<[selectors: BytesLike[]], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "routes"
+    nameOrSignature: 'routes',
   ): TypedContractMethod<
     [selector: BytesLike],
     [[string, string] & { facet: string; codehash: string }],
-    "view"
+    'view'
   >;
   getFunction(
-    nameOrSignature: "setActivationDelay"
-  ): TypedContractMethod<[newDelay: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: 'setActivationDelay',
+  ): TypedContractMethod<[newDelay: BigNumberish], [void], 'nonpayable'>;
+  getFunction(nameOrSignature: 'unpause'): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "unpause"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "verifyManifest"
+    nameOrSignature: 'verifyManifest',
   ): TypedContractMethod<
     [manifestHash: BytesLike],
     [[boolean, string] & { ok: boolean; current: string }],
-    "view"
+    'view'
   >;
 
   getEvent(
-    key: "ActivationDelaySet"
+    key: 'ActivationDelaySet',
   ): TypedContractEvent<
     ActivationDelaySetEvent.InputTuple,
     ActivationDelaySetEvent.OutputTuple,
     ActivationDelaySetEvent.OutputObject
   >;
   getEvent(
-    key: "Frozen"
-  ): TypedContractEvent<
-    FrozenEvent.InputTuple,
-    FrozenEvent.OutputTuple,
-    FrozenEvent.OutputObject
-  >;
+    key: 'Frozen',
+  ): TypedContractEvent<FrozenEvent.InputTuple, FrozenEvent.OutputTuple, FrozenEvent.OutputObject>;
   getEvent(
-    key: "RootActivated"
+    key: 'RootActivated',
   ): TypedContractEvent<
     RootActivatedEvent.InputTuple,
     RootActivatedEvent.OutputTuple,
     RootActivatedEvent.OutputObject
   >;
   getEvent(
-    key: "RootCommitted"
+    key: 'RootCommitted',
   ): TypedContractEvent<
     RootCommittedEvent.InputTuple,
     RootCommittedEvent.OutputTuple,
     RootCommittedEvent.OutputObject
   >;
   getEvent(
-    key: "RouteAdded"
+    key: 'RouteAdded',
   ): TypedContractEvent<
     RouteAddedEvent.InputTuple,
     RouteAddedEvent.OutputTuple,
     RouteAddedEvent.OutputObject
   >;
   getEvent(
-    key: "RouteRemoved"
+    key: 'RouteRemoved',
   ): TypedContractEvent<
     RouteRemovedEvent.InputTuple,
     RouteRemovedEvent.OutputTuple,
@@ -537,7 +402,7 @@ export interface IManifestDispatcher extends BaseContract {
   >;
 
   filters: {
-    "ActivationDelaySet(uint64,uint64)": TypedContractEvent<
+    'ActivationDelaySet(uint64,uint64)': TypedContractEvent<
       ActivationDelaySetEvent.InputTuple,
       ActivationDelaySetEvent.OutputTuple,
       ActivationDelaySetEvent.OutputObject
@@ -548,7 +413,7 @@ export interface IManifestDispatcher extends BaseContract {
       ActivationDelaySetEvent.OutputObject
     >;
 
-    "Frozen()": TypedContractEvent<
+    'Frozen()': TypedContractEvent<
       FrozenEvent.InputTuple,
       FrozenEvent.OutputTuple,
       FrozenEvent.OutputObject
@@ -559,7 +424,7 @@ export interface IManifestDispatcher extends BaseContract {
       FrozenEvent.OutputObject
     >;
 
-    "RootActivated(bytes32,uint64)": TypedContractEvent<
+    'RootActivated(bytes32,uint64)': TypedContractEvent<
       RootActivatedEvent.InputTuple,
       RootActivatedEvent.OutputTuple,
       RootActivatedEvent.OutputObject
@@ -570,7 +435,7 @@ export interface IManifestDispatcher extends BaseContract {
       RootActivatedEvent.OutputObject
     >;
 
-    "RootCommitted(bytes32,uint64)": TypedContractEvent<
+    'RootCommitted(bytes32,uint64)': TypedContractEvent<
       RootCommittedEvent.InputTuple,
       RootCommittedEvent.OutputTuple,
       RootCommittedEvent.OutputObject
@@ -581,7 +446,7 @@ export interface IManifestDispatcher extends BaseContract {
       RootCommittedEvent.OutputObject
     >;
 
-    "RouteAdded(bytes4,address,bytes32)": TypedContractEvent<
+    'RouteAdded(bytes4,address,bytes32)': TypedContractEvent<
       RouteAddedEvent.InputTuple,
       RouteAddedEvent.OutputTuple,
       RouteAddedEvent.OutputObject
@@ -592,7 +457,7 @@ export interface IManifestDispatcher extends BaseContract {
       RouteAddedEvent.OutputObject
     >;
 
-    "RouteRemoved(bytes4)": TypedContractEvent<
+    'RouteRemoved(bytes4)': TypedContractEvent<
       RouteRemovedEvent.InputTuple,
       RouteRemovedEvent.OutputTuple,
       RouteRemovedEvent.OutputObject

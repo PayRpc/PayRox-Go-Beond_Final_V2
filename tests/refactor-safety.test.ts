@@ -30,8 +30,7 @@ describe('Refactor safety (SampleFacet)', function () {
     const to = 2n;
     const dataHash = ethers.keccak256(ethers.toUtf8Bytes('payload'));
 
-    await expect(facet.migrate(from, to, dataHash))
-      .to.emit(facet, 'RefactorValidationPassed');
+    await expect(facet.migrate(from, to, dataHash)).to.emit(facet, 'RefactorValidationPassed');
   });
 
   it('migration safety reverts on non-incrementing version', async () => {
@@ -43,7 +42,7 @@ describe('Refactor safety (SampleFacet)', function () {
     const to = 2n; // not greater
     const dataHash = ethers.keccak256(ethers.toUtf8Bytes('payload'));
 
-  // Reverts with custom error RefactorSafetyFailed("Non-incrementing version")
-  await expect(facet.migrate(from, to, dataHash)).to.be.reverted;
+    // Reverts with custom error RefactorSafetyFailed("Non-incrementing version")
+    await expect(facet.migrate(from, to, dataHash)).to.be.reverted;
   });
 });

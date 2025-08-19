@@ -2,10 +2,7 @@
   "generated": "2025-08-18T02:18:51.717Z",
   "collidingSelectors": {
     "0xcc7bc94d": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -20,10 +17,7 @@
       ]
     },
     "0x2c08d659": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -38,10 +32,7 @@
       ]
     },
     "0xc1c4716b": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -56,10 +47,7 @@
       ]
     },
     "0xd01ce46a": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -74,10 +62,7 @@
       ]
     },
     "0xfdc615e7": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -92,10 +77,7 @@
       ]
     },
     "0x69c7608b": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -110,10 +92,7 @@
       ]
     },
     "0xd9ceede0": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -128,10 +107,7 @@
       ]
     },
     "0x6bd8007f": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -146,10 +122,7 @@
       ]
     },
     "0xecac993e": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -164,10 +137,7 @@
       ]
     },
     "0xbbf2edb0": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -182,10 +152,7 @@
       ]
     },
     "0xe3eb766a": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -200,10 +167,7 @@
       ]
     },
     "0xf27b2396": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\contracts\\facets\\IAntiBotFacet.sol\\IAntiBotFacet.json",
@@ -218,10 +182,7 @@
       ]
     },
     "0x3007383b": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\@openzeppelin\\contracts\\access\\AccessControl.sol\\AccessControl.json",
@@ -276,10 +237,7 @@
       ]
     },
     "0x41122a35": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\@openzeppelin\\contracts\\access\\AccessControl.sol\\AccessControl.json",
@@ -334,10 +292,7 @@
       ]
     },
     "0x165a6a83": {
-      "facets": [
-        "IAntiBotFacet",
-        "SecurityFacet"
-      ],
+      "facets": ["IAntiBotFacet", "SecurityFacet"],
       "occurrences": [
         {
           "artifact": "artifacts\\@openzeppelin\\contracts\\access\\AccessControl.sol\\AccessControl.json",

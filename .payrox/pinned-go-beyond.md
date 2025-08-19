@@ -13,5 +13,6 @@ Do not modify unless you own the PayRox project.
 - Expected merkle leaf encoding: keccak256(abi.encode(bytes4,address,bytes32))
 
 # Short usage notes
+
 - This file is loaded automatically by the server and included in LLM prompts as "PinnedFacts".
 - Keep it small (<16KB) for prompt performance.

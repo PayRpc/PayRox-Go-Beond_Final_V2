@@ -24,38 +24,38 @@ function setEq(a, b) {
 }
 
 function validateEIP170Compliance(facets) {
-  return Array.isArray(facets) && facets.every(f => (f?.runtimeSize ?? 0) <= 24576);
+  return Array.isArray(facets) && facets.every((f) => (f?.runtimeSize ?? 0) <= 24576);
 }
 function validateNoLoupeInFacets(facets) {
-  return Array.isArray(facets) && facets.every(f => !f?.implementsLoupe);
+  return Array.isArray(facets) && facets.every((f) => !f?.implementsLoupe);
 }
 function validateSelectorParity(original, facets) {
-  const orig = new Set((original?.selectors) || []);
-  const fac = new Set([].concat(...(facets || []).map(f => f.selectors || [])));
+  const orig = new Set(original?.selectors || []);
+  const fac = new Set([].concat(...(facets || []).map((f) => f.selectors || [])));
   return setEq(orig, fac);
 }
 function validateStorageIsolation(facets) {
-  return Array.isArray(facets) && facets.every(f => f?.usesNamespacedStorage && !f?.hasStateVars);
+  return Array.isArray(facets) && facets.every((f) => f?.usesNamespacedStorage && !f?.hasStateVars);
 }
 function validateAccessControlMapping(facets) {
-  return Array.isArray(facets) && facets.every(f => !!f?.accessControlMappedToDiamond);
+  return Array.isArray(facets) && facets.every((f) => !!f?.accessControlMappedToDiamond);
 }
 function validateInitIdempotence(init) {
   return init ? !!init.hasIdempotenceGuard : true;
 }
 function validateCutManifestMatch(cut, manifest) {
-  const cutSet = new Set((cut?.selectors) || []);
-  const manSet = new Set((manifest?.selectors) || []);
+  const cutSet = new Set(cut?.selectors || []);
+  const manSet = new Set(manifest?.selectors || []);
   return setEq(cutSet, manSet);
 }
 function validateLoupeCoverage(manifest, facts) {
-  const man = new Set((manifest?.selectors) || []);
+  const man = new Set(manifest?.selectors || []);
   const loupe = (facts && facts.loupe_selectors) || {};
   const vals = Object.values(loupe);
-  return vals.length ? vals.every(sel => man.has(sel)) : true; // pass if no facts
+  return vals.length ? vals.every((sel) => man.has(sel)) : true; // pass if no facts
 }
 function validateERC165(manifest) {
-  const man = new Set((manifest?.selectors) || []);
+  const man = new Set(manifest?.selectors || []);
   return man.has('0x01ffc9a7'); // supportsInterface(bytes4)
 }
 
@@ -77,7 +77,13 @@ function validateRefactorOutput(output) {
 
   console.log(`📊 Validation Score: ${score}/${Object.keys(checks).length}`);
   if (passed) console.log('✅ All refactor validations passed!');
-  else console.log('⚠️ Some validations failed:', Object.entries(checks).filter(([k,v]) => !v).map(([k]) => k));
+  else
+    console.log(
+      '⚠️ Some validations failed:',
+      Object.entries(checks)
+        .filter(([k, v]) => !v)
+        .map(([k]) => k),
+    );
 
   return { passed, score, checks, timestamp: new Date().toISOString() };
 }
