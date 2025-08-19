@@ -2,6 +2,7 @@
 param(
   [string]$Source,                         # e.g. contracts\dispacher\ManifestDispacher.sol
   [string]$OutDir = "build\split",         # where to write parts + manifest JSON
+  [string]$Expected = "",
   [switch]$FailOnEmptyParts,               # exit non-zero if any part has 0 selectors
   [switch]$CiMode                          # extra checks for CI
 )
