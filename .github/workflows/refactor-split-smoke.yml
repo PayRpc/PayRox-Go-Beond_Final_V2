@@ -24,12 +24,7 @@ jobs:
 
       - name: Run splitter (non-interactive)
         shell: pwsh
-        run: |
-          ./scripts/split-and-manifest.ps1 `
-            -Source 'contracts/dispacher/ManifestDispacher.sol' `
-            -OutDir 'artifacts/splits' `
-            -CiMode `
-            -FailOnEmptyParts
+        run: ./scripts/split-and-manifest.ps1 -Source 'contracts/dispacher/ManifestDispacher.sol' -OutDir 'artifacts/splits' -CiMode -FailOnEmptyParts
 
       - name: Sanity checks
         run: |
@@ -75,12 +70,7 @@ jobs:
         run: npx hardhat compile --network hardhat
 
       - name: Run splitter (Windows)
-        run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File scripts\split-and-manifest.ps1 `
-            -Source contracts\dispacher\ManifestDispacher.sol `
-            -OutDir artifacts\splits `
-            -CiMode `
-            -FailOnEmptyParts
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\split-and-manifest.ps1 -Source contracts\dispacher\ManifestDispacher.sol -OutDir artifacts\splits -CiMode -FailOnEmptyParts
 
       - name: Sanity checks
         shell: pwsh
