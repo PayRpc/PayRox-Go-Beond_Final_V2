@@ -7,7 +7,9 @@ import { SolidityAnalyzer } from '../analyzers/SolidityAnalyzer';
 async function main() {
   const args = process.argv.slice(2);
   if (args.length < 1) {
-    console.error('Usage: generate_facets.ts <sol-file> [--maxChunkSize N] [--strategy function|feature|gas]');
+    console.error(
+      'Usage: generate_facets.ts <sol-file> [--maxChunkSize N] [--strategy function|feature|gas]',
+    );
     process.exit(2);
   }
 
@@ -15,7 +17,8 @@ async function main() {
   const maxChunkSizeFlag = args.indexOf('--maxChunkSize');
   const strategyFlag = args.indexOf('--strategy');
   const maxChunkSize = maxChunkSizeFlag > -1 ? Number(args[maxChunkSizeFlag + 1]) : 24576;
-  const strategy = strategyFlag > -1 ? (args[strategyFlag + 1] as 'function' | 'feature' | 'gas') : 'function';
+  const strategy =
+    strategyFlag > -1 ? (args[strategyFlag + 1] as 'function' | 'feature' | 'gas') : 'function';
 
   const resolved = path.resolve(process.cwd(), file);
   if (!fs.existsSync(resolved)) {
@@ -26,7 +29,9 @@ async function main() {
   const src = fs.readFileSync(resolved, 'utf8');
   const analyzer = new SolidityAnalyzer();
 
-  console.log(`Planning facets for ${resolved} (strategy=${strategy}, maxChunkSize=${maxChunkSize})`);
+  console.log(
+    `Planning facets for ${resolved} (strategy=${strategy}, maxChunkSize=${maxChunkSize})`,
+  );
 
   const result = await analyzer.refactorContract(src, { maxChunkSize, strategy });
 
@@ -45,7 +50,7 @@ async function main() {
   console.log(`Generated ${result.patches.length} facet stub(s). Summary: ${result.summary}`);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('Error generating facets:', err instanceof Error ? err.message : String(err));
   process.exit(1);
 });

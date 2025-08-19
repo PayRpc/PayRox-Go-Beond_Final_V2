@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-const pkgPath = path.join(process.cwd(), "package.json");
+const pkgPath = path.join(process.cwd(), 'package.json');
 if (!fs.existsSync(pkgPath)) {
-  console.error("package.json not found");
+  console.error('package.json not found');
   process.exit(1);
 }
 
-const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
-const version = (process.env.PRX_VERSION || pkg.version || "0.0.0").trim();
-const commit = (process.env.GITHUB_SHA || "").slice(0, 8);
+const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+const version = (process.env.PRX_VERSION || pkg.version || '0.0.0').trim();
+const commit = (process.env.GITHUB_SHA || '').slice(0, 8);
 
 const content = `// SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
@@ -49,8 +49,8 @@ contract VersionFacet {
 }
 `;
 
-const outDir = path.join(process.cwd(), "contracts", "facets");
+const outDir = path.join(process.cwd(), 'contracts', 'facets');
 fs.mkdirSync(outDir, { recursive: true });
-const outFile = path.join(outDir, "VersionFacet.sol");
+const outFile = path.join(outDir, 'VersionFacet.sol');
 fs.writeFileSync(outFile, content);
 console.log(`✅ Wrote ${outFile}`);

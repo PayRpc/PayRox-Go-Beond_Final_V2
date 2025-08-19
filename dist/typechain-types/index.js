@@ -1,140 +1,464 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
+'use strict';
+var __createBinding =
+  (this && this.__createBinding) ||
+  (Object.create
+    ? function (o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        var desc = Object.getOwnPropertyDescriptor(m, k);
+        if (!desc || ('get' in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+          desc = {
+            enumerable: true,
+            get: function () {
+              return m[k];
+            },
+          };
+        }
+        Object.defineProperty(o, k2, desc);
+      }
+    : function (o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        o[k2] = m[k];
+      });
+var __setModuleDefault =
+  (this && this.__setModuleDefault) ||
+  (Object.create
+    ? function (o, v) {
+        Object.defineProperty(o, 'default', { enumerable: true, value: v });
+      }
+    : function (o, v) {
+        o['default'] = v;
+      });
+var __importStar =
+  (this && this.__importStar) ||
+  (function () {
+    var ownKeys = function (o) {
+      ownKeys =
+        Object.getOwnPropertyNames ||
+        function (o) {
+          var ar = [];
+          for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+          return ar;
         };
-        return ownKeys(o);
+      return ownKeys(o);
     };
     return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
+      if (mod && mod.__esModule) return mod;
+      var result = {};
+      if (mod != null)
+        for (var k = ownKeys(mod), i = 0; i < k.length; i++)
+          if (k[i] !== 'default') __createBinding(result, mod, k[i]);
+      __setModuleDefault(result, mod);
+      return result;
     };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChunkFactoryLib__factory = exports.SampleFacet__factory = exports.MockManifestDispatcher__factory = exports.IDiamondCut__factory = exports.FacetB__factory = exports.FacetA__factory = exports.EpochManager__factory = exports.DiamondWithEpoch__factory = exports.Diamond__factory = exports.PayRoxProxyRouter__factory = exports.IManifestDispatcherView__factory = exports.Orchestrator__factory = exports.ManifestTypes__factory = exports.RefactorSafetyLib__factory = exports.RefactorSafeFacetBase__factory = exports.ISaltView__factory = exports.IDiamondLoupeEx__factory = exports.IChunkFactory__factory = exports.IAntiBot__factory = exports.PayRoxDiamondInit__factory = exports.IPausable__factory = exports.IERC173__factory = exports.IDiamondLoupe__factory = exports.IAccessControl__factory = exports.GovernanceOrchestrator__factory = exports.DeterministicChunkFactory__factory = exports.SecurityFacet__factory = exports.SaltViewFacet__factory = exports.RefactorSafetyFacet__factory = exports.PayRoxPaymentsFacet__factory = exports.PayRoxAdminFacet__factory = exports.PauseFacet__factory = exports.MaliciousFacet__factory = exports.IAntiBotFacet__factory = exports.ExampleFacetB__factory = exports.ExampleFacetA__factory = exports.IERC165__factory = exports.ERC165Facet__factory = exports.ChunkFactoryFacet__factory = exports.AccessControlFacet__factory = exports.IManifestDispatcher__factory = exports.ManifestDispatcher__factory = exports.AuditRegistry__factory = exports.Strings__factory = exports.ReentrancyGuard__factory = exports.SafeCast__factory = exports.ECDSA__factory = exports.IERC7913SignatureVerifier__factory = exports.IERC1271__factory = exports.factories = void 0;
+  })();
+Object.defineProperty(exports, '__esModule', { value: true });
+exports.ChunkFactoryLib__factory =
+  exports.SampleFacet__factory =
+  exports.MockManifestDispatcher__factory =
+  exports.IDiamondCut__factory =
+  exports.FacetB__factory =
+  exports.FacetA__factory =
+  exports.EpochManager__factory =
+  exports.DiamondWithEpoch__factory =
+  exports.Diamond__factory =
+  exports.PayRoxProxyRouter__factory =
+  exports.IManifestDispatcherView__factory =
+  exports.Orchestrator__factory =
+  exports.ManifestTypes__factory =
+  exports.RefactorSafetyLib__factory =
+  exports.RefactorSafeFacetBase__factory =
+  exports.ISaltView__factory =
+  exports.IDiamondLoupeEx__factory =
+  exports.IChunkFactory__factory =
+  exports.IAntiBot__factory =
+  exports.PayRoxDiamondInit__factory =
+  exports.IPausable__factory =
+  exports.IERC173__factory =
+  exports.IDiamondLoupe__factory =
+  exports.IAccessControl__factory =
+  exports.GovernanceOrchestrator__factory =
+  exports.DeterministicChunkFactory__factory =
+  exports.SecurityFacet__factory =
+  exports.SaltViewFacet__factory =
+  exports.RefactorSafetyFacet__factory =
+  exports.PayRoxPaymentsFacet__factory =
+  exports.PayRoxAdminFacet__factory =
+  exports.PauseFacet__factory =
+  exports.MaliciousFacet__factory =
+  exports.IAntiBotFacet__factory =
+  exports.ExampleFacetB__factory =
+  exports.ExampleFacetA__factory =
+  exports.IERC165__factory =
+  exports.ERC165Facet__factory =
+  exports.ChunkFactoryFacet__factory =
+  exports.AccessControlFacet__factory =
+  exports.IManifestDispatcher__factory =
+  exports.ManifestDispatcher__factory =
+  exports.AuditRegistry__factory =
+  exports.Strings__factory =
+  exports.ReentrancyGuard__factory =
+  exports.SafeCast__factory =
+  exports.ECDSA__factory =
+  exports.IERC7913SignatureVerifier__factory =
+  exports.IERC1271__factory =
+  exports.factories =
+    void 0;
 exports.OrderedMerkle__factory = exports.GasOptimizationUtils__factory = void 0;
-exports.factories = __importStar(require("./factories"));
-var IERC1271__factory_1 = require("./factories/@openzeppelin/contracts/interfaces/IERC1271__factory");
-Object.defineProperty(exports, "IERC1271__factory", { enumerable: true, get: function () { return IERC1271__factory_1.IERC1271__factory; } });
-var IERC7913SignatureVerifier__factory_1 = require("./factories/@openzeppelin/contracts/interfaces/IERC7913.sol/IERC7913SignatureVerifier__factory");
-Object.defineProperty(exports, "IERC7913SignatureVerifier__factory", { enumerable: true, get: function () { return IERC7913SignatureVerifier__factory_1.IERC7913SignatureVerifier__factory; } });
-var ECDSA__factory_1 = require("./factories/@openzeppelin/contracts/utils/cryptography/ECDSA__factory");
-Object.defineProperty(exports, "ECDSA__factory", { enumerable: true, get: function () { return ECDSA__factory_1.ECDSA__factory; } });
-var SafeCast__factory_1 = require("./factories/@openzeppelin/contracts/utils/math/SafeCast__factory");
-Object.defineProperty(exports, "SafeCast__factory", { enumerable: true, get: function () { return SafeCast__factory_1.SafeCast__factory; } });
-var ReentrancyGuard__factory_1 = require("./factories/@openzeppelin/contracts/utils/ReentrancyGuard__factory");
-Object.defineProperty(exports, "ReentrancyGuard__factory", { enumerable: true, get: function () { return ReentrancyGuard__factory_1.ReentrancyGuard__factory; } });
-var Strings__factory_1 = require("./factories/@openzeppelin/contracts/utils/Strings__factory");
-Object.defineProperty(exports, "Strings__factory", { enumerable: true, get: function () { return Strings__factory_1.Strings__factory; } });
-var AuditRegistry__factory_1 = require("./factories/contracts/audit/AuditRegistry__factory");
-Object.defineProperty(exports, "AuditRegistry__factory", { enumerable: true, get: function () { return AuditRegistry__factory_1.AuditRegistry__factory; } });
-var ManifestDispatcher__factory_1 = require("./factories/contracts/dispacher/ManifestDispacher.sol/ManifestDispatcher__factory");
-Object.defineProperty(exports, "ManifestDispatcher__factory", { enumerable: true, get: function () { return ManifestDispatcher__factory_1.ManifestDispatcher__factory; } });
-var IManifestDispatcher__factory_1 = require("./factories/contracts/dispatcher/interfaces/IManifestDispatcher__factory");
-Object.defineProperty(exports, "IManifestDispatcher__factory", { enumerable: true, get: function () { return IManifestDispatcher__factory_1.IManifestDispatcher__factory; } });
-var AccessControlFacet__factory_1 = require("./factories/contracts/facets/AccessControlFacet__factory");
-Object.defineProperty(exports, "AccessControlFacet__factory", { enumerable: true, get: function () { return AccessControlFacet__factory_1.AccessControlFacet__factory; } });
-var ChunkFactoryFacet__factory_1 = require("./factories/contracts/facets/ChunkFactoryFacet__factory");
-Object.defineProperty(exports, "ChunkFactoryFacet__factory", { enumerable: true, get: function () { return ChunkFactoryFacet__factory_1.ChunkFactoryFacet__factory; } });
-var ERC165Facet__factory_1 = require("./factories/contracts/facets/ERC165Facet.sol/ERC165Facet__factory");
-Object.defineProperty(exports, "ERC165Facet__factory", { enumerable: true, get: function () { return ERC165Facet__factory_1.ERC165Facet__factory; } });
-var IERC165__factory_1 = require("./factories/contracts/facets/ERC165Facet.sol/IERC165__factory");
-Object.defineProperty(exports, "IERC165__factory", { enumerable: true, get: function () { return IERC165__factory_1.IERC165__factory; } });
-var ExampleFacetA__factory_1 = require("./factories/contracts/facets/ExampleFacetA__factory");
-Object.defineProperty(exports, "ExampleFacetA__factory", { enumerable: true, get: function () { return ExampleFacetA__factory_1.ExampleFacetA__factory; } });
-var ExampleFacetB__factory_1 = require("./factories/contracts/facets/ExampleFacetB__factory");
-Object.defineProperty(exports, "ExampleFacetB__factory", { enumerable: true, get: function () { return ExampleFacetB__factory_1.ExampleFacetB__factory; } });
-var IAntiBotFacet__factory_1 = require("./factories/contracts/facets/IAntiBotFacet__factory");
-Object.defineProperty(exports, "IAntiBotFacet__factory", { enumerable: true, get: function () { return IAntiBotFacet__factory_1.IAntiBotFacet__factory; } });
-var MaliciousFacet__factory_1 = require("./factories/contracts/facets/MaliciousFacet__factory");
-Object.defineProperty(exports, "MaliciousFacet__factory", { enumerable: true, get: function () { return MaliciousFacet__factory_1.MaliciousFacet__factory; } });
-var PauseFacet__factory_1 = require("./factories/contracts/facets/PauseFacet__factory");
-Object.defineProperty(exports, "PauseFacet__factory", { enumerable: true, get: function () { return PauseFacet__factory_1.PauseFacet__factory; } });
-var PayRoxAdminFacet__factory_1 = require("./factories/contracts/facets/PayRoxAdminFacet__factory");
-Object.defineProperty(exports, "PayRoxAdminFacet__factory", { enumerable: true, get: function () { return PayRoxAdminFacet__factory_1.PayRoxAdminFacet__factory; } });
-var PayRoxPaymentsFacet__factory_1 = require("./factories/contracts/facets/PayRoxPaymentsFacet__factory");
-Object.defineProperty(exports, "PayRoxPaymentsFacet__factory", { enumerable: true, get: function () { return PayRoxPaymentsFacet__factory_1.PayRoxPaymentsFacet__factory; } });
-var RefactorSafetyFacet__factory_1 = require("./factories/contracts/facets/RefactorSafetyFacet__factory");
-Object.defineProperty(exports, "RefactorSafetyFacet__factory", { enumerable: true, get: function () { return RefactorSafetyFacet__factory_1.RefactorSafetyFacet__factory; } });
-var SaltViewFacet__factory_1 = require("./factories/contracts/facets/SaltViewFacet__factory");
-Object.defineProperty(exports, "SaltViewFacet__factory", { enumerable: true, get: function () { return SaltViewFacet__factory_1.SaltViewFacet__factory; } });
-var SecurityFacet__factory_1 = require("./factories/contracts/facets/SecurityFacet__factory");
-Object.defineProperty(exports, "SecurityFacet__factory", { enumerable: true, get: function () { return SecurityFacet__factory_1.SecurityFacet__factory; } });
-var DeterministicChunkFactory__factory_1 = require("./factories/contracts/factory/DeterministicChunkFactory__factory");
-Object.defineProperty(exports, "DeterministicChunkFactory__factory", { enumerable: true, get: function () { return DeterministicChunkFactory__factory_1.DeterministicChunkFactory__factory; } });
-var GovernanceOrchestrator__factory_1 = require("./factories/contracts/governance/GovernanceOrchestrator__factory");
-Object.defineProperty(exports, "GovernanceOrchestrator__factory", { enumerable: true, get: function () { return GovernanceOrchestrator__factory_1.GovernanceOrchestrator__factory; } });
-var IAccessControl__factory_1 = require("./factories/contracts/initializers/PayRoxDiamondInit.sol/IAccessControl__factory");
-Object.defineProperty(exports, "IAccessControl__factory", { enumerable: true, get: function () { return IAccessControl__factory_1.IAccessControl__factory; } });
-var IDiamondLoupe__factory_1 = require("./factories/contracts/initializers/PayRoxDiamondInit.sol/IDiamondLoupe__factory");
-Object.defineProperty(exports, "IDiamondLoupe__factory", { enumerable: true, get: function () { return IDiamondLoupe__factory_1.IDiamondLoupe__factory; } });
-var IERC173__factory_1 = require("./factories/contracts/initializers/PayRoxDiamondInit.sol/IERC173__factory");
-Object.defineProperty(exports, "IERC173__factory", { enumerable: true, get: function () { return IERC173__factory_1.IERC173__factory; } });
-var IPausable__factory_1 = require("./factories/contracts/initializers/PayRoxDiamondInit.sol/IPausable__factory");
-Object.defineProperty(exports, "IPausable__factory", { enumerable: true, get: function () { return IPausable__factory_1.IPausable__factory; } });
-var PayRoxDiamondInit__factory_1 = require("./factories/contracts/initializers/PayRoxDiamondInit.sol/PayRoxDiamondInit__factory");
-Object.defineProperty(exports, "PayRoxDiamondInit__factory", { enumerable: true, get: function () { return PayRoxDiamondInit__factory_1.PayRoxDiamondInit__factory; } });
-var IAntiBot__factory_1 = require("./factories/contracts/interfaces/IAntiBot__factory");
-Object.defineProperty(exports, "IAntiBot__factory", { enumerable: true, get: function () { return IAntiBot__factory_1.IAntiBot__factory; } });
-var IChunkFactory__factory_1 = require("./factories/contracts/interfaces/IChunkFactory__factory");
-Object.defineProperty(exports, "IChunkFactory__factory", { enumerable: true, get: function () { return IChunkFactory__factory_1.IChunkFactory__factory; } });
-var IDiamondLoupeEx__factory_1 = require("./factories/contracts/interfaces/IDiamondLoupeEx__factory");
-Object.defineProperty(exports, "IDiamondLoupeEx__factory", { enumerable: true, get: function () { return IDiamondLoupeEx__factory_1.IDiamondLoupeEx__factory; } });
-var ISaltView__factory_1 = require("./factories/contracts/interfaces/ISaltView__factory");
-Object.defineProperty(exports, "ISaltView__factory", { enumerable: true, get: function () { return ISaltView__factory_1.ISaltView__factory; } });
-var RefactorSafeFacetBase__factory_1 = require("./factories/contracts/libraries/RefactorSafeFacetBase__factory");
-Object.defineProperty(exports, "RefactorSafeFacetBase__factory", { enumerable: true, get: function () { return RefactorSafeFacetBase__factory_1.RefactorSafeFacetBase__factory; } });
-var RefactorSafetyLib__factory_1 = require("./factories/contracts/libraries/RefactorSafetyLib__factory");
-Object.defineProperty(exports, "RefactorSafetyLib__factory", { enumerable: true, get: function () { return RefactorSafetyLib__factory_1.RefactorSafetyLib__factory; } });
-var ManifestTypes__factory_1 = require("./factories/contracts/manifest/ManifestTypes__factory");
-Object.defineProperty(exports, "ManifestTypes__factory", { enumerable: true, get: function () { return ManifestTypes__factory_1.ManifestTypes__factory; } });
-var Orchestrator__factory_1 = require("./factories/contracts/orchestrator/Orchestrator__factory");
-Object.defineProperty(exports, "Orchestrator__factory", { enumerable: true, get: function () { return Orchestrator__factory_1.Orchestrator__factory; } });
-var IManifestDispatcherView__factory_1 = require("./factories/contracts/Proxy/PayRoxProxyRouter.sol/IManifestDispatcherView__factory");
-Object.defineProperty(exports, "IManifestDispatcherView__factory", { enumerable: true, get: function () { return IManifestDispatcherView__factory_1.IManifestDispatcherView__factory; } });
-var PayRoxProxyRouter__factory_1 = require("./factories/contracts/Proxy/PayRoxProxyRouter.sol/PayRoxProxyRouter__factory");
-Object.defineProperty(exports, "PayRoxProxyRouter__factory", { enumerable: true, get: function () { return PayRoxProxyRouter__factory_1.PayRoxProxyRouter__factory; } });
-var Diamond__factory_1 = require("./factories/contracts/test/Diamond__factory");
-Object.defineProperty(exports, "Diamond__factory", { enumerable: true, get: function () { return Diamond__factory_1.Diamond__factory; } });
-var DiamondWithEpoch__factory_1 = require("./factories/contracts/test/DiamondWithEpoch__factory");
-Object.defineProperty(exports, "DiamondWithEpoch__factory", { enumerable: true, get: function () { return DiamondWithEpoch__factory_1.DiamondWithEpoch__factory; } });
-var EpochManager__factory_1 = require("./factories/contracts/test/EpochManager__factory");
-Object.defineProperty(exports, "EpochManager__factory", { enumerable: true, get: function () { return EpochManager__factory_1.EpochManager__factory; } });
-var FacetA__factory_1 = require("./factories/contracts/test/FacetA__factory");
-Object.defineProperty(exports, "FacetA__factory", { enumerable: true, get: function () { return FacetA__factory_1.FacetA__factory; } });
-var FacetB__factory_1 = require("./factories/contracts/test/FacetB__factory");
-Object.defineProperty(exports, "FacetB__factory", { enumerable: true, get: function () { return FacetB__factory_1.FacetB__factory; } });
-var IDiamondCut__factory_1 = require("./factories/contracts/test/interfaces/IDiamondCut__factory");
-Object.defineProperty(exports, "IDiamondCut__factory", { enumerable: true, get: function () { return IDiamondCut__factory_1.IDiamondCut__factory; } });
-var MockManifestDispatcher__factory_1 = require("./factories/contracts/test/MockManifestDispatcher__factory");
-Object.defineProperty(exports, "MockManifestDispatcher__factory", { enumerable: true, get: function () { return MockManifestDispatcher__factory_1.MockManifestDispatcher__factory; } });
-var SampleFacet__factory_1 = require("./factories/contracts/test/Refactor/SampleFacet__factory");
-Object.defineProperty(exports, "SampleFacet__factory", { enumerable: true, get: function () { return SampleFacet__factory_1.SampleFacet__factory; } });
-var ChunkFactoryLib__factory_1 = require("./factories/contracts/utils/ChunkFactoryLib__factory");
-Object.defineProperty(exports, "ChunkFactoryLib__factory", { enumerable: true, get: function () { return ChunkFactoryLib__factory_1.ChunkFactoryLib__factory; } });
-var GasOptimizationUtils__factory_1 = require("./factories/contracts/utils/GasOptimizationUtils__factory");
-Object.defineProperty(exports, "GasOptimizationUtils__factory", { enumerable: true, get: function () { return GasOptimizationUtils__factory_1.GasOptimizationUtils__factory; } });
-var OrderedMerkle__factory_1 = require("./factories/contracts/utils/OrderedMerkle__factory");
-Object.defineProperty(exports, "OrderedMerkle__factory", { enumerable: true, get: function () { return OrderedMerkle__factory_1.OrderedMerkle__factory; } });
+exports.factories = __importStar(require('./factories'));
+var IERC1271__factory_1 = require('./factories/@openzeppelin/contracts/interfaces/IERC1271__factory');
+Object.defineProperty(exports, 'IERC1271__factory', {
+  enumerable: true,
+  get: function () {
+    return IERC1271__factory_1.IERC1271__factory;
+  },
+});
+var IERC7913SignatureVerifier__factory_1 = require('./factories/@openzeppelin/contracts/interfaces/IERC7913.sol/IERC7913SignatureVerifier__factory');
+Object.defineProperty(exports, 'IERC7913SignatureVerifier__factory', {
+  enumerable: true,
+  get: function () {
+    return IERC7913SignatureVerifier__factory_1.IERC7913SignatureVerifier__factory;
+  },
+});
+var ECDSA__factory_1 = require('./factories/@openzeppelin/contracts/utils/cryptography/ECDSA__factory');
+Object.defineProperty(exports, 'ECDSA__factory', {
+  enumerable: true,
+  get: function () {
+    return ECDSA__factory_1.ECDSA__factory;
+  },
+});
+var SafeCast__factory_1 = require('./factories/@openzeppelin/contracts/utils/math/SafeCast__factory');
+Object.defineProperty(exports, 'SafeCast__factory', {
+  enumerable: true,
+  get: function () {
+    return SafeCast__factory_1.SafeCast__factory;
+  },
+});
+var ReentrancyGuard__factory_1 = require('./factories/@openzeppelin/contracts/utils/ReentrancyGuard__factory');
+Object.defineProperty(exports, 'ReentrancyGuard__factory', {
+  enumerable: true,
+  get: function () {
+    return ReentrancyGuard__factory_1.ReentrancyGuard__factory;
+  },
+});
+var Strings__factory_1 = require('./factories/@openzeppelin/contracts/utils/Strings__factory');
+Object.defineProperty(exports, 'Strings__factory', {
+  enumerable: true,
+  get: function () {
+    return Strings__factory_1.Strings__factory;
+  },
+});
+var AuditRegistry__factory_1 = require('./factories/contracts/audit/AuditRegistry__factory');
+Object.defineProperty(exports, 'AuditRegistry__factory', {
+  enumerable: true,
+  get: function () {
+    return AuditRegistry__factory_1.AuditRegistry__factory;
+  },
+});
+var ManifestDispatcher__factory_1 = require('./factories/contracts/dispacher/ManifestDispacher.sol/ManifestDispatcher__factory');
+Object.defineProperty(exports, 'ManifestDispatcher__factory', {
+  enumerable: true,
+  get: function () {
+    return ManifestDispatcher__factory_1.ManifestDispatcher__factory;
+  },
+});
+var IManifestDispatcher__factory_1 = require('./factories/contracts/dispatcher/interfaces/IManifestDispatcher__factory');
+Object.defineProperty(exports, 'IManifestDispatcher__factory', {
+  enumerable: true,
+  get: function () {
+    return IManifestDispatcher__factory_1.IManifestDispatcher__factory;
+  },
+});
+var AccessControlFacet__factory_1 = require('./factories/contracts/facets/AccessControlFacet__factory');
+Object.defineProperty(exports, 'AccessControlFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return AccessControlFacet__factory_1.AccessControlFacet__factory;
+  },
+});
+var ChunkFactoryFacet__factory_1 = require('./factories/contracts/facets/ChunkFactoryFacet__factory');
+Object.defineProperty(exports, 'ChunkFactoryFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return ChunkFactoryFacet__factory_1.ChunkFactoryFacet__factory;
+  },
+});
+var ERC165Facet__factory_1 = require('./factories/contracts/facets/ERC165Facet.sol/ERC165Facet__factory');
+Object.defineProperty(exports, 'ERC165Facet__factory', {
+  enumerable: true,
+  get: function () {
+    return ERC165Facet__factory_1.ERC165Facet__factory;
+  },
+});
+var IERC165__factory_1 = require('./factories/contracts/facets/ERC165Facet.sol/IERC165__factory');
+Object.defineProperty(exports, 'IERC165__factory', {
+  enumerable: true,
+  get: function () {
+    return IERC165__factory_1.IERC165__factory;
+  },
+});
+var ExampleFacetA__factory_1 = require('./factories/contracts/facets/ExampleFacetA__factory');
+Object.defineProperty(exports, 'ExampleFacetA__factory', {
+  enumerable: true,
+  get: function () {
+    return ExampleFacetA__factory_1.ExampleFacetA__factory;
+  },
+});
+var ExampleFacetB__factory_1 = require('./factories/contracts/facets/ExampleFacetB__factory');
+Object.defineProperty(exports, 'ExampleFacetB__factory', {
+  enumerable: true,
+  get: function () {
+    return ExampleFacetB__factory_1.ExampleFacetB__factory;
+  },
+});
+var IAntiBotFacet__factory_1 = require('./factories/contracts/facets/IAntiBotFacet__factory');
+Object.defineProperty(exports, 'IAntiBotFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return IAntiBotFacet__factory_1.IAntiBotFacet__factory;
+  },
+});
+var MaliciousFacet__factory_1 = require('./factories/contracts/facets/MaliciousFacet__factory');
+Object.defineProperty(exports, 'MaliciousFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return MaliciousFacet__factory_1.MaliciousFacet__factory;
+  },
+});
+var PauseFacet__factory_1 = require('./factories/contracts/facets/PauseFacet__factory');
+Object.defineProperty(exports, 'PauseFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return PauseFacet__factory_1.PauseFacet__factory;
+  },
+});
+var PayRoxAdminFacet__factory_1 = require('./factories/contracts/facets/PayRoxAdminFacet__factory');
+Object.defineProperty(exports, 'PayRoxAdminFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return PayRoxAdminFacet__factory_1.PayRoxAdminFacet__factory;
+  },
+});
+var PayRoxPaymentsFacet__factory_1 = require('./factories/contracts/facets/PayRoxPaymentsFacet__factory');
+Object.defineProperty(exports, 'PayRoxPaymentsFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return PayRoxPaymentsFacet__factory_1.PayRoxPaymentsFacet__factory;
+  },
+});
+var RefactorSafetyFacet__factory_1 = require('./factories/contracts/facets/RefactorSafetyFacet__factory');
+Object.defineProperty(exports, 'RefactorSafetyFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return RefactorSafetyFacet__factory_1.RefactorSafetyFacet__factory;
+  },
+});
+var SaltViewFacet__factory_1 = require('./factories/contracts/facets/SaltViewFacet__factory');
+Object.defineProperty(exports, 'SaltViewFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return SaltViewFacet__factory_1.SaltViewFacet__factory;
+  },
+});
+var SecurityFacet__factory_1 = require('./factories/contracts/facets/SecurityFacet__factory');
+Object.defineProperty(exports, 'SecurityFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return SecurityFacet__factory_1.SecurityFacet__factory;
+  },
+});
+var DeterministicChunkFactory__factory_1 = require('./factories/contracts/factory/DeterministicChunkFactory__factory');
+Object.defineProperty(exports, 'DeterministicChunkFactory__factory', {
+  enumerable: true,
+  get: function () {
+    return DeterministicChunkFactory__factory_1.DeterministicChunkFactory__factory;
+  },
+});
+var GovernanceOrchestrator__factory_1 = require('./factories/contracts/governance/GovernanceOrchestrator__factory');
+Object.defineProperty(exports, 'GovernanceOrchestrator__factory', {
+  enumerable: true,
+  get: function () {
+    return GovernanceOrchestrator__factory_1.GovernanceOrchestrator__factory;
+  },
+});
+var IAccessControl__factory_1 = require('./factories/contracts/initializers/PayRoxDiamondInit.sol/IAccessControl__factory');
+Object.defineProperty(exports, 'IAccessControl__factory', {
+  enumerable: true,
+  get: function () {
+    return IAccessControl__factory_1.IAccessControl__factory;
+  },
+});
+var IDiamondLoupe__factory_1 = require('./factories/contracts/initializers/PayRoxDiamondInit.sol/IDiamondLoupe__factory');
+Object.defineProperty(exports, 'IDiamondLoupe__factory', {
+  enumerable: true,
+  get: function () {
+    return IDiamondLoupe__factory_1.IDiamondLoupe__factory;
+  },
+});
+var IERC173__factory_1 = require('./factories/contracts/initializers/PayRoxDiamondInit.sol/IERC173__factory');
+Object.defineProperty(exports, 'IERC173__factory', {
+  enumerable: true,
+  get: function () {
+    return IERC173__factory_1.IERC173__factory;
+  },
+});
+var IPausable__factory_1 = require('./factories/contracts/initializers/PayRoxDiamondInit.sol/IPausable__factory');
+Object.defineProperty(exports, 'IPausable__factory', {
+  enumerable: true,
+  get: function () {
+    return IPausable__factory_1.IPausable__factory;
+  },
+});
+var PayRoxDiamondInit__factory_1 = require('./factories/contracts/initializers/PayRoxDiamondInit.sol/PayRoxDiamondInit__factory');
+Object.defineProperty(exports, 'PayRoxDiamondInit__factory', {
+  enumerable: true,
+  get: function () {
+    return PayRoxDiamondInit__factory_1.PayRoxDiamondInit__factory;
+  },
+});
+var IAntiBot__factory_1 = require('./factories/contracts/interfaces/IAntiBot__factory');
+Object.defineProperty(exports, 'IAntiBot__factory', {
+  enumerable: true,
+  get: function () {
+    return IAntiBot__factory_1.IAntiBot__factory;
+  },
+});
+var IChunkFactory__factory_1 = require('./factories/contracts/interfaces/IChunkFactory__factory');
+Object.defineProperty(exports, 'IChunkFactory__factory', {
+  enumerable: true,
+  get: function () {
+    return IChunkFactory__factory_1.IChunkFactory__factory;
+  },
+});
+var IDiamondLoupeEx__factory_1 = require('./factories/contracts/interfaces/IDiamondLoupeEx__factory');
+Object.defineProperty(exports, 'IDiamondLoupeEx__factory', {
+  enumerable: true,
+  get: function () {
+    return IDiamondLoupeEx__factory_1.IDiamondLoupeEx__factory;
+  },
+});
+var ISaltView__factory_1 = require('./factories/contracts/interfaces/ISaltView__factory');
+Object.defineProperty(exports, 'ISaltView__factory', {
+  enumerable: true,
+  get: function () {
+    return ISaltView__factory_1.ISaltView__factory;
+  },
+});
+var RefactorSafeFacetBase__factory_1 = require('./factories/contracts/libraries/RefactorSafeFacetBase__factory');
+Object.defineProperty(exports, 'RefactorSafeFacetBase__factory', {
+  enumerable: true,
+  get: function () {
+    return RefactorSafeFacetBase__factory_1.RefactorSafeFacetBase__factory;
+  },
+});
+var RefactorSafetyLib__factory_1 = require('./factories/contracts/libraries/RefactorSafetyLib__factory');
+Object.defineProperty(exports, 'RefactorSafetyLib__factory', {
+  enumerable: true,
+  get: function () {
+    return RefactorSafetyLib__factory_1.RefactorSafetyLib__factory;
+  },
+});
+var ManifestTypes__factory_1 = require('./factories/contracts/manifest/ManifestTypes__factory');
+Object.defineProperty(exports, 'ManifestTypes__factory', {
+  enumerable: true,
+  get: function () {
+    return ManifestTypes__factory_1.ManifestTypes__factory;
+  },
+});
+var Orchestrator__factory_1 = require('./factories/contracts/orchestrator/Orchestrator__factory');
+Object.defineProperty(exports, 'Orchestrator__factory', {
+  enumerable: true,
+  get: function () {
+    return Orchestrator__factory_1.Orchestrator__factory;
+  },
+});
+var IManifestDispatcherView__factory_1 = require('./factories/contracts/Proxy/PayRoxProxyRouter.sol/IManifestDispatcherView__factory');
+Object.defineProperty(exports, 'IManifestDispatcherView__factory', {
+  enumerable: true,
+  get: function () {
+    return IManifestDispatcherView__factory_1.IManifestDispatcherView__factory;
+  },
+});
+var PayRoxProxyRouter__factory_1 = require('./factories/contracts/Proxy/PayRoxProxyRouter.sol/PayRoxProxyRouter__factory');
+Object.defineProperty(exports, 'PayRoxProxyRouter__factory', {
+  enumerable: true,
+  get: function () {
+    return PayRoxProxyRouter__factory_1.PayRoxProxyRouter__factory;
+  },
+});
+var Diamond__factory_1 = require('./factories/contracts/test/Diamond__factory');
+Object.defineProperty(exports, 'Diamond__factory', {
+  enumerable: true,
+  get: function () {
+    return Diamond__factory_1.Diamond__factory;
+  },
+});
+var DiamondWithEpoch__factory_1 = require('./factories/contracts/test/DiamondWithEpoch__factory');
+Object.defineProperty(exports, 'DiamondWithEpoch__factory', {
+  enumerable: true,
+  get: function () {
+    return DiamondWithEpoch__factory_1.DiamondWithEpoch__factory;
+  },
+});
+var EpochManager__factory_1 = require('./factories/contracts/test/EpochManager__factory');
+Object.defineProperty(exports, 'EpochManager__factory', {
+  enumerable: true,
+  get: function () {
+    return EpochManager__factory_1.EpochManager__factory;
+  },
+});
+var FacetA__factory_1 = require('./factories/contracts/test/FacetA__factory');
+Object.defineProperty(exports, 'FacetA__factory', {
+  enumerable: true,
+  get: function () {
+    return FacetA__factory_1.FacetA__factory;
+  },
+});
+var FacetB__factory_1 = require('./factories/contracts/test/FacetB__factory');
+Object.defineProperty(exports, 'FacetB__factory', {
+  enumerable: true,
+  get: function () {
+    return FacetB__factory_1.FacetB__factory;
+  },
+});
+var IDiamondCut__factory_1 = require('./factories/contracts/test/interfaces/IDiamondCut__factory');
+Object.defineProperty(exports, 'IDiamondCut__factory', {
+  enumerable: true,
+  get: function () {
+    return IDiamondCut__factory_1.IDiamondCut__factory;
+  },
+});
+var MockManifestDispatcher__factory_1 = require('./factories/contracts/test/MockManifestDispatcher__factory');
+Object.defineProperty(exports, 'MockManifestDispatcher__factory', {
+  enumerable: true,
+  get: function () {
+    return MockManifestDispatcher__factory_1.MockManifestDispatcher__factory;
+  },
+});
+var SampleFacet__factory_1 = require('./factories/contracts/test/Refactor/SampleFacet__factory');
+Object.defineProperty(exports, 'SampleFacet__factory', {
+  enumerable: true,
+  get: function () {
+    return SampleFacet__factory_1.SampleFacet__factory;
+  },
+});
+var ChunkFactoryLib__factory_1 = require('./factories/contracts/utils/ChunkFactoryLib__factory');
+Object.defineProperty(exports, 'ChunkFactoryLib__factory', {
+  enumerable: true,
+  get: function () {
+    return ChunkFactoryLib__factory_1.ChunkFactoryLib__factory;
+  },
+});
+var GasOptimizationUtils__factory_1 = require('./factories/contracts/utils/GasOptimizationUtils__factory');
+Object.defineProperty(exports, 'GasOptimizationUtils__factory', {
+  enumerable: true,
+  get: function () {
+    return GasOptimizationUtils__factory_1.GasOptimizationUtils__factory;
+  },
+});
+var OrderedMerkle__factory_1 = require('./factories/contracts/utils/OrderedMerkle__factory');
+Object.defineProperty(exports, 'OrderedMerkle__factory', {
+  enumerable: true,
+  get: function () {
+    return OrderedMerkle__factory_1.OrderedMerkle__factory;
+  },
+});

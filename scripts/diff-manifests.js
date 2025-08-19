@@ -76,10 +76,10 @@ const allFacets = new Set([...Object.keys(s), ...Object.keys(c)]);
 const diff = {
   addedFacets: [],
   removedFacets: [],
-  selectorAdds: {},   // facet -> [selectors]
-  selectorRemoves: {},// facet -> [selectors]
-  moved: [],          // {selector, from, to}
-  newCollisions: [],  // {selector, owners}
+  selectorAdds: {}, // facet -> [selectors]
+  selectorRemoves: {}, // facet -> [selectors]
+  moved: [], // {selector, from, to}
+  newCollisions: [], // {selector, owners}
   bannedInCanary: [], // selectors
 };
 
@@ -144,19 +144,23 @@ if (diff.addedFacets.length) lines.push(`**Added facets**: ${diff.addedFacets.jo
 if (diff.removedFacets.length) lines.push(`**Removed facets**: ${diff.removedFacets.join(', ')}`);
 if (Object.keys(diff.selectorAdds).length) {
   lines.push('\n## Selector additions');
-  for (const [f, sels] of Object.entries(diff.selectorAdds)) lines.push(`- ${f}: ${sels.join(', ')}`);
+  for (const [f, sels] of Object.entries(diff.selectorAdds))
+    lines.push(`- ${f}: ${sels.join(', ')}`);
 }
 if (Object.keys(diff.selectorRemoves).length) {
   lines.push('\n## Selector removals');
-  for (const [f, sels] of Object.entries(diff.selectorRemoves)) lines.push(`- ${f}: ${sels.join(', ')}`);
+  for (const [f, sels] of Object.entries(diff.selectorRemoves))
+    lines.push(`- ${f}: ${sels.join(', ')}`);
 }
 if (diff.moved.length) {
   lines.push('\n## Selector moves');
-  for (const m of diff.moved) lines.push(`- ${m.selector}: ${m.from.join(', ')} → ${m.to.join(', ')}`);
+  for (const m of diff.moved)
+    lines.push(`- ${m.selector}: ${m.from.join(', ')} → ${m.to.join(', ')}`);
 }
 if (diff.newCollisions.length) {
   lines.push('\n## ❌ New collisions');
-  for (const col of diff.newCollisions) lines.push(`- ${col.selector}: owned by ${col.owners.join(', ')}`);
+  for (const col of diff.newCollisions)
+    lines.push(`- ${col.selector}: owned by ${col.owners.join(', ')}`);
 } else {
   lines.push('\n✅ No new collisions');
 }
@@ -177,12 +181,19 @@ try {
   }
 } catch {}
 
-const failOn = new Set(String(argv['fail-on']).split(',').map((s) => s.trim()).filter(Boolean));
+const failOn = new Set(
+  String(argv['fail-on'])
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean),
+);
 const shouldFail =
   (failOn.has('collision') && diff.newCollisions.length > 0) ||
   (failOn.has('banned') && diff.bannedInCanary.length > 0) ||
-  (failOn.has('added') && (diff.addedFacets.length > 0 || Object.keys(diff.selectorAdds).length > 0)) ||
-  (failOn.has('removed') && (diff.removedFacets.length > 0 || Object.keys(diff.selectorRemoves).length > 0)) ||
+  (failOn.has('added') &&
+    (diff.addedFacets.length > 0 || Object.keys(diff.selectorAdds).length > 0)) ||
+  (failOn.has('removed') &&
+    (diff.removedFacets.length > 0 || Object.keys(diff.selectorRemoves).length > 0)) ||
   (failOn.has('moved') && diff.moved.length > 0);
 
 process.exit(shouldFail ? 2 : 0);

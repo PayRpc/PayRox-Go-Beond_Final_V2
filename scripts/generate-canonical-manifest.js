@@ -142,7 +142,8 @@ const BANNED_SELECTORS = new Set(BANNED_SIGS.map(selectorFromSignature));
 function isFacetFile(file) {
   const f = String(file || '').replace(/\\/g, '/');
   if (!f) return false;
-  if (f.includes('/interfaces/') || f.includes('/abstract') || f.includes('/libraries/')) return false;
+  if (f.includes('/interfaces/') || f.includes('/abstract') || f.includes('/libraries/'))
+    return false;
   if (f.includes('/facets/') || /Facet\.sol$/.test(f)) return true;
   return false;
 }
@@ -272,7 +273,7 @@ const reportPath = path.resolve(argv.report);
 fs.writeFileSync(reportPath, reportLines.join('\n'));
 
 console.log(
-  `Canonical manifest written: ${outPath} (facets=${Object.keys(manifestFacets).length}, selectors=${totalSelectors})`
+  `Canonical manifest written: ${outPath} (facets=${Object.keys(manifestFacets).length}, selectors=${totalSelectors})`,
 );
 console.log(`Selector map written: ${mapPath}`);
 console.log(`Validation report written: ${reportPath}`);
