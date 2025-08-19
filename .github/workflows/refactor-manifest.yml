@@ -45,28 +45,8 @@ jobs:
           name: payrox-manifest
           path: payrox-manifest.json
 
-      - name: Download split artifacts from split workflow (if available)
-        uses: actions/download-artifact@v4
-        with:
-          name: split-manifest-ubuntu
-          path: .
-
-      - name: Extract split artifact if present
-        run: |
-          if [ -f splits.zip ]; then
-            mkdir -p artifacts/splits || true
-            unzip -o splits.zip -d tmp_splits || true
-            # Move artifacts/splits/* if present inside zip
-            if [ -d tmp_splits/artifacts/splits ]; then
-              cp -r tmp_splits/artifacts/splits/* artifacts/splits/ || true
-            fi
-            # Move payrox-manifest.json if present
-            if [ -f tmp_splits/payrox-manifest.json ]; then
-              cp tmp_splits/payrox-manifest.json ./payrox-manifest.json || true
-            fi
-          else
-            echo "No splits.zip artifact found"
-          fi
+  # Note: we run the splitter locally above, so no need to download split artifacts from another run.
+  # The generator/Upload steps will provide any canonical manifest produced by this job.
 
       - name: Use generated canonical manifest if present
         run: |
