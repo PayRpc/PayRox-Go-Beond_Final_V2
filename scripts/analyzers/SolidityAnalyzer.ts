@@ -1,7 +1,6 @@
 import { parse } from '@solidity-parser/parser';
 import * as solc from 'solc';
 import { keccak256 } from 'ethers';
-import * as crypto from 'crypto';
 import { Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -160,12 +159,11 @@ export class SolidityAnalyzer {
   }
 
   /**
-   * SHA256 (hex) using node crypto to match naming expectations
+   * Keccak256 (hex) using ethers to match Ethereum standards
    */
-  private sha256Hex(s: string): string {
+  private keccak256Hex(s: string): string {
     try {
-      const hash = crypto.createHash('sha256').update(s, 'utf8').digest('hex');
-      return '0x' + hash;
+      return keccak256(Buffer.from(s, 'utf8'));
     } catch (err) {
       return ZERO_HASH;
     }
@@ -2085,7 +2083,7 @@ export class SolidityAnalyzer {
         functions: chunk.functions.map((f: any) => f.name).sort(),
         estimatedSize: chunk.estimatedSize,
       });
-      chunkHashes[chunk.id] = this.calculateSHA256(chunkData);
+      chunkHashes[chunk.id] = this.calculateKeccak256(chunkData);
       totalSize += chunk.estimatedSize;
     });
     
@@ -2102,11 +2100,11 @@ export class SolidityAnalyzer {
   }
   
   /**
-   * Calculate SHA256 hash
+   * Calculate Keccak256 hash (Ethereum standard)
    */
-  private calculateSHA256(data: string): string {
-    // Use real SHA256 (node crypto) and return 0x-prefixed hex
-    return this.sha256Hex(data);
+  private calculateKeccak256(data: string): string {
+    // Use Keccak256 (ethers) for Ethereum compatibility
+    return this.keccak256Hex(data);
   }
   
   /**
@@ -2127,7 +2125,7 @@ export class SolidityAnalyzer {
   // combine raw hex strings; strip 0x if present
   const leftRaw = left.startsWith('0x') ? left.slice(2) : left;
   const rightRaw = right.startsWith('0x') ? right.slice(2) : right;
-  const combined = this.calculateSHA256(leftRaw + rightRaw);
+  const combined = this.calculateKeccak256(leftRaw + rightRaw);
       nextLevel.push(combined);
     }
     
