@@ -73,6 +73,29 @@ jobs:
       - name: Compile
         run: npx hardhat compile
 
+      - name: Generate canonical PayRox manifest (soft for canary)
+        env:
+          PRX_VERSION: canary@${{ github.sha }}
+        run: |
+          node scripts/generate-canonical-manifest.js \
+            --combined artifacts/splits/combined.json \
+            --out payrox-manifest.json \
+            --map selector_map.json \
+            --report validation-report.md \
+            --soft || true
+
+      - name: Upload manifest artifacts (canary)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: payrox-manifest-canary
+          path: |
+            payrox-manifest.json
+            selector_map.json
+            validation-report.md
+            artifacts/splits/combined.json
+          if-no-files-found: ignore
+
       - name: Validate readiness (don’t fail job)
         id: validate
         shell: bash

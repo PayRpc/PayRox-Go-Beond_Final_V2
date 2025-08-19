@@ -201,3 +201,63 @@ jobs:
           set -e
           echo "Running production audit (ignoring dev deps)"
           npm audit --production --omit=dev || true
+
+  payrox_refactor_gate:
+    name: PayRox Refactor Gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: hardhat
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Hardhat compile
+        run: npx hardhat compile
+
+      - name: Run splitter (produces artifacts/splits/combined.json)
+        run: |
+          mkdir -p artifacts/splits
+          npx ts-node tools/splitter/split-facet.ts \
+            --source contracts \
+            --out artifacts/splits \
+            --softLimit 22000 \
+            --compile
+          test -f artifacts/splits/combined.json
+
+      - name: Generate canonical PayRox manifest (strict)
+        env:
+          PRX_VERSION: ${{ github.ref_name }}@${{ github.sha }}
+        run: |
+          node scripts/generate-canonical-manifest.js \
+            --combined artifacts/splits/combined.json \
+            --out payrox-manifest.json \
+            --map selector_map.json \
+            --report validation-report.md
+
+      - name: Local validator (optional, if present)
+        run: |
+          if [ -f tools/local-refactor-validator.js ]; then
+            node tools/local-refactor-validator.js || exit 1
+          else
+            echo "No local validator script found; skipping"
+          fi
+
+      - name: Upload manifest artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: payrox-manifest
+          path: |
+            payrox-manifest.json
+            selector_map.json
+            validation-report.md
+            artifacts/splits/combined.json
+          if-no-files-found: error
