@@ -1,6 +1,14 @@
 {
   "version": "1.0.0",
   "facets": {
+    "PlaceholderFacet": {
+      "selectors": []
+    }
+  }
+}
+{
+  "version": "1.0.0",
+  "facets": {
     "part_2_split_0": {
       "selectors": [
         "0x750588cf",
