@@ -101,6 +101,24 @@ jobs:
             --report validation-report.md \
             --soft || true
 
+      - name: Download strict manifest artifact (if present)
+        uses: actions/download-artifact@v4
+        with:
+          name: payrox-manifest
+          path: strict-artifacts
+        continue-on-error: true
+
+      - name: Diff strict vs canary manifest (summary only)
+        run: |
+          if [ -f strict-artifacts/payrox-manifest.json ]; then
+            node scripts/diff-manifests.js \
+              --strict strict-artifacts/payrox-manifest.json \
+              --canary payrox-manifest.json || true
+          else
+            echo "No strict manifest artifact found; skipping diff."; \
+            echo "No strict manifest artifact found; skipping diff." >> "$GITHUB_STEP_SUMMARY";
+          fi
+
       - name: Upload manifest artifacts (canary)
         if: always()
         uses: actions/upload-artifact@v4
