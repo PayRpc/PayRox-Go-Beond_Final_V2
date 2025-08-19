@@ -22,14 +22,43 @@ jobs:
       - name: Compile contracts
         run: npx hardhat compile
 
-      - name: Generate manifest from compiled ABIs
-        run: node tools/generate-manifest.js || true
+      - name: Generate payrox manifest
+        id: gen
+        run: |
+          # generate-manifest exits non-zero on selector collisions; capture that as an output
+          if node tools/generate-manifest.js; then
+            echo "gen_failed=0" >> $GITHUB_OUTPUT
+          else
+            echo "gen_failed=1" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload manifests
         uses: actions/upload-artifact@v4
         with:
           name: manifests
           path: artifacts/manifests/*
+
+      - name: Triage selector collisions (always)
+        if: always()
+        run: |
+          node tools/triage-collisions.js || true
+
+      - name: Upload selector diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selector-diagnostics
+          path: |
+            payrox-manifest.json
+            selector_map.json
+            selector-collisions.json
+            selector-collisions.txt
+
+      - name: Fail on manifest collisions
+        if: steps.gen.outputs.gen_failed == '1'
+        run: |
+          echo "💥 Selector collisions found. See artifact 'selector-diagnostics'."
+          exit 1
 
       - name: Generate canonical manifest (if combined exists)
         run: |
