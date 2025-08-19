@@ -393,7 +393,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\ReentrancyGuard.sol": {
-      "lastModificationDate": 1755502818299,
+      "lastModificationDate": 1755565426172,
       "contentHash": "190613e556d509d9e9a0ea43dc5d891d",
       "sourceName": "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
       "solcConfig": {
@@ -704,8 +704,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispacher.sol": {
-      "lastModificationDate": 1755571587026,
-      "contentHash": "221490718ec3cf2e0ab5a4feecda0d2c",
+      "lastModificationDate": 1755576099832,
+      "contentHash": "5932bbe384e4ff795f7c4e4d6356d7cc",
       "sourceName": "contracts/dispacher/ManifestDispacher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1249,7 +1249,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\cryptography\\SignatureChecker.sol": {
-      "lastModificationDate": 1755502818388,
+      "lastModificationDate": 1755565426252,
       "contentHash": "baa80edaa1f29dd1b855e91b2bd7e0f2",
       "sourceName": "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol",
       "solcConfig": {
@@ -1291,7 +1291,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\cryptography\\ECDSA.sol": {
-      "lastModificationDate": 1755502815578,
+      "lastModificationDate": 1755565424194,
       "contentHash": "81de029d56aa803972be03c5d277cb6c",
       "sourceName": "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
       "solcConfig": {
@@ -1328,7 +1328,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC7913.sol": {
-      "lastModificationDate": 1755502817928,
+      "lastModificationDate": 1755565425862,
       "contentHash": "a051a14c8a262117cb4c5f4cbd13ed95",
       "sourceName": "@openzeppelin/contracts/interfaces/IERC7913.sol",
       "solcConfig": {
@@ -1365,7 +1365,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\interfaces\\IERC1271.sol": {
-      "lastModificationDate": 1755502817308,
+      "lastModificationDate": 1755565425415,
       "contentHash": "97c727fa357056eddfe826ab58943611",
       "sourceName": "@openzeppelin/contracts/interfaces/IERC1271.sol",
       "solcConfig": {
@@ -1402,7 +1402,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\Bytes.sol": {
-      "lastModificationDate": 1755502814920,
+      "lastModificationDate": 1755565423615,
       "contentHash": "62cf590c82c84688c7271f98842cf8f3",
       "sourceName": "@openzeppelin/contracts/utils/Bytes.sol",
       "solcConfig": {
@@ -1441,7 +1441,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\math\\Math.sol": {
-      "lastModificationDate": 1755502818019,
+      "lastModificationDate": 1755565425946,
       "contentHash": "5ec781e33d3a9ac91ffdc83d94420412",
       "sourceName": "@openzeppelin/contracts/utils/math/Math.sol",
       "solcConfig": {
@@ -1481,7 +1481,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SafeCast.sol": {
-      "lastModificationDate": 1755502818345,
+      "lastModificationDate": 1755565426214,
       "contentHash": "2adca1150f58fc6f3d1f0a0f22ee7cca",
       "sourceName": "@openzeppelin/contracts/utils/math/SafeCast.sol",
       "solcConfig": {
@@ -1518,7 +1518,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\Panic.sol": {
-      "lastModificationDate": 1755502818245,
+      "lastModificationDate": 1755565426118,
       "contentHash": "2133dc13536b4a6a98131e431fac59e1",
       "sourceName": "@openzeppelin/contracts/utils/Panic.sol",
       "solcConfig": {
@@ -1555,7 +1555,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\math\\SignedMath.sol": {
-      "lastModificationDate": 1755502818401,
+      "lastModificationDate": 1755565426264,
       "contentHash": "ae3528afb8bdb0a7dcfba5b115ee8074",
       "sourceName": "@openzeppelin/contracts/utils/math/SignedMath.sol",
       "solcConfig": {
@@ -1594,7 +1594,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\Strings.sol": {
-      "lastModificationDate": 1755502818508,
+      "lastModificationDate": 1755565426354,
       "contentHash": "d8f70caf0e0c77dc908176ed44812fb7",
       "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
@@ -1635,7 +1635,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\node_modules\\@openzeppelin\\contracts\\utils\\cryptography\\MessageHashUtils.sol": {
-      "lastModificationDate": 1755502818068,
+      "lastModificationDate": 1755565425984,
       "contentHash": "260f3968eefa3bbd30520cff5384cd93",
       "sourceName": "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol",
       "solcConfig": {
@@ -1674,8 +1674,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetA.sol": {
-      "lastModificationDate": 1755571943009,
-      "contentHash": "76be1ce2873d213069e59e32c2e0e6b5",
+      "lastModificationDate": 1755576085881,
+      "contentHash": "946954ff7e353303bf889427baa06683",
       "sourceName": "contracts/facets/ExampleFacetA.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1868,8 +1868,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispatcher.sol": {
-      "lastModificationDate": 1755497681404,
-      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "lastModificationDate": 1755575964068,
+      "contentHash": "2ce7dcdb85bea214ef8c3c82716d5df0",
       "sourceName": "contracts/dispacher/ManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1897,7 +1897,9 @@
         }
       },
       "imports": [],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispatcher\\interfaces\\IManifestDispatcher.sol": {
@@ -1938,8 +1940,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\LoupeFacet.sol": {
-      "lastModificationDate": 1755497681404,
-      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "lastModificationDate": 1755575969164,
+      "contentHash": "0ac4844a644fd8d632dcf5985911081e",
       "sourceName": "contracts/facets/LoupeFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1967,7 +1969,9 @@
         }
       },
       "imports": [],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBot.sol": {
@@ -2008,8 +2012,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBotFacet.sol": {
-      "lastModificationDate": 1755497681404,
-      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "lastModificationDate": 1755575980948,
+      "contentHash": "5c6c3bd97e9a4d272c6b9ecd64d8e12f",
       "sourceName": "contracts/interfaces/IAntiBotFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2037,7 +2041,9 @@
         }
       },
       "imports": [],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Proxy\\PayRoxProxyRouter.sol": {
@@ -2079,8 +2085,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond_new.sol": {
-      "lastModificationDate": 1755497681458,
-      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "lastModificationDate": 1755575986923,
+      "contentHash": "98cf762a02dec579acbca40ad46fd517",
       "sourceName": "contracts/test/Diamond_new.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2108,7 +2114,9 @@
         }
       },
       "imports": [],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\FacetA.sol": {

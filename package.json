@@ -13,6 +13,7 @@
     "audit:gated": "node scripts/security/audit-gate.cjs",
     "sol:format": "prettier --plugin-search-dir=. --write \"contracts/**/*.sol\"",
     "sol:lint": "npx solhint 'contracts/**/*.sol'",
+  "sol:lint:fix": "npx solhint 'contracts/**/*.sol' --fix",
     "build": "tsc -p .",
     "analyze": "node dist/scripts/cli/analyze.js",
     "analyze:light": "node dist/scripts/cli/analyze.js --light",

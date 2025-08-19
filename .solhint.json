@@ -2,6 +2,13 @@
   "extends": "solhint:recommended",
   "rules": {
     "compiler-version": ["error", "^0.8.0"],
+    "spdx-license-identifier": ["error", "MIT"],
+    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "not-rely-on-time": "warn",
+    "avoid-tx-origin": "error",
+    "reason-string": ["warn", { "maxLength": 128 }],
+    "quotes": ["error", "double"],
+    "max-line-length": ["warn", 160],
     "func-order": "off",
     "no-console": "off"
   }

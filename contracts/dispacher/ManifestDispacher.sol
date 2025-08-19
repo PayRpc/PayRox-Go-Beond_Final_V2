@@ -470,7 +470,7 @@ contract ManifestDispatcher is
 
     function facetMetadata(address /*facet*/)
         external
-        view
+        pure
         override(IDiamondLoupeEx)
         returns (IDiamondLoupeEx.FacetMetadata memory metadata_)
     {
@@ -482,7 +482,7 @@ contract ManifestDispatcher is
 
     function checkStorageConflicts(address /*facet*/)
         external
-        view
+        pure
         override(IDiamondLoupeEx)
         returns (bytes32[] memory conflicts_)
     {
@@ -491,7 +491,7 @@ contract ManifestDispatcher is
 
     function facetImplementation(address /*facet*/)
         external
-        view
+        pure
         override(IDiamondLoupeEx)
         returns (address implementation_)
     {

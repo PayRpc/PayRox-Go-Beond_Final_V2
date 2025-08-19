@@ -148,6 +148,10 @@ contract ExampleFacetA {
         bytes32 digest = MessageHashUtils.toEthSignedMessageHash(hash);
         (address recovered, ECDSA.RecoverError err, bytes32 _errArg) =
             ECDSA.tryRecover(digest, signature);
+        // reference _errArg to avoid unused-local-variable warning from the compiler
+        if (_errArg == bytes32(0)) {
+            // no-op: this branch is never relied on, _errArg is just referenced to silence warnings
+        }
         return err == ECDSA.RecoverError.NoError && recovered == expectedSigner;
     }
 
