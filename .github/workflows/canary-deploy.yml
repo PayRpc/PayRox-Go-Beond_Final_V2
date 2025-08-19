@@ -64,15 +64,13 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Prepare version and build & test
-        env:
-          PRX_VERSION: ${{ github.ref_name }}-${{ github.sha }}
-        run: |
-          echo "PRX_VERSION=$PRX_VERSION"
-          node scripts/gen-version-facet.ts
-          npx hardhat compile
-          npx hardhat test --no-compile --network hardhat || true
-      - name: Compile contracts
+      - name: Generate VersionFacet (from package.json/CI)
+        run: node scripts/gen-version-facet.ts
+
+      - name: Typecheck
+        run: npx tsc -p tsconfig.hardhat.json --noEmit
+
+      - name: Compile
         run: npx hardhat compile
 
       - name: Validate readiness (don’t fail job)

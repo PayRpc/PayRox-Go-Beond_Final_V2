@@ -18,8 +18,8 @@ describe("RefactorSafetyFacet", function () {
   it("does NOT expose ERC-165 or loupe functions (policy: centralized only)", async () => {
     const { facet } = await loadFixture(deployFacet);
 
-    // 1) No supportsInterface(bytes4) on the facet (check fragments rather than relying on getFunction())
-    const hasSupports = facet.interface.fragments.some((fr: any) => fr.type === "function" && fr.name === "supportsInterface");
+  // 1) No supportsInterface(bytes4)
+  const hasSupports = facet.interface.fragments.some((fr: any) => fr.type === "function" && fr.name === "supportsInterface");
     expect(hasSupports).to.equal(false);
 
     // 1b) Also check by selector to avoid name obfuscation/overloads
