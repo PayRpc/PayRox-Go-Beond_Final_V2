@@ -1,0 +1,123 @@
+import type { BaseContract, BigNumberish, BytesLike, FunctionFragment, Interface, EventFragment, AddressLike, ContractRunner, ContractMethod, Listener } from "ethers";
+import type { TypedContractEvent, TypedDeferredTopicFilter, TypedEventLog, TypedLogDescription, TypedListener } from "../../common";
+export interface ManifestTypesInterface extends Interface {
+    getEvent(nameOrSignatureOrTopic: "AuditCompleted" | "AuditRegistered" | "GovernanceProposalCreated" | "GovernanceVoteCast"): EventFragment;
+}
+export declare namespace AuditCompletedEvent {
+    type InputTuple = [
+        manifestHash: BytesLike,
+        auditor: AddressLike,
+        passed: boolean
+    ];
+    type OutputTuple = [
+        manifestHash: string,
+        auditor: string,
+        passed: boolean
+    ];
+    interface OutputObject {
+        manifestHash: string;
+        auditor: string;
+        passed: boolean;
+    }
+    type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+    type Filter = TypedDeferredTopicFilter<Event>;
+    type Log = TypedEventLog<Event>;
+    type LogDescription = TypedLogDescription<Event>;
+}
+export declare namespace AuditRegisteredEvent {
+    type InputTuple = [
+        auditId: BytesLike,
+        auditor: AddressLike,
+        passed: boolean
+    ];
+    type OutputTuple = [auditId: string, auditor: string, passed: boolean];
+    interface OutputObject {
+        auditId: string;
+        auditor: string;
+        passed: boolean;
+    }
+    type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+    type Filter = TypedDeferredTopicFilter<Event>;
+    type Log = TypedEventLog<Event>;
+    type LogDescription = TypedLogDescription<Event>;
+}
+export declare namespace GovernanceProposalCreatedEvent {
+    type InputTuple = [
+        id: BytesLike,
+        proposer: AddressLike,
+        startBlock: BigNumberish,
+        endBlock: BigNumberish,
+        quorumBps: BigNumberish
+    ];
+    type OutputTuple = [
+        id: string,
+        proposer: string,
+        startBlock: bigint,
+        endBlock: bigint,
+        quorumBps: bigint
+    ];
+    interface OutputObject {
+        id: string;
+        proposer: string;
+        startBlock: bigint;
+        endBlock: bigint;
+        quorumBps: bigint;
+    }
+    type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+    type Filter = TypedDeferredTopicFilter<Event>;
+    type Log = TypedEventLog<Event>;
+    type LogDescription = TypedLogDescription<Event>;
+}
+export declare namespace GovernanceVoteCastEvent {
+    type InputTuple = [
+        proposalId: BytesLike,
+        voter: AddressLike,
+        support: boolean,
+        weight: BigNumberish
+    ];
+    type OutputTuple = [
+        proposalId: string,
+        voter: string,
+        support: boolean,
+        weight: bigint
+    ];
+    interface OutputObject {
+        proposalId: string;
+        voter: string;
+        support: boolean;
+        weight: bigint;
+    }
+    type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+    type Filter = TypedDeferredTopicFilter<Event>;
+    type Log = TypedEventLog<Event>;
+    type LogDescription = TypedLogDescription<Event>;
+}
+export interface ManifestTypes extends BaseContract {
+    connect(runner?: ContractRunner | null): ManifestTypes;
+    waitForDeployment(): Promise<this>;
+    interface: ManifestTypesInterface;
+    queryFilter<TCEvent extends TypedContractEvent>(event: TCEvent, fromBlockOrBlockhash?: string | number | undefined, toBlock?: string | number | undefined): Promise<Array<TypedEventLog<TCEvent>>>;
+    queryFilter<TCEvent extends TypedContractEvent>(filter: TypedDeferredTopicFilter<TCEvent>, fromBlockOrBlockhash?: string | number | undefined, toBlock?: string | number | undefined): Promise<Array<TypedEventLog<TCEvent>>>;
+    on<TCEvent extends TypedContractEvent>(event: TCEvent, listener: TypedListener<TCEvent>): Promise<this>;
+    on<TCEvent extends TypedContractEvent>(filter: TypedDeferredTopicFilter<TCEvent>, listener: TypedListener<TCEvent>): Promise<this>;
+    once<TCEvent extends TypedContractEvent>(event: TCEvent, listener: TypedListener<TCEvent>): Promise<this>;
+    once<TCEvent extends TypedContractEvent>(filter: TypedDeferredTopicFilter<TCEvent>, listener: TypedListener<TCEvent>): Promise<this>;
+    listeners<TCEvent extends TypedContractEvent>(event: TCEvent): Promise<Array<TypedListener<TCEvent>>>;
+    listeners(eventName?: string): Promise<Array<Listener>>;
+    removeAllListeners<TCEvent extends TypedContractEvent>(event?: TCEvent): Promise<this>;
+    getFunction<T extends ContractMethod = ContractMethod>(key: string | FunctionFragment): T;
+    getEvent(key: "AuditCompleted"): TypedContractEvent<AuditCompletedEvent.InputTuple, AuditCompletedEvent.OutputTuple, AuditCompletedEvent.OutputObject>;
+    getEvent(key: "AuditRegistered"): TypedContractEvent<AuditRegisteredEvent.InputTuple, AuditRegisteredEvent.OutputTuple, AuditRegisteredEvent.OutputObject>;
+    getEvent(key: "GovernanceProposalCreated"): TypedContractEvent<GovernanceProposalCreatedEvent.InputTuple, GovernanceProposalCreatedEvent.OutputTuple, GovernanceProposalCreatedEvent.OutputObject>;
+    getEvent(key: "GovernanceVoteCast"): TypedContractEvent<GovernanceVoteCastEvent.InputTuple, GovernanceVoteCastEvent.OutputTuple, GovernanceVoteCastEvent.OutputObject>;
+    filters: {
+        "AuditCompleted(bytes32,address,bool)": TypedContractEvent<AuditCompletedEvent.InputTuple, AuditCompletedEvent.OutputTuple, AuditCompletedEvent.OutputObject>;
+        AuditCompleted: TypedContractEvent<AuditCompletedEvent.InputTuple, AuditCompletedEvent.OutputTuple, AuditCompletedEvent.OutputObject>;
+        "AuditRegistered(bytes32,address,bool)": TypedContractEvent<AuditRegisteredEvent.InputTuple, AuditRegisteredEvent.OutputTuple, AuditRegisteredEvent.OutputObject>;
+        AuditRegistered: TypedContractEvent<AuditRegisteredEvent.InputTuple, AuditRegisteredEvent.OutputTuple, AuditRegisteredEvent.OutputObject>;
+        "GovernanceProposalCreated(bytes32,address,uint256,uint256,uint16)": TypedContractEvent<GovernanceProposalCreatedEvent.InputTuple, GovernanceProposalCreatedEvent.OutputTuple, GovernanceProposalCreatedEvent.OutputObject>;
+        GovernanceProposalCreated: TypedContractEvent<GovernanceProposalCreatedEvent.InputTuple, GovernanceProposalCreatedEvent.OutputTuple, GovernanceProposalCreatedEvent.OutputObject>;
+        "GovernanceVoteCast(bytes32,address,bool,uint256)": TypedContractEvent<GovernanceVoteCastEvent.InputTuple, GovernanceVoteCastEvent.OutputTuple, GovernanceVoteCastEvent.OutputObject>;
+        GovernanceVoteCast: TypedContractEvent<GovernanceVoteCastEvent.InputTuple, GovernanceVoteCastEvent.OutputTuple, GovernanceVoteCastEvent.OutputObject>;
+    };
+}

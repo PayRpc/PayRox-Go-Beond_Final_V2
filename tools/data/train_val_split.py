@@ -69,8 +69,8 @@ def normalize_key(s: str) -> str:
 
 def record_key(rec: Dict[str, Any]) -> str:
     prompt = normalize_key(f"{rec.get('instruction','')}\n{rec.get('input','')}")
-    # stable hash for sets
-    return hashlib.sha1(prompt.encode('utf-8')).hexdigest()
+    # stable hash for sets (SHA-256 for security)
+    return hashlib.sha256(prompt.encode('utf-8')).hexdigest()
 
 def filter_and_dedupe(records: List[Dict[str, Any]],
                       enc,
