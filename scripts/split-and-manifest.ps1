@@ -18,6 +18,7 @@ function Resolve-SourceFile {
 }
 
 try {
+  Write-Host "[debug] Args: Source='$Source' OutDir='$OutDir' FailOnEmptyParts=$FailOnEmptyParts CiMode=$CiMode"
   $src = Resolve-SourceFile -Path $Source
   New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
@@ -67,7 +68,8 @@ print(json.dumps(combined))
 
   # Re-read combined.json for updated counts
   $combined = Get-Content (Join-Path $OutDir 'combined.json') -Raw | ConvertFrom-Json
-  Write-Host (("Postprocessed → Kept parts: {0}, Total selectors: {1}" -f $combined.parts.Count, $combined.selectors.Count)) -ForegroundColor Green
+  # $combined.parts and $combined.selectors are integers in combined.json
+  Write-Host (("Postprocessed → Kept parts: {0}, Total selectors: {1}" -f $combined.parts, $combined.selectors)) -ForegroundColor Green
 
   # Strict check (only fail if any empty parts remain after postprocess)
   if ($FailOnEmptyParts) {
@@ -76,7 +78,9 @@ print(json.dumps(combined))
       if ($j.selectors.Count -eq 0) { $_ }
     }
     if ($leftovers) {
-      Write-Error "Empty parts remain after postprocess: $($leftovers | ForEach-Object { $_.Name } -join ', ')"
+      $names = $leftovers | ForEach-Object { $_.Name }
+      $list = ($names -join ', ')
+      Write-Error "Empty parts remain after postprocess: $list"
       exit 1
     }
   }
