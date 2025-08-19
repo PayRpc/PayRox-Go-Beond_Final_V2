@@ -42,6 +42,50 @@ module.exports = [
       'import/no-duplicates': 'off',
     },
   },
+  // Disable strict TS rules for scripts TS files specifically
+  {
+    files: ['scripts/**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.json', './tsconfig.hardhat.json'],
+        sourceType: 'script',
+        ecmaVersion: 'latest',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-var-requires': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'no-inner-declarations': 'off',
+      'no-undef': 'off',
+    },
+  },
+  // Relax rules for legacy scripts and JS utilities in the scripts/ tree
+  {
+    files: ['scripts/**'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'script',
+      globals: {
+        __dirname: 'readonly',
+        process: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-var-requires': 'off',
+      'no-empty': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-undef': 'off',
+      // Allow legacy patterns in scripts: function declarations inside blocks and ts-ignore comments
+      'no-inner-declarations': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+    },
+  },
   // TS files
   {
     files: ['**/*.ts', '**/*.tsx'],
