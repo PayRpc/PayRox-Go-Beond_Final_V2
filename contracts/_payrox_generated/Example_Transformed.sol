@@ -15,9 +15,6 @@ library ExampleStorage {
     }
 }
 
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.30;
-
 contract Base {
     uint256 baseVal;
 }

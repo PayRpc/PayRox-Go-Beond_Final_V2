@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // scripts/deploy/setup-dispatcher-roles.ts
 import { ethers } from "hardhat";
+const E = ethers as any;
 
 async function main() {
     const [deployer] = await ethers.getSigners();
@@ -15,25 +16,25 @@ async function main() {
     }
 
     // Connect to factory
-    const Factory = await ethers.getContractFactory("DeterministicChunkFactory");
-    const factory = Factory.attach(FACTORY_ADDRESS);
+    const Factory: any = await E.getContractFactory("DeterministicChunkFactory");
+    const factory: any = Factory.attach(String(FACTORY_ADDRESS));
 
     // Grant roles to dispatcher
     console.log("Granting OPERATOR_ROLE to dispatcher...");
     const operatorRole = await factory.OPERATOR_ROLE();
-    let tx = await factory.grantRole(operatorRole, DISPATCHER_ADDRESS);
-    await tx.wait();
+    let tx: any = await factory.grantRole(operatorRole, String(DISPATCHER_ADDRESS));
+    if (tx && typeof tx.wait === 'function') await tx.wait();
     console.log("✓ OPERATOR_ROLE granted");
 
     console.log("Granting FEE_ROLE to dispatcher...");
     const feeRole = await factory.FEE_ROLE();
-    tx = await factory.grantRole(feeRole, DISPATCHER_ADDRESS);
-    await tx.wait();
+    tx = await factory.grantRole(feeRole, String(DISPATCHER_ADDRESS));
+    if (tx && typeof tx.wait === 'function') await tx.wait();
     console.log("✓ FEE_ROLE granted");
 
     // Verify roles
-    const hasOperatorRole = await factory.hasRole(operatorRole, DISPATCHER_ADDRESS);
-    const hasFeeRole = await factory.hasRole(feeRole, DISPATCHER_ADDRESS);
+    const hasOperatorRole = await factory.hasRole(operatorRole, String(DISPATCHER_ADDRESS));
+    const hasFeeRole = await factory.hasRole(feeRole, String(DISPATCHER_ADDRESS));
 
     console.log("Role verification:");
     console.log("- OPERATOR_ROLE:", hasOperatorRole);
