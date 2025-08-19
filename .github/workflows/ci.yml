@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_refactor_gate:
+        description: 'Run the PayRox Refactor Gate (strict manifest generation)'
+        required: false
+        default: 'false'
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -208,6 +214,8 @@ jobs:
     permissions:
       contents: read
     needs: hardhat
+    if: |
+      github.event_name != 'workflow_dispatch' || github.event.inputs.run_refactor_gate == 'true' || github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
 
@@ -261,3 +269,11 @@ jobs:
             validation-report.md
             artifacts/splits/combined.json
           if-no-files-found: error
+
+      - name: Add artifacts info to step summary
+        if: always()
+        run: |
+          echo "### PayRox Refactor Gate Artifacts" >> "$GITHUB_STEP_SUMMARY"
+          echo "- payrox-manifest (artifact name: payrox-manifest)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- selector_map.json" >> "$GITHUB_STEP_SUMMARY"
+          echo "- validation-report.md" >> "$GITHUB_STEP_SUMMARY"
