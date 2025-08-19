@@ -167,43 +167,46 @@ describe("Loupe and Selectors", function () {
     });
 
     it("Should maintain selector parity with original contract", async function () {
-      // This test would compare selectors with the original monolithic contract
-      // Load expected selectors from manifest or selector map
       const fs = require('fs');
       const path = require('path');
-      
-      const manifestPath = path.join(process.cwd(), 'payrox-manifest.json');
-      if (fs.existsSync(manifestPath)) {
-        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-        const manifestSelectors: string[] = [];
-        
-        for (const facet of Object.values(manifest.facets) as any[]) {
-          manifestSelectors.push(...facet.selectors);
+      const combinedPath = path.join(process.cwd(), 'artifacts', 'splits', 'combined.json');
+      if (!fs.existsSync(combinedPath)) this.skip();
+      const combined = JSON.parse(fs.readFileSync(combinedPath, 'utf-8'));
+      if (!Array.isArray(combined.parts) || combined.parts.length === 0) this.skip();
+
+      // Build expected selectors from original function signatures in combined.json
+      const { keccak256, toUtf8Bytes } = ethers as any;
+      const expected: string[] = [];
+      for (const part of combined.parts) {
+        const sigs: string[] = Array.isArray(part.selectors) ? part.selectors : [];
+        for (const sig of sigs) {
+          const norm = String(sig).replace(/\s+/g, ' ').trim();
+          const selector = (keccak256(toUtf8Bytes(norm)) || '').slice(0, 10);
+          expected.push(selector);
         }
-        
-        const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
-        const diamondFacets = await diamondLoupe.facets();
-        const diamondSelectors: string[] = [];
-        
-        for (const facet of diamondFacets) {
-          diamondSelectors.push(...facet.functionSelectors);
-        }
-        
-        // Remove loupe selectors from comparison (they're added by diamond)
-        const loupeSelectors = [
-          "0x1f931c1c", // facets()
-          "0xcdffacc6", // facetFunctionSelectors()
-          "0x52ef6b2c", // facetAddresses()
-          "0xadfca15e", // facetAddress()
-          "0x01ffc9a7"  // supportsInterface()
-        ];
-        
-        const filteredDiamondSelectors = diamondSelectors.filter(
-          sel => !loupeSelectors.includes(sel)
-        );
-        
-        expect(filteredDiamondSelectors.sort()).to.deep.equal(manifestSelectors.sort());
       }
+      // Deduplicate & sort expected
+      const expectedUnique = [...new Set(expected.map(s => s.toLowerCase()))].sort();
+
+      const diamondLoupe = await ethers.getContractAt("IDiamondLoupe", getTarget(diamond));
+      const diamondFacets = await diamondLoupe.facets();
+      const diamondSelectors: string[] = [];
+      for (const facet of diamondFacets) diamondSelectors.push(...facet.functionSelectors);
+
+      // Remove loupe / diamond management selectors (not defined in original source signatures)
+      const ignore = new Set([
+        '0x1f931c1c', // facets()
+        '0xcdffacc6', // facetFunctionSelectors()
+        '0x52ef6b2c', // facetAddresses()
+        '0xadfca15e', // facetAddress()
+        '0x01ffc9a7', // supportsInterface()
+      ].map(s => s.toLowerCase()));
+
+      const filteredDiamond = diamondSelectors.filter(s => !ignore.has(s.toLowerCase()))
+        .map(s => s.toLowerCase())
+        .sort();
+
+      expect(filteredDiamond).to.deep.equal(expectedUnique);
     });
   });
 
@@ -265,14 +268,39 @@ describe("Loupe and Selectors", function () {
 // Helper function to get function selectors from a contract
 function getSelectors(contract: Contract): string[] {
   const selectors: string[] = [];
-  
-  for (const func of Object.values((contract.interface as any).functions || {})) {
-    const f: any = func;
-    if (f && f.type === 'function') {
-      selectors.push(f.selector);
+  const iface: any = (contract.interface as any) || {};
+
+  // ethers v5: iface.functions is an object; ethers v6: it may be a Map
+  const funcs = iface.functions;
+  if (funcs) {
+    if (typeof funcs.entries === 'function' && typeof funcs.get === 'function') {
+      // Map-like
+      for (const f of funcs.values()) {
+        if (f && f.type === 'function' && f.selector) selectors.push(f.selector);
+      }
+    } else {
+      // plain object
+      for (const func of Object.values(funcs || {})) {
+        const f: any = func;
+        if (f && f.type === 'function' && f.selector) selectors.push(f.selector);
+      }
     }
   }
-  
+
+  // Fallback: derive selectors from fragments if present
+  if (selectors.length === 0 && Array.isArray(iface.fragments)) {
+    for (const frag of iface.fragments) {
+      if (frag.type === 'function') {
+        const inputs = (frag.inputs || []).map((i: any) => i.type || i);
+        const sig = `${frag.name}(${inputs.join(',')})`;
+  // ethers v6: use keccak256 + toUtf8Bytes
+  const { keccak256, toUtf8Bytes } = ethers as any;
+  const sel = (keccak256(toUtf8Bytes(sig)) || '').slice(0, 10);
+        selectors.push(sel);
+      }
+    }
+  }
+
   return selectors;
 }
 

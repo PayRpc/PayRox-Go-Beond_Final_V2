@@ -24,7 +24,13 @@ if (Number.isInteger(combined.selectors)) {
 }
 
 if (!Number.isInteger(partsCount) || partsCount < 1) {
-  throw new Error('No parts produced');
+  throw new Error(
+    'No parts produced (initial partsCount=' +
+      partsCount +
+      ', partsShape=' +
+      (Array.isArray(combined.parts) ? 'array' : typeof combined.parts) +
+      ')',
+  );
 }
 if (!Number.isInteger(selectorsCount) || selectorsCount < 1) {
   throw new Error('No selectors extracted');
@@ -40,14 +46,21 @@ if (Array.isArray(combined.parts) && combined.parts.length > 0) {
 } else if (Array.isArray(combined.by_part) && combined.by_part.length > 0) {
   partsList = combined.by_part;
 } else {
-  partsList = Array.from({ length: partsCount }, (_, i) => ({ file: `part_${i}.sol`, json: `part_${i}.json` }));
+  partsList = Array.from({ length: partsCount }, (_, i) => ({
+    file: `part_${i}.sol`,
+    json: `part_${i}.json`,
+  }));
 }
 
 // Filter out any parts which were post-processed away (no files present)
-partsList = partsList.filter(p => {
+partsList = partsList.filter((p) => {
   const solName = p.file || '';
   return solName && fs.existsSync(path.join(OUT, solName));
 });
+// Recompute partsCount from surviving parts if it differs (e.g. numeric vs array mismatch or removals)
+if (partsList.length > 0 && partsList.length !== partsCount) {
+  partsCount = partsList.length;
+}
 
 for (let idx = 0; idx < partsList.length; idx++) {
   const part = partsList[idx];

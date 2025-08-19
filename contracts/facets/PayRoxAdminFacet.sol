@@ -2,14 +2,14 @@
 pragma solidity 0.8.30;
 
 import { PayRoxStorage } from "../libraries/PayRoxStorage.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
+import { RefactorSafeFacetBase } from "../libraries/RefactorSafeFacetBase.sol";
 import { RefactorSafetyLib } from "../libraries/RefactorSafetyLib.sol";
 
 contract PayRoxAdminFacet is RefactorSafeFacetBase {
     using RefactorSafetyLib for *;
 
     // Optional: pin a version (used only by the base for logs/checks)
-    function _getVersion() internal view override returns (uint256) { return 1; }
+    function _getVersion() internal pure override returns (uint256) { return 1; }
     function _getStorageNamespace() internal pure override returns (bytes32) { return PayRoxStorage.SLOT; }
     // IMPORTANT: under delegatecall, address(this) == dispatcher; disable codehash check in prod
     function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }

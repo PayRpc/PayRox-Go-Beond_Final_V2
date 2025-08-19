@@ -2,7 +2,7 @@
 pragma solidity 0.8.30;
 
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {RefactorSafeFacetBase} from "../libraries/RefactorSafetyLib.sol";
+import {RefactorSafeFacetBase} from "../libraries/RefactorSafeFacetBase.sol";
 import {LibSecurityStorage as Sec} from "../security/LibSecurityStorage.sol";
 import {IAntiBotFacet} from "./IAntiBotFacet.sol";
 

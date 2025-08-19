@@ -447,8 +447,9 @@ for (const p of kept) {
 
 const rewritten = {
   ...(typeof combined === 'object' ? combined : {}),
-  parts: finalParts,
+  parts: finalParts.filter(p => (p.selectors || []).length > 0),
   selectors: [...allSelectors],
+  by_part: finalParts.filter(p => (p.selectors || []).length > 0).map(p => ({ file: p.file, functions: (p.selectors || []).length }))
 };
 
 fs.writeFileSync(combinedPath, JSON.stringify(rewritten, null, 2));

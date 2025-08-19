@@ -1,0 +1,98 @@
+{
+  "version": "1.0.0",
+  "facets": {
+    "part_2_split_0": {
+      "selectors": [
+        "0x750588cf",
+        "0x7d979a4f",
+        "0xac5eac0f",
+        "0xf552501a"
+      ]
+    },
+    "part_2_split_1": {
+      "selectors": [
+        "0x054f7d9c",
+        "0x3a8c0786",
+        "0x9f6b4a3b",
+        "0xabb2efdf"
+      ]
+    },
+    "part_2_split_10": {
+      "selectors": [
+        "0x2d2eebfa",
+        "0x6c257d57",
+        "0xed8f85cd",
+        "0xf7c976f6"
+      ]
+    },
+    "part_2_split_11": {
+      "selectors": [
+        "0xa5863f6a"
+      ]
+    },
+    "part_2_split_2": {
+      "selectors": [
+        "0x32252057",
+        "0x53d5aa81",
+        "0xc8500474",
+        "0xebce7a75"
+      ]
+    },
+    "part_2_split_3": {
+      "selectors": [
+        "0x062576b2",
+        "0x6f89e409",
+        "0x863fbff9",
+        "0x9a3b4b20"
+      ]
+    },
+    "part_2_split_4": {
+      "selectors": [
+        "0x674e1b02",
+        "0xadc6c3b2",
+        "0xdf3a56b5",
+        "0xf8187e51"
+      ]
+    },
+    "part_2_split_5": {
+      "selectors": [
+        "0x3f4ba83a",
+        "0x62a5af3b",
+        "0x8456cb59",
+        "0xe4b8919f"
+      ]
+    },
+    "part_2_split_6": {
+      "selectors": [
+        "0x52ef6b2c",
+        "0x7a0ed627",
+        "0x82373003",
+        "0xec665a30"
+      ]
+    },
+    "part_2_split_7": {
+      "selectors": [
+        "0x4588279e",
+        "0x4b8f2c06",
+        "0x59bd24ab",
+        "0xb8763bb2"
+      ]
+    },
+    "part_2_split_8": {
+      "selectors": [
+        "0x8226e95a",
+        "0xa0df852b",
+        "0xa4d43189",
+        "0xbe64cdd4"
+      ]
+    },
+    "part_2_split_9": {
+      "selectors": [
+        "0x15d2dd54",
+        "0x1ad7a8d6",
+        "0x3f05b72d",
+        "0x715f2029"
+      ]
+    }
+  }
+}

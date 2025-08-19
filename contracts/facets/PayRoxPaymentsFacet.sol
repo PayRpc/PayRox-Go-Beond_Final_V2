@@ -2,12 +2,12 @@
 pragma solidity 0.8.30;
 
 import { PayRoxStorage } from "../libraries/PayRoxStorage.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
+import { RefactorSafeFacetBase } from "../libraries/RefactorSafeFacetBase.sol";
 
 contract PayRoxPaymentsFacet is RefactorSafeFacetBase {
     // Minimal facet that records and settles payments in shared diamond storage.
 
-    function _getVersion() internal view override returns (uint256) { return 1; }
+    function _getVersion() internal pure override returns (uint256) { return 1; }
     function _getStorageNamespace() internal pure override returns (bytes32) { return PayRoxStorage.SLOT; }
     function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }
 

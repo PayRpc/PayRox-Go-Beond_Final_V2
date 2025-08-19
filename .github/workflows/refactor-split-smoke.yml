@@ -61,6 +61,9 @@ jobs:
 
       - name: Install deps
         run: npm ci --legacy-peer-deps
+      # IMPORTANT: compile first so facet splitter can derive selectors from compiled artifacts
+      - name: Compile contracts
+        run: npx hardhat compile --network hardhat
 
       - name: Run splitter (Windows)
         run: |
@@ -69,9 +72,6 @@ jobs:
             -OutDir artifacts\splits `
             -CiMode `
             -FailOnEmptyParts
-
-      - name: Compile contracts
-        run: npx hardhat compile --network hardhat
 
       - name: Sanity checks
         shell: pwsh
