@@ -19,6 +19,12 @@ jobs:
         shell: pwsh
         run: pwsh -File scripts/split-and-manifest.ps1 -Source contracts/dispacher/ManifestDispacher.sol -Expected manifests/expected/ManifestDispatcher.json
 
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Generate manifest from compiled ABIs
+        run: node tools/generate-manifest.js || true
+
       - name: Upload manifests
         uses: actions/upload-artifact@v4
         with:
