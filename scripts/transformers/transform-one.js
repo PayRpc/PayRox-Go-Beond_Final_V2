@@ -15,6 +15,8 @@ const fs = require('fs');
 const path = require('path');
 const parser = require('@solidity-parser/parser');
 const diff = require('diff');
+const { keccak_256 } = require('js-sha3');
+const { execSync } = require('child_process');
 
 function args() {
   const a = process.argv.slice(2);
@@ -55,14 +57,37 @@ function headerOf(source) {
   return hdr;
 }
 
+function slotHex(contractName) {
+  const key = `payrox.${contractName}.storage`;
+  return '0x' + keccak_256(key);
+}
+
+function typeToString(t) {
+  if (!t) return 'uint256';
+  switch (t.type) {
+    case 'ElementaryTypeName': return t.name;
+    case 'UserDefinedTypeName': return t.namePath;
+    case 'ArrayTypeName': {
+      const base = typeToString(t.baseTypeName);
+      const len = t.length ? (t.length.number || t.length.value || '') : '';
+      return len ? `${base}[${len}]` : `${base}[]`;
+    }
+    case 'Mapping': {
+      const k = typeToString(t.keyType);
+      const v = typeToString(t.valueType);
+      return `mapping(${k} => ${v})`;
+    }
+    default: return 'uint256';
+  }
+}
+
 function buildStorageLib(contractName, stateVars) {
-  // Namespaced slot
-  const slotKey = `payrox.${contractName}.storage`;
+  const slot = slotHex(contractName);
   const structLines = stateVars
     .filter(v => !v.dropped)
     .map(v => `        ${v.type} ${v.name}; // from: ${v.from}`);
   return `library ${contractName}Storage {
-    bytes32 internal constant SLOT = keccak256("${slotKey}");
+    bytes32 internal constant SLOT = ${slot};
     struct Layout {
 ${structLines.join('\n')}
     }
@@ -91,21 +116,13 @@ function buildContractIndex(ast) {
             const maybeImmutable = (sub && sub.isImmutable) || /immutable\b/.test(JSON.stringify(sub));
             const maybeConstant  = (sub && sub.isDeclaredConst) || /constant\b/.test(JSON.stringify(sub));
             if (maybeImmutable || maybeConstant) continue;
-            // Type extraction
+            // Type extraction using recursive serializer
             let ty = 'uint256';
             try {
-              const t = v.typeName;
-              if (!t) ty = 'uint256';
-              else if (t.type === 'ElementaryTypeName') ty = t.name;
-              else if (t.type === 'UserDefinedTypeName') ty = t.namePath;
-              else if (t.type === 'ArrayTypeName') {
-                const base = t.baseTypeName.type === 'ElementaryTypeName' ? t.baseTypeName.name :
-                             t.baseTypeName.type === 'UserDefinedTypeName' ? t.baseTypeName.namePath : 'bytes';
-                ty = `${base}[]`;
-              } else if (t.type === 'Mapping') {
-                ty = 'mapping(bytes32 => bytes32)'; // textual mapping type; safe placeholder
-              }
-            } catch {}
+              ty = typeToString(v.typeName);
+            } catch (e) {
+              // leave default
+            }
             vars.push({ name: v.name, type: ty, declRange: v.range });
           }
         }
@@ -209,6 +226,8 @@ function scopeLocalNames(fn) {
   return locals;
 }
 
+function isIdentChar(c) { return /[A-Za-z0-9_]/.test(c); }
+
 function computeEditsForContract(source, ast, contractName, stateVarNames, libName) {
   // Find function bodies that touch any state var identifiers not shadowed
   const edits = []; // {start, end, text} insert/replace
@@ -220,9 +239,18 @@ function computeEditsForContract(source, ast, contractName, stateVarNames, libNa
       const hits = [];
       parser.visit(fn.body, {
         Identifier(id) {
-          if (stateVarNames.has(id.name) && !locals.has(id.name) && id.range) {
-            hits.push({ start: id.range[0], end: id.range[1], name: id.name });
-          }
+          if (!id.range) return;
+          if (!stateVarNames.has(id.name)) return;
+          if (locals.has(id.name)) return;
+
+          const [s,e] = id.range;
+          const prev = s > 0 ? source[s-1] : '';
+          const next = e < source.length ? source[e] : '';
+
+          // avoid obj.var, SomeType.var, fnName(...), PartOfLongerIdent
+          if (prev === '.' || isIdentChar(prev) || isIdentChar(next)) return;
+
+          hits.push({ start: s, end: e, name: id.name });
         }
       });
       if (!hits.length) return;
@@ -305,6 +333,19 @@ function run() {
   const libName = `${contractName}Storage`;
   const constructors = collectConstructors(ast, contractName);
 
+  // Safety: fail if any constructor has a non-empty body. Lifting constructor
+  // bodies into initialize() is not yet implemented — better to stop.
+  for (const c of constructors) {
+    const node = c.node;
+    if (node && node.body && node.body.statements && node.body.statements.length) {
+      console.error('❌ Constructor with body detected. Transformer will not automatically lift constructor bodies.');
+      console.error('File:', srcPath);
+      console.error('Contract:', contractName);
+      console.error('Please extract constructor logic manually or re-run after implementing body lifting.');
+      process.exit(2);
+    }
+  }
+
   const stateVarNames = new Set(stateVars.filter(v => !v.dropped).map(v => v.name));
   const { transformed: contractTransformed, patches } =
     computeEditsForContract(source, ast, contractName, stateVarNames, libName);
@@ -334,6 +375,24 @@ function run() {
 
   // Write files
   write(outFile, finalOutput);
+  // Also write a copy into contracts/_payrox_generated to allow compilation checks
+  try {
+    const compileDir = path.join(process.cwd(), 'contracts', '_payrox_generated');
+    mkdirp(compileDir);
+    const compilePath = path.join(compileDir, `${baseName}_Transformed.sol`);
+    write(compilePath, finalOutput);
+    // Run a compile to validate output. If hardhat isn't present or compile fails, we fail.
+    try {
+      execSync('npx hardhat compile', { stdio: 'inherit' });
+    } catch (e) {
+      console.error('❌ Transformed code did not compile. See generated files for context.');
+      process.exit(3);
+    }
+  } catch (e) {
+    console.error('⚠️ Could not run compile check:', String(e));
+    // Continue: we don't want to block on environments without Hardhat installed,
+    // but the preferred behavior is to fail above if compilation fails.
+  }
   const unified = diff.createTwoFilesPatch(path.basename(srcPath), path.basename(outFile), source, finalOutput, '', '');
   write(patchFile, unified);
 
