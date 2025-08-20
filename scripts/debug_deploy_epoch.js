@@ -1,7 +1,7 @@
 const hre = require('hardhat');
 
 async function main() {
-  const [deployer, addr1] = await hre.ethers.getSigners();
+  const [deployer] = await hre.ethers.getSigners();
   console.log('Deployer address:', deployer.address);
 
   const EpochManager = await hre.ethers.getContractFactory('EpochManager');
