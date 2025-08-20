@@ -1,6 +1,5 @@
 /**
  * PayRox Diamond Deployment Script Template
- * 
  * Deploys Diamond Pattern contracts with:
  * - CREATE2 deterministic addresses
  * - Proper role assignments to dispatcher
@@ -8,10 +7,10 @@
  * - Verification and validation
  */
 
-import { ethers } from "hardhat";
-import { Contract } from "ethers";
-import fs from "fs";
-import path from "path";
+import { ethers } from 'hardhat';
+import { Contract } from 'ethers';
+import fs from 'fs';
+import path from 'path';
 
 interface DeploymentConfig {
   facetsDir: string;
@@ -22,11 +21,14 @@ interface DeploymentConfig {
 
 interface ManifestData {
   version: string;
-  facets: Record<string, {
-    selectors: string[];
-    address?: string;
-    codehash?: string;
-  }>;
+  facets: Record<
+    string,
+    {
+      selectors: string[];
+      address?: string;
+      codehash?: string;
+    }
+  >;
   dispatcher?: string;
 }
 
@@ -76,30 +78,28 @@ class DiamondDeployer {
       console.log(`  Deploying ${facetName}...`);
 
       const FacetFactory = await ethers.getContractFactory(facetName);
-      
+
       // Use CREATE2 for deterministic addresses
-      const facetSalt = ethers.utils.keccak256(
-        ethers.utils.toUtf8Bytes(`${this.config.salt}-${facetName}`)
-      );
+      const _facetSalt = ethers.keccak256(ethers.toUtf8Bytes(`${this.config.salt}-${facetName}`));
 
       const facet = await FacetFactory.deploy({ gasLimit: 5000000 });
-      await facet.deployed();
+      await facet.waitForDeployment();
 
-      this.deployedFacets.set(facetName, facet);
-      
+      this.deployedFacets.set(facetName, facet as any);
+
       // Update manifest with deployed address
-      facetData.address = facet.address;
-      
-      console.log(`    ✅ ${facetName} deployed to: ${facet.address}`);
-      
+      facetData.address = await facet.getAddress();
+
+      console.log(`    ✅ ${facetName} deployed to: ${await facet.getAddress()}`);
+
       // Verify size constraint (EIP-170)
-      const code = await ethers.provider.getCode(facet.address);
+      const code = await ethers.provider.getCode(await facet.getAddress());
       const sizeBytes = (code.length - 2) / 2; // Remove 0x prefix
-      
+
       if (sizeBytes > 24576) {
         throw new Error(`❌ ${facetName} exceeds EIP-170 limit: ${sizeBytes} > 24576 bytes`);
       }
-      
+
       console.log(`    📏 Size: ${sizeBytes}/24576 bytes`);
     }
   }
@@ -108,43 +108,41 @@ class DiamondDeployer {
     console.log('💎 Deploying Diamond...');
 
     const [deployer] = await ethers.getSigners();
-    
+
     // Deploy DiamondCutFacet first (required for Diamond)
-    const DiamondCutFacet = await ethers.getContractFactory("DiamondCutFacet");
+    const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
     const diamondCutFacet = await DiamondCutFacet.deploy();
-    await diamondCutFacet.deployed();
+    await diamondCutFacet.waitForDeployment();
 
     // Deploy DiamondLoupeFacet
-    const DiamondLoupeFacet = await ethers.getContractFactory("DiamondLoupeFacet");
+    const DiamondLoupeFacet = await ethers.getContractFactory('DiamondLoupeFacet');
     const diamondLoupeFacet = await DiamondLoupeFacet.deploy();
-    await diamondLoupeFacet.deployed();
+    await diamondLoupeFacet.waitForDeployment();
 
     // Deploy Diamond
-    const Diamond = await ethers.getContractFactory("Diamond");
-    const diamond = await Diamond.deploy(
-      deployer.address,
-      diamondCutFacet.address,
-      { gasLimit: 5000000 }
-    );
-    await diamond.deployed();
+    const Diamond = await ethers.getContractFactory('Diamond');
+    const diamond = await Diamond.deploy(deployer.address, await diamondCutFacet.getAddress());
+    await diamond.waitForDeployment();
 
-    console.log(`  ✅ Diamond deployed to: ${diamond.address}`);
-    
+    console.log(`  ✅ Diamond deployed to: ${await diamond.getAddress()}`);
+
     // Add loupe facet
     const diamondCut = await ethers.getContractAt(
-      "contracts/interfaces/IDiamondCut.sol:IDiamondCut",
-      diamond.address
+      'contracts/interfaces/IDiamondCut.sol:IDiamondCut',
+      await diamond.getAddress(),
     );
     const loupeSelectors = this.getFunctionSelectors(diamondLoupeFacet);
-    
+
     await diamondCut.diamondCut(
-      [{
-        facetAddress: diamondLoupeFacet.address,
-        action: 0, // Add
-        functionSelectors: loupeSelectors
-      }],
+      [
+        {
+          facetAddress: diamondLoupeFacet.address,
+          action: 0, // Add
+          functionSelectors: loupeSelectors,
+        },
+      ],
       ethers.constants.AddressZero,
-      "0x"
+      '0x',
     );
 
     return diamond;
@@ -153,7 +151,7 @@ class DiamondDeployer {
   private async initializeDiamond(diamond: Contract): Promise<void> {
     console.log('⚙️  Initializing Diamond with facets...');
 
-    const diamondCut = await ethers.getContractAt("IDiamondCut", diamond.address);
+    const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address);
     const facetCuts = [];
 
     for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
@@ -165,20 +163,17 @@ class DiamondDeployer {
       facetCuts.push({
         facetAddress: facet.address,
         action: 0, // Add
-        functionSelectors: facetData.selectors
+        functionSelectors: facetData.selectors,
       });
 
       console.log(`  Adding ${facetName} with ${facetData.selectors.length} selectors`);
     }
 
     // Execute diamond cut
-    const tx = await diamondCut.diamondCut(
-      facetCuts,
-      ethers.constants.AddressZero,
-      "0x",
-      { gasLimit: 8000000 }
-    );
-    
+    const tx = await diamondCut.diamondCut(facetCuts, ethers.constants.AddressZero, '0x', {
+      gasLimit: 8000000,
+    });
+
     await tx.wait();
     console.log('  ✅ All facets added to Diamond');
   }
@@ -187,10 +182,10 @@ class DiamondDeployer {
     console.log('✅ Verifying deployment...');
 
     const diamondLoupe = await ethers.getContractAt(
-      "contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe",
-      diamond.address
+      'contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe',
+      diamond.address,
     );
-    
+
     // Verify all facets are properly added
     const facets = await diamondLoupe.facets();
     console.log(`  📊 Total facets: ${facets.length}`);
@@ -208,7 +203,9 @@ class DiamondDeployer {
       for (const selector of facetData.selectors) {
         const facetAddress = await diamondLoupe.facetAddress(selector);
         if (facetAddress !== facetData.address) {
-          throw new Error(`Selector routing failed: ${selector} -> ${facetAddress} (expected ${facetData.address})`);
+          throw new Error(
+            `Selector routing failed: ${selector} -> ${facetAddress} (expected ${facetData.address})`,
+          );
         }
       }
     }
@@ -217,10 +214,10 @@ class DiamondDeployer {
     for (const [facetName, facet] of this.deployedFacets.entries()) {
       const selectors = this.getFunctionSelectors(facet);
       const loupeSelectors = [
-        "0x1f931c1c", // facets()
-        "0xcdffacc6", // facetFunctionSelectors()
-        "0x52ef6b2c", // facetAddresses()
-        "0xadfca15e"  // facetAddress()
+        '0x1f931c1c', // facets()
+        '0xcdffacc6', // facetFunctionSelectors()
+        '0x52ef6b2c', // facetAddresses()
+        '0xadfca15e', // facetAddress()
       ];
 
       for (const selector of selectors) {
@@ -237,16 +234,20 @@ class DiamondDeployer {
     console.log('📄 Updating manifest with deployment addresses...');
 
     this.manifest.dispatcher = diamond.address;
-    
+
     // Calculate merkle root from facet selectors
     const leaves = [];
     for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
       for (const selector of facetData.selectors) {
         const leaf = ethers.utils.keccak256(
           ethers.utils.defaultAbiCoder.encode(
-            ["bytes4", "address", "bytes32"],
-            [selector, facetData.address, ethers.utils.keccak256(ethers.utils.toUtf8Bytes(facetName))]
-          )
+            ['bytes4', 'address', 'bytes32'],
+            [
+              selector,
+              facetData.address,
+              ethers.utils.keccak256(ethers.utils.toUtf8Bytes(facetName)),
+            ],
+          ),
         );
         leaves.push(leaf);
       }
@@ -262,12 +263,12 @@ class DiamondDeployer {
       block: await ethers.provider.getBlockNumber(),
       timestamp: Math.floor(Date.now() / 1000),
       deployer: (await ethers.getSigners())[0].address,
-      salt: this.config.salt
+      salt: this.config.salt,
     };
 
     const updatedManifest = {
       ...this.manifest,
-      deployment
+      deployment,
     };
 
     fs.writeFileSync(this.config.manifestPath, JSON.stringify(updatedManifest, null, 2));
@@ -289,16 +290,15 @@ class DiamondDeployer {
 
     // All roles should be granted to the diamond (dispatcher), not individual facets
     const [deployer] = await ethers.getSigners();
-    
+
     // If diamond has access control, grant roles to diamond address
     try {
-      const accessControl = await ethers.getContractAt("IAccessControl", diamond.address);
+      const accessControl = await ethers.getContractAt('IAccessControl', diamond.address);
       const adminRole = await accessControl.DEFAULT_ADMIN_ROLE();
-      
+
       // Grant admin role to diamond itself (for delegatecall context)
       await accessControl.grantRole(adminRole, diamond.address);
       console.log(`  ✅ Admin role granted to diamond: ${diamond.address}`);
-      
     } catch (error) {
       console.log(`  ℹ️  No access control interface found (this is OK)`);
     }
@@ -308,10 +308,10 @@ class DiamondDeployer {
 // Example usage
 async function main() {
   const config: DeploymentConfig = {
-    facetsDir: "./facets",
-    manifestPath: "./payrox-manifest.json",
-    salt: ethers.utils.id("PayRox-Diamond-V1"),
-    verify: process.env.VERIFY === "true"
+    facetsDir: './facets',
+    manifestPath: './payrox-manifest.json',
+    salt: ethers.utils.id('PayRox-Diamond-V1'),
+    verify: process.env.VERIFY === 'true',
   };
 
   const deployer = new DiamondDeployer(config);

@@ -5,7 +5,7 @@
 const { ethers } = require('ethers');
 const fs = require('fs');
 
-async function main(){
+async function main() {
   const providerUrl = process.env.RPC || 'http://localhost:8545';
   const provider = new ethers.JsonRpcProvider(providerUrl);
 
@@ -16,9 +16,16 @@ async function main(){
 
   // Optionally show how to read a specific storage slot manually
   console.log('\nManual steps:');
-  console.log('1) Use `eth_getStorageAt` to read the canonical pause slot (PayRoxPauseStorage.SLOT) and the old PayRoxStorage.SLOT.');
-  console.log('2) If legacy paused slot is true but canonical is false, consider writing a controlled tx to set canonical paused state via PauseFacet.pause().');
+  console.log(
+    '1) Use `eth_getStorageAt` to read the canonical pause slot (PayRoxPauseStorage.SLOT) and the old PayRoxStorage.SLOT.',
+  );
+  console.log(
+    '2) If legacy paused slot is true but canonical is false, consider writing a controlled tx to set canonical paused state via PauseFacet.pause().',
+  );
   console.log('\nThis script intentionally does not write to the chain.');
 }
 
-main().catch(e=>{ console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

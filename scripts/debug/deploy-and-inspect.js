@@ -14,8 +14,11 @@ async function main() {
   console.log('facetB', facetB.target || facetB.address);
 
   console.log('facetA.interface keys:', Object.keys(facetA.interface));
-  console.log('facetA.interface.functions keys:', Object.keys((facetA.interface).functions || {}));
-  console.log('facetA.interface.fragments length:', (facetA.interface).fragments ? (facetA.interface).fragments.length : 'no fragments');
+  console.log('facetA.interface.functions keys:', Object.keys(facetA.interface.functions || {}));
+  console.log(
+    'facetA.interface.fragments length:',
+    facetA.interface.fragments ? facetA.interface.fragments.length : 'no fragments',
+  );
 
   const Diamond = await hre.ethers.getContractFactory('Diamond');
   const diamond = await Diamond.deploy(owner.address);
@@ -25,7 +28,7 @@ async function main() {
   // compute selectors
   const getSelectors = (c) => {
     const selectors = [];
-    const funcs = Object.values((c.interface).functions || {});
+    const funcs = Object.values(c.interface.functions || {});
     for (const f of funcs) {
       if (f && f.type === 'function') selectors.push(f.selector);
     }
@@ -51,4 +54,7 @@ async function main() {
   }
 }
 
-main().catch((err)=>{console.error(err);process.exit(1);});
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

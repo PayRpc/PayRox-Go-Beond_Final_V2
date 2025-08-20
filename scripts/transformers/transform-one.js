@@ -59,8 +59,8 @@ function buildStorageLib(contractName, stateVars) {
   // Namespaced slot
   const slotKey = `payrox.${contractName}.storage`;
   const structLines = stateVars
-    .filter(v => !v.dropped)
-    .map(v => `        ${v.type} ${v.name}; // from: ${v.from}`);
+    .filter((v) => !v.dropped)
+    .map((v) => `        ${v.type} ${v.name}; // from: ${v.from}`);
   return `library ${contractName}Storage {
     bytes32 internal constant SLOT = keccak256("${slotKey}");
     struct Layout {
@@ -80,16 +80,20 @@ function buildContractIndex(ast) {
   const idx = {};
   parser.visit(ast, {
     ContractDefinition(node) {
-      const bases = (node.baseContracts || []).map(b => (b.baseName && (b.baseName.name || b.baseName.namePath)) || '').filter(Boolean);
+      const bases = (node.baseContracts || [])
+        .map((b) => (b.baseName && (b.baseName.name || b.baseName.namePath)) || '')
+        .filter(Boolean);
       const vars = [];
       for (const sub of node.subNodes) {
         if (sub.type === 'StateVariableDeclaration') {
           for (const v of sub.variables) {
             if (!v || !v.name) continue;
             // Skip constants/immutables conservatively by peeking raw text if available
-            const slice = (sub.range ? null : null); // parser may not expose raw tokens; fallback below
-            const maybeImmutable = (sub && sub.isImmutable) || /immutable\b/.test(JSON.stringify(sub));
-            const maybeConstant  = (sub && sub.isDeclaredConst) || /constant\b/.test(JSON.stringify(sub));
+            const slice = sub.range ? null : null; // parser may not expose raw tokens; fallback below
+            const maybeImmutable =
+              (sub && sub.isImmutable) || /immutable\b/.test(JSON.stringify(sub));
+            const maybeConstant =
+              (sub && sub.isDeclaredConst) || /constant\b/.test(JSON.stringify(sub));
             if (maybeImmutable || maybeConstant) continue;
             // Type extraction
             let ty = 'uint256';
@@ -99,8 +103,12 @@ function buildContractIndex(ast) {
               else if (t.type === 'ElementaryTypeName') ty = t.name;
               else if (t.type === 'UserDefinedTypeName') ty = t.namePath;
               else if (t.type === 'ArrayTypeName') {
-                const base = t.baseTypeName.type === 'ElementaryTypeName' ? t.baseTypeName.name :
-                             t.baseTypeName.type === 'UserDefinedTypeName' ? t.baseTypeName.namePath : 'bytes';
+                const base =
+                  t.baseTypeName.type === 'ElementaryTypeName'
+                    ? t.baseTypeName.name
+                    : t.baseTypeName.type === 'UserDefinedTypeName'
+                      ? t.baseTypeName.namePath
+                      : 'bytes';
                 ty = `${base}[]`;
               } else if (t.type === 'Mapping') {
                 ty = 'mapping(bytes32 => bytes32)'; // textual mapping type; safe placeholder
@@ -111,7 +119,7 @@ function buildContractIndex(ast) {
         }
       }
       idx[node.name] = { name: node.name, bases, vars };
-    }
+    },
   });
   return idx;
 }
@@ -123,22 +131,25 @@ function c3Linearize(name, idx, memo, stack) {
   if (stack.has(name)) return [name]; // cycle guard
   stack.add(name);
   const parents = idx[name].bases || [];
-  const seqs = parents.map(p => c3Linearize(p, idx, memo, stack));
+  const seqs = parents.map((p) => c3Linearize(p, idx, memo, stack));
   seqs.push(parents.slice()); // local precedence list
   const result = [name];
   // merge
-  const heads = () => seqs.map(s => s[0]).filter(Boolean);
-  const tailsContain = (x) => seqs.some(s => s.slice(1).includes(x));
-  while (seqs.some(s => s.length)) {
+  const heads = () => seqs.map((s) => s[0]).filter(Boolean);
+  const tailsContain = (x) => seqs.some((s) => s.slice(1).includes(x));
+  while (seqs.some((s) => s.length)) {
     let candidate = null;
     for (const h of heads()) {
-      if (!tailsContain(h)) { candidate = h; break; }
+      if (!tailsContain(h)) {
+        candidate = h;
+        break;
+      }
     }
     if (!candidate) {
       // fallback: flatten left-to-right DFS
       const seen = new Set(result);
-      for (const s of seqs) for (const n of s) if (!seen.has(n)) result.push(n), seen.add(n);
-      seqs.forEach(s => s.length = 0);
+      for (const s of seqs) for (const n of s) if (!seen.has(n)) (result.push(n), seen.add(n));
+      seqs.forEach((s) => (s.length = 0));
       break;
     }
     result.push(candidate);
@@ -154,7 +165,10 @@ function collectStateVarsLinearized(ast, targetContract) {
   const order = c3Linearize(root, idx, {}, new Set());
   // Solidity layout: bases first (most base to most derived), then root.
   // Our c3Linearize returns [C, ...bases merged]; reorder to [bases..., C]
-  const linear = order.slice(1).concat([root]).filter((n, i, a) => a.indexOf(n) === i);
+  const linear = order
+    .slice(1)
+    .concat([root])
+    .filter((n, i, a) => a.indexOf(n) === i);
   const acc = [];
   const seen = new Set();
   for (const n of linear) {
@@ -170,7 +184,7 @@ function collectStateVarsLinearized(ast, targetContract) {
       acc.push({ name: v.name, type: v.type, from: n, dropped: false });
     }
   }
-  return { contractName: root, vars: acc, baseOrder: linear.filter(x => x !== root) };
+  return { contractName: root, vars: acc, baseOrder: linear.filter((x) => x !== root) };
 }
 
 function collectConstructors(ast, targetContract) {
@@ -178,14 +192,23 @@ function collectConstructors(ast, targetContract) {
   parser.visit(ast, {
     FunctionDefinition(n) {
       if (n.isConstructor) {
-        if (targetContract && n.loc && n.loc.source && !n.loc.source.endsWith(`${targetContract}.sol`)) {/* best-effort */}
-        const params = (n.parameters?.parameters || []).map(p => {
-          const pt = p.typeName?.name || p.typeName?.namePath || 'uint256';
-          return `${pt} ${p.name || '_'}`;
-        }).join(', ');
+        if (
+          targetContract &&
+          n.loc &&
+          n.loc.source &&
+          !n.loc.source.endsWith(`${targetContract}.sol`)
+        ) {
+          /* best-effort */
+        }
+        const params = (n.parameters?.parameters || [])
+          .map((p) => {
+            const pt = p.typeName?.name || p.typeName?.namePath || 'uint256';
+            return `${pt} ${p.name || '_'}`;
+          })
+          .join(', ');
         cons.push({ name: 'constructor', params, node: n });
       }
-    }
+    },
   });
   return cons;
 }
@@ -193,9 +216,13 @@ function collectConstructors(ast, targetContract) {
 function scopeLocalNames(fn) {
   const locals = new Set();
   // params
-  for (const p of (fn.parameters?.parameters || [])) { if (p.name) locals.add(p.name); }
+  for (const p of fn.parameters?.parameters || []) {
+    if (p.name) locals.add(p.name);
+  }
   // returns
-  for (const r of (fn.returnParameters?.parameters || [])) { if (r.name) locals.add(r.name); }
+  for (const r of fn.returnParameters?.parameters || []) {
+    if (r.name) locals.add(r.name);
+  }
   // local var declarations
   parser.visit(fn, {
     VariableDeclarationStatement(n) {
@@ -204,7 +231,9 @@ function scopeLocalNames(fn) {
     VariableDeclaration(n) {
       if (n.storageLocation !== 'default' && n.name) locals.add(n.name);
     },
-    ParameterList(n) { /* already covered */ }
+    ParameterList(n) {
+      /* already covered */
+    },
   });
   return locals;
 }
@@ -223,7 +252,7 @@ function computeEditsForContract(source, ast, contractName, stateVarNames, libNa
           if (stateVarNames.has(id.name) && !locals.has(id.name) && id.range) {
             hits.push({ start: id.range[0], end: id.range[1], name: id.name });
           }
-        }
+        },
       });
       if (!hits.length) return;
 
@@ -251,7 +280,7 @@ function computeEditsForContract(source, ast, contractName, stateVarNames, libNa
           patches.push(`upgrade mutability pure→view on ${fn.name || '<fallback>'}`);
         }
       }
-    }
+    },
   });
 
   // Sort edits in reverse order so indices remain valid
@@ -279,8 +308,13 @@ function makeInitializerStub(constructors, contractName, libName) {
 }
 
 function addInitializedVar(stateVars, contractName) {
-  if (!stateVars.find(v => v.name === '__initialized')) {
-    stateVars.unshift({ name: '__initialized', type: 'bool', from: contractName || 'Self', dropped: false });
+  if (!stateVars.find((v) => v.name === '__initialized')) {
+    stateVars.unshift({
+      name: '__initialized',
+      type: 'bool',
+      from: contractName || 'Self',
+      dropped: false,
+    });
   }
 }
 
@@ -305,9 +339,14 @@ function run() {
   const libName = `${contractName}Storage`;
   const constructors = collectConstructors(ast, contractName);
 
-  const stateVarNames = new Set(stateVars.filter(v => !v.dropped).map(v => v.name));
-  const { transformed: contractTransformed, patches } =
-    computeEditsForContract(source, ast, contractName, stateVarNames, libName);
+  const stateVarNames = new Set(stateVars.filter((v) => !v.dropped).map((v) => v.name));
+  const { transformed: contractTransformed, patches } = computeEditsForContract(
+    source,
+    ast,
+    contractName,
+    stateVarNames,
+    libName,
+  );
 
   const libCode = buildStorageLib(contractName, stateVars);
   const hdr = headerOf(source);
@@ -319,7 +358,7 @@ function run() {
   if (contractDeclRe.test(finalContract) && constructors.length) {
     finalContract = finalContract.replace(
       contractDeclRe,
-      `$1\n${makeInitializerStub(constructors, contractName, libName)}\n`
+      `$1\n${makeInitializerStub(constructors, contractName, libName)}\n`,
     );
   }
 
@@ -334,7 +373,14 @@ function run() {
 
   // Write files
   write(outFile, finalOutput);
-  const unified = diff.createTwoFilesPatch(path.basename(srcPath), path.basename(outFile), source, finalOutput, '', '');
+  const unified = diff.createTwoFilesPatch(
+    path.basename(srcPath),
+    path.basename(outFile),
+    source,
+    finalOutput,
+    '',
+    '',
+  );
   write(patchFile, unified);
 
   const report = {
@@ -344,18 +390,25 @@ function run() {
     storageLib: libName,
     baseOrder: contractInfo.baseOrder,
     stateVars,
-    droppedDuplicates: stateVars.filter(v => v.dropped).map(v => ({ name: v.name, from: v.from })),
+    droppedDuplicates: stateVars
+      .filter((v) => v.dropped)
+      .map((v) => ({ name: v.name, from: v.from })),
     patches,
     outFile,
-    patchFile
+    patchFile,
   };
   write(jsonFile, JSON.stringify(report, null, 2));
-  write(reportFile, `# Transform Report\n\n- Contract: ${contractName}\n- Storage lib: ${libName}\n- Output: ${outFile}\n- Patch: ${patchFile}\n\n## Edits\n${patches.map(p=>`- ${p}`).join('\n')}\n`);
+  write(
+    reportFile,
+    `# Transform Report\n\n- Contract: ${contractName}\n- Storage lib: ${libName}\n- Output: ${outFile}\n- Patch: ${patchFile}\n\n## Edits\n${patches.map((p) => `- ${p}`).join('\n')}\n`,
+  );
 
   console.log(JSON.stringify(report, null, 2));
 }
 
-try { run(); } catch (e) {
-  console.error(JSON.stringify({ ok: false, error: String(e && e.message || e) }));
+try {
+  run();
+} catch (e) {
+  console.error(JSON.stringify({ ok: false, error: String((e && e.message) || e) }));
   process.exit(1);
 }
