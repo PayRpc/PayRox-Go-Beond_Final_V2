@@ -4,7 +4,7 @@ import { keccak256 } from 'ethers';
 import * as crypto from 'crypto';
 import { Command } from 'commander';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as _path from 'path';
 import {
   ParsedContract,
   FunctionInfo,
@@ -86,19 +86,19 @@ interface EventNode extends ASTNode {
   parameters?: ParameterListNode;
 }
 
-interface ModifierNode extends ASTNode {
+interface _ModifierNode extends ASTNode {
   type: 'ModifierDefinition';
   name: string;
   parameters?: ParameterListNode;
 }
 
-interface ImportNode extends ASTNode {
+interface _ImportNode extends ASTNode {
   type: 'ImportDirective';
   path: string;
   symbolAliases?: Array<{ foreign: string }>;
 }
 
-interface CompilationOutput {
+interface _CompilationOutput {
   contracts?: {
     [filename: string]: {
       [contractName: string]: {

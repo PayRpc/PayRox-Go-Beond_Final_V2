@@ -131,46 +131,49 @@ class DiamondDeployer {
       'contracts/interfaces/IDiamondCut.sol:IDiamondCut',
       await diamond.getAddress(),
     );
-    const loupeSelectors = this.getFunctionSelectors(diamondLoupeFacet);
+    const loupeSelectors = this.getFunctionSelectors(diamondLoupeFacet as any);
 
     await diamondCut.diamondCut(
       [
         {
-          facetAddress: diamondLoupeFacet.address,
+          facetAddress: await diamondLoupeFacet.getAddress(),
           action: 0, // Add
           functionSelectors: loupeSelectors,
         },
       ],
-      ethers.constants.AddressZero,
+      ethers.ZeroAddress,
       '0x',
     );
 
-    return diamond;
+    return diamond as any;
   }
 
   private async initializeDiamond(diamond: Contract): Promise<void> {
     console.log('⚙️  Initializing Diamond with facets...');
 
-    const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address);
+    const diamondCut = await ethers.getContractAt(
+      'IDiamondCut',
+      await (diamond as any).getAddress(),
+    );
     const facetCuts = [];
 
-    for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
-      const facet = this.deployedFacets.get(facetName);
+    for (const [_facetName, facetData] of Object.entries(this.manifest.facets)) {
+      const facet = this.deployedFacets.get(_facetName);
       if (!facet) {
-        throw new Error(`Facet not deployed: ${facetName}`);
+        throw new Error(`Facet not deployed: ${_facetName}`);
       }
 
       facetCuts.push({
-        facetAddress: facet.address,
+        facetAddress: await (facet as any).getAddress(),
         action: 0, // Add
         functionSelectors: facetData.selectors,
       });
 
-      console.log(`  Adding ${facetName} with ${facetData.selectors.length} selectors`);
+      console.log(`  Adding ${_facetName} with ${facetData.selectors.length} selectors`);
     }
 
     // Execute diamond cut
-    const tx = await diamondCut.diamondCut(facetCuts, ethers.constants.AddressZero, '0x', {
+    const tx = await diamondCut.diamondCut(facetCuts, ethers.ZeroAddress, '0x', {
       gasLimit: 8000000,
     });
 
@@ -183,7 +186,7 @@ class DiamondDeployer {
 
     const diamondLoupe = await ethers.getContractAt(
       'contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe',
-      diamond.address,
+      await (diamond as any).getAddress(),
     );
 
     // Verify all facets are properly added
@@ -239,14 +242,10 @@ class DiamondDeployer {
     const leaves = [];
     for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
       for (const selector of facetData.selectors) {
-        const leaf = ethers.utils.keccak256(
-          ethers.utils.defaultAbiCoder.encode(
+        const leaf = ethers.keccak256(
+          ethers.AbiCoder.defaultAbiCoder().encode(
             ['bytes4', 'address', 'bytes32'],
-            [
-              selector,
-              facetData.address,
-              ethers.utils.keccak256(ethers.utils.toUtf8Bytes(facetName)),
-            ],
+            [selector, facetData.address, ethers.keccak256(ethers.toUtf8Bytes(facetName))],
           ),
         );
         leaves.push(leaf);
@@ -254,8 +253,8 @@ class DiamondDeployer {
     }
 
     // Simple merkle root calculation (in production, use proper merkle tree)
-    const combinedHash = ethers.utils.keccak256(ethers.utils.concat(leaves.sort()));
-    this.manifest.merkle_root = combinedHash;
+    const combinedHash = ethers.keccak256(ethers.concat(leaves.sort()));
+    (this.manifest as any).merkle_root = combinedHash;
 
     // Add deployment metadata
     const deployment = {
@@ -277,9 +276,9 @@ class DiamondDeployer {
 
   private getFunctionSelectors(contract: Contract): string[] {
     const selectors: string[] = [];
-    for (const func of Object.values(contract.interface.functions)) {
-      if (func.type === 'function') {
-        selectors.push(func.selector);
+    for (const func of Object.values((contract.interface as any).functions || {})) {
+      if ((func as any).type === 'function') {
+        selectors.push((func as any).selector);
       }
     }
     return selectors;
@@ -289,11 +288,11 @@ class DiamondDeployer {
     console.log('👥 Setting up role assignments...');
 
     // All roles should be granted to the diamond (dispatcher), not individual facets
-    const [deployer] = await ethers.getSigners();
+    const [_deployer] = await ethers.getSigners();
 
     // If diamond has access control, grant roles to diamond address
     try {
-      const accessControl = await ethers.getContractAt('IAccessControl', diamond.address);
+      const accessControl = await ethers.getContractAt('IAccessControl', await (diamond as any).getAddress());
       const adminRole = await accessControl.DEFAULT_ADMIN_ROLE();
 
       // Grant admin role to diamond itself (for delegatecall context)
