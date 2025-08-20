@@ -528,4 +528,4 @@ main().catch((e) => {
   console.error('💥 Registry generation failed:', e && e.message ? e.message : e);
   process.exit(1);
 });
-const outA = path.resolve('./cross-network-address-registry.json');
+const _outA = path.resolve('./cross-network-address-registry.json');

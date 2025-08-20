@@ -59,7 +59,7 @@ if (solcOutput.errors && solcOutput.errors.some((e) => e.severity === 'error')) 
 
 const contracts = solcOutput.contracts[path.basename(SRC_FILE)] || {};
 const abiSignatures = [];
-Object.entries(contracts).forEach(([cname, cobj]) => {
+Object.entries(contracts).forEach(([_cname, cobj]) => {
   (cobj.abi || []).forEach((item) => {
     if (item.type === 'function' && item.name) {
       abiSignatures.push(funcSigFromAbiItem(item));
@@ -127,7 +127,7 @@ for (const f of files) {
   console.log(`Manifest ${f}: functions=${signatures.length} mismatches=${mismatches.length}`);
 }
 
-const combined = { parts: partManifests };
+const _cname = m[1];
 const combinedPath = path.join(OUT_DIR, 'combined.json');
 fs.writeFileSync(combinedPath, JSON.stringify(combined, null, 2));
 console.log('Wrote combined manifest to', combinedPath);

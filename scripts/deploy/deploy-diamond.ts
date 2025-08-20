@@ -10,10 +10,10 @@
 
 import { ethers } from 'hardhat';
 import { Contract } from 'ethers';
+import * as fs from 'fs';
 // runtime-cast to avoid Hardhat/ethers typing conflicts in scripts
 const E = ethers as any;
-import fs from 'fs';
-import path from 'path';
+import * as _path from 'path';
 
 interface DeploymentConfig {
   facetsDir: string;
@@ -84,7 +84,7 @@ class DiamondDeployer {
       const FacetFactory: any = await E.getContractFactory(facetName);
 
       // Use CREATE2 for deterministic addresses
-      const facetSalt = E.utils.keccak256(E.utils.toUtf8Bytes(`${this.config.salt}-${facetName}`));
+      const _facetSalt = E.utils.keccak256(E.utils.toUtf8Bytes(`${this.config.salt}-${facetName}`));
 
       const facet: any = await FacetFactory.deploy({ gasLimit: 5000000 });
       if (typeof facet.deployed === 'function') await facet.deployed();
@@ -198,7 +198,7 @@ class DiamondDeployer {
     console.log(`  📊 Total selectors: ${totalSelectors}`);
 
     // Verify selector routing
-    for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
+    for (const [_facetName, facetData] of Object.entries(this.manifest.facets)) {
       for (const selector of facetData.selectors) {
         const facetAddress = await diamondLoupe.facetAddress(selector);
         if (facetAddress !== facetData.address) {
@@ -283,7 +283,7 @@ class DiamondDeployer {
     console.log('👥 Setting up role assignments...');
 
     // All roles should be granted to the diamond (dispatcher), not individual facets
-    const [deployer] = await ethers.getSigners();
+    const [_deployer] = await ethers.getSigners();
 
     // If diamond has access control, grant roles to diamond address
     try {

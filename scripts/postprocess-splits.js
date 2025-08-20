@@ -250,15 +250,15 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
       `WARN: couldn't find contract end in ${solPath}; attempting best-effort tail-scan`,
     );
     // Best-effort: treat rest of file as body (no footer) and continue
-    const header = solText.slice(0, openIdx + 1);
-    const footer = '';
-    const body = solText.slice(openIdx + 1);
+    const _header = solText.slice(0, openIdx + 1);
+    const _footer = '';
+    const _body = solText.slice(openIdx + 1);
     // continue below where functions are extracted from 'body'
   }
 
-  const header = solText.slice(0, openIdx + 1);
-  const footer = solText.slice(contractClose >= 0 ? contractClose : solText.length);
-  const body = solText.slice(openIdx + 1, contractClose >= 0 ? contractClose : solText.length);
+  const _header = solText.slice(0, openIdx + 1);
+  const _footer = solText.slice(contractClose >= 0 ? contractClose : solText.length);
+  const _body = solText.slice(openIdx + 1, contractClose >= 0 ? contractClose : solText.length);
 
   // Find functions and interface declarations
   const funcRe = /function\s+([A-Za-z0-9_]+)\s*\([^)]*\)\s*([^;{]*)({|;)/g;

@@ -38,7 +38,7 @@ function extractEventsAndErrors(file) {
 
 function run(originalDir, diamondDir) {
   const origFiles = fs.readdirSync(originalDir).filter((f) => f.endsWith('.sol'));
-  const diamFiles = fs.readdirSync(diamondDir).filter((f) => f.endsWith('.sol'));
+  const _diamFiles = fs.readdirSync(diamondDir).filter((f) => f.endsWith('.sol'));
   const out = ensureOut();
   const report = [];
   origFiles.forEach((f) => {

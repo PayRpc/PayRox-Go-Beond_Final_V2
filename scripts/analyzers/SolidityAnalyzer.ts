@@ -4,7 +4,7 @@ import { keccak256 } from 'ethers';
 import * as crypto from 'crypto';
 import { Command } from 'commander';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as _path from 'path';
 import {
   ParsedContract,
   FunctionInfo,
@@ -86,19 +86,19 @@ interface EventNode extends ASTNode {
   parameters?: ParameterListNode;
 }
 
-interface ModifierNode extends ASTNode {
+interface _ModifierNode extends ASTNode {
   type: 'ModifierDefinition';
   name: string;
   parameters?: ParameterListNode;
 }
 
-interface ImportNode extends ASTNode {
+interface _ImportNode extends ASTNode {
   type: 'ImportDirective';
   path: string;
   symbolAliases?: Array<{ foreign: string }>;
 }
 
-interface CompilationOutput {
+interface _CompilationOutput {
   contracts?: {
     [filename: string]: {
       [contractName: string]: {
@@ -835,15 +835,15 @@ export class SolidityAnalyzer {
   /**
    * Generic AST node visitor
    */
-  private visitNode(node: ASTNode, callback: (node: ASTNode) => void): void {
-    if (!node) {
+  private visitNode(_node: ASTNode, callback: (_node: ASTNode) => void): void {
+    if (!_node) {
       return;
     }
 
-    callback(node);
+    callback(_node);
 
     // Visit child nodes
-    for (const [key, value] of Object.entries(node)) {
+    for (const [key, value] of Object.entries(_node)) {
       if (Array.isArray(value)) {
         value.forEach((child) => {
           if (typeof child === 'object' && child !== null) {

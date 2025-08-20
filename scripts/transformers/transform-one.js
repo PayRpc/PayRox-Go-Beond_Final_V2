@@ -118,7 +118,7 @@ function buildContractIndex(ast) {
           for (const v of sub.variables) {
             if (!v || !v.name) continue;
             // Skip constants/immutables conservatively by peeking raw text if available
-            const slice = sub.range ? null : null; // parser may not expose raw tokens; fallback below
+            const _slice = sub.range ? null : null; // parser may not expose raw tokens; fallback below
             const maybeImmutable =
               (sub && sub.isImmutable) || /immutable\b/.test(JSON.stringify(sub));
             const maybeConstant =
@@ -242,13 +242,13 @@ function scopeLocalNames(fn) {
   }
   // local var declarations
   parser.visit(fn, {
-    VariableDeclarationStatement(n) {
-      for (const v of n.declarations || []) if (v && v.name) locals.add(v.name);
+    VariableDeclarationStatement(_n) {
+      for (const v of _n.declarations || []) if (v && v.name) locals.add(v.name);
     },
-    VariableDeclaration(n) {
-      if (n.storageLocation !== 'default' && n.name) locals.add(n.name);
+    VariableDeclaration(_n) {
+      if (_n.storageLocation !== 'default' && _n.name) locals.add(_n.name);
     },
-    ParameterList(n) {
+    ParameterList(_n) {
       /* already covered */
     },
   });
