@@ -89,7 +89,6 @@ function buildContractIndex(ast) {
           for (const v of sub.variables) {
             if (!v || !v.name) continue;
             // Skip constants/immutables conservatively by peeking raw text if available
-            const slice = sub.range ? null : null; // parser may not expose raw tokens; fallback below
             const maybeImmutable =
               (sub && sub.isImmutable) || /immutable\b/.test(JSON.stringify(sub));
             const maybeConstant =
@@ -113,7 +112,9 @@ function buildContractIndex(ast) {
               } else if (t.type === 'Mapping') {
                 ty = 'mapping(bytes32 => bytes32)'; // textual mapping type; safe placeholder
               }
-            } catch {}
+            } catch {
+              // Ignore type extraction errors and use default type
+            }
             vars.push({ name: v.name, type: ty, declRange: v.range });
           }
         }
@@ -231,7 +232,7 @@ function scopeLocalNames(fn) {
     VariableDeclaration(n) {
       if (n.storageLocation !== 'default' && n.name) locals.add(n.name);
     },
-    ParameterList(n) {
+    ParameterList() {
       /* already covered */
     },
   });
