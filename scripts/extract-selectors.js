@@ -44,6 +44,18 @@ function selectorOf(sig) {
   return '0x' + keccak_256(sig).slice(0, 8);
 }
 
+function normParam(p) {
+  let s = p
+    .trim()
+    .replace(/\b(memory|calldata|storage)\b/g, '')
+    .replace(/\baddress\s+payable\b/g, 'address')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const toks = s.split(' ');
+  if (toks.length > 1 && /^[A-Za-z_]\w*$/.test(toks[toks.length - 1])) toks.pop();
+  return toks.join(' ');
+}
+
 /* ---------- compile original to get ABI-accurate function set ---------- */
 const sourceContent = fs.readFileSync(SRC_FILE, 'utf8');
 const stdInput = {
@@ -59,7 +71,7 @@ if (solcOutput.errors && solcOutput.errors.some((e) => e.severity === 'error')) 
 
 const contracts = solcOutput.contracts[path.basename(SRC_FILE)] || {};
 const abiSignatures = [];
-Object.entries(contracts).forEach(([cname, cobj]) => {
+Object.entries(contracts).forEach(([, cobj]) => {
   (cobj.abi || []).forEach((item) => {
     if (item.type === 'function' && item.name) {
       abiSignatures.push(funcSigFromAbiItem(item));
@@ -83,18 +95,6 @@ for (const f of files) {
   const src = fs.readFileSync(fp, 'utf8');
 
   const re = /function\s+([A-Za-z_]\w*)\s*\(([^)]*)\)\s*(?:external|public)/gms;
-
-  function normParam(p) {
-    let s = p
-      .trim()
-      .replace(/\b(memory|calldata|storage)\b/g, '')
-      .replace(/\baddress\s+payable\b/g, 'address')
-      .replace(/\s+/g, ' ')
-      .trim();
-    const toks = s.split(' ');
-    if (toks.length > 1 && /^[A-Za-z_]\w*$/.test(toks[toks.length - 1])) toks.pop();
-    return toks.join(' ');
-  }
 
   const signatures = [];
   const selectors = [];
