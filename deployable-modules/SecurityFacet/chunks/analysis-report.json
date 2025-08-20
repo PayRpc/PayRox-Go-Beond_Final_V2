@@ -1,0 +1,357 @@
+{
+  "originalFile": "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\SecurityFacet.sol",
+  "originalSize": 9752,
+  "originalRuntimeBytes": 4526,
+  "originalLines": 270,
+  "recommendedChunks": [
+    {
+      "name": "SecurityFacet",
+      "type": "facet",
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.30;\n\nimport {ReentrancyGuard} from \"@openzeppelin/contracts/utils/ReentrancyGuard.sol\";\nimport {LibSecurityStorage as Sec} from \"../security/LibSecurityStorage.sol\";\nimport {IAntiBotFacet} from \"./IAntiBotFacet.sol\";\n\n/**\n * @title SecurityFacet (AntiBotLite) for PayRox\n * @notice Throttling + buyback pause + circuit breaker, driven by an off-chain monitor.\n *         Call validateTransaction() in sensitive paths. No on-chain oracle dependency.\n */\ncontract SecurityFacet is ReentrancyGuard, IAntiBotFacet {\n    // ---- Errors ----\n    error AuthDenied();\n    \n    // ---- Role ids (keccak256 constants) ----\n    function GOVERNANCE_ROLE() public pure returns (bytes32) { return keccak256(\"GOVERNANCE_ROLE\"); }\n    function MONITOR_ROLE()    public pure returns (bytes32) { return keccak256(\"MONITOR_ROLE\"); }\n\n    // ---- Events ----\n    event AntibotStatusUpdated(bool enabled);\n    event ThrottleUpdated(uint256 blocks);\n    event ThresholdsUpdated(uint256 pauseBps, uint256 circuitBps);\n    event BuybackPaused(bool status);\n    event CircuitBreaker(bool status, int256 moveBps);\n    event Throttled(address indexed user, uint256 untilBlock);\n    event TrustedAdded(address indexed account);\n    event TrustedRemoved(address indexed account);\n    event RoleGranted(bytes32 indexed role, address indexed account);\n    event RoleRevoked(bytes32 indexed role, address indexed account);\n    event MonitorPing(address indexed monitor, int256 moveBps);\n\n    // ---- Internal helpers ----\n    // Storage for facet owner (compatible with PayRox pattern)\n    bytes32 private constant OWNER_SLOT = keccak256(\"payrox.security.owner\");\n    // Namespace for refactor safety checks (must match LibSecurityStorage)\n    bytes32 private constant _SEC_SLOT = keccak256(\"payrox.security.antibot.v1\");\n    \n    function _getOwner() internal view returns (address owner) {\n        bytes32 slot = OWNER_SLOT;\n        assembly { owner := sload(slot) }\n    }\n    \n    function _setOwner(address newOwner) internal {\n        bytes32 slot = OWNER_SLOT;\n        assembly { sstore(slot, newOwner) }\n    }\n    \n    function _isOwner(address a) internal view returns (bool) {\n        return a == _getOwner();\n    }\n\n    modifier onlyOwner() {\n        require(_isOwner(msg.sender), \"SecurityFacet: not owner\");\n        _;\n    }\n\n    modifier onlyGovOrOwner() {\n        Sec.Layout storage L = Sec.layout();\n        if (!(L.roles[GOVERNANCE_ROLE()][msg.sender] || _isOwner(msg.sender))) revert AuthDenied();\n        _;\n    }\n\n    modifier onlyMonitorOrOwner() {\n        Sec.Layout storage L = Sec.layout();\n        if (!(L.roles[MONITOR_ROLE()][msg.sender] || _isOwner(msg.sender))) revert AuthDenied();\n        _;\n    }\n\n    // ==== Initialization (call once via DiamondInit) ====\n    function initializeSecurityFacet(\n        bool enabled,\n        uint256 throttleBlocks,\n        uint256 pauseBps,\n        uint256 circuitBps,\n        address[] calldata initialTrusted,\n        address governance,\n        address monitor\n    ) external {\n        // Set caller as owner if not already set\n        if (_getOwner() == address(0)) {\n            _setOwner(msg.sender);\n        }\n        \n        // Only owner can initialize\n        require(_isOwner(msg.sender), \"SecurityFacet: not owner\");\n        \n        Sec.Layout storage L = Sec.layout();\n\n        L.antibotEnabled      = enabled;\n        L.throttleBlocks      = throttleBlocks == 0 ? 1 : throttleBlocks;\n        L.pauseThresholdBps   = pauseBps == 0 ? 500 : pauseBps;       // default 5%\n        L.circuitThresholdBps = circuitBps == 0 ? 1500 : circuitBps;  // default 15%\n\n        // trust owner by default\n        L.trusted[msg.sender] = true;\n\n        for (uint256 i = 0; i < initialTrusted.length; i++) {\n            L.trusted[initialTrusted[i]] = true;\n            emit TrustedAdded(initialTrusted[i]);\n        }\n\n        if (governance != address(0)) {\n            L.roles[GOVERNANCE_ROLE()][governance] = true;\n            emit RoleGranted(GOVERNANCE_ROLE(), governance);\n            L.trusted[governance] = true;\n            emit TrustedAdded(governance);\n        }\n        if (monitor != address(0)) {\n            L.roles[MONITOR_ROLE()][monitor] = true;\n            emit RoleGranted(MONITOR_ROLE(), monitor);\n            L.trusted[monitor] = true;\n            emit TrustedAdded(monitor);\n        }\n    }\n\n    // ==== Guards (call these from sensitive selectors) ====\n\n    /// @notice Reverts if throttled or circuit breaker active. Updates sender's lastTxBlock if enabled.\n    function validateTransaction(address sender)\n        external\n        override\n        returns (bool ok)\n    {\n        Sec.Layout storage L = Sec.layout();\n\n        if (L.circuitBroken) revert CircuitBreakerActive();\n\n        if (L.antibotEnabled && !L.trusted[sender]) {\n            uint256 last = L.lastTxBlock[sender];\n            uint256 minNext = last + (L.throttleBlocks == 0 ? 1 : L.throttleBlocks);\n            if (block.number < minNext) {\n                emit Throttled(sender, minNext);\n                revert TransactionThrottled(sender, minNext);\n            }\n            if (last != block.number) {\n                L.lastTxBlock[sender] = block.number;\n            }\n        }\n        return true;\n    }\n\n    /// @notice Reverts if buyback is paused or circuit breaker active.\n    function ensureBuybackAllowed() external view override returns (bool ok) {\n        Sec.Layout storage L = Sec.layout();\n        if (L.circuitBroken) revert CircuitBreakerActive();\n        require(!L.buybackPaused, \"BUYBACK_PAUSED\");\n        return true;\n    }\n\n    // ==== Off-chain monitor hook ====\n\n    /// @notice Report market move in basis points; negative for drops (e.g., -600 = -6%).\n    function reportMarketMove(int256 moveBps) external override onlyMonitorOrOwner nonReentrant {\n        Sec.Layout storage L = Sec.layout();\n        emit MonitorPing(msg.sender, moveBps);\n\n        // Trip breaker on large drop\n        if (moveBps <= -int256(L.circuitThresholdBps)) {\n            if (!L.circuitBroken) {\n                L.circuitBroken = true;\n                if (!L.buybackPaused) {\n                    L.buybackPaused = true;\n                    emit BuybackPaused(true);\n                }\n                emit CircuitBreaker(true, moveBps);\n            }\n            return;\n        }\n\n        // Pause buyback on moderate drop; unpause on >= 0 if not broken\n        if (moveBps <= -int256(L.pauseThresholdBps)) {\n            if (!L.buybackPaused) {\n                L.buybackPaused = true;\n                emit BuybackPaused(true);\n            }\n        } else if (moveBps >= 0 && L.buybackPaused && !L.circuitBroken) {\n            L.buybackPaused = false;\n            emit BuybackPaused(false);\n        }\n    }\n\n    // ==== Admin / config ====\n    function setEnabled(bool enabled) external override onlyGovOrOwner {\n        Sec.Layout storage L = Sec.layout();\n        if (L.antibotEnabled != enabled) {\n            L.antibotEnabled = enabled;\n            emit AntibotStatusUpdated(enabled);\n        }\n    }\n\n    function setThrottleBlocks(uint256 blocks_) external override onlyGovOrOwner {\n        Sec.Layout storage L = Sec.layout();\n        L.throttleBlocks = blocks_ == 0 ? 1 : blocks_;\n        emit ThrottleUpdated(L.throttleBlocks);\n    }\n\n    function setThresholds(uint256 pauseBps_, uint256 circuitBps_) external override onlyGovOrOwner {\n        if (pauseBps_ == 0 || pauseBps_ >= circuitBps_) revert BadThresholds();\n        Sec.Layout storage L = Sec.layout();\n        L.pauseThresholdBps = pauseBps_;\n        L.circuitThresholdBps = circuitBps_;\n        emit ThresholdsUpdated(pauseBps_, circuitBps_);\n    }\n\n    function setBuybackPaused(bool paused) external override onlyGovOrOwner {\n        Sec.Layout storage L = Sec.layout();\n        if (L.buybackPaused != paused) {\n            L.buybackPaused = paused;\n            emit BuybackPaused(paused);\n        }\n    }\n\n    function resetCircuitBreaker() external override onlyGovOrOwner {\n        Sec.Layout storage L = Sec.layout();\n        if (L.circuitBroken) {\n            L.circuitBroken = false;\n            emit CircuitBreaker(false, 0);\n        }\n    }\n\n    // ==== Trust / roles ====\n    function addTrusted(address a) external override onlyGovOrOwner {\n        Sec.Layout storage L = Sec.layout();\n        if (!L.trusted[a]) {\n            L.trusted[a] = true;\n            emit TrustedAdded(a);\n        }\n    }\n\n    function removeTrusted(address a) external override onlyGovOrOwner {\n        Sec.Layout storage L = Sec.layout();\n        if (L.trusted[a]) {\n            L.trusted[a] = false;\n            emit TrustedRemoved(a);\n        }\n    }\n\n    // Access control functions are provided by the canonical AccessControlFacet to avoid selector collisions\n\n    function isTrusted(address a) external view override returns (bool) {\n        return Sec.layout().trusted[a];\n    }\n\n    // ===== Read-only helpers for ops/CLI =====\n    struct SecurityConfig {\n        bool antibotEnabled;\n        bool buybackPaused;\n        bool circuitBroken;\n        uint256 throttleBlocks;\n        uint256 pauseThresholdBps;\n        uint256 circuitThresholdBps;\n    }\n\n    function getSecurityConfig() external view returns (SecurityConfig memory cfg) {\n        Sec.Layout storage L = Sec.layout();\n        cfg.antibotEnabled = L.antibotEnabled;\n        cfg.buybackPaused = L.buybackPaused;\n        cfg.circuitBroken = L.circuitBroken;\n        cfg.throttleBlocks = L.throttleBlocks;\n        cfg.pauseThresholdBps = L.pauseThresholdBps;\n        cfg.circuitThresholdBps = L.circuitThresholdBps;\n    }\n\n    function isSecurityInitialized() external view returns (bool) {\n        return _getOwner() != address(0);\n    }\n}\n",
+      "size": 9752,
+      "runtimeBytes": 4526,
+      "estimatedGas": 2150400,
+      "dependencies": [
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "../security/LibSecurityStorage.sol",
+        "./IAntiBotFacet.sol"
+      ],
+      "functions": [
+        {
+          "name": "GOVERNANCE_ROLE",
+          "signature": "GOVERNANCE_ROLE()",
+          "selector": "0xf36c8f5c",
+          "stateMutability": "pure",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "name": "MONITOR_ROLE",
+          "signature": "MONITOR_ROLE()",
+          "selector": "0x4d9b47e2",
+          "stateMutability": "pure",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "name": "addTrusted",
+          "signature": "addTrusted(address)",
+          "selector": "0xd4d0d6e6",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "a",
+              "type": "address"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "ensureBuybackAllowed",
+          "signature": "ensureBuybackAllowed()",
+          "selector": "0x0d2644d2",
+          "stateMutability": "view",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "ok",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "name": "getSecurityConfig",
+          "signature": "getSecurityConfig()",
+          "selector": "0x9f8e6da1",
+          "stateMutability": "view",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "cfg",
+              "type": "tuple"
+            }
+          ]
+        },
+        {
+          "name": "initializeSecurityFacet",
+          "signature": "initializeSecurityFacet(bool,uint256,uint256,uint256,address[],address,address)",
+          "selector": "0x94e096e4",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "enabled",
+              "type": "bool"
+            },
+            {
+              "name": "throttleBlocks",
+              "type": "uint256"
+            },
+            {
+              "name": "pauseBps",
+              "type": "uint256"
+            },
+            {
+              "name": "circuitBps",
+              "type": "uint256"
+            },
+            {
+              "name": "initialTrusted",
+              "type": "address[]"
+            },
+            {
+              "name": "governance",
+              "type": "address"
+            },
+            {
+              "name": "monitor",
+              "type": "address"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "isSecurityInitialized",
+          "signature": "isSecurityInitialized()",
+          "selector": "0x3ea6b343",
+          "stateMutability": "view",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "name": "isTrusted",
+          "signature": "isTrusted(address)",
+          "selector": "0x96d64879",
+          "stateMutability": "view",
+          "inputs": [
+            {
+              "name": "a",
+              "type": "address"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        },
+        {
+          "name": "removeTrusted",
+          "signature": "removeTrusted(address)",
+          "selector": "0xd55e62a0",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "a",
+              "type": "address"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "reportMarketMove",
+          "signature": "reportMarketMove(int256)",
+          "selector": "0x88ded880",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "moveBps",
+              "type": "int256"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "resetCircuitBreaker",
+          "signature": "resetCircuitBreaker()",
+          "selector": "0xde5f8d93",
+          "stateMutability": "nonpayable",
+          "inputs": [],
+          "outputs": []
+        },
+        {
+          "name": "setBuybackPaused",
+          "signature": "setBuybackPaused(bool)",
+          "selector": "0x527555da",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "paused",
+              "type": "bool"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "setEnabled",
+          "signature": "setEnabled(bool)",
+          "selector": "0x328d8f72",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "enabled",
+              "type": "bool"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "setThresholds",
+          "signature": "setThresholds(uint256,uint256)",
+          "selector": "0xe3064a77",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "pauseBps_",
+              "type": "uint256"
+            },
+            {
+              "name": "circuitBps_",
+              "type": "uint256"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "setThrottleBlocks",
+          "signature": "setThrottleBlocks(uint256)",
+          "selector": "0x75b9f5b2",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "blocks_",
+              "type": "uint256"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "name": "validateTransaction",
+          "signature": "validateTransaction(address)",
+          "selector": "0x8fa3a84c",
+          "stateMutability": "nonpayable",
+          "inputs": [
+            {
+              "name": "sender",
+              "type": "address"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "ok",
+              "type": "bool"
+            }
+          ]
+        }
+      ],
+      "storageSlots": ["payrox.securityfacet.v1"],
+      "interfaceId": "0x3e24a067"
+    }
+  ],
+  "gasEstimates": [
+    {
+      "chunkName": "SecurityFacet",
+      "deploymentGas": 2150400,
+      "functionGas": {},
+      "storageGas": 20000,
+      "isWithinLimit": true
+    }
+  ],
+  "deploymentStrategy": {
+    "mainContract": "SecurityFacet",
+    "facets": ["SecurityFacet"],
+    "libraries": [],
+    "deploymentOrder": ["SecurityFacet"],
+    "crossReferences": {}
+  },
+  "diamondCut": [
+    {
+      "facet": "SecurityFacet",
+      "action": "Add",
+      "selectors": [
+        "0xf36c8f5c",
+        "0x4d9b47e2",
+        "0xd4d0d6e6",
+        "0x0d2644d2",
+        "0x9f8e6da1",
+        "0x94e096e4",
+        "0x3ea6b343",
+        "0x96d64879",
+        "0xd55e62a0",
+        "0x88ded880",
+        "0xde5f8d93",
+        "0x527555da",
+        "0x328d8f72",
+        "0xe3064a77",
+        "0x75b9f5b2",
+        "0x8fa3a84c"
+      ]
+    }
+  ],
+  "manifest": [
+    {
+      "name": "SecurityFacet",
+      "selectors": [
+        "0xf36c8f5c",
+        "0x4d9b47e2",
+        "0xd4d0d6e6",
+        "0x0d2644d2",
+        "0x9f8e6da1",
+        "0x94e096e4",
+        "0x3ea6b343",
+        "0x96d64879",
+        "0xd55e62a0",
+        "0x88ded880",
+        "0xde5f8d93",
+        "0x527555da",
+        "0x328d8f72",
+        "0xe3064a77",
+        "0x75b9f5b2",
+        "0x8fa3a84c"
+      ],
+      "signatures": [
+        "GOVERNANCE_ROLE()",
+        "MONITOR_ROLE()",
+        "addTrusted(address)",
+        "ensureBuybackAllowed()",
+        "getSecurityConfig()",
+        "initializeSecurityFacet(bool,uint256,uint256,uint256,address[],address,address)",
+        "isSecurityInitialized()",
+        "isTrusted(address)",
+        "removeTrusted(address)",
+        "reportMarketMove(int256)",
+        "resetCircuitBreaker()",
+        "setBuybackPaused(bool)",
+        "setEnabled(bool)",
+        "setThresholds(uint256,uint256)",
+        "setThrottleBlocks(uint256)",
+        "validateTransaction(address)"
+      ],
+      "estimatedSize": 4526,
+      "securityLevel": "low",
+      "versionTag": "v1"
+    }
+  ],
+  "validation": {
+    "selectorParity": true,
+    "runtimeSizeOk": true,
+    "noLoupeInFacets": true,
+    "errors": [],
+    "warnings": []
+  }
+}

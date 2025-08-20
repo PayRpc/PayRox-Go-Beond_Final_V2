@@ -1,0 +1,380 @@
+name: 🚀 Canary Deployment Pipeline
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment for canary deployment"
+        required: true
+        default: "sepolia"
+        type: choice
+        options:
+          - sepolia
+          - goerli
+          - mumbai
+          - optimism-sepolia
+          - arbitrum-sepolia
+      force_deploy:
+        description: "Force deployment even if validation fails"
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  CANARY_ADDRESS: '0x742d35Cc6634C0532925a3b8D88F3E73C09cCF40'
+  PRX_VERSION: ${{ github.ref_name }}-${{ github.sha }}
+
+concurrency:
+  group: canary-${{ github.ref }}-${{ github.event.inputs.environment || 'sepolia' }}
+  cancel-in-progress: true
+
+jobs:
+  validate-canary:
+    name: "🔍 Validate Canary Deployment"
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.setup.outputs.environment }}
+      should-deploy: ${{ steps.validate.outputs.should-deploy }}
+      deployment-config: ${{ steps.validate.outputs.deployment-config }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        id: setup
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=sepolia" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Generate VersionFacet (from package.json/CI)
+        run: node scripts/gen-version-facet.ts
+
+      - name: Typecheck
+        run: npx tsc -p tsconfig.hardhat.json --noEmit
+
+      - name: Compile
+        run: npx hardhat compile
+
+      - name: Validate readiness (don’t fail job)
+        id: validate
+        shell: bash
+        run: |
+          set -e
+          SHOULD=true
+
+          if [ ! -d "artifacts/contracts" ]; then
+            echo "❌ Contract compilation artifacts missing"
+            SHOULD=false
+          fi
+
+          # Optional light validation tests (non-fatal)
+          npx hardhat test test/validation/ --grep "deployment" || {
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.force_deploy }}" = "true" ]; then
+              echo "⚠️ Validation tests failed but force_deploy=true"
+            else
+              echo "⚠️ Validation tests failed"
+              SHOULD=false
+            fi
+          }
+
+          # Produce canary config regardless; downstream job decides using SHOULD flag
+          cat > canary-config.json << EOF
+          {
+            "environment": "${{ steps.setup.outputs.environment }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit": "${{ github.sha }}",
+            "canary_address": "${{ env.CANARY_ADDRESS }}",
+            "gas_settings": {
+              "maxFeePerGas": "20000000000",
+              "maxPriorityFeePerGas": "2000000000"
+            }
+          }
+          EOF
+
+          echo "deployment-config=$(jq -c . canary-config.json)" >> "$GITHUB_OUTPUT"
+          echo "should-deploy=${SHOULD}" >> "$GITHUB_OUTPUT"
+
+          echo "### Canary validation" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$SHOULD" = "true" ]; then
+            echo "✅ Passed (or force-deploy enabled)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️ Skipping deploy due to validation result" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload canary config
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-deployment-config
+          path: canary-config.json
+          retention-days: 7
+
+  deploy-canary:
+    name: "🎯 Deploy Canary System"
+    runs-on: ubuntu-latest
+    needs: validate-canary
+    if: needs.validate-canary.outputs.should-deploy == 'true'
+    environment: ${{ needs.validate-canary.outputs.environment }}
+    env:
+      NETWORK: ${{ needs.validate-canary.outputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Download canary config
+        uses: actions/download-artifact@v4
+        with:
+          name: canary-deployment-config
+
+      - name: Export env
+        shell: bash
+        run: |
+          echo "NETWORK=${{ needs.validate-canary.outputs.environment }}" >> "$GITHUB_ENV"
+          echo "CANARY_ADDRESS=${{ env.CANARY_ADDRESS }}" >> "$GITHUB_ENV"
+
+      - name: Check secrets
+        env:
+          PRIVATE_KEY: ${{ secrets.CANARY_PRIVATE_KEY }}
+          INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+        shell: bash
+        run: |
+          [ -n "$PRIVATE_KEY" ] || { echo "❌ Missing CANARY_PRIVATE_KEY"; exit 1; }
+          [ -n "$INFURA_API_KEY" ] || { echo "❌ Missing INFURA_API_KEY"; exit 1; }
+          echo "✅ Secrets present"
+
+      - name: Create deploy script
+        shell: bash
+        run: |
+          mkdir -p scripts
+          cat > scripts/deploy-canary.ts << 'EOF'
+          import { ethers } from "hardhat";
+          import { writeFileSync } from "fs";
+
+          async function main() {
+            const network = process.env.NETWORK || "sepolia";
+            const reuseFactory = process.env.PRX_FACTORY_ADDR;
+            const reuseDispatcher = process.env.PRX_DISPATCHER_ADDR;
+
+            console.log("🎯 PayRox Go Beyond Canary");
+            const [deployer] = await ethers.getSigners();
+            const bal = await deployer.provider!.getBalance(deployer.address);
+            console.log({ network, deployer: deployer.address, balanceETH: ethers.formatEther(bal) });
+
+            let factoryAddr: string;
+            let dispatcherAddr: string;
+
+            if (reuseFactory) {
+              factoryAddr = reuseFactory;
+              console.log(`↩️ Reusing factory at ${factoryAddr}`);
+            } else {
+              // Name assumed to exist in repo; adjust if your impl name differs
+              const Fac = await ethers.getContractFactory("DeterministicChunkFactory");
+              const fac = await Fac.deploy();
+              await fac.waitForDeployment();
+              factoryAddr = await fac.getAddress();
+              console.log(`✅ Deployed factory at ${factoryAddr}`);
+            }
+
+            if (reuseDispatcher) {
+              dispatcherAddr = reuseDispatcher;
+              console.log(`↩️ Reusing dispatcher at ${dispatcherAddr}`);
+            } else {
+              const Disp = await ethers.getContractFactory("ManifestDispatcher");
+              const disp = await Disp.deploy();
+              await disp.waitForDeployment();
+              dispatcherAddr = await disp.getAddress();
+              console.log(`✅ Deployed dispatcher at ${dispatcherAddr}`);
+            }
+
+            // Light sanity checks using interfaces we ship in repo
+            try {
+              const factory = await ethers.getContractAt("IChunkFactory", factoryAddr);
+              const count = await factory.deploymentCount();
+              console.log(`Factory deploymentCount: ${count}`);
+            } catch (e) {
+              console.warn("⚠️ IChunkFactory surface not available or call failed:", e);
+            }
+
+            try {
+              const view = await ethers.getContractAt("IManifestDispatcherView", dispatcherAddr);
+              const root = await view.activeRoot();
+              const frozen = await view.frozen();
+              console.log(`Dispatcher activeRoot=${root} frozen=${frozen}`);
+            } catch (e) {
+              console.warn("⚠️ Dispatcher view not available or call failed:", e);
+            }
+
+            // Compute EXTCODEHASH equivalents (keccak(code))
+            const codeFactory = await ethers.provider.getCode(factoryAddr);
+            const codeDispatcher = await ethers.provider.getCode(dispatcherAddr);
+            const exthFactory = ethers.keccak256(codeFactory);
+            const exthDispatcher = ethers.keccak256(codeDispatcher);
+
+            const deploymentInfo = {
+              network,
+              timestamp: new Date().toISOString(),
+              deployer: deployer.address,
+              contracts: {
+                factory: factoryAddr,
+                dispatcher: dispatcherAddr
+              },
+              extcodehash: {
+                factory: exthFactory,
+                dispatcher: exthDispatcher
+              },
+              status: "SUCCESS"
+            };
+
+            writeFileSync("canary-deployment.json", JSON.stringify(deploymentInfo, null, 2));
+            console.log("📦 Saved canary-deployment.json");
+          }
+
+          main().catch((e) => { console.error("💥 Canary failed:", e); process.exit(1); });
+          EOF
+
+      - name: Run canary deployment
+        env:
+          PRIVATE_KEY: ${{ secrets.CANARY_PRIVATE_KEY }}
+          INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          PRX_FACTORY_ADDR: ${{ env.PRX_FACTORY_ADDR }}
+          PRX_DISPATCHER_ADDR: ${{ env.PRX_DISPATCHER_ADDR }}
+        run: npx hardhat run scripts/deploy-canary.ts --network $NETWORK
+
+      - name: Security analysis (best-effort)
+        shell: bash
+        run: |
+          set -e
+          echo "🔐 Running non-fatal security checks (Slither + Mythril)"
+          # Slither via GitHub Action is faster; run as best-effort
+          echo "::group::Slither"
+          if command -v slither >/dev/null 2>&1; then
+            slither --version || true
+            slither contracts || true
+          else
+            echo "Slither not installed in runner; skipping"
+          fi
+          echo "::endgroup::"
+
+          echo "::group::Mythril"
+          if command -v myth >/dev/null 2>&1; then
+            mkdir -p security/mythril-reports
+            # Run mythril in a non-fatal way for each facet file
+            for f in $(git ls-files 'contracts/facets/**.sol'); do
+              base=$(basename "$f" .sol)
+              myth analyze -o json "$f" > "security/mythril-reports/mythril-${base}.json" || echo "Mythril failed for $f"
+            done
+            python3 security/process-mythril.py security/mythril-reports || echo "Mythril processor failed"
+          else
+            echo "Mythril not installed in runner; skipping"
+          fi
+          echo "::endgroup::"
+
+      - name: Verify & summarize
+        shell: bash
+        run: |
+          test -f canary-deployment.json || { echo "❌ Missing canary-deployment.json"; exit 1; }
+          echo "📊 Results:" && cat canary-deployment.json | jq .
+
+          FACTORY=$(jq -r '.contracts.factory' canary-deployment.json)
+          DISPATCHER=$(jq -r '.contracts.dispatcher' canary-deployment.json)
+
+          echo "🔍 Attempting verification (may be best-effort on testnets)"
+          npx hardhat verify --network "$NETWORK" "$FACTORY" || echo "⚠️ Factory verify skipped/failed"
+          npx hardhat verify --network "$NETWORK" "$DISPATCHER" || echo "⚠️ Dispatcher verify skipped/failed"
+
+          echo "### Canary deployment" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Network: $NETWORK" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Factory: \`$FACTORY\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dispatcher: \`$DISPATCHER\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload canary results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-deployment-results
+          path: |
+            canary-deployment.json
+            canary-config.json
+          retention-days: 30
+
+  validate-canary-deployment:
+    name: "✅ Validate Canary Deployment"
+    runs-on: ubuntu-latest
+    needs: [validate-canary, deploy-canary]
+    if: success()
+    steps:
+      - name: Download canary results
+        uses: actions/download-artifact@v4
+        with:
+          name: canary-deployment-results
+
+      - name: Validate JSON
+        shell: bash
+        run: |
+          test -f canary-deployment.json || { echo "❌ Missing canary-deployment.json"; exit 1; }
+          STATUS=$(jq -r '.status' canary-deployment.json)
+          [ "$STATUS" = "SUCCESS" ] || { echo "❌ Status: $STATUS"; exit 1; }
+
+          FACTORY=$(jq -r '.contracts.factory' canary-deployment.json)
+          DISPATCHER=$(jq -r '.contracts.dispatcher' canary-deployment.json)
+          [ "$FACTORY" != "null" ] && [ "$DISPATCHER" != "null" ] || { echo "❌ Invalid addresses"; exit 1; }
+
+          echo "✅ Canary OK — Factory: $FACTORY, Dispatcher: $DISPATCHER"
+          cat > canary-report.md <<EOF
+          # 🎯 Canary Deployment Report
+
+          **Deployment Date**: $(jq -r '.timestamp' canary-deployment.json)  
+          **Network**: $(jq -r '.network' canary-deployment.json)  
+          **Status**: ✅ SUCCESS
+
+          ## Deployed Contracts
+          | Contract | Address |
+          |----------|---------|
+          | DeterministicChunkFactory | \`$FACTORY\` |
+          | ManifestDispatcher | \`$DISPATCHER\` |
+
+          ## Notes
+          - EXTCODEHASH(factory): \`$(jq -r '.extcodehash.factory' canary-deployment.json)\`
+          - EXTCODEHASH(dispatcher): \`$(jq -r '.extcodehash.dispatcher' canary-deployment.json)\`
+
+          ## Next Steps
+          1. Run integration tests against the canary.
+          2. Monitor logs/gas for 24h.
+          3. Proceed to production if stable.
+
+          *Generated by PayRox Canary Pipeline*
+          EOF
+
+      - name: Upload canary report
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-deployment-report
+          path: canary-report.md
+          retention-days: 90

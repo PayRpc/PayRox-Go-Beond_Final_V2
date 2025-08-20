@@ -1,0 +1,16 @@
+{
+  "parts": [
+    {
+      "file": "part_0.sol",
+      "size": 327,
+      "selectors": [],
+      "signatures": []
+    },
+    {
+      "file": "part_1.sol",
+      "size": 623,
+      "selectors": [],
+      "signatures": []
+    }
+  ]
+}

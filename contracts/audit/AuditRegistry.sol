@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
+import {PayRoxAccessControlStorage as ACS} from "../libraries/PayRoxAccessControlStorage.sol";
+import {PayRoxPauseStorage as PS} from "../libraries/PayRoxPauseStorage.sol";
 import "../manifest/ManifestTypes.sol";
 import "../manifest/ManifestUtils.sol";
 
@@ -11,7 +11,7 @@ import "../manifest/ManifestUtils.sol";
  * @dev Registry for managing security audits of PayRox manifests and contracts
  * @notice Tracks audit status, manages auditor credentials, and validates audit reports
  */
-contract AuditRegistry is AccessControl, Pausable {
+contract AuditRegistry {
     using ManifestUtils for ManifestTypes.AuditInfo;
 
     /// @dev Role for certified auditors
@@ -88,9 +88,9 @@ contract AuditRegistry is AccessControl, Pausable {
     constructor(address admin) {
         if (admin == address(0)) revert ManifestTypes.UnauthorizedDeployer();
 
-        _grantRole(DEFAULT_ADMIN_ROLE, admin);
-        _grantRole(AUDIT_ADMIN_ROLE, admin);
-        _grantRole(AUDITOR_ROLE, admin);
+    ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][admin] = true;
+    ACS.layout().roles[AUDIT_ADMIN_ROLE][admin] = true;
+    ACS.layout().roles[AUDITOR_ROLE][admin] = true;
 
         certifiedAuditors[admin] = true;
     }
@@ -105,7 +105,9 @@ contract AuditRegistry is AccessControl, Pausable {
         bytes32 manifestHash,
         bool passed,
         string calldata reportUri
-    ) external onlyRole(AUDITOR_ROLE) whenNotPaused {
+    ) external {
+        require(ACS.layout().roles[AUDITOR_ROLE][msg.sender], "Missing role");
+        require(!PS.layout().paused, "Pausable: paused");
         if (!certifiedAuditors[msg.sender]) {
             revert AuditorNotCertified(msg.sender);
         }
@@ -155,7 +157,8 @@ contract AuditRegistry is AccessControl, Pausable {
      */
     function certifyAuditor(
         address auditor
-    ) external onlyRole(AUDIT_ADMIN_ROLE) {
+    ) external {
+        require(ACS.layout().roles[AUDIT_ADMIN_ROLE][msg.sender], "Missing role");
         if (auditor == address(0)) {
             revert ManifestTypes.UnauthorizedDeployer();
         }
@@ -164,8 +167,8 @@ contract AuditRegistry is AccessControl, Pausable {
             revert AuditorAlreadyCertified(auditor);
         }
 
-        certifiedAuditors[auditor] = true;
-        _grantRole(AUDITOR_ROLE, auditor);
+    certifiedAuditors[auditor] = true;
+    ACS.layout().roles[AUDITOR_ROLE][auditor] = true;
 
         emit AuditorCertified(auditor, msg.sender);
     }
@@ -176,13 +179,14 @@ contract AuditRegistry is AccessControl, Pausable {
      */
     function revokeAuditor(
         address auditor
-    ) external onlyRole(AUDIT_ADMIN_ROLE) {
+    ) external {
+        require(ACS.layout().roles[AUDIT_ADMIN_ROLE][msg.sender], "Missing role");
         if (!certifiedAuditors[auditor]) {
             revert AuditorNotCertified(auditor);
         }
 
-        certifiedAuditors[auditor] = false;
-        _revokeRole(AUDITOR_ROLE, auditor);
+    certifiedAuditors[auditor] = false;
+    ACS.layout().roles[AUDITOR_ROLE][auditor] = false;
 
         emit AuditorRevoked(auditor, msg.sender);
     }
@@ -193,7 +197,8 @@ contract AuditRegistry is AccessControl, Pausable {
      */
     function updateAuditValidityPeriod(
         uint256 newPeriod
-    ) external onlyRole(AUDIT_ADMIN_ROLE) {
+    ) external {
+        require(ACS.layout().roles[AUDIT_ADMIN_ROLE][msg.sender], "Missing role");
         if (newPeriod < MIN_AUDIT_VALIDITY || newPeriod > MAX_AUDIT_VALIDITY) {
             revert InvalidAuditPeriod(newPeriod);
         }
@@ -299,7 +304,8 @@ contract AuditRegistry is AccessControl, Pausable {
      */
     function markExpiredAudits(
         bytes32[] calldata manifestHashes
-    ) external onlyRole(AUDIT_ADMIN_ROLE) {
+    ) external {
+        require(ACS.layout().roles[AUDIT_ADMIN_ROLE][msg.sender], "Missing role");
         for (uint256 i = 0; i < manifestHashes.length; i++) {
             bytes32 manifestHash = manifestHashes[i];
 
@@ -314,14 +320,5 @@ contract AuditRegistry is AccessControl, Pausable {
     /**
      * @dev Emergency pause function
      */
-    function emergencyPause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _pause();
-    }
-
-    /**
-     * @dev Emergency unpause function
-     */
-    function emergencyUnpause() external onlyRole(DEFAULT_ADMIN_ROLE) {
-        _unpause();
-    }
+    // Pause/unpause handled by canonical PauseFacet
 }

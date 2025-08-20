@@ -124,7 +124,5 @@ contract MockManifestDispatcher is IManifestDispatcher {
         return ManifestInfo(bytes32(0), 0, 0, 0);
     }
 
-    function supportsInterface(bytes4) external pure returns (bool) {
-        return true;
-    }
+        // supportsInterface is centralized in ERC165Facet for canonical reporting; keep mock minimal.
 }

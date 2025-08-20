@@ -65,10 +65,11 @@ interface ManifestData {
 class PayRoxRefactorLinter {
   private readonly EIP170_SIZE_LIMIT = 24576; // 24,576 bytes
   private readonly LOUPE_FUNCTIONS = [
-  'facets',
-  'facetFunctionSelectors',
-  'facetAddresses',
-  'facetAddress'
+    'facets()',
+    'facetFunctionSelectors(address)',
+    'facetAddresses()',
+    'facetAddress(bytes4)',
+    'supportsInterface(bytes4)'
   ];
 
   private errors: LintError[] = [];
@@ -76,7 +77,7 @@ class PayRoxRefactorLinter {
   private facetsDir: string;
   private manifestPath: string;
 
-  constructor(facetsDir: string = './contracts/facets', manifestPath: string = './payrox-manifest.json') {
+  constructor(facetsDir: string = './facets', manifestPath: string = './payrox-manifest.json') {
     this.facetsDir = facetsDir;
     this.manifestPath = manifestPath;
   }
@@ -123,15 +124,14 @@ class PayRoxRefactorLinter {
     } catch (error) {
       this.errors.push({
         type: 'COMPILATION',
-        message: `Compilation failed: ${error instanceof Error ? error.message : String(error)}`,
-        details: { error: error instanceof Error ? error.message : String(error) }
+        message: `Compilation failed: ${error}`,
+        details: { error: error.toString() }
       });
     }
   }
 
   private async checkFacetSizes(): Promise<FacetInfo[]> {
-  console.log('📏 Checking facet sizes...');
-  console.log(`   Using facets directory: ${this.facetsDir}`);
+    console.log('📏 Checking facet sizes...');
     
     const facetInfos: FacetInfo[] = [];
     
@@ -151,10 +151,8 @@ class PayRoxRefactorLinter {
       const facetName = path.basename(facetPath, '.sol');
       
       try {
-  // Get runtime bytecode size from artifacts
-  // Expected Hardhat artifact layout: artifacts/<relative path to .sol>/<ContractName>.json
-  const rel = path.relative(process.cwd(), facetPath);
-  const artifactPath = path.join('artifacts', rel, `${facetName}.json`);
+        // Get runtime bytecode size from artifacts
+        const artifactPath = path.join('./artifacts', facetPath, `${facetName}.sol`, `${facetName}.json`);
         
         let runtimeSize = 0;
         let selectors: string[] = [];
@@ -168,10 +166,11 @@ class PayRoxRefactorLinter {
           selectors = this.extractSelectorsFromAbi(artifact.abi || []);
         }
 
-        // Check for loupe functions in source by matching function declarations only
+        // Check for loupe functions in source
         const sourceCode = fs.readFileSync(facetPath, 'utf-8');
-        const hasLoupeFunctions = this.LOUPE_FUNCTIONS.some(funcName => 
-          new RegExp(`function\\s+${funcName}\\s*\\(`, 'm').test(sourceCode)
+        const hasLoupeFunctions = this.LOUPE_FUNCTIONS.some(func => 
+          sourceCode.includes(func) || 
+          new RegExp(`function\\s+${func.split('(')[0]}\\s*\\(`).test(sourceCode)
         );
 
         const facetInfo: FacetInfo = {
@@ -384,8 +383,24 @@ class PayRoxRefactorLinter {
   }
 
   private computeSelector(signature: string): string {
-    // This is a simplified selector computation
-    // In a real implementation, you'd use ethers.js or similar
+    // Function selector = first 4 bytes of keccak256(functionSignature)
+    // Use ethers (v6 or v5) if available; fallback to js-sha3
+    try {
+      const ethersLib = require('ethers');
+      // ethers v6 exports keccak256 & toUtf8Bytes at top-level
+      const keccak256 = (ethersLib.keccak256 || (ethersLib.utils && ethersLib.utils.keccak256));
+      const toUtf8Bytes = (ethersLib.toUtf8Bytes || (ethersLib.utils && ethersLib.utils.toUtf8Bytes));
+      if (keccak256 && toUtf8Bytes) {
+        const full = keccak256(toUtf8Bytes(signature));
+        return full.slice(0, 10); // 0x + 8 hex chars
+      }
+    } catch (_) { /* ignore and fallback */ }
+    try {
+      const { keccak_256 } = require('js-sha3');
+      const full = '0x' + keccak_256(signature);
+      return full.slice(0, 10);
+    } catch (_) { /* ignore */ }
+    // Absolute last resort (should never happen): clearly mark fallback
     const crypto = require('crypto');
     const hash = crypto.createHash('sha256').update(signature).digest('hex');
     return '0x' + hash.substring(0, 8);
@@ -442,7 +457,7 @@ program
   .name('refactor-lint')
   .description('PayRox Diamond Pattern refactor linter')
   .version('1.0.0')
-  .option('-f, --facets <dir>', 'Facets directory', './contracts/facets')
+  .option('-f, --facets <dir>', 'Facets directory', './facets')
   .option('-m, --manifest <path>', 'Manifest file path', './payrox-manifest.json')
   .option('--json', 'Output results as JSON')
   .action(async (options) => {

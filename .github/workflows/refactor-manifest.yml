@@ -1,0 +1,94 @@
+name: Refactor Manifest Check
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci --legacy-peer-deps
+
+      - name: Split & Manifest
+        shell: pwsh
+        run: pwsh -File scripts/split-and-manifest.ps1 -Source contracts/dispacher/ManifestDispacher.sol -Expected manifests/expected/ManifestDispatcher.json
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Generate payrox manifest
+        id: gen
+        run: |
+          # generate-manifest exits non-zero on selector collisions; capture that as an output
+          if node tools/generate-manifest.js; then
+            echo "gen_failed=0" >> $GITHUB_OUTPUT
+          else
+            echo "gen_failed=1" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifests
+          path: artifacts/manifests/*
+
+      - name: Triage selector collisions (always)
+        if: always()
+        run: |
+          node tools/triage-collisions.js || true
+
+      - name: Upload selector diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selector-diagnostics
+          path: |
+            payrox-manifest.json
+            selector_map.json
+            selector-collisions.json
+            selector-collisions.txt
+
+      - name: Fail on manifest collisions
+        if: steps.gen.outputs.gen_failed == '1'
+        run: |
+          echo "💥 Selector collisions found. See artifact 'selector-diagnostics'."
+          exit 1
+
+      - name: Generate canonical manifest (if combined exists)
+        run: |
+          if [ -f artifacts/splits/combined.json ]; then
+            node scripts/generate-canonical-manifest.js --combined artifacts/splits/combined.json --out payrox-manifest.json || true
+          else
+            echo "No combined.json found; skipping canonical manifest generation"
+          fi
+
+      - name: Upload canonical manifest (if present)
+        uses: actions/upload-artifact@v4
+        with:
+          name: payrox-manifest
+          path: payrox-manifest.json
+
+  # Note: we run the splitter locally above, so no need to download split artifacts from another run.
+  # The generator/Upload steps will provide any canonical manifest produced by this job.
+
+      - name: Use generated canonical manifest if present
+        run: |
+          if [ -f payrox-manifest.json ]; then echo "Using local payrox-manifest.json"; exit 0; fi
+          if [ -f artifacts/splits/payrox-manifest.json ]; then cp artifacts/splits/payrox-manifest.json ./payrox-manifest.json; echo "Copied canonical manifest from split artifacts"; exit 0; fi
+          echo "No canonical manifest found; falling back to expected manifest";
+
+      - name: Run manifest parity check (strict)
+        run: |
+          if [ -f payrox-manifest.json ]; then
+            echo "Running parity check against generated payrox-manifest.json";
+            node scripts/validate-manifest-selectors.js --source contracts/dispacher/ManifestDispacher.sol --combined payrox-manifest.json --mode strict;
+          else
+            echo "No generated manifest; falling back to expected manifest";
+            node scripts/validate-manifest-selectors.js --source contracts/dispacher/ManifestDispacher.sol --combined manifests/expected/ManifestDispatcher.json --mode strict;
+          fi

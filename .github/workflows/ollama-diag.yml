@@ -1,0 +1,82 @@
+name: Ollama Diagnostic Smoke Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  ollama-diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Run Ollama diagnostic (non-blocking)
+      run: |
+        echo "Running Ollama diagnostic smoke check..."
+        # If there's a local script, prefer it
+        if [ -x "scripts/ollama-diag.sh" ]; then
+          scripts/ollama-diag.sh || true
+        else
+          # Best-effort curl to local Ollama health endpoint if available
+          if command -v curl >/dev/null 2>&1; then
+            curl --max-time 5 -sS "http://localhost:11434/health" || true
+          fi
+        fi
+      continue-on-error: truename: Ollama Diag Smoke Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  diag-ollama:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Simple Ollama reachability check
+      run: |
+        set -e
+        # Use secret OLLAMA_HOST if provided, otherwise default to localhost
+        OLLAMA_HOST="${{ secrets.OLLAMA_HOST }}"
+        if [ -z "$OLLAMA_HOST" ]; then
+          OLLAMA_HOST="http://127.0.0.1:11434"
+        fi
+        echo "Checking Ollama at $OLLAMA_HOST"
+        # Try a quick models list; non-fatal for CI (continue-on-error set below)
+        if curl --silent --fail --max-time 5 "$OLLAMA_HOST/v1/models" >/dev/null 2>&1; then
+          echo "✅ Ollama appears reachable"
+        else
+          echo "⚠️  Ollama not reachable at $OLLAMA_HOST"
+          exit 0
+        fi
+      continue-on-error: true
+
+    - name: Optional: Run repo diag endpoint (if server available)
+      run: |
+        # Try hitting the repo's local diag endpoint if present
+        # This is best-effort and non-fatal in CI
+        if command -v curl >/dev/null 2>&1; then
+          if curl --silent --fail --max-time 5 "http://127.0.0.1:8000/diag/ollama" >/dev/null 2>&1; then
+            echo "✅ Repo diag endpoint reachable"
+          else
+            echo "ℹ️  Repo diag endpoint not reachable (ok)"
+          fi
+        fi
+      continue-on-error: true

@@ -1,78 +1,129 @@
+// tools/generate-manifest.js
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
+const { keccak256, toUtf8Bytes } = require('ethers'); // v6
 
-const facetsDir = path.join(process.cwd(), 'contracts', 'facets');
-const outPath = path.join(process.cwd(), 'payrox-manifest.json');
+const ARTIFACTS_ROOT = path.join(process.cwd(), 'artifacts', 'contracts');
+const OUT_MANIFEST = path.join(process.cwd(), 'payrox-manifest.json');
+const OUT_SELECTOR_MAP = path.join(process.cwd(), 'selector_map.json');
 
-function computeSelector(signature) {
-  const hash = crypto.createHash('sha256').update(signature).digest('hex');
-  return '0x' + hash.substring(0, 8);
+function readJSON(p) {
+  return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
-function extractParamTypes(paramStr) {
-  if (!paramStr || paramStr.trim() === '') return [];
-  // split on commas but ignore commas inside tuples (simple heuristic: assume no nested tuples used)
-  const parts = paramStr.split(',').map(s => s.trim()).filter(Boolean);
-  const modifiers = new Set(['memory','calldata','storage','indexed','internal','external','public','private','view','pure','returns','payable','virtual','override','unchecked','contract']);
-  return parts.map(p => {
-    // remove parameter comments
-    p = p.replace(/\/\*.*?\*\//g, '').replace(/\/\/.*$/g, '').trim();
-    // remove multiple spaces
-    p = p.replace(/\s+/g, ' ');
-    const tokens = p.split(' ').filter(Boolean);
-    // filter out known modifiers
-    const filtered = tokens.filter(t => !modifiers.has(t));
-    if (filtered.length === 0) return '';
-    // If last token looks like an identifier (contains letters and not special chars) drop it
-    const last = filtered[filtered.length - 1];
-    if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(last) && filtered.length > 1) {
-      filtered.pop();
-    }
-    return filtered.join(' ');
-  }).map(s => s.trim());
+function isFacetArtifact(art) {
+  const src = art?.sourceName || '';
+  const name = art?.contractName || '';
+  // Only consider artifacts whose source file is under contracts/facets/
+  const inFacetsFolder = src.startsWith('contracts/facets/') || src.includes('/facets/');
+  // Try multiple artifact shapes for runtime bytecode
+  const deployedA = art?.deployedBytecode; // some artifacts have a string here
+  const deployedB = art?.deployedBytecode?.object; // some have object wrapper
+  const deployedC = art?.evm?.deployedBytecode?.object; // older hh format
+  const deployed = deployedA || deployedB || deployedC || '';
+  const hasRuntime = typeof deployed === 'string' && deployed.length > 2 && deployed !== '0x';
+  // Only include real, deployable facet contracts (skip interfaces, abstract contracts, libraries)
+  return inFacetsFolder && hasRuntime && /Facet$/.test(name);
 }
 
-function scanFacet(filePath) {
-  const src = fs.readFileSync(filePath, 'utf8');
-  const matches = [];
-  const re = /function\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)/g;
-  let m;
-  while ((m = re.exec(src)) !== null) {
-    const name = m[1];
-    const params = m[2];
-    // skip internal/private/internal functions by looking for keywords after the closing paren in a small window
-    const after = src.substring(m.index, m.index + 200);
-    if (/\b(private|internal)\b/.test(after)) continue; // prefer public/external
-    // include if public or external or returns present or modifier not private/internal
-    // We'll include most functions; the selector computation will be consistent
-    const types = extractParamTypes(params).join(',');
-    const signature = `${name}(${types})`;
-    matches.push(signature);
+function typeFromAbi(input) {
+  const t = input.type;
+  if (!t.startsWith('tuple')) return t;
+  const match = t.match(/^tuple(\[.*\])?$/);
+  const arraySuffix = match && match[1] ? match[1] : '';
+  const components = input.components || [];
+  const inner = '(' + components.map(typeFromAbi).join(',') + ')';
+  return inner + arraySuffix;
+}
+
+function funcSignature(item) {
+  const name = item.name;
+  const params = (item.inputs || []).map(typeFromAbi).join(',');
+  return `${name}(${params})`;
+}
+
+function selector(sig) {
+  return '0x' + keccak256(toUtf8Bytes(sig)).slice(2, 10);
+}
+
+function walk(dir, out = []) {
+  if (!fs.existsSync(dir)) return out;
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name);
+    const stat = fs.statSync(full);
+    if (stat.isDirectory()) walk(full, out);
+    else if (stat.isFile() && name.endsWith('.json')) out.push(full);
   }
-  return Array.from(new Set(matches));
+  return out;
 }
 
-function main() {
-  if (!fs.existsSync(facetsDir)) {
-    console.error('Facets dir not found:', facetsDir);
-    process.exit(1);
-  }
-
-  const files = fs.readdirSync(facetsDir).filter(f => f.endsWith('.sol'));
-  const manifest = { version: '0.1.0', facets: {} };
-
+function collectFacetArtifacts() {
+  const files = walk(ARTIFACTS_ROOT);
+  const result = [];
   for (const f of files) {
-    const filePath = path.join(facetsDir, f);
-    const facetName = path.basename(f, '.sol');
-    const signatures = scanFacet(filePath);
-    const selectors = signatures.map(sig => computeSelector(sig));
-    manifest.facets[facetName] = { selectors };
+    try {
+      const art = readJSON(f);
+      if (!art?.abi) continue;
+      if (!isFacetArtifact(art)) continue;
+      result.push({ file: f, art });
+    } catch (_) { }
   }
-
-  fs.writeFileSync(outPath, JSON.stringify(manifest, null, 2));
-  console.log('Wrote manifest to', outPath);
-  console.log(JSON.stringify(manifest, null, 2));
+  return result;
 }
 
-main();
+function buildManifest() {
+  const artifacts = collectFacetArtifacts();
+  if (artifacts.length === 0) {
+    console.warn('⚠️  No facet artifacts found in', ARTIFACTS_ROOT);
+  }
+
+  const manifest = { version: "1.0.0", facets: {} };
+  const selectorOwners = new Map();
+
+  for (const { art } of artifacts) {
+    const facetName = art.contractName;
+    const funcs = art.abi.filter(i => i.type === 'function');
+    const sels = new Set();
+
+    for (const fn of funcs) {
+      const sig = funcSignature(fn);
+      const sel = selector(sig);
+      sels.add(sel);
+
+      if (!selectorOwners.has(sel)) selectorOwners.set(sel, []);
+      selectorOwners.get(sel).push(facetName);
+    }
+
+    manifest.facets[facetName] = { selectors: Array.from(sels) };
+  }
+
+  const collisions = [];
+  for (const [sel, owners] of selectorOwners.entries()) {
+    if (owners.length > 1) collisions.push({ selector: sel, facets: owners });
+  }
+  if (collisions.length) {
+    console.error('❌ Selector collisions detected:');
+    for (const c of collisions) {
+      console.error(`   ${c.selector} in facets: ${c.facets.join(', ')}`);
+    }
+    fs.writeFileSync(OUT_MANIFEST, JSON.stringify(manifest, null, 2));
+    process.exit(2);
+  }
+
+  const selectorMap = {};
+  for (const { art } of artifacts) {
+    const facetName = art.contractName;
+    for (const fn of art.abi.filter(i => i.type === 'function')) {
+      const sig = funcSignature(fn);
+      const sel = selector(sig);
+      selectorMap[sel] = `${facetName}.${sig}`;
+    }
+  }
+
+  fs.writeFileSync(OUT_MANIFEST, JSON.stringify(manifest, null, 2));
+  fs.writeFileSync(OUT_SELECTOR_MAP, JSON.stringify(selectorMap, null, 2));
+  console.log(`✅ Wrote ${OUT_MANIFEST} and ${OUT_SELECTOR_MAP}`);
+}
+
+buildManifest();

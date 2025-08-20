@@ -2,14 +2,14 @@
 pragma solidity 0.8.30;
 
 import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
+import { PayRoxPauseStorage as PS } from "../libraries/PayRoxPauseStorage.sol";
 
 /**
  * @title ExampleFacetB
  * @notice Delegatecalled facet to be routed by a Manifest‑gated dispatcher.
  * @dev Diamond‑safe storage (fixed slot), L2‑friendly bounds, no external calls.
  */
-contract ExampleFacetB is RefactorSafeFacetBase {
+contract ExampleFacetB {
     /* ───────────────────────────── Errors ───────────────────────────── */
     error Paused();
     error InvalidOperationType();
@@ -85,8 +85,7 @@ contract ExampleFacetB is RefactorSafeFacetBase {
         mapping(bytes32 => OperationData) operations;
         mapping(address => UserOpsRB) userOps;
 
-        // Op controls
-        bool    paused;
+    // Op controls
         address operator;        // can set paused
         bool    initialized;     // one‑time initializer guard
         uint256 initNonce;       // for EIP-712 replay protection
@@ -99,7 +98,7 @@ contract ExampleFacetB is RefactorSafeFacetBase {
     }
 
     modifier whenNotPaused() {
-        if (_layout().paused) revert Paused();
+    if (PS.layout().paused) revert Paused();
         _;
     }
 
@@ -112,11 +111,6 @@ contract ExampleFacetB is RefactorSafeFacetBase {
         if (msg.sender != _layout().operator) revert NotOperator();
         _;
     }
-
-    // -------- Refactor safety hooks (non-hot path usage) --------
-    function _getVersion() internal pure override returns (uint256) { return 120; } // e.g., 1.2.0
-    function _getStorageNamespace() internal pure override returns (bytes32) { return _SLOT; }
-    function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }
 
     /* ───────────────────────────── Admin (init) ───────────────────────────── */
     /**
@@ -174,10 +168,7 @@ contract ExampleFacetB is RefactorSafeFacetBase {
     /**
      * @notice Set pause state (operator‑gated).
      */
-    function setPaused(bool paused_) external onlyOperator {
-        _layout().paused = paused_;
-        emit PausedSet(paused_, msg.sender);
-    }
+    // Note: Pause control is centralized in PauseFacet; remove local setPaused to avoid selector collision.
 
     /**
      * @notice Rotate governance address (governance-signed).
@@ -455,8 +446,8 @@ contract ExampleFacetB is RefactorSafeFacetBase {
         view
         returns (uint256 value, uint256 operations, address executor, bool paused)
     {
-        Layout storage l = _layout();
-        return (l.currentValue, l.operationCounter, l.lastExecutor, l.paused);
+    Layout storage l = _layout();
+    return (l.currentValue, l.operationCounter, l.lastExecutor, PS.layout().paused);
     }
 
     /**
@@ -487,7 +478,7 @@ contract ExampleFacetB is RefactorSafeFacetBase {
             l.currentValue,
             l.operationCounter,
             l.lastExecutor,
-            l.paused,
+            PS.layout().paused,
             l.initialized,
             l.operator,
             l.governance
@@ -646,24 +637,23 @@ contract ExampleFacetB is RefactorSafeFacetBase {
         name = "ExampleFacetB";
         version = "1.2.0"; // Updated version for enhanced features
 
-    selectors = new bytes4[](16); // Removed emergencyRefactorValidation selector
-        selectors[0] = this.initializeFacetB.selector;
-        selectors[1] = this.setPaused.selector;
-        selectors[2] = this.rotateGovernance.selector;
-        selectors[3] = this.rotateOperator.selector;
-        selectors[4] = this.executeB.selector;
-        selectors[5] = this.batchExecuteB.selector;
-        selectors[6] = this.getOperation.selector;
-        selectors[7] = this.getUserOperations.selector;
-        selectors[8] = this.complexCalculation.selector;
-        selectors[9] = this.getStateSummary.selector;
-        selectors[10] = this.getFacetInfoB.selector;
-        // Production-grade functions
-        selectors[11] = this.getAdvancedAnalytics.selector;
-        selectors[12] = this.getUserStatistics.selector;
-        selectors[13] = this.validateOperation.selector;
-        selectors[14] = this.simulateOperation.selector;
-    selectors[15] = this.getInitNonce.selector;
-    selectors[16] = this.getGovernance.selector;
+    selectors = new bytes4[](16);
+    selectors[0] = this.initializeFacetB.selector;
+    selectors[1] = this.rotateGovernance.selector;
+    selectors[2] = this.rotateOperator.selector;
+    selectors[3] = this.executeB.selector;
+    selectors[4] = this.batchExecuteB.selector;
+    selectors[5] = this.getOperation.selector;
+    selectors[6] = this.getUserOperations.selector;
+    selectors[7] = this.complexCalculation.selector;
+    selectors[8] = this.getStateSummary.selector;
+    selectors[9] = this.getFacetInfoB.selector;
+    // Production-grade functions
+    selectors[10] = this.getAdvancedAnalytics.selector;
+    selectors[11] = this.getUserStatistics.selector;
+    selectors[12] = this.validateOperation.selector;
+    selectors[13] = this.simulateOperation.selector;
+    selectors[14] = this.getInitNonce.selector;
+    selectors[15] = this.getGovernance.selector;
     }
 }

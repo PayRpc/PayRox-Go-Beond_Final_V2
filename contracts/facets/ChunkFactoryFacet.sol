@@ -247,16 +247,7 @@ contract ChunkFactoryFacet is IChunkFactory {
     /**
      * @notice Emergency pause mechanism
      */
-    function pause() external override {
-        DeterministicChunkFactory(factoryAddress).pause();
-    }
-
-    /**
-     * @notice Resume operations
-     */
-    function unpause() external override {
-        DeterministicChunkFactory(factoryAddress).unpause();
-    }
+    // Pause/unpause are handled by the canonical PauseFacet; remove passthroughs to avoid selector duplication.
 
     /**
      * @notice Set fee for specific tier (admin only) - delegates to factory
@@ -384,14 +375,53 @@ contract ChunkFactoryFacet is IChunkFactory {
         return factoryAddress;
     }
 
+    // ERC165 is provided by the canonical ERC165Facet; this facet must not implement supportsInterface
+
     // ─────────────────────────────────────────────────────────────────────────────
-    // ERC165 SUPPORTS-INTERFACE
+    // DIAMOND LOUPE COMPATIBILITY (selectors list)
     // ─────────────────────────────────────────────────────────────────────────────
 
-    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
-        return interfaceId == type(IChunkFactory).interfaceId || interfaceId == 0x01ffc9a7; // ERC165
+    function getFacetFunctionSelectors() external pure returns (bytes4[] memory selectors) {
+        // Update this list to match EXACTLY what the facet exposes
+    selectors = new bytes4[](32);
+        uint256 i;
+        // IChunkFactory interface functions
+        selectors[i++] = IChunkFactory.stage.selector;
+        selectors[i++] = IChunkFactory.stageMany.selector;
+        selectors[i++] = IChunkFactory.stageBatch.selector;
+        selectors[i++] = IChunkFactory.deployDeterministic.selector;
+        selectors[i++] = IChunkFactory.deployDeterministicBatch.selector;
+        selectors[i++] = IChunkFactory.predict.selector;
+        selectors[i++] = IChunkFactory.predictAddress.selector;
+        selectors[i++] = IChunkFactory.predictAddressBatch.selector;
+        selectors[i++] = IChunkFactory.read.selector;
+        selectors[i++] = IChunkFactory.exists.selector;
+        selectors[i++] = IChunkFactory.isDeployedContract.selector;
+        selectors[i++] = IChunkFactory.validateBytecodeSize.selector;
+        selectors[i++] = IChunkFactory.verifySystemIntegrity.selector;
+        selectors[i++] = IChunkFactory.deploymentCount.selector;
+        selectors[i++] = IChunkFactory.userTiers.selector;
+        selectors[i++] = IChunkFactory.owner.selector;
+        selectors[i++] = IChunkFactory.withdrawFees.selector;
+    selectors[i++] = IChunkFactory.withdrawRefund.selector;
+        selectors[i++] = IChunkFactory.setTierFee.selector;
+        selectors[i++] = IChunkFactory.setUserTier.selector;
+        selectors[i++] = IChunkFactory.setIdempotentMode.selector;
+        selectors[i++] = IChunkFactory.setFeeRecipient.selector;
+        selectors[i++] = IChunkFactory.setBaseFeeWei.selector;
+        selectors[i++] = IChunkFactory.setFeesEnabled.selector;
+        selectors[i++] = IChunkFactory.setMaxSingleTransfer.selector;
+        selectors[i++] = IChunkFactory.transferDefaultAdmin.selector;
+    selectors[i++] = IChunkFactory.addAuthorizedRecipient.selector;
+    selectors[i++] = IChunkFactory.removeAuthorizedRecipient.selector;
+
+        // PayRox helpers from this facet
+        selectors[i++] = this.getExpectedManifestHash.selector;
+        selectors[i++] = this.getExpectedFactoryBytecodeHash.selector;
+        selectors[i++] = this.getManifestDispatcher.selector;
+        selectors[i++] = this.getFactoryAddress.selector;
+
+        require(i == selectors.length, "selector count mismatch");
+        return selectors;
     }
-
-    // Note: Diamond loupe selectors were moved to `LoupeFacet.sol` to comply with
-    // the linter's requirement that loupe functions live in a dedicated facet.
 }

@@ -1,0 +1,18 @@
+{
+  "facets": {
+    "FacetA": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "selectors": ["0x74322ad9"],
+      "version": 1
+    },
+    "FacetB": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "selectors": ["0x0bfc516b"],
+      "version": 1
+    }
+  },
+  "meta": {
+    "description": "Expected selector set for test diamond (FacetA + FacetB)",
+    "generated": "2025-08-18T00:00:00Z"
+  }
+}
