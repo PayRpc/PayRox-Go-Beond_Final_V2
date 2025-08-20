@@ -233,14 +233,14 @@
               "type": "bytes32"
             },
             {
-              "internalType": "uint256",
+              "internalType": "uint64",
               "name": "version",
-              "type": "uint256"
+              "type": "uint64"
             },
             {
-              "internalType": "uint256",
+              "internalType": "uint64",
               "name": "timestamp",
-              "type": "uint256"
+              "type": "uint64"
             },
             {
               "internalType": "uint256",

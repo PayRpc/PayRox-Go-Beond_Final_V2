@@ -355,8 +355,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IManifestDispatcher.sol": {
-      "lastModificationDate": 1755671201320,
-      "contentHash": "e8810144f0c7be25244ce05d65bedeec",
+      "lastModificationDate": 1755674618807,
+      "contentHash": "12cf95516b1503f0bb9bc43f479d9e8c",
       "sourceName": "contracts/interfaces/IManifestDispatcher.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -628,8 +628,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispacher.sol": {
-      "lastModificationDate": 1755663728883,
-      "contentHash": "b4c0e5475fb21bfcf002a3a182b3f718",
+      "lastModificationDate": 1755674181709,
+      "contentHash": "6951a6276daa0162e2e2fb89cbe9a750",
       "sourceName": "contracts/dispacher/ManifestDispacher.sol",
       "solcConfig": {
         "version": "0.8.30",

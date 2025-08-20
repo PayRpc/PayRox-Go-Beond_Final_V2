@@ -10,9 +10,9 @@ interface IManifestDispatcher {
 
     struct ManifestInfo {
         bytes32 hash;
-        uint256 version;
-        uint256 timestamp;
-        uint256 selectorCount;
+        uint64 version;        // ✅ Match dispatcher implementation (uint64)
+        uint64 timestamp;      // ✅ Match dispatcher implementation (uint64)
+        uint256 selectorCount; // ✅ Correct (uint256 routeCount)
     }
 
     // ──────────────────────── Events ─────────────────────────
@@ -125,6 +125,7 @@ contract PayRoxProxyRouter {
     error AlreadyInitialized();
     error NotOwner();
     error NotPendingOwner();
+    error InvalidNewOwner();      // ✅ Better UX for transferOwnership(address(0))
     error Paused();
     error FrozenRouter();
     error DispatcherZero();
@@ -222,7 +223,7 @@ contract PayRoxProxyRouter {
 
     /// @notice Transfer ownership of router admin (two-step process).
     function transferOwnership(address newOwner) external onlyOwner {
-        if (newOwner == address(0)) revert NotOwner();
+        if (newOwner == address(0)) revert InvalidNewOwner();  // ✅ Better UX
         RouterStorage storage s = _s();
         s.pendingOwner = newOwner;
         emit OwnershipTransferStarted(s.owner, newOwner);
@@ -519,12 +520,16 @@ contract PayRoxProxyRouter {
             let cd := add(calldata_, 0x20)
             let cdlen := mload(calldata_)
             let ptr := mload(0x40)
+
             ok := delegatecall(gas(), target, cd, cdlen, 0, 0)
             let size := returndatasize()
-            ret := mload(0x40)
-            mstore(0x40, add(ret, and(add(size, 0x3f), not(0x1f)))) // bump free mem ptr
+
+            ret := ptr
             mstore(ret, size)
             returndatacopy(add(ret, 0x20), 0, size)
+
+            // ✅ FIX: Properly bump free memory pointer including 0x20 length word
+            mstore(0x40, add(add(ret, 0x20), and(add(size, 31), not(31))))
         }
     }
 
