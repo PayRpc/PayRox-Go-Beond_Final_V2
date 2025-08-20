@@ -21,23 +21,21 @@ interface IDiamondLoupe {
 
     /**
      * @notice Get all function selectors supported by a facet.
-     * @param _facet The facet address
-     * @return facetFunctionSelectors_ List of function selectors
+     * @param facet The facet address
+     * @return selectors_ List of function selectors
      */
-    function facetFunctionSelectors(
-        address _facet
-    ) external view returns (bytes4[] memory facetFunctionSelectors_);
+    function facetFunctionSelectors(address facet) external view returns (bytes4[] memory selectors_);
 
     /**
      * @notice Get all facet addresses.
-     * @return facetAddresses_ List of facet addresses
+     * @return addresses_ List of facet addresses
      */
-    function facetAddresses() external view returns (address[] memory facetAddresses_);
+    function facetAddresses() external view returns (address[] memory addresses_);
 
     /**
      * @notice Get the facet address that supports a given selector.
-     * @param _functionSelector The function selector
-     * @return facetAddress_ The facet address or address(0) if none
+     * @param selector The function selector
+     * @return facet_ The facet address or address(0) if none
      */
-    function facetAddress(bytes4 _functionSelector) external view returns (address facetAddress_);
+    function facetAddress(bytes4 selector) external view returns (address facet_);
 }

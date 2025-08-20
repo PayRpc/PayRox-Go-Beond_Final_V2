@@ -7,7 +7,7 @@
       "inputs": [
         {
           "internalType": "bytes4",
-          "name": "_functionSelector",
+          "name": "selector",
           "type": "bytes4"
         }
       ],
@@ -15,7 +15,7 @@
       "outputs": [
         {
           "internalType": "address",
-          "name": "facetAddress_",
+          "name": "facet_",
           "type": "address"
         }
       ],
@@ -28,7 +28,7 @@
       "outputs": [
         {
           "internalType": "address[]",
-          "name": "facetAddresses_",
+          "name": "addresses_",
           "type": "address[]"
         }
       ],
@@ -39,7 +39,7 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_facet",
+          "name": "facet",
           "type": "address"
         }
       ],
@@ -47,7 +47,7 @@
       "outputs": [
         {
           "internalType": "bytes4[]",
-          "name": "facetFunctionSelectors_",
+          "name": "selectors_",
           "type": "bytes4[]"
         }
       ],

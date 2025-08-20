@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
@@ -11,44 +12,29 @@ interface IDiamondLoupeEx {
         address facetAddress;
         bytes4[] functionSelectors;
         bytes32 versionTag;   // arbitrary tag (e.g., keccak256("v1.2.3"))
-        uint8   securityLevel; // 0=untrusted, 1=user, 2=admin, 3=system
+        uint8 securityLevel;  // 0=untrusted, 1=user, 2=admin, 3=system
     }
 
     struct FacetMetadata {
-        string name;            // human-readable (optional)
-        string category;        // optional
-        string[] dependencies;  // optional
-        bool isUpgradeable;     // whether facet is meant to be replaceable
+        string name;           // human-readable (optional)
+        string category;       // optional
+        string[] dependencies; // optional
+        bool isUpgradeable;    // whether facet is meant to be replaceable
     }
 
     // ---------- Events (optional utility) ----------
-    event SelectorConflict(bytes4 indexed selector, address indexed existingFacet, address indexed newFacet);
+    event SelectorConflict(bytes4 indexed selector, address existingFacet, address newFacet);
 
     // ---------- Extended queries (non-breaking) ----------
-    function facetAddressesEx(bool includeUnsafe)
-        external
-        view
-        returns (address[] memory facetAddresses_);
+    function facetAddressesEx(bool includeUnsafe) external view returns (address[] memory addresses_);
 
-    function facetFunctionSelectorsEx(address facet, uint8 minSecurityLevel)
-        external
-        view
-        returns (bytes4[] memory selectors_);
+    function facetFunctionSelectorsEx(address facet, uint8 minLevel) external view returns (bytes4[] memory selectors_);
 
-    function facetsEx(bool includeMetadata)
-        external
-        view
-        returns (FacetEx[] memory facets_);
+    function facetsEx(bool includeMetadata) external view returns (FacetEx[] memory facets_);
 
-    function facetAddressEx(bytes4 functionSelector, bytes32 requiredVersion)
-        external
-        view
-        returns (address facetAddress_);
+    function facetAddressEx(bytes4 selector, bytes32 version) external view returns (address facet_);
 
-    function facetAddressesBatchEx(bytes4[] calldata functionSelectors)
-        external
-        view
-        returns (address[] memory facetAddresses_);
+    function facetAddressesBatchEx(bytes4[] calldata selectors) external view returns (address[] memory addresses_);
 
     // ---------- Fingerprints / provenance ----------
     /// @notice keccak256(runtime bytecode) a.k.a. EXTCODEHASH
@@ -58,7 +44,7 @@ interface IDiamondLoupeEx {
     function selectorHash(address facet) external view returns (bytes32);
 
     /// @notice (deployer, timestamp) for provenance (0 if unknown)
-    function facetProvenance(address facet) external view returns (address deployer, uint256 deployTimestamp);
+    function facetProvenance(address facet) external view returns (address deployer, uint256 timestamp);
 
     // ---------- Optional extras ----------
     /// @dev Purely advisory; heavy to compute on-chain. Return empty if unsupported.
