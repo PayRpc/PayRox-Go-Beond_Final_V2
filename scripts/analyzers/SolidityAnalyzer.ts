@@ -835,7 +835,7 @@ export class SolidityAnalyzer {
   /**
    * Generic AST node visitor
    */
-  private visitNode(node: ASTNode, callback: (node: ASTNode) => void): void {
+  private visitNode(node: ASTNode, callback: (_node: ASTNode) => void): void {
     if (!node) {
       return;
     }
