@@ -38,6 +38,7 @@
   "include": [
     "./scripts/**/*",
     "./test/**/*",
+    "./tests/**/*", 
     "./tasks/**/*",
     "./hardhat.config.ts",
     "./src/**/*",
