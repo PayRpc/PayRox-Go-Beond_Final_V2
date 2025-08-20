@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // PayRox Selector & Manifest Toolkit (strict)
-// - Uses ethers v5 utils
+// - Uses ethers v6 utils
 // - No facet state/codegen; planning-only helpers
 import express, { Request, Response } from 'express';
 import cors from 'cors';
@@ -60,7 +60,6 @@ const broadcast = (msg: any) => {
   const data = JSON.stringify(msg);
   for (const client of wss.clients) {
     // 1 = OPEN
-    // @ts-ignore
     if (client.readyState === 1) client.send(data);
   }
 };
@@ -69,7 +68,7 @@ wss.on('connection', (ws: any) => {
 });
 
 // ---- Helpers ----
-const abi = new AbiCoder();
+const abi = AbiCoder.defaultAbiCoder();
 // Local zero constants (avoid depending on ethers.constants across versions)
 const ADDRESS_ZERO = '0x' + '0'.repeat(40);
 const HASH_ZERO = '0x' + '0'.repeat(64);
