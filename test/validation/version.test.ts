@@ -1,9 +1,9 @@
-import { expect } from "chai";
-import { ethers } from "hardhat";
+import { expect } from 'chai';
+import { ethers } from 'hardhat';
 
-describe("VersionFacet (validation)", () => {
-  it("exposes version() and versionNumber()", async () => {
-    const Fac = await ethers.getContractFactory("VersionFacet");
+describe('VersionFacet (validation)', () => {
+  it('exposes version() and versionNumber()', async () => {
+    const Fac = await ethers.getContractFactory('VersionFacet');
     const f = await Fac.deploy();
     await f.waitForDeployment();
 
@@ -14,7 +14,7 @@ describe("VersionFacet (validation)", () => {
     // expect(v).to.be.a("string").that.is.not.empty;
     // expect(n).to.be.a("bigint");
     // expect(n).to.be.greaterThan(0n);
-    
+
     // Test passes without version checks due to interface limitations
     expect(true).to.be.true;
   }).timeout(30000);
