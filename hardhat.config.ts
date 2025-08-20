@@ -12,10 +12,6 @@ const config: HardhatUserConfig = {
         version: '0.8.30',
         settings: { optimizer: { enabled: true, runs: 200 }, evmVersion: 'cancun', viaIR: true },
       },
-      {
-        version: '0.8.26',
-        settings: { optimizer: { enabled: true, runs: 200 }, evmVersion: 'cancun' },
-      },
     ],
   },
   paths: {

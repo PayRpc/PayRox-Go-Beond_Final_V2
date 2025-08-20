@@ -1,9 +1,38 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/```solidity
+// SPDX-License-Identifier: MIT  
+pragma solidity 0.8.30;
+
+import "../libraries/LibCore.sol```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.30;
+
+import "../libraries/LibAdmin.sol";ode
 
 /**
  * PayRox AI Refactor Copilot
  * 
- * Self-correcting AI system for Diamond Pattern refactoring with strict validation.
+ * Self-correcting AI syste```soli### AdminF```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.30;
+
+import "../libraries/LibAdmin.sol";sol
+```s### CoreFacet.sol
+```solidity
+// SPDX-License-Identifier: MIT  
+pragma solidity 0.8.30;
+
+import "../libraries/LibCore.sol";y
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.30;
+
+import "../libraries/LibAdmin.sol";/ SPDX-Lic```solidity
+// SPDX-License-Identifier: MIT  
+pragma solidity 0.8.30;
+
+import "../libraries/LibCore.sol";Identifier: MIT
+pragma solidity 0.8.30;
+
+import "../libraries/LibAdmin.sol"; Diamond Pattern refactoring with strict validation.
  * Enforces EIP-170 size limits, EIP-2535 compliance, and behavior preservation.
  */
 
@@ -108,7 +137,7 @@ contract AdminFacet {
 ### CoreFacet.sol
 \`\`\`solidity
 // SPDX-License-Identifier: MIT  
-pragma solidity ^0.8.19;
+pragma solidity 0.8.30;
 
 import "../libraries/LibCore.sol";
 

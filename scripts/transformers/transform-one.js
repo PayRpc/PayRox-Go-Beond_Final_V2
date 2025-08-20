@@ -51,7 +51,7 @@ function headerOf(source) {
   let hdr = '';
   if (spdx) hdr += spdx[0] + '\n';
   if (pragma) hdr += pragma[0] + '\n\n';
-  if (!hdr) hdr = `// SPDX-License-Identifier: MIT\npragma solidity ^0.8.30;\n\n`;
+  if (!hdr) hdr = `// SPDX-License-Identifier: MIT\npragma solidity 0.8.30;\n\n`;
   return hdr;
 }
 

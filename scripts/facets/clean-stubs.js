@@ -32,7 +32,7 @@ function extractFunctionNames(src) {
 }
 
 function makeContract(name, functions) {
-  const header = `// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.20;\n\n// Auto-generated facet wrapper (cleaned)\ncontract ${name} {\n`;
+  const header = `// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30;\n\n// Auto-generated facet wrapper (cleaned)\ncontract ${name} {\n`;
   const body = functions
     .map((fn) => `  function ${fn}() external pure { revert("stub: ${fn}"); }\n`)
     .join('\n');
