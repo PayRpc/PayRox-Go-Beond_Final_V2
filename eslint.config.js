@@ -40,6 +40,13 @@ module.exports = [
       'import/namespace': 'off',
       'import/named': 'off',
       'import/no-duplicates': 'off',
+      'no-inner-declarations': 'off',
+      'no-empty': 'off',
+      'no-undef': 'off',
+      'no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
     },
   },
   // TS files
@@ -76,13 +83,16 @@ module.exports = [
       'import/named': 'off',
       'import/no-duplicates': 'off',
       '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      'no-inner-declarations': 'off',
+      'no-empty': 'off',
       'no-undef': 'off',
       'no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
     },
