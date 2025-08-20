@@ -21,8 +21,8 @@ async function main() {
   const admin = deployer.address;
   const activationDelaySeconds = 3600; // 1 hour for gas-estimate fixture
   const dispatcher = await DispatcherFactory.deploy(admin, activationDelaySeconds);
-  await dispatcher.deployed();
-  console.log('Dispatcher deployed at', dispatcher.address);
+  await dispatcher.waitForDeployment();
+  console.log('Dispatcher deployed at', await dispatcher.getAddress());
 
   const selectors = ['0x00000000']; // single bytes4 selector
   // Deploy a minimal facet (ExampleFacetA) so the facet has code and a stable codehash
@@ -33,8 +33,8 @@ async function main() {
     try {
       const GasFactory = await ethers.getContractFactory('GasOptimizationUtils');
       const gasLib = await GasFactory.deploy();
-      await gasLib.deployed();
-      gasLibAddress = gasLib.address;
+      await gasLib.waitForDeployment();
+      gasLibAddress = await gasLib.getAddress();
       console.log('Deployed GasOptimizationUtils at', gasLibAddress);
     } catch (linkErr) {
       // library may not be needed or already inlined; log and continue
@@ -56,8 +56,8 @@ async function main() {
     }
 
     facet = await FacetFactory.deploy();
-    await facet.deployed();
-    console.log('Deployed ExampleFacetA at', facet.address);
+    await facet.waitForDeployment();
+    console.log('Deployed ExampleFacetA at', await facet.getAddress());
   } catch (err) {
     console.warn(
       'ExampleFacetA not found or failed to deploy, falling back to deployer as facet (may revert)',
@@ -66,12 +66,12 @@ async function main() {
     facet = { address: deployer.address };
   }
 
-  const facets = [facet.address];
+  const facets = [await facet.getAddress()];
   // compute on-chain code hash for the deployed facet
-  let codehash = ethers.constants.HashZero;
+  let codehash = ethers.ZeroHash;
   try {
-    const code = await ethers.provider.getCode(facet.address);
-    codehash = ethers.utils.keccak256(code);
+    const code = await ethers.provider.getCode(await facet.getAddress());
+    codehash = ethers.keccak256(code);
   } catch (err) {
     console.warn('Failed to fetch code for facet:', err && err.message ? err.message : err);
   }
@@ -83,8 +83,8 @@ async function main() {
 
   // Compute the leaf value matching OrderedMerkle.leafOfSelectorRoute:
   // leaf = keccak256(abi.encodePacked(bytes1(0x00), selector, facet, codehash))
-  const leaf = ethers.utils.keccak256(
-    ethers.utils.solidityPack(
+  const leaf = ethers.keccak256(
+    ethers.solidityPacked(
       ['bytes1', 'bytes4', 'address', 'bytes32'],
       ['0x00', selectors[0], facets[0], codehashes[0]],
     ),
@@ -95,7 +95,7 @@ async function main() {
   try {
     // For a Merkle tree the on-chain "root" is the hashed node values. For
     // a single-leaf tree the root == _hashLeaf(leaf) == keccak256(0x00 || leaf).
-    const root = ethers.utils.keccak256(ethers.utils.concat(['0x00', leaf]));
+    const root = ethers.keccak256(ethers.concat(['0x00', leaf]));
     const commitTx = await (await dispatcher.commitRoot(root, 1)).wait();
     console.log('Committed root', root, 'tx:', commitTx.transactionHash);
   } catch (err) {
