@@ -4,6 +4,7 @@ pragma solidity 0.8.30;
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 import {GasOptimizationUtils} from "../utils/GasOptimizationUtils.sol";
+import { PayRoxPauseStorage as PS } from "../libraries/PayRoxPauseStorage.sol";
 
 /**
  * @title ExampleFacetA
@@ -18,6 +19,7 @@ contract ExampleFacetA {
     error EmptyData();
     error DataTooLarge();
     error TooManyMessages();
+    error Paused();
 
     /* ─────────────────────── Gas / L2‑friendly caps ─────────────────── */
     uint256 private constant MAX_DATA_BYTES = 4096; // per-key bound
@@ -50,10 +52,15 @@ contract ExampleFacetA {
         assembly { l.slot := slot }
     }
 
+    modifier whenNotPaused() {
+        if (PS.layout().paused) revert Paused();
+        _;
+    }
+
     /* ───────────────────────────── API ──────────────────────────────── */
 
     /// Execute an action and emit both readable and hash events for flexibility.
-    function executeA(string calldata message) external returns (bool success) {
+    function executeA(string calldata message) external whenNotPaused returns (bool success) {
         if (bytes(message).length == 0) revert EmptyMessage();
         if (bytes(message).length > MAX_MSG_BYTES) revert DataTooLarge();
 
@@ -71,7 +78,7 @@ contract ExampleFacetA {
     }
 
     /// Store bounded bytes under a caller-namespaced key; emits a hashed event for gas savings.
-    function storeData(bytes32 key, bytes calldata data_) external {
+    function storeData(bytes32 key, bytes calldata data_) external whenNotPaused {
         if (key == bytes32(0)) revert InvalidKey();
         if (data_.length == 0) revert EmptyData();
         if (data_.length > MAX_DATA_BYTES) revert DataTooLarge();
@@ -95,7 +102,7 @@ contract ExampleFacetA {
     }
 
     /// Batch execute bounded messages.
-    function batchExecute(string[] calldata messages) external returns (bool[] memory results) {
+    function batchExecute(string[] calldata messages) external whenNotPaused returns (bool[] memory results) {
         uint256 n = messages.length;
         if (n == 0) revert EmptyMessage();
         if (n > MAX_MESSAGES) revert TooManyMessages();
@@ -114,8 +121,7 @@ contract ExampleFacetA {
                     l.userCounts[msg.sender] += 1;
                     l.totalExecutions_ += 1;
                 }
-                // Emit both events for each message
-                emit FacetAExecuted(msg.sender, 0, messages[i]);
+                // Emit only hash event for gas efficiency in batch operations
                 emit FacetAExecutedHash(msg.sender, keccak256(bytes(messages[i])));
                 results[i] = true;
             } else {
@@ -146,12 +152,7 @@ contract ExampleFacetA {
     ) external pure returns (bool isValid) {
         if (expectedSigner == address(0)) return false;
         bytes32 digest = MessageHashUtils.toEthSignedMessageHash(hash);
-        (address recovered, ECDSA.RecoverError err, bytes32 _errArg) =
-            ECDSA.tryRecover(digest, signature);
-        // reference _errArg to avoid unused-local-variable warning from the compiler
-        if (_errArg == bytes32(0)) {
-            // no-op: this branch is never relied on, _errArg is just referenced to silence warnings
-        }
+        (address recovered, ECDSA.RecoverError err, ) = ECDSA.tryRecover(digest, signature);
         return err == ECDSA.RecoverError.NoError && recovered == expectedSigner;
     }
 

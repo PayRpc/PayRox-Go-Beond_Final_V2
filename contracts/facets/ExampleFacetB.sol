@@ -18,7 +18,6 @@ contract ExampleFacetB {
     error TooManyOperations();
     error EmptyBatch();
     error LengthMismatch();
-    error NotOperator();
     error AlreadyInitialized();
     error NotInitialized();
     error ZeroAddress();
@@ -53,9 +52,9 @@ contract ExampleFacetB {
     event StateChanged(uint256 oldValue, uint256 newValue, address indexed changer);
     event BatchOperationCompleted(uint256 operationCount, uint256 successCount, address indexed executor);
     event PausedSet(bool paused, address indexed by);
-    event Initialized(address operator);
-    event GovernanceRotated(address indexed oldGovernance, address indexed newGovernance);
-    event OperatorRotated(address indexed oldOperator, address indexed newOperator);
+    event Initialized(address operator, uint256 nonce);
+    event GovernanceRotated(address indexed oldGovernance, address indexed newGovernance, uint256 nonce);
+    event OperatorRotated(address indexed oldOperator, address indexed newOperator, uint256 nonce);
 
     /* ─────────────── Diamond‑safe storage (fixed slot) ─────────────── */
     // Unique slot for this facet’s state.
@@ -98,17 +97,12 @@ contract ExampleFacetB {
     }
 
     modifier whenNotPaused() {
-    if (PS.layout().paused) revert Paused();
+        if (PS.layout().paused) revert Paused();
         _;
     }
 
     modifier whenInitialized() {
         if (!_layout().initialized) revert NotInitialized();
-        _;
-    }
-
-    modifier onlyOperator() {
-        if (msg.sender != _layout().operator) revert NotOperator();
         _;
     }
 
@@ -134,19 +128,25 @@ contract ExampleFacetB {
         Layout storage l = _layout();
         if (l.initialized) revert AlreadyInitialized();
 
-        // Verify EIP-712 signature from governance
+                // Verify EIP-712 signature from governance
         bytes32 domainSeparator = keccak256(
             abi.encode(
                 EIP712_DOMAIN_TYPEHASH,
-                keccak256("PayRoxFacetB"),
-                keccak256("1.2.0"),
+                keccak256("ExampleFacetB"),
+                keccak256("1"),
                 block.chainid,
                 address(this)
             )
         );
 
         bytes32 structHash = keccak256(
-            abi.encode(INIT_TYPEHASH, operator_, governance_, deadline, l.initNonce)
+            abi.encode(
+                INIT_TYPEHASH,
+                operator_,
+                governance_,
+                deadline,
+                l.initNonce
+            )
         );
 
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
@@ -162,7 +162,7 @@ contract ExampleFacetB {
         l.initialized = true;
         unchecked { l.initNonce += 1; } // Prevent replay
 
-        emit Initialized(operator_);
+        emit Initialized(operator_, l.initNonce);
     }
 
     /**
@@ -213,7 +213,7 @@ contract ExampleFacetB {
         l.governance = newGovernance;
         unchecked { l.initNonce += 1; } // Prevent replay
 
-        emit GovernanceRotated(oldGovernance, newGovernance);
+        emit GovernanceRotated(oldGovernance, newGovernance, l.initNonce);
     }
 
     /**
@@ -259,7 +259,7 @@ contract ExampleFacetB {
         l.operator = newOperator;
         unchecked { l.initNonce += 1; } // Prevent replay
 
-        emit OperatorRotated(oldOperator, newOperator);
+        emit OperatorRotated(oldOperator, newOperator, l.initNonce);
     }
 
     /* ───────────────────────────── API ───────────────────────────── */

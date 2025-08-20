@@ -355,7 +355,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IManifestDispatcher.sol": {
-      "lastModificationDate": 1755674618807,
+      "lastModificationDate": 1755675743907,
       "contentHash": "12cf95516b1503f0bb9bc43f479d9e8c",
       "sourceName": "contracts/interfaces/IManifestDispatcher.sol",
       "solcConfig": {
@@ -748,7 +748,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\utils\\OrderedMerkle.sol": {
-      "lastModificationDate": 1755676689976,
+      "lastModificationDate": 1755676725298,
       "contentHash": "9a914b5756ca71b136bbebad7e9b4f65",
       "sourceName": "contracts/utils/OrderedMerkle.sol",
       "solcConfig": {
@@ -1259,8 +1259,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetB.sol": {
-      "lastModificationDate": 1755663728893,
-      "contentHash": "6cec1df9d079933aae64c90c873a7829",
+      "lastModificationDate": 1755725308740,
+      "contentHash": "18c3f6057db553bed676e18828004021",
       "sourceName": "contracts/facets/ExampleFacetB.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1724,8 +1724,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetA.sol": {
-      "lastModificationDate": 1755663728891,
-      "contentHash": "946954ff7e353303bf889427baa06683",
+      "lastModificationDate": 1755725323924,
+      "contentHash": "7e1acbcde8ed2dd29c4096630c0a76ad",
       "sourceName": "contracts/facets/ExampleFacetA.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -1755,7 +1755,8 @@
       "imports": [
         "@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
         "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol",
-        "../utils/GasOptimizationUtils.sol"
+        "../utils/GasOptimizationUtils.sol",
+        "../libraries/PayRoxPauseStorage.sol"
       ],
       "versionPragmas": [
         "0.8.30"
@@ -2033,7 +2034,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\dispacher\\ManifestDispatcher.sol": {
-      "lastModificationDate": 1755675018159,
+      "lastModificationDate": 1755675743907,
       "contentHash": "630ed1ce5ea4027deff9a89b22086610",
       "sourceName": "contracts/dispacher/ManifestDispatcher.sol",
       "solcConfig": {
@@ -2105,7 +2106,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\LoupeFacet.sol": {
-      "lastModificationDate": 1755675133525,
+      "lastModificationDate": 1755675743907,
       "contentHash": "3a07e42dbd473ae32e79906a008999cc",
       "sourceName": "contracts/facets/LoupeFacet.sol",
       "solcConfig": {
@@ -2291,7 +2292,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IAntiBotFacet.sol": {
-      "lastModificationDate": 1755675118398,
+      "lastModificationDate": 1755675743907,
       "contentHash": "c79e7229a92336314ecbac356917e54d",
       "sourceName": "contracts/interfaces/IAntiBotFacet.sol",
       "solcConfig": {
@@ -2326,7 +2327,7 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IERC20Upgradeable.sol": {
-      "lastModificationDate": 1755675112424,
+      "lastModificationDate": 1755675743902,
       "contentHash": "7ef10790513940d338f2e58d1d12bb26",
       "sourceName": "contracts/interfaces/IERC20Upgradeable.sol",
       "solcConfig": {
@@ -2361,7 +2362,7 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Proxy\\PayRoxProxyRouter.sol": {
-      "lastModificationDate": 1755673437063,
+      "lastModificationDate": 1755675604373,
       "contentHash": "893c487db56aee1456701d532c9c3551",
       "sourceName": "contracts/Proxy/PayRoxProxyRouter.sol",
       "solcConfig": {
@@ -2401,7 +2402,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Diamond_new.sol": {
-      "lastModificationDate": 1755675012563,
+      "lastModificationDate": 1755675743910,
       "contentHash": "6b43c2a7864da7de8354b6ea5c95d3e6",
       "sourceName": "contracts/test/Diamond_new.sol",
       "solcConfig": {
@@ -2547,7 +2548,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\utils\\ManifestDispatcherLib.sol": {
-      "lastModificationDate": 1755675006464,
+      "lastModificationDate": 1755675743912,
       "contentHash": "069bd706c678b75f7fa93e25db3eb689",
       "sourceName": "contracts/utils/ManifestDispatcherLib.sol",
       "solcConfig": {
@@ -2617,6 +2618,72 @@
       "artifacts": [
         "VersionFacet"
       ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Example.sol": {
+      "lastModificationDate": 1755724291272,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/test/Example.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\_payrox_generated\\Example_Transformed.sol": {
+      "lastModificationDate": 1755724292423,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/_payrox_generated/Example_Transformed.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
     }
   }
 }

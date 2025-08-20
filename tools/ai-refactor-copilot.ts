@@ -1,351 +1,294 @@
-#!/usr/bin/```solidity
-// SPDX-License-Identifier: MIT  
-pragma solidity 0.8.30;
-
-import "../libraries/LibCore.sol```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.30;
-
-import "../libraries/LibAdmin.sol";ode
-
+#!/usr/bin/env node
+/* eslint-disable */
 /**
  * PayRox AI Refactor Copilot
  * 
- * Self-correcting AI syste```soli### AdminF```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.30;
-
-import "../libraries/LibAdmin.sol";sol
-```s### CoreFacet.sol
-```solidity
-// SPDX-License-Identifier: MIT  
-pragma solidity 0.8.30;
-
-import "../libraries/LibCore.sol";y
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.30;
-
-import "../libraries/LibAdmin.sol";/ SPDX-Lic```solidity
-// SPDX-License-Identifier: MIT  
-pragma solidity 0.8.30;
-
-import "../libraries/LibCore.sol";Identifier: MIT
-pragma solidity 0.8.30;
-
-import "../libraries/LibAdmin.sol"; Diamond Pattern refactoring with strict validation.
- * Enforces EIP-170 size limits, EIP-2535 compliance, and behavior preservation.
+ * Self-correcting AI system for automated code quality and security improvements
+ * Integrates with Ollama for intelligent refactoring suggestions
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import { execSync } from 'child_process';
-import { program } from 'commander';
 
-interface RefactorOptions {
-  file?: string;
-  prompt: string;
-  output?: string;
-  retries?: number;
-  model?: string;
-  dryRun?: boolean;
+interface RefactorSuggestion {
+    file: string;
+    line: number;
+    type: 'security' | 'performance' | 'style' | 'bug';
+    severity: 'high' | 'medium' | 'low';
+    description: string;
+    suggestion: string;
+    autoFix?: boolean;
 }
 
-interface ValidationResult {
-  success: boolean;
-  errors: string[];
-  warnings: string[];
-  details?: any;
-}
+class PayRoxAIRefactorCopilot {
+    private projectRoot: string;
+    private ollamaModel: string;
 
-class PayRoxRefactorCopilot {
-  private readonly systemPromptPath = path.join(__dirname, 'ai-rulebook', 'system-prompt.txt');
-  private readonly maxRetries: number;
-  private readonly outputDir: string;
-
-  constructor(options: RefactorOptions) {
-    this.maxRetries = options.retries || 3;
-    this.outputDir = options.output || './facets';
-    this.ensureOutputDir();
-  }
-
-  private ensureOutputDir(): void {
-    if (!fs.existsSync(this.outputDir)) {
-      fs.mkdirSync(this.outputDir, { recursive: true });
-    }
-  }
-
-  private loadSystemPrompt(): string {
-    if (!fs.existsSync(this.systemPromptPath)) {
-      throw new Error(`System prompt not found at ${this.systemPromptPath}`);
-    }
-    return fs.readFileSync(this.systemPromptPath, 'utf-8');
-  }
-
-  private async generateRefactor(prompt: string, context: string = '', attempt: number = 1): Promise<string> {
-    const systemPrompt = this.loadSystemPrompt();
-    const fullPrompt = `
-${systemPrompt}
-
-CONTEXT:
-${context}
-
-USER REQUEST:
-${prompt}
-
-ATTEMPT: ${attempt}/${this.maxRetries}
-
-Generate a complete Diamond Pattern refactor following all constraints.
-Include all required outputs: facets, manifest, tests, deploy scripts, and report.
-End with the mandatory SELF-CHECK footer with all boxes ticked.
-    `.trim();
-
-    // Here you would integrate with your AI service (Ollama, OpenAI, etc.)
-    // For now, returning a placeholder that demonstrates the expected structure
-    return this.callAIService(fullPrompt);
-  }
-
-  private async callAIService(prompt: string): Promise<string> {
-    // Placeholder for AI service integration
-    // In real implementation, this would call Ollama or other AI service
-    console.log('🤖 Calling AI service for refactor generation...');
-    
-    // Simulate AI call - in real implementation, replace with actual AI service
-    return `
-# PayRox Diamond Refactor Output
-
-## Generated Facets
-
-### AdminFacet.sol
-\`\`\`solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
-
-import "../libraries/LibAdmin.sol";
-
-contract AdminFacet {
-    function setOwner(address newOwner) external {
-        LibAdmin.enforceOnlyOwner();
-        LibAdmin.setOwner(newOwner);
-    }
-    
-    function getOwner() external view returns (address) {
-        return LibAdmin.getOwner();
-    }
-}
-\`\`\`
-
-### CoreFacet.sol
-\`\`\`solidity
-// SPDX-License-Identifier: MIT  
-pragma solidity 0.8.30;
-
-import "../libraries/LibCore.sol";
-
-contract CoreFacet {
-    function processPayment(uint256 amount) external payable {
-        LibCore.processPayment(amount);
-    }
-}
-\`\`\`
-
-## Manifest (payrox-manifest.json)
-\`\`\`json
-{
-  "version": "1.0.0",
-  "facets": {
-    "AdminFacet": {
-      "selectors": ["0x13af4035", "0x893d20e8"],
-      "address": "0x0000000000000000000000000000000000000000"
-    },
-    "CoreFacet": {
-      "selectors": ["0x12345678"],
-      "address": "0x0000000000000000000000000000000000000000"
-    }
-  },
-  "dispatcher": "0x0000000000000000000000000000000000000000",
-  "merkle_root": "0x0000000000000000000000000000000000000000000000000000000000000000"
-}
-\`\`\`
-
-## Tests Generated
-- loupe-and-selectors.test.ts
-- epoch-rules.test.ts  
-- roles-delegatecall.test.ts
-- size-and-gas.test.ts
-
-## Deploy Scripts Generated
-- deploy-diamond.ts
-- verify-deployment.ts
-
---- SELF-CHECK (tick before submit) ---
-[✓] Size OK   [✓] No Loupe in Facets   [✓] Selectors Parity
-[✓] Roles→Dispatcher   [✓] Epoch Rules   [✓] Refund Math
-[✓] Init Guard
-    `;
-  }
-
-  private async validateOutput(output: string): Promise<ValidationResult> {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-
-    // Check for mandatory self-check footer
-    if (!this.validateSelfCheck(output)) {
-      errors.push('Missing or incomplete SELF-CHECK footer');
+    constructor(projectRoot: string = process.cwd(), ollamaModel: string = 'llama3.1:latest') {
+        this.projectRoot = projectRoot;
+        this.ollamaModel = ollamaModel;
     }
 
-    // Run compilation check
-    try {
-      console.log('📋 Running compilation check...');
-      execSync('npx hardhat compile', { stdio: 'pipe', cwd: process.cwd() });
-    } catch (error) {
-      errors.push(`Compilation failed: ${error}`);
+    /**
+     * Analyze a file for potential improvements using Ollama AI
+     */
+    async analyzeFile(filePath: string): Promise<RefactorSuggestion[]> {
+        try {
+            const content = fs.readFileSync(filePath, 'utf-8');
+            const fileExtension = path.extname(filePath);
+            
+            // Create context-aware prompt based on file type
+            const prompt = this.createAnalysisPrompt(content, fileExtension, filePath);
+            
+            // Query Ollama for suggestions
+            const suggestions = await this.queryOllama(prompt);
+            
+            return this.parseSuggestions(suggestions, filePath);
+        } catch (error) {
+            console.error(`Error analyzing file ${filePath}:`, error);
+            return [];
+        }
     }
 
-    // Run refactor linter
-    try {
-      console.log('🔍 Running refactor linter...');
-      const lintResult = execSync('npm run ai:lint', { stdio: 'pipe', cwd: process.cwd() });
-      const lintOutput = lintResult.toString();
-      if (lintOutput.includes('ERROR')) {
-        errors.push(`Lint errors found: ${lintOutput}`);
-      }
-      if (lintOutput.includes('WARNING')) {
-        warnings.push(`Lint warnings: ${lintOutput}`);
-      }
-    } catch (error) {
-      errors.push(`Linting failed: ${error}`);
-    }
-
-    // Run critical tests
-    try {
-      console.log('🧪 Running critical tests...');
-      execSync('npx hardhat test --grep "(loupe|selectors|epoch|roles)"', { 
-        stdio: 'pipe', 
-        cwd: process.cwd() 
-      });
-    } catch (error) {
-      errors.push(`Critical tests failed: ${error}`);
-    }
-
-    return {
-      success: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
-
-  private validateSelfCheck(output: string): boolean {
-    const selfCheckRegex = /--- SELF-CHECK \(tick before submit\) ---\s*\[✓\] Size OK\s*\[✓\] No Loupe in Facets\s*\[✓\] Selectors Parity\s*\[✓\] Roles→Dispatcher\s*\[✓\] Epoch Rules\s*\[✓\] Refund Math\s*\[✓\] Init Guard/;
-    return selfCheckRegex.test(output);
-  }
-
-  private writeOutput(output: string, attempt: number): void {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const outputFile = path.join(this.outputDir, `refactor-${timestamp}-attempt-${attempt}.md`);
-    fs.writeFileSync(outputFile, output);
-    console.log(`📄 Output written to: ${outputFile}`);
-  }
-
-  public async refactor(options: RefactorOptions): Promise<void> {
-    console.log('🚀 Starting PayRox Diamond Pattern Refactor...');
-    
-    let context = '';
-    if (options.file) {
-      if (!fs.existsSync(options.file)) {
-        throw new Error(`File not found: ${options.file}`);
-      }
-      context = `TARGET FILE: ${options.file}\n${fs.readFileSync(options.file, 'utf-8')}`;
-    }
-
-    for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
-      console.log(`\n🔄 Attempt ${attempt}/${this.maxRetries}`);
-      
-      try {
-        // Generate refactor
-        const output = await this.generateRefactor(options.prompt, context, attempt);
+    /**
+     * Create context-aware analysis prompt for Ollama
+     */
+    private createAnalysisPrompt(content: string, extension: string, filePath: string): string {
+        const fileType = this.getFileType(extension);
         
-        if (options.dryRun) {
-          console.log('🏃‍♂️ Dry run mode - skipping validation');
-          console.log(output);
-          return;
-        }
+        return `
+Analyze this ${fileType} file for potential improvements based on PayRox Diamond proxy best practices:
 
-        // Write output for inspection
-        this.writeOutput(output, attempt);
+File: ${filePath}
+Content:
+\`\`\`${fileType}
+${content}
+\`\`\`
 
-        // Validate output
-        console.log('✅ Validating generated refactor...');
-        const validation = await this.validateOutput(output);
+Please identify:
+1. Security vulnerabilities or anti-patterns
+2. Performance optimization opportunities
+3. Code style improvements
+4. Potential bugs or edge cases
+5. Diamond proxy specific improvements (if applicable)
 
-        if (validation.success) {
-          console.log('🎉 Refactor completed successfully!');
-          if (validation.warnings.length > 0) {
-            console.log('⚠️  Warnings:');
-            validation.warnings.forEach(warning => console.log(`   ${warning}`));
-          }
-          return;
-        } else {
-          console.log('❌ Validation failed:');
-          validation.errors.forEach(error => console.log(`   ${error}`));
-          
-          if (attempt < this.maxRetries) {
-            console.log('🔧 Preparing retry with error feedback...');
-            context += `\n\nPREVIOUS ATTEMPT ERRORS:\n${validation.errors.join('\n')}`;
-          }
-        }
-      } catch (error) {
-        console.error(`💥 Attempt ${attempt} failed:`, error);
-        if (attempt === this.maxRetries) {
-          throw new Error(`All ${this.maxRetries} attempts failed. Last error: ${error}`);
-        }
-      }
+Focus on:
+- EIP-2535 Diamond Standard compliance
+- Storage collision prevention
+- Reentrancy protection
+- Gas optimization
+- Access control patterns
+- Upgrade safety
+
+Return suggestions in JSON format:
+{
+  "suggestions": [
+    {
+      "line": number,
+      "type": "security|performance|style|bug",
+      "severity": "high|medium|low",
+      "description": "Brief description",
+      "suggestion": "Specific improvement recommendation",
+      "autoFix": boolean
+    }
+  ]
+}
+`;
     }
 
-    throw new Error(`Refactor failed after ${this.maxRetries} attempts`);
-  }
+    /**
+     * Query Ollama with the analysis prompt
+     */
+    private async queryOllama(prompt: string): Promise<string> {
+        try {
+            const command = `ollama run ${this.ollamaModel} "${prompt.replace(/"/g, '\\"')}"`;
+            const result = execSync(command, { encoding: 'utf-8', maxBuffer: 1024 * 1024 });
+            return result.trim();
+        } catch (error) {
+            console.error('Error querying Ollama:', error);
+            return '{"suggestions": []}';
+        }
+    }
+
+    /**
+     * Parse Ollama response into structured suggestions
+     */
+    private parseSuggestions(response: string, filePath: string): RefactorSuggestion[] {
+        try {
+            // Extract JSON from response (Ollama might include extra text)
+            const jsonMatch = response.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) {
+                console.warn('No JSON found in Ollama response');
+                return [];
+            }
+
+            const parsed = JSON.parse(jsonMatch[0]);
+            const suggestions: RefactorSuggestion[] = [];
+
+            if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
+                for (const suggestion of parsed.suggestions) {
+                    suggestions.push({
+                        file: filePath,
+                        line: suggestion.line || 0,
+                        type: suggestion.type || 'style',
+                        severity: suggestion.severity || 'low',
+                        description: suggestion.description || '',
+                        suggestion: suggestion.suggestion || '',
+                        autoFix: suggestion.autoFix || false
+                    });
+                }
+            }
+
+            return suggestions;
+        } catch (error) {
+            console.error('Error parsing Ollama response:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Get file type from extension
+     */
+    private getFileType(extension: string): string {
+        const typeMap: Record<string, string> = {
+            '.sol': 'solidity',
+            '.ts': 'typescript',
+            '.js': 'javascript',
+            '.json': 'json',
+            '.md': 'markdown'
+        };
+        return typeMap[extension] || 'text';
+    }
+
+    /**
+     * Analyze entire project for refactoring opportunities
+     */
+    async analyzeProject(): Promise<RefactorSuggestion[]> {
+        const allSuggestions: RefactorSuggestion[] = [];
+        
+        // Find all relevant files
+        const files = this.findProjectFiles();
+        
+        console.log(`🔍 Analyzing ${files.length} files...`);
+        
+        for (const file of files) {
+            console.log(`📄 Analyzing: ${file}`);
+            const suggestions = await this.analyzeFile(file);
+            allSuggestions.push(...suggestions);
+        }
+        
+        return allSuggestions;
+    }
+
+    /**
+     * Find all relevant files in the project
+     */
+    private findProjectFiles(): string[] {
+        const files: string[] = [];
+        const extensions = ['.sol', '.ts', '.js'];
+        const excludeDirs = ['node_modules', '.git', 'coverage', 'artifacts', 'cache'];
+
+        const walkDir = (dir: string) => {
+            const items = fs.readdirSync(dir);
+            
+            for (const item of items) {
+                const fullPath = path.join(dir, item);
+                const stat = fs.statSync(fullPath);
+                
+                if (stat.isDirectory() && !excludeDirs.includes(item)) {
+                    walkDir(fullPath);
+                } else if (stat.isFile() && extensions.includes(path.extname(item))) {
+                    files.push(fullPath);
+                }
+            }
+        };
+
+        walkDir(this.projectRoot);
+        return files;
+    }
+
+    /**
+     * Generate refactor report
+     */
+    generateReport(suggestions: RefactorSuggestion[]): string {
+        const report = [`# PayRox AI Refactor Report`, `Generated: ${new Date().toISOString()}`, ''];
+        
+        // Group by severity
+        const bySeverity = {
+            high: suggestions.filter(s => s.severity === 'high'),
+            medium: suggestions.filter(s => s.severity === 'medium'),
+            low: suggestions.filter(s => s.severity === 'low')
+        };
+
+        // Summary
+        report.push('## Summary');
+        report.push(`- **High Priority**: ${bySeverity.high.length} issues`);
+        report.push(`- **Medium Priority**: ${bySeverity.medium.length} issues`);
+        report.push(`- **Low Priority**: ${bySeverity.low.length} issues`);
+        report.push('');
+
+        // Detailed suggestions
+        for (const [severity, items] of Object.entries(bySeverity)) {
+            if (items.length === 0) continue;
+            
+            report.push(`## ${severity.toUpperCase()} Priority`);
+            report.push('');
+            
+            for (const suggestion of items) {
+                report.push(`### ${suggestion.file}:${suggestion.line} (${suggestion.type})`);
+                report.push(`**Description**: ${suggestion.description}`);
+                report.push(`**Suggestion**: ${suggestion.suggestion}`);
+                if (suggestion.autoFix) {
+                    report.push('✅ *Auto-fix available*');
+                }
+                report.push('');
+            }
+        }
+
+        return report.join('\n');
+    }
+
+    /**
+     * Run the AI refactor copilot
+     */
+    async run(): Promise<void> {
+        console.log('🤖 PayRox AI Refactor Copilot Starting...');
+        console.log(`📁 Project Root: ${this.projectRoot}`);
+        console.log(`🧠 AI Model: ${this.ollamaModel}`);
+        console.log('');
+
+        // Analyze project
+        const suggestions = await this.analyzeProject();
+        
+        // Generate report
+        const report = this.generateReport(suggestions);
+        
+        // Save report
+        const reportPath = path.join(this.projectRoot, 'AI_REFACTOR_REPORT.md');
+        fs.writeFileSync(reportPath, report);
+        
+        console.log('');
+        console.log('🎉 Analysis Complete!');
+        console.log(`📋 Found ${suggestions.length} suggestions`);
+        console.log(`📄 Report saved to: ${reportPath}`);
+        
+        // Show summary
+        const highPriority = suggestions.filter(s => s.severity === 'high').length;
+        if (highPriority > 0) {
+            console.log(`⚠️  ${highPriority} high-priority issues found!`);
+        }
+    }
 }
 
-// CLI Interface
-program
-  .name('ai-refactor-copilot')
-  .description('PayRox AI-powered Diamond Pattern refactor assistant')
-  .version('1.0.0');
-
-program
-  .argument('<prompt>', 'Refactor prompt describing the desired changes')
-  .option('-f, --file <path>', 'Target contract file to refactor')
-  .option('-o, --output <dir>', 'Output directory for generated files', './facets')
-  .option('-r, --retries <number>', 'Maximum retry attempts', '3')
-  .option('-m, --model <name>', 'AI model to use', 'codellama:7b-instruct')
-  .option('--dry-run', 'Generate output without validation')
-  .action(async (prompt: string, options: any) => {
-    try {
-      const copilot = new PayRoxRefactorCopilot({
-        prompt,
-        file: options.file,
-        output: options.output,
-        retries: parseInt(options.retries),
-        model: options.model,
-        dryRun: options.dryRun
-      });
-
-      await copilot.refactor({
-        prompt,
-        file: options.file,
-        output: options.output,
-        retries: parseInt(options.retries),
-        model: options.model,
-        dryRun: options.dryRun
-      });
-    } catch (error) {
-      console.error('💥 Refactor failed:', error);
-      process.exit(1);
-    }
-  });
-
-// Handle direct execution
+// CLI interface
 if (require.main === module) {
-  program.parse();
+    const args = process.argv.slice(2);
+    const projectRoot = args[0] || process.cwd();
+    const model = args[1] || 'llama3.1:latest';
+    
+    const copilot = new PayRoxAIRefactorCopilot(projectRoot, model);
+    copilot.run().catch(console.error);
 }
 
-export { PayRoxRefactorCopilot, RefactorOptions, ValidationResult };
+export default PayRoxAIRefactorCopilot;

@@ -40,6 +40,7 @@
     "./test/**/*",
     "./tests/**/*", 
     "./tasks/**/*",
+    "./tools/**/*",
     "./hardhat.config.ts",
     "./src/**/*",
     "./typechain-types/**/*", // Aligns with ARTIFACTS_PATHS.TYPECHAIN_ROOT
