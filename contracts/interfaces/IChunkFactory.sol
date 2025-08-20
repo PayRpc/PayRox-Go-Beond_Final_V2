@@ -89,9 +89,7 @@ interface IChunkFactory {
     /// Caller pulls any overpayment refunds accrued.
     function withdrawRefund() external;
 
-    /// Pause / unpause (role-gated in implementation).
-    function pause() external;
-    function unpause() external;
+    // Pause/unpause are provided by the canonical PauseFacet and not part of this factory interface.
 
     // -------- Admin setters present in v2 (role-gated there) --------
 

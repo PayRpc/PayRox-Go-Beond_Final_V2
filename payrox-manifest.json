@@ -1,0 +1,108 @@
+{
+  "version": "1.0.0",
+  "facets": {
+    "AccessControlFacet": {
+      "selectors": [
+        "0x248a9ca3",
+        "0x2f2ff15d",
+        "0x91d14854",
+        "0xd547741f"
+      ]
+    },
+    "ChunkFactoryFacet": {
+      "selectors": [
+        "0x79189d61",
+        "0xee05163a",
+        "0xc2c8e21a",
+        "0x4c36f10d",
+        "0x38a699a4",
+        "0x966dae0e",
+        "0x7ed1cd47",
+        "0xbc2e51df",
+        "0x699ffc7e",
+        "0xa9c2e36c",
+        "0xee9d1ef5",
+        "0x6290caec",
+        "0x8da5cb5b",
+        "0xa64139fa",
+        "0x10a93528",
+        "0x8e7163c2",
+        "0xa087a87e",
+        "0x8061c715",
+        "0xc97237be",
+        "0xe74b981b",
+        "0xa901dd92",
+        "0x40fca008",
+        "0x63221490",
+        "0x0bfde0da",
+        "0xa04725c6",
+        "0xfa8c96ef",
+        "0x1d513465",
+        "0x7f4aedfe",
+        "0x5ea31b98",
+        "0x24063c82",
+        "0xb697ff8a",
+        "0x939e255c",
+        "0x476343ee",
+        "0x110f8874"
+      ]
+    },
+    "ERC165Facet": {
+      "selectors": [
+        "0x01ffc9a7"
+      ]
+    },
+    "MaliciousFacet": {
+      "selectors": [
+        "0xd018db3e"
+      ]
+    },
+    "PauseFacet": {
+      "selectors": [
+        "0x8456cb59",
+        "0x5c975abb",
+        "0x3f4ba83a"
+      ]
+    },
+    "PayRoxAdminFacet": {
+      "selectors": [
+        "0xc3f909d4",
+        "0x9159aba8",
+        "0x8e005553"
+      ]
+    },
+    "PayRoxPaymentsFacet": {
+      "selectors": [
+        "0x498ae704",
+        "0xe66eefc8",
+        "0x325fda8a"
+      ]
+    },
+    "RefactorSafetyFacet": {
+      "selectors": [
+        "0xe623a87c",
+        "0xc34c492f"
+      ]
+    },
+    "SecurityFacet": {
+      "selectors": [
+        "0xf36c8f5c",
+        "0x4d9b47e2",
+        "0xd4d0d6e6",
+        "0x0d2644d2",
+        "0x9f8e6da1",
+        "0x94e096e4",
+        "0x3ea6b343",
+        "0x96d64879",
+        "0xd55e62a0",
+        "0x88ded880",
+        "0xde5f8d93",
+        "0x527555da",
+        "0x328d8f72",
+        "0xe3064a77",
+        "0x75b9f5b2",
+        "0x8fa3a84c"
+      ]
+    }
+  }
+}

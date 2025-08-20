@@ -232,6 +232,54 @@ jobs:
         target: 'contracts/facets/'
         fail-on: none
         slither-args: --print human-summary
+
+    - name: Setup Python for Mythril
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install solc-select & Mythril
+      run: |
+        python -m pip install --upgrade pip
+        pip install solc-select mythril
+        echo "$HOME/.solc-select/bin" >> $GITHUB_PATH
+        solc-select install 0.8.30
+        solc-select use 0.8.30
+        solc --version
+        myth --version
+
+    - name: Determine changed Solidity files (PR-only)
+      if: ${{ github.event_name == 'pull_request' }}
+      id: changed_myth
+      shell: bash
+      run: |
+        BASE="${{ github.base_ref }}"
+        HEAD="${{ github.head_ref }}"
+        git fetch origin "$BASE" --depth=1 || true
+        DIFF=$(git diff --name-only "origin/${BASE}"... | grep -E '^contracts/.*\.sol$' || true)
+        echo "changed<<EOF" >> $GITHUB_OUTPUT
+        echo "${DIFF}" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Run Mythril (changed files or all facets)
+      env:
+        MYTH_TARGETS: ${{ steps.changed_myth.outputs.changed }}
+        PRX_MYTHRIL_FAIL_ON_HIGH: ${{ env.PRX_MYTHRIL_FAIL_ON_HIGH || 'false' }}
+      run: |
+        bash security/run-mythril.sh
+
+    - name: Upload Mythril artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: mythril-reports
+        path: security/mythril-reports/
+
+    - name: Post Mythril summary to PR (comment)
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: mythril
+        path: security/mythril-reports/mythril-summary.md
     - name: Check for common vulnerabilities
       run: |
         echo "🔐 Scanning for common vulnerabilities..."

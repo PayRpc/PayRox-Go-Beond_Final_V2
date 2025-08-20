@@ -4,14 +4,13 @@ pragma solidity 0.8.30;
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 import {GasOptimizationUtils} from "../utils/GasOptimizationUtils.sol";
-import { RefactorSafeFacetBase } from "../libraries/RefactorSafetyLib.sol";
 
 /**
  * @title ExampleFacetA
  * @notice Delegatecalled facet routed by a Manifest‑gated dispatcher.
  * @dev Uses a fixed storage slot layout (diamond‑safe). Non‑payable; no external calls.
  */
-contract ExampleFacetA is RefactorSafeFacetBase {
+contract ExampleFacetA {
 
     /* ───────────────────────────── Errors ───────────────────────────── */
     error EmptyMessage();
@@ -50,11 +49,6 @@ contract ExampleFacetA is RefactorSafeFacetBase {
         bytes32 slot = _SLOT;
         assembly { l.slot := slot }
     }
-
-    // -------- Refactor safety hooks (non-hot path usage) --------
-    function _getVersion() internal pure override returns (uint256) { return 110; } // e.g., 1.1.0
-    function _getStorageNamespace() internal pure override returns (bytes32) { return _SLOT; }
-    function _getExpectedCodeHash() internal pure override returns (bytes32) { return bytes32(0); }
 
     /* ───────────────────────────── API ──────────────────────────────── */
 
@@ -154,6 +148,10 @@ contract ExampleFacetA is RefactorSafeFacetBase {
         bytes32 digest = MessageHashUtils.toEthSignedMessageHash(hash);
         (address recovered, ECDSA.RecoverError err, bytes32 _errArg) =
             ECDSA.tryRecover(digest, signature);
+        // reference _errArg to avoid unused-local-variable warning from the compiler
+        if (_errArg == bytes32(0)) {
+            // no-op: this branch is never relied on, _errArg is just referenced to silence warnings
+        }
         return err == ECDSA.RecoverError.NoError && recovered == expectedSigner;
     }
 

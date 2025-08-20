@@ -4,6 +4,11 @@
   "sourceName": "contracts/libraries/RefactorSafetyLib.sol",
   "abi": [
     {
+      "inputs": [],
+      "name": "BaselineGasZero",
+      "type": "error"
+    },
+    {
       "inputs": [
         {
           "internalType": "bytes32",
@@ -17,6 +22,38 @@
         }
       ],
       "name": "IncompatibleStorageLayout",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "fromVersion",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "toVersion",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefSafetyNonIncrementing",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "have",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "minRequired",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefSafetyVersionIncompatible",
       "type": "error"
     },
     {
@@ -110,8 +147,8 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x6080806040523460175760399081601c823930815050f35b5f80fdfe5f80fdfea2646970667358221220e786842f5a277524ea745b2dd3fe396baef84d7ba9b933c51a6aef8ba74b02d564736f6c634300081e0033",
-  "deployedBytecode": "0x5f80fdfea2646970667358221220e786842f5a277524ea745b2dd3fe396baef84d7ba9b933c51a6aef8ba74b02d564736f6c634300081e0033",
+  "bytecode": "0x6080806040523460175760399081601c823930815050f35b5f80fdfe5f80fdfea2646970667358221220fecb79434ae75685456349757833c9f91edfa1b692b402dd3af10dd8fdeab59c64736f6c634300081e0033",
+  "deployedBytecode": "0x5f80fdfea2646970667358221220fecb79434ae75685456349757833c9f91edfa1b692b402dd3af10dd8fdeab59c64736f6c634300081e0033",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }
