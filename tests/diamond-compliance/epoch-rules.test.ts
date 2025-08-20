@@ -14,11 +14,11 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
  */
 
 describe("Epoch Rules", function () {
-  let diamond: Contract;
-  let epochManager: Contract;
-  let facetA: Contract;
-  let facetB: Contract;
-  let owner: any;
+  let diamond: any;
+  let epochManager: any;
+  let facetA: any;
+  let facetB: any;
+  let _owner: any;
   let addr1: any;
 
   async function deployEpochSystemFixture() {
@@ -40,7 +40,7 @@ describe("Epoch Rules", function () {
 
     // Deploy diamond with epoch support
     const DiamondWithEpoch = await ethers.getContractFactory("DiamondWithEpoch");
-  const diamond = await DiamondWithEpoch.deploy(await owner.getAddress(), epochManager.target ?? epochManager.address);
+  const diamond = await DiamondWithEpoch.deploy(await owner.getAddress(), epochManager.target);
   await diamond.waitForDeployment();
 
     return { diamond, epochManager, facetA, facetB, owner, addr1 };
@@ -52,7 +52,7 @@ describe("Epoch Rules", function () {
     epochManager = fixture.epochManager;
     facetA = fixture.facetA;
     facetB = fixture.facetB;
-    owner = fixture.owner;
+    _owner = fixture.owner;
     addr1 = fixture.addr1;
   });
 

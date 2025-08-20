@@ -20,7 +20,7 @@ async function deployEpochSystemFixture() {
   await facetB.waitForDeployment();
 
   const DiamondWithEpoch = await ethers.getContractFactory("DiamondWithEpoch");
-  const diamond = await DiamondWithEpoch.deploy(await owner.getAddress(), epochManager.target ?? epochManager.address);
+  const diamond = await DiamondWithEpoch.deploy(await owner.getAddress(), epochManager.target);
   await diamond.waitForDeployment();
 
   return { diamond, epochManager, facetA, facetB };

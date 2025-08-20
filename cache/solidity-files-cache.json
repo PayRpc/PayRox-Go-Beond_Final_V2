@@ -2578,8 +2578,8 @@
       "artifacts": []
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\VersionFacet.sol": {
-      "lastModificationDate": 1755588482734,
-      "contentHash": "a0d91ec9a32ed0c06fc241e08a247d18",
+      "lastModificationDate": 1755663728912,
+      "contentHash": "1c1b194214eb538a7cc0f3278ecd4342",
       "sourceName": "contracts/facets/VersionFacet.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -2613,6 +2613,138 @@
       "artifacts": [
         "VersionFacet"
       ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\TerraStakeLiquidityGuard-administrative-1.facet.sol": {
+      "lastModificationDate": 1755658017282,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/Tests/TerraStakeLiquidityGuard-administrative-1.facet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\TerraStakeLiquidityGuard-chunk-0.facet.sol": {
+      "lastModificationDate": 1755658012553,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/Tests/TerraStakeLiquidityGuard-chunk-0.facet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\TerraStakeLiquidityGuard-core-0.facet.sol": {
+      "lastModificationDate": 1755658012375,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/Tests/TerraStakeLiquidityGuard-core-0.facet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\Tests\\Test-1.facet.sol": {
+      "lastModificationDate": 1755657997050,
+      "contentHash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sourceName": "contracts/Tests/Test-1.facet.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
     }
   }
 }

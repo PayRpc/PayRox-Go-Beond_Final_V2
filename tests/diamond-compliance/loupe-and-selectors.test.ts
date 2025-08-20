@@ -19,8 +19,8 @@ function getTarget(c: any) {
  */
 
 describe("Loupe and Selectors", function () {
-  let diamond: Contract;
-  let facets: Contract[];
+  let diamond: any;
+  let facets: any[];
   let expectedSelectors: string[];
 
   async function deployDiamondFixture() {
@@ -310,7 +310,7 @@ describe("Loupe and Selectors", function () {
 });
 
 // Helper function to get function selectors from a contract
-function getSelectors(contract: Contract): string[] {
+function getSelectors(contract: any): string[] {
   const selectors: string[] = [];
   const iface: any = (contract.interface as any) || {};
 
