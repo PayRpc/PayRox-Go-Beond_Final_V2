@@ -25,12 +25,12 @@ module.exports = [
         require: 'readonly',
         Buffer: 'readonly',
         setTimeout: 'readonly',
-        setInterval: 'readonly'
-      }
+        setInterval: 'readonly',
+      },
     },
     plugins: {
       import: importPlugin,
-      prettier
+      prettier,
     },
     rules: {
       ...importRecommended,
@@ -39,8 +39,8 @@ module.exports = [
       'import/no-unresolved': 'off',
       'import/namespace': 'off',
       'import/named': 'off',
-      'import/no-duplicates': 'off'
-    }
+      'import/no-duplicates': 'off',
+    },
   },
   // TS files
   {
@@ -50,20 +50,20 @@ module.exports = [
       parserOptions: {
         project: ['./tsconfig.json', './tsconfig.hardhat.json'],
         sourceType: 'module',
-        ecmaVersion: 'latest'
+        ecmaVersion: 'latest',
       },
       globals: {
         console: 'readonly',
         process: 'readonly',
         module: 'readonly',
         require: 'readonly',
-        Buffer: 'readonly'
-      }
+        Buffer: 'readonly',
+      },
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
       import: importPlugin,
-      prettier
+      prettier,
     },
     rules: {
       ...tsRecommended,
@@ -84,7 +84,7 @@ module.exports = [
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-      ]
-    }
-  }
+      ],
+    },
+  },
 ];
