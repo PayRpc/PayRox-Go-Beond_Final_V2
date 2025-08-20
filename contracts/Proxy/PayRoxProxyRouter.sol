@@ -1,17 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-/// @notice Optional dispatcher view (lightweight compat check; no hard coupling)
-interface IManifestDispatcherView {
-    function routes(bytes4 selector) external view returns (address facet, bytes32 codehash);
-    function activeRoot() external view returns (bytes32);
-    function frozen() external view returns (bool);
-}
+import {IManifestDispatcherView, BatchCall} from "../interfaces/IManifestDispatcher.sol";
 
-/// @notice Batch call structure for gas-optimized operations
-struct BatchCall {
-    bytes4 selector;
-    bytes data;
+/**
+ * @title ICrossDomainMessenger
+ * @notice Interface for L2 cross-domain messengers (OP-Stack, Arbitrum, etc.)
+ */
+interface ICrossDomainMessenger {
+    function xDomainMessageSender() external view returns (address);
 }
 
 /**
@@ -27,6 +24,10 @@ struct BatchCall {
  *  - Batch executes via `delegatecall` loop (no external helper that might use CALL).
  *  - Optional batch reentrancy lock (single slot) to prevent weird recursive batches.
  *  - `freeze()` permanently locks admin mutators except pause/forbid (for incident response).
+ *  - Ownership transfer uses two-step process to prevent accidental loss.
+ *  - Initialize function should be called immediately after deployment by the proxy to prevent front-running.
+ *  - Codehash checking may not be effective if the dispatcher is a proxy (proxy codehash is constant).
+ *  - State changes during batch execution (via delegatecall) may lead to inconsistent checks; dispatcher should avoid modifying router state.
  */
 contract PayRoxProxyRouter {
     // ─────────────────────────────────────────────────────────────────────────────
@@ -44,14 +45,18 @@ contract PayRoxProxyRouter {
     event PausedSet(bool paused);
     event SelectorsForbidden(bytes4[] selectors, bool forbidden);
     event Frozen();
+    event OwnershipTransferStarted(address indexed previousOwner, address indexed newOwner);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event BatchExecuted(uint256 callCount, uint256 gasUsed, uint256 timestamp);
+    event L2GovernorConfigured(address l2Messenger, address l1Governor);
 
     // ─────────────────────────────────────────────────────────────────────────────
     // Errors
     // ─────────────────────────────────────────────────────────────────────────────
     error AlreadyInitialized();
     error NotOwner();
+    error NotPendingOwner();
+    error InvalidNewOwner();
     error Paused();
     error FrozenRouter();
     error DispatcherZero();
@@ -61,6 +66,7 @@ contract PayRoxProxyRouter {
     error BatchTooLarge(uint256 size, uint256 maxSize);
     error EmptyBatch();
     error BatchReentrancy();
+    error Reentrancy();
 
     // ─────────────────────────────────────────────────────────────────────────────
     // Constants
@@ -73,13 +79,19 @@ contract PayRoxProxyRouter {
     // ─────────────────────────────────────────────────────────────────────────────
     struct RouterStorage {
         address owner;
+        address pendingOwner;
         address dispatcher;
         bytes32 dispatcherCodehash; // expected EXTCODEHASH(dispatcher) or 0x0 to disable pin
         bool strictCodehash; // if true, check codehash on every call
         bool paused; // emergency pause
         bool frozen; // one-way freeze of admin mutators (except pause/forbid)
         bool batchLock; // tiny reentrancy lock for batch
+        bool reentrancyLock; // reentrancy lock for fallback
         mapping(bytes4 => bool) forbidden; // hot kill-switch per selector
+        
+        // L2 governance (optional)
+        address l2Messenger; // e.g., OP: 0x4200000000000000000000000000000000000007, Arbitrum: L2CrossDomainMessenger
+        address l1Governor;  // L1 governor that's allowed through messenger
     }
 
     function _s() private pure returns (RouterStorage storage s) {
@@ -92,8 +104,25 @@ contract PayRoxProxyRouter {
     // ─────────────────────────────────────────────────────────────────────────────
     // Modifiers
     // ─────────────────────────────────────────────────────────────────────────────
+    function _isGov(address sender) internal view returns (bool) {
+        RouterStorage storage s = _s();
+        if (sender == s.owner) return true;
+        if (sender == s.l2Messenger && s.l2Messenger != address(0)) {
+            // read-through to original L1 sender
+            try ICrossDomainMessenger(s.l2Messenger).xDomainMessageSender() returns (address xSender) {
+                return xSender == s.l1Governor && s.l1Governor != address(0);
+            } catch { return false; }
+        }
+        return false;
+    }
+
     modifier onlyOwner() {
         if (msg.sender != _s().owner) revert NotOwner();
+        _;
+    }
+
+    modifier onlyGovernor() {
+        if (!_isGov(msg.sender)) revert NotOwner();
         _;
     }
 
@@ -102,11 +131,20 @@ contract PayRoxProxyRouter {
         _;
     }
 
+    modifier nonReentrant() {
+        RouterStorage storage s = _s();
+        if (s.reentrancyLock) revert Reentrancy();
+        s.reentrancyLock = true;
+        _;
+        s.reentrancyLock = false;
+    }
+
     // ─────────────────────────────────────────────────────────────────────────────
     // Admin / setup
     // ─────────────────────────────────────────────────────────────────────────────
 
     /// @notice One-time initializer. Must be called after your proxy is upgraded to this implementation.
+    /// @dev Should be called immediately by the proxy during upgrade to prevent front-running.
     /// @param owner_ New owner of the router's admin functions (msg.sender if zero).
     /// @param dispatcher_ Address of the ManifestDispatcher to route to.
     /// @param expectedCodehash EXTCODEHASH(dispatcher_) to enforce; set 0x0 to disable checking.
@@ -130,29 +168,40 @@ contract PayRoxProxyRouter {
         s.paused = false;
         s.frozen = false;
         s.batchLock = false;
+        s.reentrancyLock = false;
 
         emit PayRoxProxyRouterInitialized(s.owner, s.dispatcher, s.dispatcherCodehash, s.strictCodehash);
     }
 
-    /// @notice Transfer ownership of router admin.
-    function transferOwnership(address newOwner) external onlyOwner {
-        if (newOwner == address(0)) revert NotOwner();
+    /// @notice Transfer ownership of router admin (two-step process).
+    function transferOwnership(address newOwner) external onlyGovernor {
+        if (newOwner == address(0)) revert InvalidNewOwner();
         RouterStorage storage s = _s();
-        address prev = s.owner;
-        s.owner = newOwner;
-        emit OwnershipTransferred(prev, newOwner);
+        s.pendingOwner = newOwner;
+        emit OwnershipTransferStarted(s.owner, newOwner);
+    }
+
+    /// @notice New owner accepts ownership.
+    function acceptOwnership() external {
+        RouterStorage storage s = _s();
+        if (msg.sender != s.pendingOwner) revert NotPendingOwner();
+        address previousOwner = s.owner;
+        s.owner = s.pendingOwner;
+        s.pendingOwner = address(0);
+        emit OwnershipTransferred(previousOwner, s.owner);
     }
 
     /// @notice Renounce ownership (danger; only for fully automated flows).
-    function renounceOwnership() external onlyOwner {
+    function renounceOwnership() external onlyGovernor {
         RouterStorage storage s = _s();
         address prev = s.owner;
         s.owner = address(0);
+        s.pendingOwner = address(0);
         emit OwnershipTransferred(prev, address(0));
     }
 
     /// @notice Set a new dispatcher. Requires not frozen.
-    function setDispatcher(address dispatcher_, bytes32 expectedCodehash) external onlyOwner notFrozen {
+    function setDispatcher(address dispatcher_, bytes32 expectedCodehash) external onlyGovernor notFrozen {
         if (dispatcher_ == address(0)) revert DispatcherZero();
         _validateDispatcherCompatibility(dispatcher_);
         RouterStorage storage s = _s();
@@ -163,7 +212,7 @@ contract PayRoxProxyRouter {
     }
 
     /// @notice Update expected dispatcher codehash (e.g., after redeploy). 0x0 disables the check.
-    function setDispatcherCodehash(bytes32 expected) external onlyOwner notFrozen {
+    function setDispatcherCodehash(bytes32 expected) external onlyGovernor notFrozen {
         RouterStorage storage s = _s();
         bytes32 old = s.dispatcherCodehash;
         s.dispatcherCodehash = expected;
@@ -171,19 +220,19 @@ contract PayRoxProxyRouter {
     }
 
     /// @notice Toggle strict per-call codehash checks.
-    function setStrictCodehash(bool enabled) external onlyOwner notFrozen {
+    function setStrictCodehash(bool enabled) external onlyGovernor notFrozen {
         _s().strictCodehash = enabled;
         emit StrictCodehashSet(enabled);
     }
 
     /// @notice Pause/unpause routing (allowed even when frozen).
-    function setPaused(bool paused_) external onlyOwner {
+    function setPaused(bool paused_) external onlyGovernor {
         _s().paused = paused_;
         emit PausedSet(paused_);
     }
 
     /// @notice Forbid/allow a batch of selectors (hot kill-switch). Allowed even when frozen.
-    function setForbiddenSelectors(bytes4[] calldata selectors, bool forbidden) external onlyOwner {
+    function setForbiddenSelectors(bytes4[] calldata selectors, bool forbidden) external onlyGovernor {
         RouterStorage storage s = _s();
         for (uint256 i = 0; i < selectors.length; i++) {
             s.forbidden[selectors[i]] = forbidden;
@@ -192,17 +241,29 @@ contract PayRoxProxyRouter {
     }
 
     /// @notice One-way freeze of admin mutators (except pause/forbid).
-    function freeze() external onlyOwner {
+    function freeze() external onlyGovernor {
         _s().frozen = true;
         emit Frozen();
+    }
+
+    /// @notice Configure L2 cross-domain governance (OP-Stack, Arbitrum, etc.)
+    /// @param l2Messenger_ Address of L2 cross-domain messenger (e.g., 0x4200...0007 on OP-Stack)
+    /// @param l1Governor_ Address of L1 governor that can send messages through messenger
+    function setL2Governor(address l2Messenger_, address l1Governor_) external onlyOwner notFrozen {
+        RouterStorage storage s = _s();
+        s.l2Messenger = l2Messenger_;
+        s.l1Governor = l1Governor_;
+        emit L2GovernorConfigured(l2Messenger_, l1Governor_);
     }
 
     // ─────────────────────────────────────────────────────────────────────────────
     // Routing
     // ─────────────────────────────────────────────────────────────────────────────
-    receive() external payable {}
+    receive() external payable {
+        if (_s().paused) revert Paused();
+    }
 
-    fallback() external payable {
+    fallback() external payable nonReentrant {
         RouterStorage storage s = _s();
         if (s.paused) revert Paused();
 
@@ -247,11 +308,11 @@ contract PayRoxProxyRouter {
     // ─────────────────────────────────────────────────────────────────────────────
 
     /// @notice Execute multiple calls in a single transaction (all routed via dispatcher).
-    /// @dev Reverts the whole batch if any inner call fails. Uses a tiny local reentrancy lock.
+    /// @dev Reverts the whole batch if any inner call fails. Uses symmetric reentrancy protection with fallback.
     function batchExecute(BatchCall[] calldata calls) external returns (bytes[] memory results) {
         RouterStorage storage s = _s();
         if (s.paused) revert Paused();
-        if (s.batchLock) revert BatchReentrancy();
+        if (s.batchLock || s.reentrancyLock) revert Reentrancy(); // symmetric with fallback
         uint256 n = calls.length;
         if (n == 0) revert EmptyBatch();
         if (n > MAX_BATCH_SIZE) revert BatchTooLarge(n, MAX_BATCH_SIZE);
@@ -270,6 +331,7 @@ contract PayRoxProxyRouter {
 
         uint256 gasBefore = gasleft();
         s.batchLock = true;
+        s.reentrancyLock = true;
 
         for (uint256 i = 0; i < n; ) {
             bytes4 sel = calls[i].selector;
@@ -283,6 +345,8 @@ contract PayRoxProxyRouter {
             (ok, ret) = _delegateTo(s.dispatcher, cd);
 
             if (!ok) {
+                s.batchLock = false;
+                s.reentrancyLock = false;
                 // Bubble the exact revert data from the inner call
                 assembly {
                     revert(add(ret, 0x20), mload(ret))
@@ -297,6 +361,7 @@ contract PayRoxProxyRouter {
         }
 
         s.batchLock = false;
+        s.reentrancyLock = false;
         unchecked {
             uint256 gasUsed = gasBefore - gasleft();
             emit BatchExecuted(n, gasUsed, block.timestamp);
@@ -308,7 +373,7 @@ contract PayRoxProxyRouter {
     function batchCallSameFunction(bytes4 selector, bytes[] calldata datas) external returns (bytes[] memory results) {
         RouterStorage storage s = _s();
         if (s.paused) revert Paused();
-        if (s.batchLock) revert BatchReentrancy();
+        if (s.batchLock || s.reentrancyLock) revert Reentrancy(); // symmetric with fallback
         uint256 n = datas.length;
         if (n == 0) revert EmptyBatch();
         if (n > MAX_BATCH_SIZE) revert BatchTooLarge(n, MAX_BATCH_SIZE);
@@ -328,6 +393,7 @@ contract PayRoxProxyRouter {
 
         uint256 gasBefore = gasleft();
         s.batchLock = true;
+        s.reentrancyLock = true;
 
         for (uint256 i = 0; i < n; ) {
             // Build calldata = selector (4) + data
@@ -338,6 +404,8 @@ contract PayRoxProxyRouter {
             (ok, ret) = _delegateTo(s.dispatcher, cd);
 
             if (!ok) {
+                s.batchLock = false;
+                s.reentrancyLock = false;
                 // Bubble the exact revert data from the inner call
                 assembly {
                     revert(add(ret, 0x20), mload(ret))
@@ -352,6 +420,7 @@ contract PayRoxProxyRouter {
         }
 
         s.batchLock = false;
+        s.reentrancyLock = false;
         unchecked {
             uint256 gasUsed = gasBefore - gasleft();
             emit BatchExecuted(n, gasUsed, block.timestamp);
@@ -365,32 +434,52 @@ contract PayRoxProxyRouter {
     function owner() external view returns (address) {
         return _s().owner;
     }
+
+    function pendingOwner() external view returns (address) {
+        return _s().pendingOwner;
+    }
+
     function dispatcher() external view returns (address) {
         return _s().dispatcher;
     }
+
     function dispatcherCodehash() external view returns (bytes32) {
         return _s().dispatcherCodehash;
     }
+
     function strictCodehash() external view returns (bool) {
         return _s().strictCodehash;
     }
+
     function paused() external view returns (bool) {
         return _s().paused;
     }
+
     function frozen() external view returns (bool) {
         return _s().frozen;
     }
+
     function isForbidden(bytes4 selector) external view returns (bool) {
         return _s().forbidden[selector];
+    }
+
+    function l2Messenger() external view returns (address) {
+        return _s().l2Messenger;
+    }
+
+    function l1Governor() external view returns (address) {
+        return _s().l1Governor;
     }
 
     /// @notice Convenience helpers (best-effort; only if dispatcher supports the view)
     function getRoute(bytes4 selector) external view returns (address facet, bytes32 codehash) {
         return IManifestDispatcherView(_s().dispatcher).routes(selector);
     }
+
     function getActiveManifestRoot() external view returns (bytes32) {
         return IManifestDispatcherView(_s().dispatcher).activeRoot();
     }
+
     function isDispatcherFrozen() external view returns (bool) {
         return IManifestDispatcherView(_s().dispatcher).frozen();
     }
@@ -409,12 +498,16 @@ contract PayRoxProxyRouter {
             let cd := add(calldata_, 0x20)
             let cdlen := mload(calldata_)
             let ptr := mload(0x40)
+
             ok := delegatecall(gas(), target, cd, cdlen, 0, 0)
             let size := returndatasize()
-            ret := mload(0x40)
-            mstore(0x40, add(ret, and(add(size, 0x3f), not(0x1f)))) // bump free mem ptr
-            mstore(ret, size)
+
+            ret := ptr
+            mstore(ret, size)                                   // [len | data]
             returndatacopy(add(ret, 0x20), 0, size)
+
+            // bump free mem: ret + 0x20 (len) + size (padded to 32)
+            mstore(0x40, add(add(ret, 0x20), and(add(size, 31), not(31))))
         }
     }
 
