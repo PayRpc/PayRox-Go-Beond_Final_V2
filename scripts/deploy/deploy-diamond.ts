@@ -7,10 +7,10 @@
  * - Verification and validation
  */
 
-import { ethers } from 'hardhat';
+import hre from 'hardhat';
 import { Contract } from 'ethers';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 interface DeploymentConfig {
   facetsDir: string;
@@ -77,10 +77,10 @@ class DiamondDeployer {
     for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
       console.log(`  Deploying ${facetName}...`);
 
-      const FacetFactory = await ethers.getContractFactory(facetName);
+      const FacetFactory = await hre.ethers.getContractFactory(facetName);
 
-      // Use CREATE2 for deterministic addresses
-      const _facetSalt = ethers.keccak256(ethers.toUtf8Bytes(`${this.config.salt}-${facetName}`));
+      // Use deterministic salt for CREATE2
+      const _facetSalt = hre.ethers.keccak256(hre.ethers.toUtf8Bytes(`${this.config.salt}-${facetName}`));
 
       const facet = await FacetFactory.deploy({ gasLimit: 5000000 });
       await facet.waitForDeployment();
@@ -93,7 +93,7 @@ class DiamondDeployer {
       console.log(`    ✅ ${facetName} deployed to: ${await facet.getAddress()}`);
 
       // Verify size constraint (EIP-170)
-      const code = await ethers.provider.getCode(await facet.getAddress());
+      const code = await hre.ethers.provider.getCode(await facet.getAddress());
       const sizeBytes = (code.length - 2) / 2; // Remove 0x prefix
 
       if (sizeBytes > 24576) {
@@ -107,27 +107,27 @@ class DiamondDeployer {
   private async deployDiamond(): Promise<Contract> {
     console.log('💎 Deploying Diamond...');
 
-    const [deployer] = await ethers.getSigners();
+    const [deployer] = await hre.ethers.getSigners();
 
     // Deploy DiamondCutFacet first (required for Diamond)
-    const DiamondCutFacet = await ethers.getContractFactory('DiamondCutFacet');
+    const DiamondCutFacet = await hre.ethers.getContractFactory('DiamondCutFacet');
     const diamondCutFacet = await DiamondCutFacet.deploy();
     await diamondCutFacet.waitForDeployment();
 
     // Deploy DiamondLoupeFacet
-    const DiamondLoupeFacet = await ethers.getContractFactory('DiamondLoupeFacet');
+    const DiamondLoupeFacet = await hre.ethers.getContractFactory('DiamondLoupeFacet');
     const diamondLoupeFacet = await DiamondLoupeFacet.deploy();
     await diamondLoupeFacet.waitForDeployment();
 
     // Deploy Diamond
-    const Diamond = await ethers.getContractFactory('Diamond');
+    const Diamond = await hre.ethers.getContractFactory('Diamond');
     const diamond = await Diamond.deploy(deployer.address, await diamondCutFacet.getAddress());
     await diamond.waitForDeployment();
 
     console.log(`  ✅ Diamond deployed to: ${await diamond.getAddress()}`);
 
     // Add loupe facet
-    const diamondCut = await ethers.getContractAt(
+    const diamondCut = await hre.ethers.getContractAt(
       'contracts/interfaces/IDiamondCut.sol:IDiamondCut',
       await diamond.getAddress(),
     );
@@ -141,7 +141,7 @@ class DiamondDeployer {
           functionSelectors: loupeSelectors,
         },
       ],
-      ethers.ZeroAddress,
+      hre.ethers.ZeroAddress,
       '0x',
     );
 
@@ -151,7 +151,7 @@ class DiamondDeployer {
   private async initializeDiamond(diamond: Contract): Promise<void> {
     console.log('⚙️  Initializing Diamond with facets...');
 
-    const diamondCut = await ethers.getContractAt(
+    const diamondCut = await hre.ethers.getContractAt(
       'IDiamondCut',
       await (diamond as any).getAddress(),
     );
@@ -173,7 +173,7 @@ class DiamondDeployer {
     }
 
     // Execute diamond cut
-    const tx = await diamondCut.diamondCut(facetCuts, ethers.ZeroAddress, '0x', {
+    const tx = await diamondCut.diamondCut(facetCuts, hre.ethers.ZeroAddress, '0x', {
       gasLimit: 8000000,
     });
 
@@ -184,7 +184,7 @@ class DiamondDeployer {
   private async verifyDeployment(diamond: Contract): Promise<void> {
     console.log('✅ Verifying deployment...');
 
-    const diamondLoupe = await ethers.getContractAt(
+    const diamondLoupe = await hre.ethers.getContractAt(
       'contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe',
       await (diamond as any).getAddress(),
     );
@@ -236,16 +236,16 @@ class DiamondDeployer {
   private async updateManifest(diamond: Contract): Promise<void> {
     console.log('📄 Updating manifest with deployment addresses...');
 
-    this.manifest.dispatcher = diamond.address;
+    this.manifest.dispatcher = await (diamond as any).getAddress();
 
     // Calculate merkle root from facet selectors
     const leaves = [];
     for (const [facetName, facetData] of Object.entries(this.manifest.facets)) {
       for (const selector of facetData.selectors) {
-        const leaf = ethers.keccak256(
-          ethers.AbiCoder.defaultAbiCoder().encode(
+        const leaf = hre.ethers.keccak256(
+          hre.ethers.AbiCoder.defaultAbiCoder().encode(
             ['bytes4', 'address', 'bytes32'],
-            [selector, facetData.address, ethers.keccak256(ethers.toUtf8Bytes(facetName))],
+            [selector, facetData.address, hre.ethers.keccak256(hre.ethers.toUtf8Bytes(facetName))],
           ),
         );
         leaves.push(leaf);
@@ -253,15 +253,15 @@ class DiamondDeployer {
     }
 
     // Simple merkle root calculation (in production, use proper merkle tree)
-    const combinedHash = ethers.keccak256(ethers.concat(leaves.sort()));
+    const combinedHash = hre.ethers.keccak256(hre.ethers.concat(leaves.sort()));
     (this.manifest as any).merkle_root = combinedHash;
 
     // Add deployment metadata
     const deployment = {
-      network: (await ethers.provider.getNetwork()).name,
-      block: await ethers.provider.getBlockNumber(),
+      network: (await hre.ethers.provider.getNetwork()).name,
+      block: await hre.ethers.provider.getBlockNumber(),
       timestamp: Math.floor(Date.now() / 1000),
-      deployer: (await ethers.getSigners())[0].address,
+      deployer: (await hre.ethers.getSigners())[0].address,
       salt: this.config.salt,
     };
 
@@ -288,16 +288,16 @@ class DiamondDeployer {
     console.log('👥 Setting up role assignments...');
 
     // All roles should be granted to the diamond (dispatcher), not individual facets
-    const [_deployer] = await ethers.getSigners();
+    const [_deployer] = await hre.ethers.getSigners();
 
     // If diamond has access control, grant roles to diamond address
     try {
-      const accessControl = await ethers.getContractAt('IAccessControl', await (diamond as any).getAddress());
+      const accessControl = await hre.ethers.getContractAt('IAccessControl', await (diamond as any).getAddress());
       const adminRole = await accessControl.DEFAULT_ADMIN_ROLE();
 
       // Grant admin role to diamond itself (for delegatecall context)
       await accessControl.grantRole(adminRole, diamond.address);
-      console.log(`  ✅ Admin role granted to diamond: ${diamond.address}`);
+      console.log(`  ✅ Admin role granted to diamond: ${await (diamond as any).getAddress()}`);
     } catch (error) {
       console.log(`  ℹ️  No access control interface found (this is OK)`);
     }
@@ -309,7 +309,7 @@ async function main() {
   const config: DeploymentConfig = {
     facetsDir: './facets',
     manifestPath: './payrox-manifest.json',
-    salt: ethers.utils.id('PayRox-Diamond-V1'),
+    salt: hre.ethers.keccak256(hre.ethers.toUtf8Bytes('PayRox-Diamond-V1')),
     verify: process.env.VERIFY === 'true',
   };
 
@@ -317,9 +317,9 @@ async function main() {
   const { diamond, facets } = await deployer.deploy();
 
   console.log('\n🎉 Deployment Summary:');
-  console.log(`Diamond Address: ${diamond.address}`);
+  console.log(`Diamond Address: ${await (diamond as any).getAddress()}`);
   for (const [name, facet] of facets.entries()) {
-    console.log(`${name}: ${facet.address}`);
+    console.log(`${name}: ${await (facet as any).getAddress()}`);
   }
 }
 
