@@ -37,6 +37,12 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         return defaultAdmin;
     }
 
+    /// @notice owner() returns the informational default admin address.
+    /// @dev Access control checks in this contract use ACS roles (see `PayRoxAccessControlStorage`).
+    ///      `owner()` is retained for compatibility/visibility only and should not be relied on for
+    ///      authorization decisions (use ACS roles instead).
+    
+
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     // ROLES & CONSTANTS
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
@@ -100,6 +106,23 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         baseFeeWei = _baseFeeWei;
         feesEnabled = _feesEnabled;
     }
+
+    // -----------------------------
+    // Runtime Invariant Checklist
+    // -----------------------------
+    // These succinct invariants are useful for CI checks and audits:
+    // 1) Mismatch dispatcher/codehash/root -> all state-changing creators (stage*/deploy*) revert with
+    //    "System integrity check failed" via `_verifySystemIntegrity()`.
+    // 2) When `feesEnabled == false` and `msg.value > 0`, the helpers auto-refund the caller and
+    //    return early; the factory's ETH balance must remain unchanged by these operations.
+    // 3) `deployDeterministicBatch` charges per-slot (even when an idempotent slot is a no-op). If this
+    //    is the intended billing model, call sites should be aware; see the `deployDeterministicBatch`
+    //    docstring for details. On idempotent hits the predicted address is returned, no CREATE2 is executed,
+    //    and `isDeployedContract[predicted]` is set to true to maintain view parity.
+    // 4) Successful fee push leaves factory balance at zero (fees forwarded to `feeRecipient`). On failed
+    //    push, `FeeCollectionFailed` is emitted and funds remain withdrawable via `withdrawFees()` by
+    //    `feeRecipient`.
+
 
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     // CORE FUNCTIONS (DELEGATED TO LIBRARY)
@@ -186,7 +209,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         bytes calldata bytecode,
         bytes calldata constructorArgs
     ) external payable nonReentrant whenNotPaused returns (address deployed) {
-        _verifySystemIntegrity();
+    require(_verifySystemIntegrity(), "System integrity check failed");
         _collectFee();
 
         // Combine bytecode and constructor args into init code
@@ -232,11 +255,13 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         bytes[] calldata constructorArgs
     ) external payable nonReentrant whenNotPaused returns (address[] memory deployed) {
         require(salts.length == bytecodes.length && bytecodes.length == constructorArgs.length, "Array length mismatch");
-        _verifySystemIntegrity();
+    require(_verifySystemIntegrity(), "System integrity check failed");
 
         deployed = new address[](salts.length);
-        uint256 totalFee = _getDeploymentFee(msg.sender) * salts.length;
-        require(msg.value >= totalFee, "Insufficient fee");
+    // Billing note: this batch API charges per-slot (msg.sender pays _getDeploymentFee(msg.sender) * salts.length)
+    // even if some slots are idempotent hits (no CREATE2). This is intentional for the current pricing model.
+    uint256 totalFee = _getDeploymentFee(msg.sender) * salts.length;
+    require(msg.value >= totalFee, "Insufficient fee");
 
         // Forward fee immediately (consistent with push policy)
         if (totalFee > 0) {
@@ -403,7 +428,15 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
 
     function _collectFee() internal {
-        if (!feesEnabled) return;
+        if (!feesEnabled) {
+            // Lenient policy: auto-refund any ETH accidentally sent when fees are disabled
+            if (msg.value > 0) {
+                // Early refund and return for clarity: caller receives full refund, factory balance unchanged.
+                (bool refundSuccess, ) = msg.sender.call{value: msg.value}("");
+                require(refundSuccess, "Refund failed");
+            }
+            return; // explicit early return to highlight invariant for CI
+        }
 
         uint256 fee = _getDeploymentFee(msg.sender);
         require(msg.value >= fee, "Insufficient fee");
@@ -423,7 +456,15 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
     }
 
     function _collectProtocolFee() internal {
-        if (!feesEnabled) return;
+        if (!feesEnabled) {
+            // Auto-refund accidental ETH when fees are disabled
+            if (msg.value > 0) {
+                // Early refund and return for clarity: caller receives full refund, factory balance unchanged.
+                (bool refundSuccess, ) = msg.sender.call{value: msg.value}("");
+                require(refundSuccess, "Refund failed");
+            }
+            return; // explicit early return to highlight invariant for CI
+        }
 
         uint256 fee = _getDeploymentFee(msg.sender);
         require(msg.value >= fee, "Insufficient fee");
@@ -452,7 +493,15 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
 
     /// @notice Collect fee for batch operations
     function _collectBatchFee(uint256 count) internal {
-        if (!feesEnabled) return;
+        if (!feesEnabled) {
+            // Auto-refund accidental ETH when fees are disabled
+            if (msg.value > 0) {
+                // Early refund and return for clarity: caller receives full refund, factory balance unchanged.
+                (bool refundSuccess, ) = msg.sender.call{value: msg.value}("");
+                require(refundSuccess, "Refund failed");
+            }
+            return; // explicit early return to highlight invariant for CI
+        }
 
         uint256 totalFee = _getDeploymentFee(msg.sender) * count;
         require(msg.value >= totalFee, "Insufficient fee for batch");
@@ -538,7 +587,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         (bool success, ) = payable(msg.sender).call{value: balance}("");
         require(success, "Withdraw failed");
         
-        emit FeesWithdrawn(msg.sender, balance);
+    emit EmergencyWithdrawal(msg.sender, balance);
     }
 
     function setFeeRecipient(address newRecipient) external onlyRole(FEE_ROLE) {
