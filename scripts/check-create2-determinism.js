@@ -41,13 +41,8 @@ const minimist = require('minimist');
 const {
   keccak256,
   getAddress,
-  getBytes,
-  hexlify,
   isHexString,
-  zeroPadValue,
   dataSlice,
-  concat,
-  toUtf8Bytes,
   AbiCoder,
   Interface,
   JsonRpcProvider,
