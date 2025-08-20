@@ -31,7 +31,7 @@ async function main() {
           // Provide a deterministic dummy address per library (last 20 hex chars from keccak)
           if (!libraryAddresses[libName]) {
             const ethers = (hre as any).ethers;
-            const dummy = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(libName)).slice(-40);
+            const dummy = ethers.keccak256(ethers.toUtf8Bytes(libName)).slice(-40);
             libraryAddresses[libName] = '0x' + dummy;
           }
         }
