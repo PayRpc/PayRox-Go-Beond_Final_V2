@@ -250,10 +250,7 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
       `WARN: couldn't find contract end in ${solPath}; attempting best-effort tail-scan`,
     );
     // Best-effort: treat rest of file as body (no footer) and continue
-    const header = solText.slice(0, openIdx + 1);
-    const footer = '';
-    const body = solText.slice(openIdx + 1);
-    // continue below where functions are extracted from 'body'
+    // Variables will be redeclared below with proper values
   }
 
   const header = solText.slice(0, openIdx + 1);
@@ -369,10 +366,14 @@ function splitOversizedPart(solPath, jsonInfo, recDepth = 0) {
           if (sub && sub.length > 0) {
             try {
               fs.unlinkSync(gsol);
-            } catch (_) {}
+            } catch (_) {
+              // Ignore file deletion errors
+            }
             try {
               fs.unlinkSync(path.join(outDir, g.json));
-            } catch (_) {}
+            } catch (_) {
+              // Ignore file deletion errors
+            }
             sub.forEach((s) => finalGen.push(s));
             continue;
           }
@@ -415,10 +416,14 @@ function ensureFullySplit(solPath, jsonInfo, maxIter = 4) {
     // remove original
     try {
       fs.unlinkSync(sol);
-    } catch (_) {}
+    } catch (_) {
+      // Ignore file deletion errors
+    }
     try {
       fs.unlinkSync(path.join(outDir, info && info.json ? info.json : ''));
-    } catch (_) {}
+    } catch (_) {
+      // Ignore file deletion errors
+    }
 
     // push generated items back to queue to ensure they are small enough
     for (const g of gen) {
@@ -431,7 +436,9 @@ function ensureFullySplit(solPath, jsonInfo, maxIter = 4) {
           const meta = JSON.parse(fs.readFileSync(gjsonPath, 'utf8'));
           ginfo = meta;
         }
-      } catch (_) {}
+      } catch (_) {
+        // Ignore JSON parsing errors
+      }
       queue.push({ sol: gsol, info: ginfo, depth: depth + 1 });
     }
   }
@@ -453,10 +460,14 @@ for (const p of kept) {
         // remove original files if they still exist
         try {
           fs.unlinkSync(solPath);
-        } catch (e) {}
+        } catch (e) {
+          // Ignore file deletion errors
+        }
         try {
           fs.unlinkSync(jsonPath);
-        } catch (e) {}
+        } catch (e) {
+          // Ignore file deletion errors
+        }
 
         // add generated parts from ensured results
         ensured.forEach((it) => {
