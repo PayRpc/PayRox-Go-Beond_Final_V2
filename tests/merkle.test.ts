@@ -1,6 +1,7 @@
 import { encodeLeaf } from '../scripts/utils/merkle';
 import { processOrderedProof } from '../scripts/utils/ordered-merkle';
 import { expect } from 'chai';
+import { ethers } from 'hardhat';
 
 // Minimal synthetic roundtrip: build a tiny ordered tree of 2 leaves and verify root matches.
 
@@ -16,7 +17,7 @@ describe('Ordered Merkle (2-leaf) roundtrip', () => {
     const leafHashB = encodeLeaf(selB, facet, codehash);
 
     // _hashLeaf = keccak256(0x00 || leaf)
-    const { keccak256, concat } = require('ethers');
+    const { keccak256, concat } = ethers;
     const leafNodeA = keccak256(concat(['0x00', leafHashA]));
     const leafNodeB = keccak256(concat(['0x00', leafHashB]));
 
@@ -28,6 +29,6 @@ describe('Ordered Merkle (2-leaf) roundtrip', () => {
     const positionsHex = '0x01';
 
     const recomputed = processOrderedProof(leafHashA, proof, positionsHex);
-  expect(recomputed.toLowerCase()).to.equal(root.toLowerCase());
+    expect(recomputed.toLowerCase()).to.equal(root.toLowerCase());
   });
 });
