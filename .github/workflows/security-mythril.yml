@@ -1,4 +1,4 @@
-name: Security — Mythril
+name: Security — Mythril (Before/After Analysis)
 
 on:
   pull_request:
@@ -9,9 +9,9 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  mythril:
+  mythril-comparison:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,9 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Install NPM deps (for imports)
-        run: npm ci
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -53,23 +50,96 @@ jobs:
           echo "${DIFF}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Run Mythril (changed files or all facets)
+      - name: Install NPM deps (current branch)
+        run: npm ci
+
+      - name: Run Mythril on current branch (post-refactor)
         env:
           MYTH_TARGETS: ${{ steps.changed.outputs.changed }}
-          # Optional repo variable may be provided as a secret or env var; default to 'false'
           PRX_MYTHRIL_FAIL_ON_HIGH: ${{ env.PRX_MYTHRIL_FAIL_ON_HIGH || 'false' }}
         run: |
+          mkdir -p security/mythril-reports
+          echo "🔍 **Post-Refactor Security Analysis (Current Branch)**" > security/mythril-reports/mythril-summary.md
+          echo "" >> security/mythril-reports/mythril-summary.md
           bash security/run-mythril.sh
+          # Backup current results
+          cp -r security/mythril-reports security/mythril-reports-current
+
+      - name: Checkout base branch for baseline analysis
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          git stash push -m "WIP: current analysis" || true
+          git checkout "origin/${{ github.base_ref }}"
+
+      - name: Install NPM deps (base branch)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: npm ci || echo "⚠️ NPM install failed on base branch - may be expected for older versions"
+
+      - name: Run Mythril on base branch (pre-refactor)
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          MYTH_TARGETS: ${{ steps.changed.outputs.changed }}
+          PRX_MYTHRIL_FAIL_ON_HIGH: 'false'  # Don't fail on base branch issues
+        run: |
+          echo "🔍 **Pre-Refactor Security Analysis (Base Branch)**" > security/mythril-reports/mythril-summary-base.md
+          echo "" >> security/mythril-reports/mythril-summary-base.md
+          bash security/run-mythril.sh || echo "⚠️ Base branch analysis completed with issues - this is expected"
+          # Backup base results
+          cp -r security/mythril-reports security/mythril-reports-base
+
+      - name: Restore current branch and generate comparison
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          git checkout "${{ github.head_ref }}"
+          git stash pop || true
+          
+          # Restore current branch results
+          cp -r security/mythril-reports-current/* security/mythril-reports/
+          
+          # Generate comparison report
+          echo "# 🛡️ Security Analysis: Before vs After Refactoring" > security/mythril-reports/comparison-summary.md
+          echo "" >> security/mythril-reports/comparison-summary.md
+          echo "## 📊 Analysis Summary" >> security/mythril-reports/comparison-summary.md
+          echo "" >> security/mythril-reports/comparison-summary.md
+          
+          # Count issues in both reports
+          BASE_ISSUES=$(find security/mythril-reports-base -name "*.json" -exec cat {} \; 2>/dev/null | grep -o '"severity"' | wc -l || echo "0")
+          CURRENT_ISSUES=$(find security/mythril-reports-current -name "*.json" -exec cat {} \; 2>/dev/null | grep -o '"severity"' | wc -l || echo "0")
+          
+          echo "- **Pre-Refactor Issues**: ${BASE_ISSUES}" >> security/mythril-reports/comparison-summary.md
+          echo "- **Post-Refactor Issues**: ${CURRENT_ISSUES}" >> security/mythril-reports/comparison-summary.md
+          
+          if [ "${CURRENT_ISSUES}" -lt "${BASE_ISSUES}" ]; then
+            IMPROVEMENT=$((BASE_ISSUES - CURRENT_ISSUES))
+            echo "- **✅ Security Improvement**: Reduced ${IMPROVEMENT} security issues" >> security/mythril-reports/comparison-summary.md
+          elif [ "${CURRENT_ISSUES}" -gt "${BASE_ISSUES}" ]; then
+            REGRESSION=$((CURRENT_ISSUES - BASE_ISSUES))
+            echo "- **⚠️ Security Regression**: Introduced ${REGRESSION} new security issues" >> security/mythril-reports/comparison-summary.md
+          else
+            echo "- **🔄 Security Status**: No change in issue count" >> security/mythril-reports/comparison-summary.md
+          fi
+          
+          echo "" >> security/mythril-reports/comparison-summary.md
+          echo "## 📋 Detailed Reports" >> security/mythril-reports/comparison-summary.md
+          echo "" >> security/mythril-reports/comparison-summary.md
+          echo "### Pre-Refactor Analysis" >> security/mythril-reports/comparison-summary.md
+          cat security/mythril-reports-base/mythril-summary-base.md >> security/mythril-reports/comparison-summary.md 2>/dev/null || echo "Base analysis not available" >> security/mythril-reports/comparison-summary.md
+          echo "" >> security/mythril-reports/comparison-summary.md
+          echo "### Post-Refactor Analysis" >> security/mythril-reports/comparison-summary.md
+          cat security/mythril-reports/mythril-summary.md >> security/mythril-reports/comparison-summary.md
 
       - name: Upload Mythril artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: mythril-reports
-          path: security/mythril-reports/
+          name: mythril-security-comparison
+          path: |
+            security/mythril-reports/
+            security/mythril-reports-base/
+            security/mythril-reports-current/
 
-      - name: Post summary to PR (comment)
+      - name: Post comparison summary to PR
         if: ${{ github.event_name == 'pull_request' }}
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          header: mythril
-          path: security/mythril-reports/mythril-summary.md
+          header: mythril-comparison
+          path: security/mythril-reports/comparison-summary.md
