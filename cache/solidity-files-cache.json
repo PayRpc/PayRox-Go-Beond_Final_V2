@@ -274,8 +274,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\factory\\DeterministicChunkFactory.sol": {
-      "lastModificationDate": 1755725599358,
-      "contentHash": "b389d524e2b35615f26c311862291818",
+      "lastModificationDate": 1755726819059,
+      "contentHash": "13204060d20974debf15d9674281e690",
       "sourceName": "contracts/factory/DeterministicChunkFactory.sol",
       "solcConfig": {
         "version": "0.8.30",
@@ -318,7 +318,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\interfaces\\IChunkFactory.sol": {
-      "lastModificationDate": 1755725650879,
+      "lastModificationDate": 1755725819555,
       "contentHash": "e672269205d1ba1ca07c1ed780738caf",
       "sourceName": "contracts/interfaces/IChunkFactory.sol",
       "solcConfig": {
@@ -549,7 +549,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ChunkFactoryFacet.sol": {
-      "lastModificationDate": 1755725716529,
+      "lastModificationDate": 1755725804039,
       "contentHash": "77f00e2307a2ab66962ca421d9e6192e",
       "sourceName": "contracts/facets/ChunkFactoryFacet.sol",
       "solcConfig": {
@@ -1259,7 +1259,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetB.sol": {
-      "lastModificationDate": 1755725308740,
+      "lastModificationDate": 1755725814679,
       "contentHash": "18c3f6057db553bed676e18828004021",
       "sourceName": "contracts/facets/ExampleFacetB.sol",
       "solcConfig": {
@@ -1724,7 +1724,7 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\facets\\ExampleFacetA.sol": {
-      "lastModificationDate": 1755725323924,
+      "lastModificationDate": 1755725811145,
       "contentHash": "7e1acbcde8ed2dd29c4096630c0a76ad",
       "sourceName": "contracts/facets/ExampleFacetA.sol",
       "solcConfig": {
