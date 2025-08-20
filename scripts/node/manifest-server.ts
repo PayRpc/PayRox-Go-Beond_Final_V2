@@ -60,8 +60,8 @@ const broadcast = (msg: any) => {
   const data = JSON.stringify(msg);
   for (const client of wss.clients) {
   // 1 = OPEN
-  // @ts-expect-error -- ws.Client type varies between ws versions; runtime check is safe
-  if (client.readyState === 1) client.send(data);
+  // runtime check using a cast to any to avoid parser/type differences between ws versions
+  if ((client as any).readyState === 1) client.send(data);
   }
 };
 wss.on('connection', (ws: any) => {
