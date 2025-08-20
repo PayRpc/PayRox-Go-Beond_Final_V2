@@ -2,13 +2,8 @@
   Migration helper (off-chain): compares legacy PayRoxStorage.paused slot vs canonical PS.layout().paused
   and prints suggested actions. This is a read-only helper for operators; it does not perform on-chain writes.
 */
-const { ethers } = require('ethers');
-const fs = require('fs');
 
 async function main() {
-  const providerUrl = process.env.RPC || 'http://localhost:8545';
-  const provider = new ethers.JsonRpcProvider(providerUrl);
-
   // These slot values must match the libraries; derive from code or hardcode known slot constants.
   // For safety we only print guidance.
   console.log('Migration helper is read-only. Please review output carefully.');
