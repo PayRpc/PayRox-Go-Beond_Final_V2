@@ -51,13 +51,9 @@ jobs:
         id: reachability
         run: |
           set -e
-          OLLAMA_HOST="${{ secrets.OLLAMA_HOST }}"
-          if [ -z "$OLLAMA_HOST" ]; then
-            OLLAMA_HOST="http://127.0.0.1:11434"
-            echo "Using default Ollama host (not available in CI): $OLLAMA_HOST"
-          else
-            echo "Using configured Ollama host: $OLLAMA_HOST"
-          fi
+          # Set default host for CI environments where OLLAMA_HOST secret is not available
+          OLLAMA_HOST="http://127.0.0.1:11434"
+          echo "Using default Ollama host (not available in CI): $OLLAMA_HOST"
           
           echo "Note: Ollama service checks are currently non-blocking during development"
           
