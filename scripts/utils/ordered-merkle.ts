@@ -61,7 +61,7 @@ export function verifyOrderedProof(
  */
 export function createRouteLeaf(selector: string, facet: string, codehash: string): string {
   // Use proper ABI encoding: bytes4, address, bytes32 (not padded bytes32s)
-  const abi = new AbiCoder();
+  const abi = AbiCoder.defaultAbiCoder();
   return keccak256(abi.encode(['bytes4', 'address', 'bytes32'], [selector, facet, codehash]));
 }
 
