@@ -1,3 +1,5 @@
+import { ethers } from 'hardhat';
+
 // Crash prevention utilities
 export class CrashGuard {
   static safeProcessExit(code: number = 0): never {
@@ -115,73 +117,17 @@ export class EthersV6Helper {
   }
 
   static getZeroAddress(): string {
-    // Try v6 first
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const ethers = require('ethers');
-      if (ethers.ZeroAddress) {
-        return ethers.ZeroAddress;
-      }
-    } catch (error) {
-      // Ignore
-    }
-
-    // Fall back to v5
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const ethers = require('ethers');
-      if (ethers.constants?.AddressZero) {
-        return ethers.constants.AddressZero;
-      }
-    } catch (error) {
-      // Ignore
-    }
-
-    // Hardcoded fallback
-    return '0x0000000000000000000000000000000000000000';
+    // Ethers v6 approach
+    return ethers.ZeroAddress;
   }
 
   static keccak256(data: string): string {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const ethers = require('ethers');
-      
-      // Try v6 first
-      if (ethers.keccak256) {
-        return ethers.keccak256(data);
-      }
-      
-      // Fall back to v5
-      if (ethers.utils?.keccak256) {
-        return ethers.utils.keccak256(data);
-      }
-      
-      throw new Error('No keccak256 function found');
-    } catch (error) {
-      console.error('[EthersV6Helper] keccak256 failed:', error);
-      throw error;
-    }
+    // Ethers v6 approach
+    return ethers.keccak256(data);
   }
 
   static toUtf8Bytes(str: string): Uint8Array {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const ethers = require('ethers');
-      
-      // Try v6 first
-      if (ethers.toUtf8Bytes) {
-        return ethers.toUtf8Bytes(str);
-      }
-
-      // Fall back to v5
-      if (ethers.utils?.toUtf8Bytes) {
-        return ethers.utils.toUtf8Bytes(str);
-      }
-
-      throw new Error('No toUtf8Bytes function found');
-    } catch (error) {
-      console.error('[EthersV6Helper] toUtf8Bytes failed:', error);
-      throw error;
-    }
+    // Ethers v6 approach
+    return ethers.toUtf8Bytes(str);
   }
 }
