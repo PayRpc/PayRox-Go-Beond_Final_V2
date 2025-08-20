@@ -194,8 +194,8 @@
       ]
     },
     "C:\\PayRox-Go-Beyond-Ollama\\contracts\\governance\\GovernanceOrchestrator.sol": {
-      "lastModificationDate": 1755663728917,
-      "contentHash": "6956630c0ebf73c5075e16c53f79e9ac",
+      "lastModificationDate": 1755675601266,
+      "contentHash": "85b16d062231498cfdd3fe06c966b1c5",
       "sourceName": "contracts/governance/GovernanceOrchestrator.sol",
       "solcConfig": {
         "version": "0.8.30",

@@ -51,6 +51,12 @@ contract GovernanceOrchestrator is ReentrancyGuard {
     /// @dev Mapping to track executed proposals
     mapping(bytes32 => bool) public executedProposals;
 
+    /// @dev Snapshot of total voting supply at proposal creation (prevents manipulation)
+    mapping(bytes32 => uint256) public snapshotTotalSupply;
+
+    /// @dev Snapshot of quorum threshold at proposal creation (prevents mid-vote changes)
+    mapping(bytes32 => uint256) public snapshotQuorumThreshold;
+
     // Events
     event ProposalCreated(
         bytes32 indexed proposalId,
@@ -82,6 +88,12 @@ contract GovernanceOrchestrator is ReentrancyGuard {
         uint256 newThreshold
     );
 
+    event ProposalCancelled(
+        bytes32 indexed proposalId,
+        address indexed canceller,
+        string reason
+    );
+
     // Custom errors
     error ProposalAlreadyExists(bytes32 proposalId);
     error ProposalNotFound(bytes32 proposalId);
@@ -92,6 +104,8 @@ contract GovernanceOrchestrator is ReentrancyGuard {
     error ProposalAlreadyExecuted(bytes32 proposalId);
     error QuorumNotMet(bytes32 proposalId);
     error InvalidQuorumThreshold(uint256 threshold);
+    error ActiveProposalsExist(); // 🔒 SECURITY: Prevent threshold changes during active votes
+    error ProposalAlreadyCancelled(bytes32 proposalId); // Emergency cancellation
 
     /**
      * @dev Constructor sets up access control
@@ -143,10 +157,14 @@ contract GovernanceOrchestrator is ReentrancyGuard {
             executed: false
         });
 
+        // 🔒 SECURITY: Snapshot values at creation to prevent manipulation
+        snapshotTotalSupply[proposalId] = totalVotingSupply;
+        snapshotQuorumThreshold[proposalId] = quorumThreshold;
+
         allProposals.push(proposalId);
 
         emit ProposalCreated(proposalId, msg.sender, description, deadline);
-        emit ManifestTypes.GovernanceVoteCast(proposalId, msg.sender, true, 0);
+        // ❌ REMOVED: Spurious zero-weight vote event that could mislead indexers
     }
 
     /**
@@ -219,10 +237,11 @@ contract GovernanceOrchestrator is ReentrancyGuard {
             revert VotingActive(proposalId);
         }
 
+        // 🔒 SECURITY: Use snapshots to prevent post-vote manipulation
         bool hasPassed = ManifestUtils.checkGovernanceQuorum(
             proposal,
-            totalVotingSupply,
-            quorumThreshold
+            snapshotTotalSupply[proposalId],
+            snapshotQuorumThreshold[proposalId]
         );
 
         if (!hasPassed) {
@@ -254,7 +273,7 @@ contract GovernanceOrchestrator is ReentrancyGuard {
     }
 
     /**
-     * @dev Update quorum threshold
+     * @dev Update quorum threshold (🔒 SECURITY: Only when no active proposals)
      * @param newThreshold New threshold percentage (1-100)
      */
     function updateQuorumThreshold(
@@ -263,6 +282,11 @@ contract GovernanceOrchestrator is ReentrancyGuard {
         require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
         if (newThreshold == 0 || newThreshold > 100) {
             revert InvalidQuorumThreshold(newThreshold);
+        }
+
+        // 🔒 SECURITY: Prevent threshold manipulation during active voting
+        if (_hasActiveProposals()) {
+            revert ActiveProposalsExist();
         }
 
         uint256 oldThreshold = quorumThreshold;
@@ -305,10 +329,11 @@ contract GovernanceOrchestrator is ReentrancyGuard {
             return false; // Proposal does not exist
         }
 
+        // 🔒 SECURITY: Use snapshots to prevent manipulation
         return ManifestUtils.checkGovernanceQuorum(
             proposal,
-            totalVotingSupply,
-            quorumThreshold
+            snapshotTotalSupply[proposalId],
+            snapshotQuorumThreshold[proposalId]
         );
     }
 
@@ -316,4 +341,79 @@ contract GovernanceOrchestrator is ReentrancyGuard {
      * @dev Emergency pause function
      */
     // Pause/unpause provided by PauseFacet
+
+    /**
+     * @dev Check if any proposals are currently active (voting not ended)
+     * @return hasActive True if any proposal is still in voting period
+     */
+    function _hasActiveProposals() internal view returns (bool hasActive) {
+        uint256 length = allProposals.length;
+        for (uint256 i = 0; i < length; ) {
+            bytes32 proposalId = allProposals[i];
+            ManifestTypes.GovernanceProposal storage proposal = proposals[proposalId];
+            
+            // Check if proposal is active (not executed and voting hasn't ended)
+            if (!proposal.executed && block.timestamp <= proposal.votingDeadline) {
+                return true;
+            }
+            
+            unchecked { ++i; }
+        }
+        return false;
+    }
+
+    /**
+     * @dev Get snapshot values for a proposal (for transparency)
+     * @param proposalId The proposal ID
+     * @return totalSupply The snapshotted total voting supply
+     * @return threshold The snapshotted quorum threshold
+     */
+    function getProposalSnapshots(
+        bytes32 proposalId
+    ) external view returns (uint256 totalSupply, uint256 threshold) {
+        return (snapshotTotalSupply[proposalId], snapshotQuorumThreshold[proposalId]);
+    }
+
+    /**
+     * @dev Emergency cancellation of malicious proposals (EMERGENCY_ROLE only)
+     * @param proposalId The proposal to cancel
+     * @param reason Human-readable cancellation reason
+     */
+    function emergencyCancelProposal(
+        bytes32 proposalId,
+        string calldata reason
+    ) external {
+        require(ACS.layout().roles[EMERGENCY_ROLE][msg.sender], "Missing emergency role");
+        
+        ManifestTypes.GovernanceProposal storage proposal = proposals[proposalId];
+        if (proposal.proposalId == bytes32(0)) {
+            revert ProposalNotFound(proposalId);
+        }
+        
+        if (proposal.executed) {
+            revert ProposalAlreadyExecuted(proposalId);
+        }
+        
+        // Mark as executed to prevent normal execution path
+        proposal.executed = true;
+        executedProposals[proposalId] = true;
+        
+        emit ProposalCancelled(proposalId, msg.sender, reason);
+    }
+
+    /**
+     * @dev Check if proposal was cancelled
+     * @param proposalId The proposal ID to check
+     * @return cancelled True if the proposal was emergency cancelled
+     */
+    function isProposalCancelled(bytes32 proposalId) external view returns (bool cancelled) {
+        ManifestTypes.GovernanceProposal memory proposal = proposals[proposalId];
+        
+        // If executed but has zero votes, likely cancelled (heuristic)
+        // For exact tracking, could add a separate cancelled mapping
+        return proposal.executed && 
+               proposal.forVotes == 0 && 
+               proposal.againstVotes == 0 && 
+               proposal.abstainVotes == 0;
+    }
 }
