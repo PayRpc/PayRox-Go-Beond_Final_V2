@@ -14,8 +14,8 @@ async function main() {
   const admin = deployer.address;
   const activationDelaySeconds = 3600; // 1 hour for gas-estimate fixture
   const dispatcher = await DispatcherFactory.deploy(admin, activationDelaySeconds);
-  await dispatcher.deployed();
-  console.log('Dispatcher deployed at', dispatcher.address);
+  await dispatcher.waitForDeployment();
+  console.log('Dispatcher deployed at', await dispatcher.getAddress());
 
   const selectors = ['0x00000000']; // single bytes4 selector
   // Deploy a minimal facet (ExampleFacetA) so the facet has code and a stable codehash
@@ -26,8 +26,8 @@ async function main() {
     try {
       const GasFactory = await ethers.getContractFactory('GasOptimizationUtils');
       const gasLib = await GasFactory.deploy();
-      await gasLib.deployed();
-      gasLibAddress = gasLib.address;
+      await gasLib.waitForDeployment();
+      gasLibAddress = await gasLib.getAddress();
       console.log('Deployed GasOptimizationUtils at', gasLibAddress);
     } catch (linkErr) {
       console.warn(
@@ -47,8 +47,8 @@ async function main() {
     }
 
     const facetCtr = await FacetFactory.deploy();
-    await facetCtr.deployed();
-    facet = { address: facetCtr.address };
+    await facetCtr.waitForDeployment();
+    facet = { address: await facetCtr.getAddress() };
     console.log('Deployed ExampleFacetA at', facet.address);
   } catch (err) {
     console.warn(
@@ -60,10 +60,10 @@ async function main() {
 
   const facets = [facet.address];
   // compute on-chain code hash for the deployed facet
-  let codehash = ethers.constants.HashZero;
+  let codehash = ethers.ZeroHash;
   try {
     const code = await ethers.provider.getCode(facet.address);
-    codehash = ethers.utils.keccak256(code);
+    codehash = ethers.keccak256(code);
   } catch (err) {
     console.warn('Failed to fetch code for facet:', (err as any)?.message || err);
   }
@@ -79,7 +79,7 @@ async function main() {
 
   // Commit the root to make applyRoutes callable (commitRoot requires COMMIT_ROLE which deployer has)
   try {
-    const root = ethers.utils.keccak256(ethers.utils.concat(['0x00', leaf]));
+    const root = ethers.keccak256(ethers.concat(['0x00', leaf]));
     const commitTx = await (await dispatcher.commitRoot(root, 1)).wait();
     console.log('Committed root', root, 'tx:', commitTx.transactionHash);
   } catch (err) {
