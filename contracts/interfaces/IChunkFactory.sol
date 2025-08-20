@@ -163,21 +163,9 @@ interface IChunkFactory {
     /// @param enabled True to enable fee collection, false to disable
     function setFeesEnabled(bool enabled) external;
 
-    /// @notice Set the maximum single transfer amount
-    /// @param newMax The new maximum transfer amount
-    function setMaxSingleTransfer(uint256 newMax) external;
-
     /// @notice Transfer default admin role to a new address
     /// @param newAdmin The new admin address
     function transferDefaultAdmin(address newAdmin) external;
-
-    /// @notice Add an authorized recipient address
-    /// @param recipient The address to authorize
-    function addAuthorizedRecipient(address recipient) external;
-
-    /// @notice Remove an authorized recipient address
-    /// @param recipient The address to remove authorization from
-    function removeAuthorizedRecipient(address recipient) external;
 
     // -------- Events --------
 
@@ -226,12 +214,6 @@ interface IChunkFactory {
 
     /// @notice Emitted when fee collection is enabled or disabled
     event FeesEnabledSet(bool enabled);
-
-    /// @notice Emitted when an authorized recipient is added
-    event AuthorizedRecipientAdded(address indexed recipient);
-
-    /// @notice Emitted when an authorized recipient is removed
-    event AuthorizedRecipientRemoved(address indexed recipient);
 
     /// @notice Emitted when the default admin is transferred
     event DefaultAdminTransferred(address indexed previousAdmin, address indexed newAdmin);

@@ -16,16 +16,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
     error ZeroAddress();
     error InvalidConstructorArgs();
 
-    // AUTHORIZATION_FIX: Authorized recipients for Ether transfers
-    mapping(address => bool) public authorizedRecipients;
-    uint256 public maxSingleTransfer = 1 ether;
     address public defaultAdmin;
-
-    modifier onlyAuthorizedTransfer(address recipient, uint256 amount) {
-        require(authorizedRecipients[recipient] || recipient == defaultAdmin, "Unauthorized recipient");
-        require(amount <= maxSingleTransfer, "Amount exceeds maximum");
-        _;
-    }
 
     modifier onlyOwner() {
         require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Not owner");
@@ -100,7 +91,6 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
     ACS.layout().roles[OPERATOR_ROLE][msg.sender] = true;
     ACS.layout().roles[FEE_ROLE][msg.sender] = true;
         defaultAdmin = msg.sender;
-        authorizedRecipients[msg.sender] = true;
 
         feeRecipient = _feeRecipient;
         expectedManifestDispatcher = _manifestDispatcher;
@@ -146,6 +136,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         // PERFECT_CEI_PATTERN: Complete Checks-Effects-Interactions
 
         // ═══ CHECKS PHASE ═══
+        require(_verifySystemIntegrity(), "System integrity check failed");
         bytes memory dataMemory = data;
         require(data.length <= MAX_CHUNK_BYTES, "DeterministicChunkFactory: chunk exceeds size limit");
         require(ChunkFactoryLib.validateData(dataMemory), "DeterministicChunkFactory: invalid chunk data");
@@ -160,6 +151,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
 
         // Prepare all deployment data
         bytes memory initCode = ChunkFactoryLib.createInitCode(data);
+        require(ChunkFactoryLib.validateBytecodeSize(initCode), "Invalid bytecode size");
         bytes32 initCodeHash = keccak256(initCode);
         address predicted = ChunkFactoryLib.predictAddress(address(this), salt, initCodeHash);
         require(predicted != address(0), "DeterministicChunkFactory: invalid predicted address");
@@ -246,6 +238,14 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         uint256 totalFee = _getDeploymentFee(msg.sender) * salts.length;
         require(msg.value >= totalFee, "Insufficient fee");
 
+        // Forward fee immediately (consistent with push policy)
+        if (totalFee > 0) {
+            (bool success, ) = payable(feeRecipient).call{value: totalFee}("");
+            if (!success) {
+                emit FeeCollectionFailed(feeRecipient, totalFee);
+            }
+        }
+
         for (uint256 i = 0; i < salts.length; i++) {
             bytes memory initCode = abi.encodePacked(bytecodes[i], constructorArgs[i]);
             require(ChunkFactoryLib.validateBytecodeSize(initCode), "Invalid bytecode size");
@@ -255,6 +255,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
 
             if (predicted.code.length > 0 && idempotentMode) {
                 deployed[i] = predicted;
+                isDeployedContract[predicted] = true; // Fix: maintain view consistency
                 continue;
             }
 
@@ -363,6 +364,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         uint256 balance = address(this).balance;
         require(balance > 0, "No fees to withdraw");
 
+        // This should only contain fees from failed pushes
         (bool success, ) = feeRecipient.call{value: balance}("");
         require(success, "Transfer failed");
 
@@ -406,6 +408,14 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         uint256 fee = _getDeploymentFee(msg.sender);
         require(msg.value >= fee, "Insufficient fee");
 
+        // Forward fee immediately (consistent with _collectProtocolFee)
+        if (fee > 0) {
+            (bool success, ) = payable(feeRecipient).call{value: fee}("");
+            if (!success) {
+                emit FeeCollectionFailed(feeRecipient, fee);
+            }
+        }
+
         if (msg.value > fee) {
             (bool refundSuccess, ) = msg.sender.call{value: msg.value - fee}("");
             require(refundSuccess, "Refund failed");
@@ -447,6 +457,14 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         uint256 totalFee = _getDeploymentFee(msg.sender) * count;
         require(msg.value >= totalFee, "Insufficient fee for batch");
 
+        // Forward fee immediately (consistent with push policy)
+        if (totalFee > 0) {
+            (bool success, ) = payable(feeRecipient).call{value: totalFee}("");
+            if (!success) {
+                emit FeeCollectionFailed(feeRecipient, totalFee);
+            }
+        }
+
         if (msg.value > totalFee) {
             (bool refundSuccess, ) = msg.sender.call{value: msg.value - totalFee}("");
             require(refundSuccess, "Refund failed");
@@ -455,6 +473,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
 
     /// @notice Internal staging without fee collection (for batch operations)
     function _stageInternalNoFee(bytes calldata data) internal returns (address chunk, bytes32 hash) {
+        require(_verifySystemIntegrity(), "System integrity check failed");
         bytes memory dataMemory = data;
         require(data.length <= MAX_CHUNK_BYTES, "Invalid data size");
         require(ChunkFactoryLib.validateData(dataMemory), "Invalid data");
@@ -467,6 +486,7 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
         }
 
         bytes memory initCode = ChunkFactoryLib.createInitCode(data);
+        require(ChunkFactoryLib.validateBytecodeSize(initCode), "Invalid bytecode size");
         bytes32 initCodeHash = keccak256(initCode);
 
         address predicted = ChunkFactoryLib.predictAddress(address(this), salt, initCodeHash);
@@ -507,27 +527,18 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
 
     /**
      * @dev Emergency function to withdraw locked Ether
-     * @notice Only callable by contract owner
+     * @notice Only callable by admin when contract is paused
      */
-    function emergencyWithdraw() external onlyOwner {
-        require(address(this).balance > 0, "No Ether to withdraw");
+    function emergencyWithdraw() external nonReentrant {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Not owner");
+        require(PS.layout().paused, "Not paused");
         uint256 balance = address(this).balance;
-        payable(owner()).transfer(balance);
-    }
-
-    /**
-     * @dev Add an authorized recipient for Ether transfers
-     */
-    function addAuthorizedRecipient(address recipient) external onlyOwner {
-        require(recipient != address(0), "Invalid recipient");
-        authorizedRecipients[recipient] = true;
-    }
-
-    /**
-     * @dev Remove an authorized recipient
-     */
-    function removeAuthorizedRecipient(address recipient) external onlyOwner {
-        authorizedRecipients[recipient] = false;
+        require(balance > 0, "No Ether to withdraw");
+        
+        (bool success, ) = payable(msg.sender).call{value: balance}("");
+        require(success, "Withdraw failed");
+        
+        emit FeesWithdrawn(msg.sender, balance);
     }
 
     function setFeeRecipient(address newRecipient) external onlyRole(FEE_ROLE) {
@@ -544,11 +555,6 @@ contract DeterministicChunkFactory is IChunkFactory, ReentrancyGuard {
     function setFeesEnabled(bool enabled) external onlyRole(FEE_ROLE) {
         feesEnabled = enabled;
         emit FeesEnabledSet(enabled);
-    }
-
-    function setMaxSingleTransfer(uint256 newMax) external {
-        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
-        maxSingleTransfer = newMax;
     }
 
     function transferDefaultAdmin(address newAdmin) external {

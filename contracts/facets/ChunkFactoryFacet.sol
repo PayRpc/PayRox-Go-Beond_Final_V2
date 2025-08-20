@@ -300,35 +300,11 @@ contract ChunkFactoryFacet is IChunkFactory {
     }
 
     /**
-     * @notice Set maximum single transfer amount (admin only) - delegates to factory
-     * @param newMax The new maximum transfer amount
-     */
-    function setMaxSingleTransfer(uint256 newMax) external override {
-        DeterministicChunkFactory(factoryAddress).setMaxSingleTransfer(newMax);
-    }
-
-    /**
      * @notice Transfer default admin role (admin only) - delegates to factory
      * @param newAdmin The new admin address
      */
     function transferDefaultAdmin(address newAdmin) external override {
         DeterministicChunkFactory(factoryAddress).transferDefaultAdmin(newAdmin);
-    }
-
-    /**
-     * @notice Add authorized recipient (admin only) - delegates to factory
-     * @param recipient The recipient address to authorize
-     */
-    function addAuthorizedRecipient(address recipient) external override {
-        DeterministicChunkFactory(factoryAddress).addAuthorizedRecipient(recipient);
-    }
-
-    /**
-     * @notice Remove authorized recipient (admin only) - delegates to factory
-     * @param recipient The recipient address to remove from authorization
-     */
-    function removeAuthorizedRecipient(address recipient) external override {
-        DeterministicChunkFactory(factoryAddress).removeAuthorizedRecipient(recipient);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
@@ -383,7 +359,7 @@ contract ChunkFactoryFacet is IChunkFactory {
 
     function getFacetFunctionSelectors() external pure returns (bytes4[] memory selectors) {
         // Update this list to match EXACTLY what the facet exposes
-    selectors = new bytes4[](32);
+    selectors = new bytes4[](29);
         uint256 i;
         // IChunkFactory interface functions
         selectors[i++] = IChunkFactory.stage.selector;
@@ -410,10 +386,7 @@ contract ChunkFactoryFacet is IChunkFactory {
         selectors[i++] = IChunkFactory.setFeeRecipient.selector;
         selectors[i++] = IChunkFactory.setBaseFeeWei.selector;
         selectors[i++] = IChunkFactory.setFeesEnabled.selector;
-        selectors[i++] = IChunkFactory.setMaxSingleTransfer.selector;
         selectors[i++] = IChunkFactory.transferDefaultAdmin.selector;
-    selectors[i++] = IChunkFactory.addAuthorizedRecipient.selector;
-    selectors[i++] = IChunkFactory.removeAuthorizedRecipient.selector;
 
         // PayRox helpers from this facet
         selectors[i++] = this.getExpectedManifestHash.selector;
