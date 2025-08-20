@@ -68,6 +68,9 @@ contract ManifestDispatcher is
     mapping(address => address) private _facetDeployer;      // provenance (first registrar)
     mapping(address => uint64)  private _facetDeployedAt;    // provenance timestamp
 
+    // Dev registrar control for production safety
+    bool private devRegistrarEnabled;
+
     // ───────────────────────────────────────────────────────────────────────────
     // Errors
     // ───────────────────────────────────────────────────────────────────────────
@@ -90,6 +93,7 @@ contract ManifestDispatcher is
     error ActivationDelayOutOfRange(uint64 newDelay);
     error InvalidSecurityLevel(uint8 level);
     error FacetUnknown(address facet);
+    error DevOnly();
 
     // ───────────────────────────────────────────────────────────────────────────
     // Events (contract-specific + some from interfaces are reused)
@@ -99,6 +103,8 @@ contract ManifestDispatcher is
     event RouteUpdated(bytes4 indexed selector, address indexed oldFacet, address indexed newFacet);
     event FacetSecurityLevelSet(address indexed facet, uint8 level);
     event FacetVersionTagSet(address indexed facet, bytes32 versionTag);
+    event L2TimestampWarning(uint64 activationTime, uint64 delay); // L2 governance timing alert
+    event DevRegistrarToggled(bool enabled);
 
     // ───────────────────────────────────────────────────────────────────────────
     // Constructor
@@ -116,6 +122,7 @@ contract ManifestDispatcher is
 
         manifest.activationDelay = activationDelaySeconds;
         manifest.manifestVersion = 1;
+        devRegistrarEnabled = false; // Default to disabled for production safety
     }
 
     // ───────────────────────────────────────────────────────────────────────────
@@ -179,6 +186,10 @@ contract ManifestDispatcher is
 
     function verifyManifest(bytes32 manifestHash) external view returns (bool ok, bytes32 current) {
         current = manifest.activeRoot; ok = (manifestHash == current);
+    }
+
+    function isDevRegistrarEnabled() external view returns (bool) {
+        return devRegistrarEnabled;
     }
 
     function getManifestInfo()
@@ -268,6 +279,7 @@ contract ManifestDispatcher is
     }
 
     /// @notice Activate the committed root after the delay.
+    /// @dev L2 WARNING: block.timestamp is sequencer-provided and may have bounded drift vs L1 wall time
     function activateCommittedRoot()
         external
         override
@@ -281,6 +293,9 @@ contract ManifestDispatcher is
         uint64 earliest = manifest.committedAt + manifest.activationDelay;
         uint64 nowTs = uint64(block.timestamp);
         if (nowTs < earliest) revert ActivationNotReady(earliest, nowTs);
+
+        // Emit L2 timing warning for governance monitoring
+        emit L2TimestampWarning(nowTs, manifest.activationDelay);
 
         manifest.activeRoot = pending;
         manifest.activeEpoch += 1;
@@ -300,7 +315,7 @@ contract ManifestDispatcher is
         override
     {
         require(ACS.layout().roles[EMERGENCY_ROLE][msg.sender], "Missing role");
-        require(!PS.layout().paused, "Pausable: paused");
+        // SECURITY FIX: Allow emergency route removal even when paused for incident response
         uint256 n = selectors.length;
         if (n > MAX_BATCH) revert BatchTooLarge(n);
         bool changed;
@@ -349,6 +364,17 @@ contract ManifestDispatcher is
         if (manifest.frozen) revert FrozenContract();
         manifest.frozen = true;
         emit Frozen();
+    }
+
+    /// @notice Enable/disable dev registrar for production safety
+    /// @param enabled Whether to allow adminRegisterUnsafe calls
+    function setDevRegistrarEnabled(bool enabled)
+        external
+    {
+        require(ACS.layout().roles[ACS.DEFAULT_ADMIN_ROLE][msg.sender], "Missing role");
+        if (manifest.frozen) revert FrozenContract();
+        devRegistrarEnabled = enabled;
+        emit DevRegistrarToggled(enabled);
     }
 
     // Pause/unpause provided by PauseFacet to avoid selector duplication
@@ -659,6 +685,8 @@ contract ManifestDispatcher is
     {
         require(ACS.layout().roles[APPLY_ROLE][msg.sender], "Missing role");
         require(!PS.layout().paused, "Pausable: paused");
+        if (manifest.frozen) revert FrozenContract(); // SECURITY FIX: prevent freeze bypass
+        if (!devRegistrarEnabled) revert DevOnly(); // SECURITY FIX: production safety gate
         uint256 n = facets_.length;
         if (n == 0) return;
         if (n != selectors_.length) revert LenMismatch();
