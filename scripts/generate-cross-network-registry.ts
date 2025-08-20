@@ -21,6 +21,7 @@
 import { artifacts } from 'hardhat';
 import * as fs from 'fs';
 import * as path from 'path';
+import { getCreate2Address, keccak256, solidityPacked, getAddress } from 'ethers';
 
 type NetStatus = 'production' | 'testnet' | 'local';
 
@@ -258,10 +259,7 @@ async function main() {
   console.log('🌍 PayRox Cross-Network Address Registry Generator\n');
 
   // Config (env overrideable)
-  // get ethers exports at runtime from the ethers library (avoid Hardhat wrapper)
-  // use require to ensure runtime resolution under ts-node
-  const EthersLib: any = require('ethers');
-  const { getCreate2Address, keccak256, solidityPacked, getAddress } = EthersLib;
+  // Use ethers imports directly instead of runtime require
 
   const deployer = process.env.PRX_DEPLOYER_ADDR
     ? getAddress(process.env.PRX_DEPLOYER_ADDR)
@@ -287,9 +285,9 @@ async function main() {
 
   let factoryInitCode = factoryInfo?.bytecode;
   let targetInitCode = targetInfo?.bytecode;
-  const factoryCompiler = factoryInfo?.compiler;
-  let targetCompiler = targetInfo?.compiler;
-  let manifestFallbackUsed = false;
+  const _factoryCompiler = factoryInfo?.compiler;
+  let _targetCompiler = targetInfo?.compiler;
+  let _manifestFallbackUsed = false;
 
   // If the intended universal contract artifact isn't present, fall back to SaltViewFacet (read-only helpers)
   if (!targetInitCode) {
@@ -306,8 +304,8 @@ async function main() {
         );
       }
       targetInitCode = fbInfo.bytecode;
-      targetCompiler = fbInfo.compiler;
-      manifestFallbackUsed = true;
+      _targetCompiler = fbInfo.compiler;
+      _manifestFallbackUsed = true;
     }
   }
 
