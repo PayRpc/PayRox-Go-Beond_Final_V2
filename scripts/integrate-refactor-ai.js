@@ -93,7 +93,7 @@ function createUniversalRefactorPrompt(repoFacts) {
       storageIsolation: 'No state vars in facets. Use Lib<Facet>Storage with unique slot',
       accessControl:
         'Keep modifiers/roles semantics. Roles live at diamond; diamond owner passes onlyOwner',
-      initIdempotent: 'Constructors/initialize() become Init contract call (idempotent)'
+      initIdempotent: 'Constructors/initialize() become Init contract call (idempotent)',
     },
     repoConformantImports: {
       facetFiles: [
@@ -114,8 +114,9 @@ function createUniversalRefactorPrompt(repoFacts) {
     },
     upgradeableMapping: {
       removeMixins: ['Initializable', 'UUPSUpgradeable', 'etc.'],
-      migrateConstructor: 'constructor/initialize() to Init<Module>.sol via diamondCut _init/_calldata',
-      reentrancyGuard: "Add tiny lock in storage or reuse project’s guard",
+      migrateConstructor:
+        'constructor/initialize() to Init<Module>.sol via diamondCut _init/_calldata',
+      reentrancyGuard: 'Add tiny lock in storage or reuse project’s guard',
     },
     externalDependencies: {
       policy: 'Prefer minimal local interfaces under contracts/external/...; no new npm deps',
@@ -193,7 +194,11 @@ function createUniversalRefactorPrompt(repoFacts) {
 function updateLearningManifest() {
   console.log('📋 Updating Learning Manifest...');
   const manifestPath = path.join(AI_DIR, 'learning-manifest.json');
-  const manifest = readJson(manifestPath, { capabilities: {}, refactorLearning: {}, activeLearning: {} });
+  const manifest = readJson(manifestPath, {
+    capabilities: {},
+    refactorLearning: {},
+    activeLearning: {},
+  });
 
   manifest.capabilities = {
     ...manifest.capabilities,
@@ -229,7 +234,10 @@ function updateLearningManifest() {
 function updatePatternDatabase() {
   console.log('🔍 Updating Pattern Database...');
   const dbPath = path.join(AI_DB_DIR, 'patterns.json');
-  const patterns = readJson(dbPath, { patterns: {}, learningStats: { totalPatterns: 0, averageConfidence: 0 } });
+  const patterns = readJson(dbPath, {
+    patterns: {},
+    learningStats: { totalPatterns: 0, averageConfidence: 0 },
+  });
 
   patterns.patterns = patterns.patterns || {};
   patterns.patterns.refactoring = {

@@ -2,6 +2,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 require('@nomicfoundation/hardhat-ethers');
 require('@nomicfoundation/hardhat-chai-matchers');
+// Import tasks
+require('./tasks/prx.chunk');
 const config = {
   solidity: {
     compilers: [

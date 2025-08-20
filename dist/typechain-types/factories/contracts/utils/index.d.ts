@@ -1,0 +1,3 @@
+export { ChunkFactoryLib__factory } from "./ChunkFactoryLib__factory";
+export { GasOptimizationUtils__factory } from "./GasOptimizationUtils__factory";
+export { OrderedMerkle__factory } from "./OrderedMerkle__factory";

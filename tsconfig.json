@@ -36,7 +36,8 @@
     }
   },
   "include": [
-    "./scripts/**/*",
+  "./scripts/**/*",
+  "./tests/**/*.ts",
     "./test/**/*",
     "./tasks/**/*",
     "./hardhat.config.ts",

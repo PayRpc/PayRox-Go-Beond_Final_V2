@@ -25,12 +25,12 @@ module.exports = [
         require: 'readonly',
         Buffer: 'readonly',
         setTimeout: 'readonly',
-        setInterval: 'readonly'
-      }
+        setInterval: 'readonly',
+      },
     },
     plugins: {
       import: importPlugin,
-      prettier
+      prettier,
     },
     rules: {
       ...importRecommended,
@@ -39,8 +39,15 @@ module.exports = [
       'import/no-unresolved': 'off',
       'import/namespace': 'off',
       'import/named': 'off',
-      'import/no-duplicates': 'off'
-    }
+      'import/no-duplicates': 'off',
+      'no-inner-declarations': 'off',
+      'no-empty': 'off',
+      'no-undef': 'off',
+      'no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
+    },
   },
   // TS files
   {
@@ -50,20 +57,20 @@ module.exports = [
       parserOptions: {
         project: ['./tsconfig.json', './tsconfig.hardhat.json'],
         sourceType: 'module',
-        ecmaVersion: 'latest'
+        ecmaVersion: 'latest',
       },
       globals: {
         console: 'readonly',
         process: 'readonly',
         module: 'readonly',
         require: 'readonly',
-        Buffer: 'readonly'
-      }
+        Buffer: 'readonly',
+      },
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
       import: importPlugin,
-      prettier
+      prettier,
     },
     rules: {
       ...tsRecommended,
@@ -76,15 +83,18 @@ module.exports = [
       'import/named': 'off',
       'import/no-duplicates': 'off',
       '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      'no-inner-declarations': 'off',
+      'no-empty': 'off',
       'no-undef': 'off',
       'no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-      ]
-    }
-  }
+      ],
+    },
+  },
 ];

@@ -1,18 +1,28 @@
-Pre-push safety checks
+# Pre-push safety checks
 
-This folder contains small helper scripts you can run locally before pushing changes to ensure the workspace doesn't contain banned tokens or secrets.
+<!-- cSpell:ignore prepush prepush-check prepush-check.sh prepush-check.ps1 pwsh pwsh.exe powershell -->
 
-Files:
-- prepush-check.sh  -- Bash script. Run with: bash scripts/tools/prepush-check.sh
-- prepush-check.ps1 -- PowerShell script. Run with: pwsh.exe -File scripts/tools/prepush-check.ps1
+Run the pre-push checks before pushing changes.
 
-Install as a git pre-push hook (manual):
-1. Copy the script to .git/hooks/pre-push (or create a hook that runs it).
-2. Make sure the hook is executable (chmod +x .git/hooks/pre-push).
+Bash
 
-Example .git/hooks/pre-push (bash):
-#!/usr/bin/env bash
-set -e
-scripts/tools/prepush-check.sh
+```bash
+bash scripts/tools/prepush-check.sh
+```
 
-If the check fails, the hook will exit non-zero and abort the push. Adjust excludes in the script if you need to whitelist additional directories.
+PowerShell
+
+```powershell
+pwsh.exe -File scripts/tools/prepush-check.ps1
+```
+
+Install as a git hook (Unix-like)
+
+Copy `scripts/tools/prepush-check.sh` to `.git/hooks/pre-push` and make it executable:
+
+```bash
+cp scripts/tools/prepush-check.sh .git/hooks/pre-push
+chmod +x .git/hooks/pre-push
+```
+
+Note: the script filenames on disk remain `prepush-check.sh` and `prepush-check.ps1`; this document uses the term "pre-push" for the git hook and checks.

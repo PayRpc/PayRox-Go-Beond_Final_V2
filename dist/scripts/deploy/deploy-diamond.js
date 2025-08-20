@@ -19,7 +19,7 @@ const hardhat_1 = require('hardhat');
 const fs_1 = __importDefault(require('fs'));
 class DiamondDeployer {
   config;
-  manifest;
+  manifest; // loaded in constructor
   deployedFacets = new Map();
   constructor(config) {
     this.config = config;
@@ -89,7 +89,10 @@ class DiamondDeployer {
     await diamond.deployed();
     console.log(`  ✅ Diamond deployed to: ${diamond.address}`);
     // Add loupe facet
-    const diamondCut = await hardhat_1.ethers.getContractAt('IDiamondCut', diamond.address);
+    const diamondCut = await hardhat_1.ethers.getContractAt(
+      'contracts/interfaces/IDiamondCut.sol:IDiamondCut',
+      diamond.address,
+    );
     const loupeSelectors = this.getFunctionSelectors(diamondLoupeFacet);
     await diamondCut.diamondCut(
       [
@@ -132,7 +135,10 @@ class DiamondDeployer {
   }
   async verifyDeployment(diamond) {
     console.log('✅ Verifying deployment...');
-    const diamondLoupe = await hardhat_1.ethers.getContractAt('IDiamondLoupe', diamond.address);
+    const diamondLoupe = await hardhat_1.ethers.getContractAt(
+      'contracts/interfaces/IDiamondLoupe.sol:IDiamondLoupe',
+      diamond.address,
+    );
     // Verify all facets are properly added
     const facets = await diamondLoupe.facets();
     console.log(`  📊 Total facets: ${facets.length}`);

@@ -56,7 +56,6 @@ exports.SolidityAnalyzer = void 0;
 const parser_1 = require('@solidity-parser/parser');
 const solc = __importStar(require('solc'));
 const ethers_1 = require('ethers');
-const crypto = __importStar(require('crypto'));
 const commander_1 = require('commander');
 const fs = __importStar(require('fs'));
 const index_1 = require('../../scripts/types/index');
@@ -92,12 +91,11 @@ class SolidityAnalyzer {
     }
   }
   /**
-   * SHA256 (hex) using node crypto to match naming expectations
+   * Keccak256 (hex) using ethers to match Ethereum standards
    */
-  sha256Hex(s) {
+  keccak256Hex(s) {
     try {
-      const hash = crypto.createHash('sha256').update(s, 'utf8').digest('hex');
-      return '0x' + hash;
+      return (0, ethers_1.keccak256)(Buffer.from(s, 'utf8'));
     } catch (err) {
       return ZERO_HASH;
     }
@@ -1617,7 +1615,7 @@ class SolidityAnalyzer {
         functions: chunk.functions.map((f) => f.name).sort(),
         estimatedSize: chunk.estimatedSize,
       });
-      chunkHashes[chunk.id] = this.calculateSHA256(chunkData);
+      chunkHashes[chunk.id] = this.calculateKeccak256(chunkData);
       totalSize += chunk.estimatedSize;
     });
     // Calculate merkle root from chunk hashes
@@ -1631,11 +1629,11 @@ class SolidityAnalyzer {
     };
   }
   /**
-   * Calculate SHA256 hash
+   * Calculate Keccak256 hash (Ethereum standard)
    */
-  calculateSHA256(data) {
-    // Use real SHA256 (node crypto) and return 0x-prefixed hex
-    return this.sha256Hex(data);
+  calculateKeccak256(data) {
+    // Use Keccak256 (ethers) for Ethereum compatibility
+    return this.keccak256Hex(data);
   }
   /**
    * Calculate merkle root from hashes
@@ -1654,7 +1652,7 @@ class SolidityAnalyzer {
       // combine raw hex strings; strip 0x if present
       const leftRaw = left.startsWith('0x') ? left.slice(2) : left;
       const rightRaw = right.startsWith('0x') ? right.slice(2) : right;
-      const combined = this.calculateSHA256(leftRaw + rightRaw);
+      const combined = this.calculateKeccak256(leftRaw + rightRaw);
       nextLevel.push(combined);
     }
     return this.calculateMerkleRoot(nextLevel);

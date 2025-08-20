@@ -5,11 +5,7 @@
  * @param positionsHex Bitfield hex string (e.g., "0x01") where bit i = 1 means sibling i is on the right
  * @returns Computed root hash
  */
-export declare function processOrderedProof(
-  leaf: string,
-  proof: string[],
-  positionsHex: string,
-): string;
+export declare function processOrderedProof(leaf: string, proof: string[], positionsHex: string): string;
 /**
  * Verify an ordered Merkle proof using bitfield position encoding
  * @param leaf The leaf hash (0x-prefixed hex string)
@@ -18,12 +14,7 @@ export declare function processOrderedProof(
  * @param root Expected root hash (0x-prefixed hex string)
  * @returns True if proof is valid
  */
-export declare function verifyOrderedProof(
-  leaf: string,
-  proof: string[],
-  positionsHex: string,
-  root: string,
-): boolean;
+export declare function verifyOrderedProof(leaf: string, proof: string[], positionsHex: string, root: string): boolean;
 /**
  * Create a leaf hash for manifest route verification
  * @param selector 4-byte function selector (0x-prefixed)

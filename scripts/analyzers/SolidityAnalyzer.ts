@@ -4,7 +4,7 @@ import { keccak256 } from 'ethers';
 import * as crypto from 'crypto';
 import { Command } from 'commander';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as _path from 'path';
 import {
   ParsedContract,
   FunctionInfo,
@@ -86,19 +86,19 @@ interface EventNode extends ASTNode {
   parameters?: ParameterListNode;
 }
 
-interface ModifierNode extends ASTNode {
+interface _ModifierNode extends ASTNode {
   type: 'ModifierDefinition';
   name: string;
   parameters?: ParameterListNode;
 }
 
-interface ImportNode extends ASTNode {
+interface _ImportNode extends ASTNode {
   type: 'ImportDirective';
   path: string;
   symbolAliases?: Array<{ foreign: string }>;
 }
 
-interface CompilationOutput {
+interface _CompilationOutput {
   contracts?: {
     [filename: string]: {
       [contractName: string]: {
@@ -125,7 +125,6 @@ interface CompilationOutput {
 
 // Canonical zero hash (256-bit)
 const ZERO_HASH = '0x' + '0'.repeat(64);
-
 
 export class SolidityAnalyzer {
   constructor() {
@@ -184,10 +183,7 @@ export class SolidityAnalyzer {
   /**
    * Parse and analyze a Solidity contract
    */
-  async parseContract(
-    sourceCode: string,
-    contractName?: string
-  ): Promise<ParsedContract> {
+  async parseContract(sourceCode: string, contractName?: string): Promise<ParsedContract> {
     try {
       // Parse the AST
       const ast = parse(sourceCode, {
@@ -203,7 +199,7 @@ export class SolidityAnalyzer {
       } catch (e) {
         console.warn(
           'Compilation failed, continuing with AST-only analysis:',
-          e instanceof Error ? e.message : e
+          e instanceof Error ? e.message : e,
         );
         compiled = {};
       }
@@ -229,10 +225,7 @@ export class SolidityAnalyzer {
       const chunkingRequired = this.requiresChunking(totalSize);
       const runtimeCodehash = this.calculateRuntimeCodehash(compiled);
       const storageCollisions = this.detectStorageCollisions(variables);
-      const deploymentStrategy = this.determineDeploymentStrategy(
-        totalSize,
-        functions.length
-      );
+      const deploymentStrategy = this.determineDeploymentStrategy(totalSize, functions.length);
 
       return {
         name: contractNode.name,
@@ -257,11 +250,8 @@ export class SolidityAnalyzer {
       if (error instanceof AnalysisError) {
         throw error;
       }
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new AnalysisError(
-        `Failed to parse contract: ${errorMessage}`
-      );
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new AnalysisError(`Failed to parse contract: ${errorMessage}`);
     }
   }
 
@@ -270,7 +260,7 @@ export class SolidityAnalyzer {
    */
   private async compileContract(
     sourceCode: string,
-    _contractName?: string
+    _contractName?: string,
   ): Promise<Record<string, unknown>> {
     const input = {
       language: 'Solidity',
@@ -305,7 +295,7 @@ export class SolidityAnalyzer {
 
       if (output.errors) {
         const errors = output.errors.filter(
-          (err: { severity: string }) => err.severity === 'error'
+          (err: { severity: string }) => err.severity === 'error',
         );
         if (errors.length > 0) {
           throw new CompilationError('Compilation failed', errors);
@@ -317,8 +307,7 @@ export class SolidityAnalyzer {
       if (error instanceof CompilationError) {
         throw error;
       }
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new CompilationError(`Compilation failed: ${errorMessage}`);
     }
   }
@@ -326,20 +315,17 @@ export class SolidityAnalyzer {
   /**
    * Find the main contract node in AST
    */
-  private findContractNode(
-    ast: unknown,
-    contractName?: string
-  ): ContractNode | null {
+  private findContractNode(ast: unknown, contractName?: string): ContractNode | null {
     const contractNodes: ContractNode[] = [];
 
-    this.visitNode(ast as ASTNode, node => {
+    this.visitNode(ast as ASTNode, (node) => {
       if (node.type === 'ContractDefinition') {
         contractNodes.push(node as ContractNode);
       }
     });
 
     if (contractName) {
-      const found = contractNodes.find(node => node.name === contractName);
+      const found = contractNodes.find((node) => node.name === contractName);
       if (found) {
         return found;
       }
@@ -352,27 +338,20 @@ export class SolidityAnalyzer {
   /**
    * Extract function information
    */
-  private extractFunctions(
-    contractNode: ContractNode,
-    sourceCode: string
-  ): FunctionInfo[] {
+  private extractFunctions(contractNode: ContractNode, sourceCode: string): FunctionInfo[] {
     const functions: FunctionInfo[] = [];
 
-    this.visitNode(contractNode, node => {
+    this.visitNode(contractNode, (node) => {
       if (node.type === 'FunctionDefinition') {
         const functionNode = node as FunctionNode;
         const functionInfo: FunctionInfo = {
-          name:
-            functionNode.name ||
-            (functionNode.isConstructor ? 'constructor' : 'fallback'),
+          name: functionNode.name || (functionNode.isConstructor ? 'constructor' : 'fallback'),
           selector: this.calculateSelector(functionNode),
           signature: this.buildFunctionSignature(functionNode),
           visibility: functionNode.visibility || 'public',
           stateMutability: functionNode.stateMutability || 'nonpayable',
           parameters: this.extractParameters(functionNode.parameters),
-          returnParameters: this.extractParameters(
-            functionNode.returnParameters
-          ),
+          returnParameters: this.extractParameters(functionNode.returnParameters),
           modifiers: this.extractFunctionModifiers(functionNode),
           gasEstimate: this.estimateFunctionGas(functionNode),
           dependencies: this.findFunctionDependencies(functionNode, sourceCode),
@@ -390,14 +369,11 @@ export class SolidityAnalyzer {
   /**
    * Extract state variables
    */
-  private extractVariables(
-    contractNode: ContractNode,
-    sourceCode: string
-  ): VariableInfo[] {
+  private extractVariables(contractNode: ContractNode, sourceCode: string): VariableInfo[] {
     const variables: VariableInfo[] = [];
     let slotCounter = 0;
 
-    this.visitNode(contractNode, node => {
+    this.visitNode(contractNode, (node) => {
       if (node.type === 'StateVariableDeclaration') {
         const variables_node = node as unknown as { variables: VariableNode[] };
         if (variables_node.variables) {
@@ -431,13 +407,10 @@ export class SolidityAnalyzer {
   /**
    * Extract events
    */
-  private extractEvents(
-    contractNode: ContractNode,
-    sourceCode: string
-  ): EventInfo[] {
+  private extractEvents(contractNode: ContractNode, sourceCode: string): EventInfo[] {
     const events: EventInfo[] = [];
 
-    this.visitNode(contractNode, node => {
+    this.visitNode(contractNode, (node) => {
       if (node.type === 'EventDefinition') {
         const eventInfo: EventInfo = {
           name: node.name || '',
@@ -446,12 +419,9 @@ export class SolidityAnalyzer {
             (node as any).parameters || {
               type: 'ParameterList',
               parameters: [],
-            }
+            },
           ),
-          indexed:
-            (node as any).parameters?.map?.(
-              (param: any) => param.isIndexed || false
-            ) || [],
+          indexed: (node as any).parameters?.map?.((param: any) => param.isIndexed || false) || [],
           sourceLocation: this.getSourceLocation(node, sourceCode),
         };
 
@@ -465,13 +435,10 @@ export class SolidityAnalyzer {
   /**
    * Extract modifiers
    */
-  private extractModifiers(
-    contractNode: any,
-    sourceCode: string
-  ): ModifierInfo[] {
+  private extractModifiers(contractNode: any, sourceCode: string): ModifierInfo[] {
     const modifiers: ModifierInfo[] = [];
 
-    this.visitNode(contractNode, node => {
+    this.visitNode(contractNode, (node) => {
       if (node.type === 'ModifierDefinition') {
         const modifierInfo: ModifierInfo = {
           name: node.name || '',
@@ -479,7 +446,7 @@ export class SolidityAnalyzer {
             (node as any).parameters || {
               type: 'ParameterList',
               parameters: [],
-            }
+            },
           ),
           sourceLocation: this.getSourceLocation(node, sourceCode),
         };
@@ -497,13 +464,11 @@ export class SolidityAnalyzer {
   private extractImports(ast: any): ImportInfo[] {
     const imports: ImportInfo[] = [];
 
-    this.visitNode(ast, node => {
+    this.visitNode(ast, (node) => {
       if (node.type === 'ImportDirective') {
         const importInfo: ImportInfo = {
           path: (node as any).path || '',
-          symbols:
-            (node as any).symbolAliases?.map?.((alias: any) => alias.foreign) ||
-            [],
+          symbols: (node as any).symbolAliases?.map?.((alias: any) => alias.foreign) || [],
           sourceLocation: this.getSourceLocation(node, ''),
         };
 
@@ -518,10 +483,7 @@ export class SolidityAnalyzer {
    * Extract inheritance information
    */
   private extractInheritance(contractNode: any): string[] {
-    return (
-      contractNode.baseContracts?.map((base: any) => base.baseName.namePath) ||
-      []
-    );
+    return contractNode.baseContracts?.map((base: any) => base.baseName.namePath) || [];
   }
 
   /**
@@ -566,8 +528,8 @@ export class SolidityAnalyzer {
       return '0x00000000';
     }
 
-  const signature = this.buildFunctionSignature(functionNode);
-  return this.selectorFromSignature(signature);
+    const signature = this.buildFunctionSignature(functionNode);
+    return this.selectorFromSignature(signature);
   }
 
   /**
@@ -580,7 +542,7 @@ export class SolidityAnalyzer {
 
     const params =
       functionNode.parameters?.parameters
-        ?.map(param => this.typeToString(param.typeName))
+        ?.map((param) => this.typeToString(param.typeName))
         .join(',') || '';
 
     return `${functionNode.name}(${params})`;
@@ -592,7 +554,7 @@ export class SolidityAnalyzer {
   private buildEventSignature(eventNode: EventNode): string {
     const params =
       eventNode.parameters?.parameters
-        ?.map(param => this.typeToString(param.typeName))
+        ?.map((param) => this.typeToString(param.typeName))
         .join(',') || '';
 
     return `${eventNode.name}(${params})`;
@@ -601,14 +563,12 @@ export class SolidityAnalyzer {
   /**
    * Extract parameters from parameter list
    */
-  private extractParameters(
-    parameterList: ParameterListNode | undefined
-  ): ParameterInfo[] {
+  private extractParameters(parameterList: ParameterListNode | undefined): ParameterInfo[] {
     if (!parameterList?.parameters) {
       return [];
     }
 
-    return parameterList.parameters.map(param => ({
+    return parameterList.parameters.map((param) => ({
       name: param.name || '',
       type: this.typeToString(param.typeName),
       indexed: param.isIndexed || false,
@@ -619,7 +579,7 @@ export class SolidityAnalyzer {
    * Extract function modifiers
    */
   private extractFunctionModifiers(functionNode: FunctionNode): string[] {
-    return functionNode.modifiers?.map(modifier => modifier.name) || [];
+    return functionNode.modifiers?.map((modifier) => modifier.name) || [];
   }
 
   /**
@@ -643,12 +603,8 @@ export class SolidityAnalyzer {
         return `${baseType}${length}`;
       }
       case 'MappingTypeName': {
-        const keyType = typeNode.keyType
-          ? this.typeToString(typeNode.keyType)
-          : 'unknown';
-        const valueType = typeNode.valueType
-          ? this.typeToString(typeNode.valueType)
-          : 'unknown';
+        const keyType = typeNode.keyType ? this.typeToString(typeNode.keyType) : 'unknown';
+        const valueType = typeNode.valueType ? this.typeToString(typeNode.valueType) : 'unknown';
         return `mapping(${keyType} => ${valueType})`;
       }
       default:
@@ -720,10 +676,10 @@ export class SolidityAnalyzer {
     }
 
     const location = this.getSourceLocation(functionNode, sourceCode);
-  // Ensure numeric slice indices for source slices
-  const startIdx = typeof location.start === 'number' ? location.start : 0;
-  const endIdx = typeof location.end === 'number' ? location.end : sourceCode.length;
-  const functionCode = sourceCode.slice(startIdx, endIdx);
+    // Ensure numeric slice indices for source slices
+    const startIdx = typeof location.start === 'number' ? location.start : 0;
+    const endIdx = typeof location.end === 'number' ? location.end : sourceCode.length;
+    const functionCode = sourceCode.slice(startIdx, endIdx);
 
     // Rough estimation: 1 byte per 2 characters of source (accounting for compilation)
     return Math.ceil(functionCode.length / 2);
@@ -732,13 +688,10 @@ export class SolidityAnalyzer {
   /**
    * Find function dependencies (other functions called)
    */
-  private findFunctionDependencies(
-    functionNode: any,
-    _sourceCode: string
-  ): string[] {
+  private findFunctionDependencies(functionNode: any, _sourceCode: string): string[] {
     const dependencies: Set<string> = new Set();
 
-    this.visitNode(functionNode, node => {
+    this.visitNode(functionNode, (node) => {
       if (node.type === 'FunctionCall' && node.name) {
         dependencies.add(node.name);
       }
@@ -753,14 +706,11 @@ export class SolidityAnalyzer {
   /**
    * Find variable dependencies
    */
-  private findVariableDependencies(
-    variableNode: any,
-    _sourceCode: string
-  ): string[] {
+  private findVariableDependencies(variableNode: any, _sourceCode: string): string[] {
     const dependencies: Set<string> = new Set();
 
     if (variableNode.expression) {
-      this.visitNode(variableNode.expression, node => {
+      this.visitNode(variableNode.expression, (node) => {
         if (node.type === 'Identifier' && node.name) {
           dependencies.add(node.name);
         }
@@ -837,7 +787,7 @@ export class SolidityAnalyzer {
   private estimateBlockGas(blockNode: any): number {
     let gasEstimate = 0;
 
-    this.visitNode(blockNode, node => {
+    this.visitNode(blockNode, (node) => {
       switch (node.type) {
         case 'AssignmentOperator':
           gasEstimate += 5; // SSTORE cost
@@ -885,26 +835,22 @@ export class SolidityAnalyzer {
   /**
    * Generic AST node visitor
    */
-  private visitNode(node: ASTNode, callback: (node: ASTNode) => void): void {
-    if (!node) {
+  private visitNode(_node: ASTNode, callback: (_node: ASTNode) => void): void {
+    if (!_node) {
       return;
     }
 
-    callback(node);
+    callback(_node);
 
     // Visit child nodes
-    for (const [key, value] of Object.entries(node)) {
+    for (const [key, value] of Object.entries(_node)) {
       if (Array.isArray(value)) {
-        value.forEach(child => {
+        value.forEach((child) => {
           if (typeof child === 'object' && child !== null) {
             this.visitNode(child as ASTNode, callback);
           }
         });
-      } else if (
-        typeof value === 'object' &&
-        value !== null &&
-        key !== 'parent'
-      ) {
+      } else if (typeof value === 'object' && value !== null && key !== 'parent') {
         this.visitNode(value as ASTNode, callback);
       }
     }
@@ -917,9 +863,7 @@ export class SolidityAnalyzer {
   /**
    * Identify facet candidates based on function grouping strategies
    */
-  private identifyFacetCandidates(
-    functions: FunctionInfo[]
-  ): Map<string, FunctionInfo[]> {
+  private identifyFacetCandidates(functions: FunctionInfo[]): Map<string, FunctionInfo[]> {
     const facets = new Map<string, FunctionInfo[]>();
 
     for (const fn of functions) {
@@ -930,10 +874,7 @@ export class SolidityAnalyzer {
         facetKey = 'AdminFacet';
       } else if (this.isGovernanceFunction(fn)) {
         facetKey = 'GovernanceFacet';
-      } else if (
-        fn.stateMutability === 'view' ||
-        fn.stateMutability === 'pure'
-      ) {
+      } else if (fn.stateMutability === 'view' || fn.stateMutability === 'pure') {
         facetKey = 'ViewFacet';
       } else if (this.isCoreFunction(fn)) {
         facetKey = 'CoreFacet';
@@ -971,8 +912,8 @@ export class SolidityAnalyzer {
     ];
 
     return (
-      adminPatterns.some(pattern => pattern.test(func.name)) ||
-      func.modifiers.some(mod => /owner|admin|auth|role/i.test(mod))
+      adminPatterns.some((pattern) => pattern.test(func.name)) ||
+      func.modifiers.some((mod) => /owner|admin|auth|role/i.test(mod))
     );
   }
 
@@ -989,7 +930,7 @@ export class SolidityAnalyzer {
       /^timelock/,
     ];
 
-    return governancePatterns.some(pattern => pattern.test(func.name));
+    return governancePatterns.some((pattern) => pattern.test(func.name));
   }
 
   /**
@@ -1008,10 +949,7 @@ export class SolidityAnalyzer {
   /**
    * Generate manifest routes for PayRox Go Beyond deployment
    */
-  private generateManifestRoutes(
-    functions: FunctionInfo[],
-    compiled: any
-  ): ManifestRoute[] {
+  private generateManifestRoutes(functions: FunctionInfo[], compiled: any): ManifestRoute[] {
     const routes: ManifestRoute[] = [];
 
     for (const func of functions) {
@@ -1044,9 +982,7 @@ export class SolidityAnalyzer {
   /**
    * Assess security level of a function
    */
-  private assessSecurityLevel(
-    func: FunctionInfo
-  ): 'low' | 'medium' | 'high' | 'critical' {
+  private assessSecurityLevel(func: FunctionInfo): 'low' | 'medium' | 'high' | 'critical' {
     // Critical: Admin functions, fund transfers
     if (
       this.isAdminFunction(func) ||
@@ -1086,8 +1022,7 @@ export class SolidityAnalyzer {
 
       // Get the first contract's deployed bytecode
       for (const [, contractData] of Object.entries(contracts)) {
-        const deployedBytecode = (contractData as any).evm?.deployedBytecode
-          ?.object;
+        const deployedBytecode = (contractData as any).evm?.deployedBytecode?.object;
         if (deployedBytecode) {
           const cleanBytecode = deployedBytecode.startsWith('0x')
             ? deployedBytecode
@@ -1129,18 +1064,16 @@ export class SolidityAnalyzer {
     }
 
     // Check for collisions
-  for (const [slot, vars] of Array.from(slotMap.entries())) {
+    for (const [slot, vars] of Array.from(slotMap.entries())) {
       if (vars.length > 1) {
-        collisions.push(
-          `Potential storage collision at slot ${slot}: ${vars.join(', ')}`
-        );
+        collisions.push(`Potential storage collision at slot ${slot}: ${vars.join(', ')}`);
       }
     }
 
     // Check for diamond storage pattern compliance
     if (variables.length > 0 && !this.isDiamondStorageCompliant(variables)) {
       collisions.push(
-        'Contract may not be diamond storage compliant - consider using diamond storage pattern'
+        'Contract may not be diamond storage compliant - consider using diamond storage pattern',
       );
     }
 
@@ -1153,15 +1086,11 @@ export class SolidityAnalyzer {
   private isDiamondStorageCompliant(variables: VariableInfo[]): boolean {
     // Look for diamond storage struct patterns
     const hasStorageStruct = variables.some(
-      v =>
-        v.name.toLowerCase().includes('storage') ||
-        v.type.toLowerCase().includes('storage')
+      (v) => v.name.toLowerCase().includes('storage') || v.type.toLowerCase().includes('storage'),
     );
 
     // Check if variables are properly isolated
-    const hasProperIsolation = variables.every(
-      v => v.slot >= 0 && v.offset >= 0
-    );
+    const hasProperIsolation = variables.every((v) => v.slot >= 0 && v.offset >= 0);
 
     return hasStorageStruct && hasProperIsolation;
   }
@@ -1171,7 +1100,7 @@ export class SolidityAnalyzer {
    */
   private determineDeploymentStrategy(
     totalSize: number,
-    functionCount: number
+    functionCount: number,
   ): 'single' | 'faceted' | 'chunked' {
     const SIZE_THRESHOLD = 20000; // Threshold for considering faceting
     const FUNCTION_THRESHOLD = 10; // Threshold for considering faceting
@@ -1179,10 +1108,7 @@ export class SolidityAnalyzer {
 
     if (totalSize > CHUNK_THRESHOLD) {
       return 'chunked';
-    } else if (
-      totalSize > SIZE_THRESHOLD ||
-      functionCount > FUNCTION_THRESHOLD
-    ) {
+    } else if (totalSize > SIZE_THRESHOLD || functionCount > FUNCTION_THRESHOLD) {
       return 'faceted';
     } else {
       return 'single';
@@ -1193,7 +1119,7 @@ export class SolidityAnalyzer {
    * Generate PayRox Go Beyond deployment manifest entry
    */
   generateManifestEntries(contract: ParsedContract): Record<string, unknown>[] {
-    return (contract.functions || []).map(fn => ({
+    return (contract.functions || []).map((fn) => ({
       selector: fn.selector,
       facet: '<predicted_facet_address>',
       codehash: contract.runtimeCodehash || '<runtime_codehash>',
@@ -1217,7 +1143,7 @@ export class SolidityAnalyzer {
 
     // Convert facet candidates to structured recommendations
     const facetEntries: Array<[string, any[]]> = contract.facetCandidates
-      ? Array.from((contract.facetCandidates as any).entries()) as Array<[string, any[]]>
+      ? (Array.from((contract.facetCandidates as any).entries()) as Array<[string, any[]]>)
       : [];
 
     for (const [facetName, functions] of facetEntries) {
@@ -1234,8 +1160,7 @@ export class SolidityAnalyzer {
     }
 
     const gasOptimizations = this.generateGasOptimizations(contract);
-    const securityConsiderations =
-      this.generateSecurityConsiderations(contract);
+    const securityConsiderations = this.generateSecurityConsiderations(contract);
 
     return {
       facetRecommendations,
@@ -1251,9 +1176,7 @@ export class SolidityAnalyzer {
   /**
    * Categorize facet by name
    */
-  private categorizeFacet(
-    facetName: string
-  ): 'admin' | 'governance' | 'view' | 'utility' | 'core' {
+  private categorizeFacet(facetName: string): 'admin' | 'governance' | 'view' | 'utility' | 'core' {
     const name = facetName.toLowerCase();
     if (name.includes('admin')) {
       return 'admin';
@@ -1301,30 +1224,22 @@ export class SolidityAnalyzer {
     const optimizations: string[] = [];
 
     if (contract.chunkingRequired) {
-      optimizations.push(
-        'Deploy via DeterministicChunkFactory to avoid contract size limits'
-      );
+      optimizations.push('Deploy via DeterministicChunkFactory to avoid contract size limits');
     }
 
     if (contract.facetCandidates.size > 1) {
-      optimizations.push(
-        'Modular facet deployment reduces individual deployment costs'
-      );
+      optimizations.push('Modular facet deployment reduces individual deployment costs');
     }
 
     if (contract.storageCollisions.length > 0) {
-      optimizations.push(
-        'Implement diamond storage pattern to avoid storage collisions'
-      );
+      optimizations.push('Implement diamond storage pattern to avoid storage collisions');
     }
 
     const viewFunctions = contract.functions.filter(
-      f => f.stateMutability === 'view' || f.stateMutability === 'pure'
+      (f) => f.stateMutability === 'view' || f.stateMutability === 'pure',
     );
     if (viewFunctions.length > 5) {
-      optimizations.push(
-        'Consider separate ViewFacet for read-only operations'
-      );
+      optimizations.push('Consider separate ViewFacet for read-only operations');
     }
 
     return optimizations;
@@ -1337,34 +1252,26 @@ export class SolidityAnalyzer {
     const considerations: string[] = [];
 
     const criticalFunctions = contract.functions.filter(
-      f => this.assessSecurityLevel(f) === 'critical'
+      (f) => this.assessSecurityLevel(f) === 'critical',
     );
 
     if (criticalFunctions.length > 0) {
       considerations.push(
-        `${criticalFunctions.length} critical functions require enhanced access control`
+        `${criticalFunctions.length} critical functions require enhanced access control`,
       );
     }
 
     if (contract.storageCollisions.length > 0) {
-      considerations.push(
-        'Storage collisions detected - implement proper facet isolation'
-      );
+      considerations.push('Storage collisions detected - implement proper facet isolation');
     }
 
-    const adminFunctions = contract.functions.filter(f =>
-      this.isAdminFunction(f)
-    );
+    const adminFunctions = contract.functions.filter((f) => this.isAdminFunction(f));
     if (adminFunctions.length > 0) {
-      considerations.push(
-        'Separate AdminFacet recommended for privileged functions'
-      );
+      considerations.push('Separate AdminFacet recommended for privileged functions');
     }
 
     if (contract.deploymentStrategy === 'chunked') {
-      considerations.push(
-        'Chunked deployment requires additional integrity verification'
-      );
+      considerations.push('Chunked deployment requires additional integrity verification');
     }
 
     return considerations;
@@ -1375,7 +1282,7 @@ export class SolidityAnalyzer {
    */
   initializeCLI(): Command {
     const program = new Command();
-    
+
     program
       .name('solidity-analyzer')
       .description('PayRox Go Beyond Solidity Analyzer')
@@ -1388,42 +1295,50 @@ export class SolidityAnalyzer {
       .option('-o, --output <file>', 'Output file for analysis results', 'analysis.json')
       .option('-v, --verbose', 'Verbose output')
       .option('--contract-name <name>', 'Specific contract name to analyze')
-      .action(async (contractPath: string, options: { output: string; verbose?: boolean; contractName?: string }) => {
-        try {
-          console.log(`Analyzing contract: ${contractPath}`);
-          
-          // Check if file exists
-          if (!fs.existsSync(contractPath)) {
-            console.error(`Error: Contract file not found at ${contractPath}`);
+      .action(
+        async (
+          contractPath: string,
+          options: { output: string; verbose?: boolean; contractName?: string },
+        ) => {
+          try {
+            console.log(`Analyzing contract: ${contractPath}`);
+
+            // Check if file exists
+            if (!fs.existsSync(contractPath)) {
+              console.error(`Error: Contract file not found at ${contractPath}`);
+              process.exit(1);
+            }
+
+            // Read contract source
+            const sourceCode = fs.readFileSync(contractPath, 'utf8');
+
+            // Analyze contract
+            const analysis = await this.parseContract(sourceCode, options.contractName);
+
+            if (options.verbose) {
+              console.log('Analysis Results:');
+              console.log(`- Contract name: ${analysis.name}`);
+              console.log(`- Functions found: ${analysis.functions.length}`);
+              console.log(`- State variables: ${analysis.variables.length}`);
+              console.log(`- Events: ${analysis.events.length}`);
+              console.log(`- Modifiers: ${analysis.modifiers.length}`);
+              console.log(`- Total size: ${analysis.totalSize} bytes`);
+              console.log(`- Deployment strategy: ${analysis.deploymentStrategy}`);
+              console.log(`- Chunking required: ${analysis.chunkingRequired}`);
+            }
+
+            // Write output
+            fs.writeFileSync(options.output, JSON.stringify(analysis, null, 2));
+            console.log(`Analysis saved to: ${options.output}`);
+          } catch (error) {
+            console.error(
+              'Analysis failed:',
+              error instanceof Error ? error.message : 'Unknown error',
+            );
             process.exit(1);
           }
-          
-          // Read contract source
-          const sourceCode = fs.readFileSync(contractPath, 'utf8');
-          
-          // Analyze contract
-          const analysis = await this.parseContract(sourceCode, options.contractName);
-          
-          if (options.verbose) {
-            console.log('Analysis Results:');
-            console.log(`- Contract name: ${analysis.name}`);
-            console.log(`- Functions found: ${analysis.functions.length}`);
-            console.log(`- State variables: ${analysis.variables.length}`);
-            console.log(`- Events: ${analysis.events.length}`);
-            console.log(`- Modifiers: ${analysis.modifiers.length}`);
-            console.log(`- Total size: ${analysis.totalSize} bytes`);
-            console.log(`- Deployment strategy: ${analysis.deploymentStrategy}`);
-            console.log(`- Chunking required: ${analysis.chunkingRequired}`);
-          }
-          
-          // Write output
-          fs.writeFileSync(options.output, JSON.stringify(analysis, null, 2));
-          console.log(`Analysis saved to: ${options.output}`);
-        } catch (error) {
-          console.error('Analysis failed:', error instanceof Error ? error.message : 'Unknown error');
-          process.exit(1);
-        }
-      });
+        },
+      );
 
     program
       .command('refactor')
@@ -1449,68 +1364,76 @@ export class SolidityAnalyzer {
       .option('--strategy <type>', 'Chunking strategy (function|feature|gas)', 'function')
       .option('-g, --gas-limit <gas>', 'Maximum gas limit for gas-based chunking')
       .option('--contract-name <name>', 'Specific contract name to analyze')
-      .action(async (contractPath: string, options: {
-        maxSize: string;
-        output: string;
-        strategy: 'function' | 'feature' | 'gas';
-        gasLimit?: string;
-        contractName?: string;
-      }) => {
-        try {
-          console.log(`Planning chunks for: ${contractPath}`);
-          
-          // Check if file exists
-          if (!fs.existsSync(contractPath)) {
-            console.error(`Error: Contract file not found at ${contractPath}`);
+      .action(
+        async (
+          contractPath: string,
+          options: {
+            maxSize: string;
+            output: string;
+            strategy: 'function' | 'feature' | 'gas';
+            gasLimit?: string;
+            contractName?: string;
+          },
+        ) => {
+          try {
+            console.log(`Planning chunks for: ${contractPath}`);
+
+            // Check if file exists
+            if (!fs.existsSync(contractPath)) {
+              console.error(`Error: Contract file not found at ${contractPath}`);
+              process.exit(1);
+            }
+
+            // Read contract source
+            const sourceCode = fs.readFileSync(contractPath, 'utf8');
+
+            // Analyze contract
+            const analysis = await this.parseContract(sourceCode, options.contractName);
+
+            // Generate chunk plan using our enhanced logic
+            const chunkPlan = this.generateChunkPlan(analysis, {
+              maxChunkSize: parseInt(options.maxSize),
+              strategy: options.strategy,
+              gasLimit: options.gasLimit ? parseInt(options.gasLimit) : undefined,
+            });
+
+            console.log(`Generated ${chunkPlan.chunks.length} chunks:`);
+            console.log(`Strategy: ${chunkPlan.strategy}`);
+            console.log(`Total functions: ${chunkPlan.totalFunctions}`);
+            console.log(`Total estimated size: ${chunkPlan.totalEstimatedSize} bytes`);
+
+            if (chunkPlan.optimization) {
+              console.log(`Optimization efficiency: ${chunkPlan.optimization.efficiency}`);
+              console.log(`Gas optimized: ${chunkPlan.optimization.gasOptimized}`);
+              console.log(`Dependency score: ${chunkPlan.optimization.dependencyScore}`);
+
+              if (chunkPlan.optimization.recommendations.length > 0) {
+                console.log('Recommendations:');
+                chunkPlan.optimization.recommendations.forEach((rec: string) => {
+                  console.log(`  - ${rec}`);
+                });
+              }
+            }
+
+            chunkPlan.chunks.forEach((chunk: any, i: number) => {
+              console.log(
+                `  Chunk ${i + 1} (${chunk.id}): ${chunk.functions.length} functions, ~${
+                  chunk.estimatedSize
+                } bytes, ${chunk.gasEstimate} gas`,
+              );
+            });
+
+            fs.writeFileSync(options.output, JSON.stringify(chunkPlan, null, 2));
+            console.log(`Chunk plan saved to: ${options.output}`);
+          } catch (error) {
+            console.error(
+              'Chunking failed:',
+              error instanceof Error ? error.message : 'Unknown error',
+            );
             process.exit(1);
           }
-          
-          // Read contract source
-          const sourceCode = fs.readFileSync(contractPath, 'utf8');
-          
-          // Analyze contract
-          const analysis = await this.parseContract(sourceCode, options.contractName);
-          
-          // Generate chunk plan using our enhanced logic
-          const chunkPlan = this.generateChunkPlan(analysis, {
-            maxChunkSize: parseInt(options.maxSize),
-            strategy: options.strategy,
-            gasLimit: options.gasLimit ? parseInt(options.gasLimit) : undefined
-          });
-          
-          console.log(`Generated ${chunkPlan.chunks.length} chunks:`);
-          console.log(`Strategy: ${chunkPlan.strategy}`);
-          console.log(`Total functions: ${chunkPlan.totalFunctions}`);
-          console.log(`Total estimated size: ${chunkPlan.totalEstimatedSize} bytes`);
-          
-          if (chunkPlan.optimization) {
-            console.log(`Optimization efficiency: ${chunkPlan.optimization.efficiency}`);
-            console.log(`Gas optimized: ${chunkPlan.optimization.gasOptimized}`);
-            console.log(`Dependency score: ${chunkPlan.optimization.dependencyScore}`);
-            
-            if (chunkPlan.optimization.recommendations.length > 0) {
-              console.log('Recommendations:');
-              chunkPlan.optimization.recommendations.forEach((rec: string) => {
-                console.log(`  - ${rec}`);
-              });
-            }
-          }
-          
-          chunkPlan.chunks.forEach((chunk: any, i: number) => {
-            console.log(
-              `  Chunk ${i + 1} (${chunk.id}): ${chunk.functions.length} functions, ~${
-                chunk.estimatedSize
-              } bytes, ${chunk.gasEstimate} gas`
-            );
-          });
-          
-          fs.writeFileSync(options.output, JSON.stringify(chunkPlan, null, 2));
-          console.log(`Chunk plan saved to: ${options.output}`);
-        } catch (error) {
-          console.error('Chunking failed:', error instanceof Error ? error.message : 'Unknown error');
-          process.exit(1);
-        }
-      });
+        },
+      );
 
     program
       .command('manifest')
@@ -1521,45 +1444,51 @@ export class SolidityAnalyzer {
       .option('--factory <address>', 'Factory contract address')
       .option('--dispatcher <address>', 'Dispatcher contract address')
       .option('--contract-name <name>', 'Specific contract name to analyze')
-      .action(async (contractPath: string, options: {
-        output: string;
-        network: string;
-        factory?: string;
-        dispatcher?: string;
-        contractName?: string;
-      }) => {
-        try {
-          console.log(`Building manifest for: ${contractPath}`);
-          
-          // Check if file exists
-          if (!fs.existsSync(contractPath)) {
-            console.error(`Error: Contract file not found at ${contractPath}`);
+      .action(
+        async (
+          contractPath: string,
+          options: {
+            output: string;
+            network: string;
+            factory?: string;
+            dispatcher?: string;
+            contractName?: string;
+          },
+        ) => {
+          try {
+            console.log(`Building manifest for: ${contractPath}`);
+
+            // Check if file exists
+            if (!fs.existsSync(contractPath)) {
+              console.error(`Error: Contract file not found at ${contractPath}`);
+              process.exit(1);
+            }
+
+            // Read contract source
+            const sourceCode = fs.readFileSync(contractPath, 'utf8');
+
+            // Analyze contract
+            const analysis = await this.parseContract(sourceCode, options.contractName);
+
+            // Generate manifest using our existing logic
+            const manifest = this.generateManifest(analysis, {
+              network: options.network,
+              factory: options.factory,
+              dispatcher: options.dispatcher,
+            });
+
+            fs.writeFileSync(options.output, JSON.stringify(manifest, null, 2));
+            console.log(`Manifest saved to: ${options.output}`);
+            console.log(`Manifest contains ${manifest.routes.length} routes`);
+          } catch (error) {
+            console.error(
+              'Manifest building failed:',
+              error instanceof Error ? error.message : 'Unknown error',
+            );
             process.exit(1);
           }
-          
-          // Read contract source
-          const sourceCode = fs.readFileSync(contractPath, 'utf8');
-          
-          // Analyze contract
-          const analysis = await this.parseContract(sourceCode, options.contractName);
-          
-          // Generate manifest using our existing logic
-          const manifest = this.generateManifest(analysis, {
-            network: options.network,
-            factory: options.factory,
-            dispatcher: options.dispatcher
-          });
-          
-          fs.writeFileSync(options.output, JSON.stringify(manifest, null, 2));
-          console.log(`Manifest saved to: ${options.output}`);
-          console.log(
-            `Manifest contains ${manifest.routes.length} routes`
-          );
-        } catch (error) {
-          console.error('Manifest building failed:', error instanceof Error ? error.message : 'Unknown error');
-          process.exit(1);
-        }
-      });
+        },
+      );
 
     program
       .command('report')
@@ -1568,45 +1497,53 @@ export class SolidityAnalyzer {
       .option('-o, --output <file>', 'Output report file', 'report.md')
       .option('--format <type>', 'Report format (markdown|json)', 'markdown')
       .option('--contract-name <name>', 'Specific contract name to analyze')
-      .action(async (contractPath: string, options: {
-        output: string;
-        format: 'markdown' | 'json';
-        contractName?: string;
-      }) => {
-        try {
-          console.log(`Generating report for: ${contractPath}`);
-          
-          // Check if file exists
-          if (!fs.existsSync(contractPath)) {
-            console.error(`Error: Contract file not found at ${contractPath}`);
+      .action(
+        async (
+          contractPath: string,
+          options: {
+            output: string;
+            format: 'markdown' | 'json';
+            contractName?: string;
+          },
+        ) => {
+          try {
+            console.log(`Generating report for: ${contractPath}`);
+
+            // Check if file exists
+            if (!fs.existsSync(contractPath)) {
+              console.error(`Error: Contract file not found at ${contractPath}`);
+              process.exit(1);
+            }
+
+            // Read contract source
+            const sourceCode = fs.readFileSync(contractPath, 'utf8');
+
+            // Analyze contract
+            const analysis = await this.parseContract(sourceCode, options.contractName);
+
+            // Generate report
+            let report: string;
+            switch (options.format) {
+              case 'json':
+                report = JSON.stringify(analysis, null, 2);
+                break;
+              case 'markdown':
+              default:
+                report = this.generateMarkdownReport(analysis);
+                break;
+            }
+
+            fs.writeFileSync(options.output, report);
+            console.log(`Report saved to: ${options.output}`);
+          } catch (error) {
+            console.error(
+              'Report generation failed:',
+              error instanceof Error ? error.message : 'Unknown error',
+            );
             process.exit(1);
           }
-          
-          // Read contract source
-          const sourceCode = fs.readFileSync(contractPath, 'utf8');
-          
-          // Analyze contract
-          const analysis = await this.parseContract(sourceCode, options.contractName);
-          
-          // Generate report
-          let report: string;
-          switch (options.format) {
-            case 'json':
-              report = JSON.stringify(analysis, null, 2);
-              break;
-            case 'markdown':
-            default:
-              report = this.generateMarkdownReport(analysis);
-              break;
-          }
-          
-          fs.writeFileSync(options.output, report);
-          console.log(`Report saved to: ${options.output}`);
-        } catch (error) {
-          console.error('Report generation failed:', error instanceof Error ? error.message : 'Unknown error');
-          process.exit(1);
-        }
-      });
+        },
+      );
 
     return program;
   }
@@ -1616,10 +1553,10 @@ export class SolidityAnalyzer {
    */
   private generateChunkPlan(
     analysis: ParsedContract,
-    options: { maxChunkSize: number; strategy: string; gasLimit?: number }
+    options: { maxChunkSize: number; strategy: string; gasLimit?: number },
   ): any {
     // Convert analysis functions to chunk functions
-    const chunkFunctions = analysis.functions.map(func => ({
+    const chunkFunctions = analysis.functions.map((func) => ({
       name: func.name,
       signature: func.signature,
       estimatedSize: func.codeSize,
@@ -1627,37 +1564,34 @@ export class SolidityAnalyzer {
       complexity: this.calculateFunctionComplexity(func),
       dependencies: func.dependencies,
     }));
-    
+
     let chunks: any[] = [];
-    
+
     // Group functions based on strategy
     switch (options.strategy) {
       case 'feature':
         chunks = this.planChunksByFeature(chunkFunctions, options.maxChunkSize);
         break;
-        
+
       case 'gas':
         chunks = this.planChunksByGasUsage(chunkFunctions, options.maxChunkSize, options.gasLimit);
         break;
-        
+
       case 'function':
       default:
         chunks = this.planChunksByFunction(chunkFunctions, options.maxChunkSize);
         break;
     }
-    
+
     // Calculate optimization metrics
     const optimization = this.calculateChunkOptimization(chunks, options);
-    
+
     return {
       chunks,
       totalFunctions: analysis.functions.length,
-      totalEstimatedSize: chunks.reduce(
-        (sum, chunk) => sum + chunk.estimatedSize,
-        0
-      ),
+      totalEstimatedSize: chunks.reduce((sum, chunk) => sum + chunk.estimatedSize, 0),
       strategy: options.strategy,
-      optimization
+      optimization,
     };
   }
 
@@ -1668,8 +1602,16 @@ export class SolidityAnalyzer {
    */
   async refactorContract(
     sourceCode: string,
-    options: { maxChunkSize?: number; strategy?: 'function' | 'feature' | 'gas'; dryRun?: boolean } = {}
-  ): Promise<{ chunks: any[]; patches: Array<{ file: string; snippet: string }>; summary: string }> {
+    options: {
+      maxChunkSize?: number;
+      strategy?: 'function' | 'feature' | 'gas';
+      dryRun?: boolean;
+    } = {},
+  ): Promise<{
+    chunks: any[];
+    patches: Array<{ file: string; snippet: string }>;
+    summary: string;
+  }> {
     // Lightweight parse to avoid expensive compilation during refactor planning
     const analysis = await this.parseContractLightweight(sourceCode);
 
@@ -1682,9 +1624,11 @@ export class SolidityAnalyzer {
     const patches: Array<{ file: string; snippet: string }> = [];
 
     for (const chunk of chunkPlan.chunks) {
-      const fileName = `${(analysis.name || 'Contract')}-${chunk.id}.facet.sol`;
+      const fileName = `${analysis.name || 'Contract'}-${chunk.id}.facet.sol`;
       // Heuristic snippet: export minimal interface with function signatures
-      const funcs = chunk.functions.map((f: any) => `function ${f.name}(${(f.signature || '')}) external;`).join('\n');
+      const funcs = chunk.functions
+        .map((f: any) => `function ${f.name}(${f.signature || ''}) external;`)
+        .join('\n');
       const snippet = `// Suggested facet: ${chunk.id}\n// Functions:\n${funcs}\n`;
       patches.push({ file: fileName, snippet });
     }
@@ -1693,208 +1637,193 @@ export class SolidityAnalyzer {
 
     return { chunks: chunkPlan.chunks, patches, summary };
   }
-  
+
   /**
    * Calculate function complexity score
    */
   private calculateFunctionComplexity(func: FunctionInfo): number {
     let complexity = 1; // Base complexity
-    
+
     // Add complexity for parameters
     complexity += func.parameters.length * 0.5;
-    
+
     // Add complexity for return parameters
     complexity += func.returnParameters.length * 0.5;
-    
+
     // Add complexity for modifiers
     complexity += func.modifiers.length;
-    
+
     // Add complexity for state mutability
     if (func.stateMutability !== 'view' && func.stateMutability !== 'pure') {
       complexity += 1;
     }
-    
+
     // Add complexity for dependencies
     complexity += func.dependencies.length * 0.2;
-    
+
     return Math.round(complexity * 10) / 10;
   }
-  
+
   /**
    * Plan chunks by individual functions (simple strategy)
    */
   private planChunksByFunction(functions: any[], maxChunkSize: number): any[] {
     const chunks: any[] = [];
     let currentChunk: any = this.createEmptyChunk(chunks.length);
-    
+
     for (const func of functions) {
       // Check if adding this function would exceed size limit
-      if (
-        currentChunk.estimatedSize + func.estimatedSize >
-        maxChunkSize
-      ) {
+      if (currentChunk.estimatedSize + func.estimatedSize > maxChunkSize) {
         if (currentChunk.functions.length > 0) {
           chunks.push(currentChunk);
           currentChunk = this.createEmptyChunk(chunks.length);
         }
       }
-      
+
       currentChunk.functions.push(func);
       currentChunk.estimatedSize += func.estimatedSize;
       currentChunk.gasEstimate += func.gasEstimate;
       currentChunk.dependencies.push(...func.dependencies);
     }
-    
+
     if (currentChunk.functions.length > 0) {
       chunks.push(currentChunk);
     }
-    
+
     return chunks;
   }
-  
+
   /**
    * Plan chunks by gas usage optimization
    */
   private planChunksByGasUsage(functions: any[], maxChunkSize: number, gasLimit?: number): any[] {
     // Sort functions by gas usage (ascending)
-    const sortedFunctions = [...functions].sort(
-      (a, b) => a.gasEstimate - b.gasEstimate
-    );
-    
+    const sortedFunctions = [...functions].sort((a, b) => a.gasEstimate - b.gasEstimate);
+
     const chunks: any[] = [];
     let currentChunk: any = this.createEmptyChunk(chunks.length);
-    
+
     for (const func of sortedFunctions) {
       // Check both size and gas limits
       if (
-        currentChunk.estimatedSize + func.estimatedSize >
-          maxChunkSize ||
-        (gasLimit && currentChunk.gasEstimate + func.gasEstimate >
-          gasLimit)
+        currentChunk.estimatedSize + func.estimatedSize > maxChunkSize ||
+        (gasLimit && currentChunk.gasEstimate + func.gasEstimate > gasLimit)
       ) {
         if (currentChunk.functions.length > 0) {
           chunks.push(currentChunk);
           currentChunk = this.createEmptyChunk(chunks.length);
         }
       }
-      
+
       currentChunk.functions.push(func);
       currentChunk.estimatedSize += func.estimatedSize;
       currentChunk.gasEstimate += func.gasEstimate;
       currentChunk.dependencies.push(...func.dependencies);
     }
-    
+
     if (currentChunk.functions.length > 0) {
       chunks.push(currentChunk);
     }
-    
+
     return chunks;
   }
-  
+
   /**
    * Plan chunks by feature grouping (advanced strategy)
    */
   private planChunksByFeature(functions: any[], maxChunkSize: number): any[] {
     const featureGroups = this.groupFunctionsByFeature(functions);
     const chunks: any[] = [];
-    
+
     for (const [feature, funcs] of featureGroups) {
-      let currentChunk: any = this.createEmptyChunk(
-        chunks.length,
-        feature
-      );
-      
+      let currentChunk: any = this.createEmptyChunk(chunks.length, feature);
+
       for (const func of funcs) {
-        if (
-          currentChunk.estimatedSize + func.estimatedSize >
-          maxChunkSize
-        ) {
+        if (currentChunk.estimatedSize + func.estimatedSize > maxChunkSize) {
           if (currentChunk.functions.length > 0) {
             chunks.push(currentChunk);
             currentChunk = this.createEmptyChunk(chunks.length, feature);
           }
         }
-        
+
         currentChunk.functions.push(func);
         currentChunk.estimatedSize += func.estimatedSize;
         currentChunk.gasEstimate += func.gasEstimate;
         currentChunk.dependencies.push(...func.dependencies);
       }
-      
+
       if (currentChunk.functions.length > 0) {
         chunks.push(currentChunk);
       }
     }
-    
+
     return chunks;
   }
-  
+
   /**
    * Group functions by detected features
    */
-  private groupFunctionsByFeature(
-    functions: any[]
-  ): Map<string, any[]> {
+  private groupFunctionsByFeature(functions: any[]): Map<string, any[]> {
     const groups = new Map<string, any[]>();
-    
+
     for (const func of functions) {
       const feature = this.detectFunctionFeature(func);
-      
+
       if (!groups.has(feature)) {
         groups.set(feature, []);
       }
-      
+
       const group = groups.get(feature);
       if (group) {
         group.push(func);
       }
     }
-    
+
     return groups;
   }
-  
+
   /**
    * Detect feature category for a function
    */
   private detectFunctionFeature(func: any): string {
     const name = func.name.toLowerCase();
-    
+
     // ERC20-like functions
     if (
-      ['transfer', 'approve', 'allowance', 'balanceof', 'totalsupply'].some(
-        pattern => name.includes(pattern)
+      ['transfer', 'approve', 'allowance', 'balanceof', 'totalsupply'].some((pattern) =>
+        name.includes(pattern),
       )
     ) {
       return 'erc20';
     }
-    
+
     // Access control functions
     if (
-      ['onlyowner', 'onlyadmin', 'onlyauthorized', 'require'].some(pattern =>
-        name.includes(pattern)
+      ['onlyowner', 'onlyadmin', 'onlyauthorized', 'require'].some((pattern) =>
+        name.includes(pattern),
       ) ||
       func.name.includes('Role')
     ) {
       return 'access-control';
     }
-    
+
     // View/pure functions
     if (func.gasEstimate < 10000) {
       return 'read-only';
     }
-    
+
     // Administrative functions
     if (
-      ['mint', 'burn', 'pause', 'unpause', 'withdraw', 'emergency'].some(
-        pattern => name.includes(pattern)
+      ['mint', 'burn', 'pause', 'unpause', 'withdraw', 'emergency'].some((pattern) =>
+        name.includes(pattern),
       )
     ) {
       return 'administrative';
     }
-    
+
     return 'core';
   }
-  
+
   /**
    * Create empty chunk with proper initialization
    */
@@ -1908,52 +1837,45 @@ export class SolidityAnalyzer {
       dependencies: [],
     };
   }
-  
+
   /**
    * Calculate optimization metrics for chunk plan
    */
-  private calculateChunkOptimization(chunks: any[], options: { maxChunkSize: number; gasLimit?: number }): any {
-    const totalSize = chunks.reduce(
-      (sum, chunk) => sum + chunk.estimatedSize,
-      0
-    );
+  private calculateChunkOptimization(
+    chunks: any[],
+    options: { maxChunkSize: number; gasLimit?: number },
+  ): any {
+    const totalSize = chunks.reduce((sum, chunk) => sum + chunk.estimatedSize, 0);
     const averageChunkSize = totalSize / chunks.length;
     const sizeEfficiency = averageChunkSize / options.maxChunkSize;
-    
+
     const totalGas = chunks.reduce((sum, chunk) => sum + chunk.gasEstimate, 0);
     const gasOptimized = options.gasLimit ? totalGas <= options.gasLimit : true;
-    
+
     // Calculate dependency score (lower is better)
     const crossChunkDependencies = this.calculateCrossChunkDependencies(chunks);
-    const dependencyScore =
-      crossChunkDependencies / Math.max(chunks.length - 1, 1);
-    
+    const dependencyScore = crossChunkDependencies / Math.max(chunks.length - 1, 1);
+
     const recommendations: string[] = [];
-    
+
     if (sizeEfficiency < 0.7) {
-      recommendations.push(
-        'Consider merging smaller chunks for better size efficiency'
-      );
+      recommendations.push('Consider merging smaller chunks for better size efficiency');
     }
-    
+
     if (!gasOptimized) {
-      recommendations.push(
-        'Gas usage exceeds recommended limits - consider function optimization'
-      );
+      recommendations.push('Gas usage exceeds recommended limits - consider function optimization');
     }
-    
+
     if (dependencyScore > 0.3) {
       recommendations.push(
-        'High cross-chunk dependencies detected - consider reorganizing features'
+        'High cross-chunk dependencies detected - consider reorganizing features',
       );
     }
-    
+
     if (chunks.length > 10) {
-      recommendations.push(
-        'Large number of chunks may increase deployment complexity'
-      );
+      recommendations.push('Large number of chunks may increase deployment complexity');
     }
-    
+
     return {
       efficiency: Math.round(sizeEfficiency * 100) / 100,
       gasOptimized,
@@ -1961,7 +1883,7 @@ export class SolidityAnalyzer {
       recommendations,
     };
   }
-  
+
   /**
    * Calculate cross-chunk dependencies
    */
@@ -1969,12 +1891,12 @@ export class SolidityAnalyzer {
     // Simplified dependency calculation
     // In practice, this would analyze actual function call relationships
     let crossDependencies = 0;
-    
+
     for (let i = 0; i < chunks.length; i++) {
       for (let j = i + 1; j < chunks.length; j++) {
         const chunk1Deps = new Set(chunks[i].dependencies);
         const chunk2Funcs = new Set(chunks[j].functions.map((f: any) => f.name));
-        
+
         // Count dependencies from chunk1 to chunk2
         for (const dep of chunk1Deps) {
           if (chunk2Funcs.has(dep)) {
@@ -1983,7 +1905,7 @@ export class SolidityAnalyzer {
         }
       }
     }
-    
+
     return crossDependencies;
   }
 
@@ -1992,26 +1914,26 @@ export class SolidityAnalyzer {
    */
   private generateManifest(
     analysis: ParsedContract,
-    options: { network: string; factory?: string; dispatcher?: string; deployer?: string }
+    options: { network: string; factory?: string; dispatcher?: string; deployer?: string },
   ): any {
     // Generate chunk plan for the manifest
     const chunkPlan = this.generateChunkPlan(analysis, {
       maxChunkSize: 24576, // EIP-170 limit
-      strategy: 'function'
+      strategy: 'function',
     });
-    
+
     // Build routes from analysis and chunk plan
     const routes = this.buildManifestRoutes(analysis, chunkPlan);
-    
+
     // Calculate verification data
     const verification = this.calculateManifestVerification(chunkPlan.chunks, routes);
-    
+
     // Extract dependencies
     const dependencies = this.extractManifestDependencies(analysis);
-    
+
     // Check security features
     const security = this.checkManifestSecurity(analysis);
-    
+
     return {
       metadata: {
         version: '1.0.0',
@@ -2031,13 +1953,13 @@ export class SolidityAnalyzer {
       security,
     };
   }
-  
+
   /**
    * Build manifest routes from analysis and chunk plan
    */
   private buildManifestRoutes(analysis: ParsedContract, chunkPlan: any): any[] {
     const routes: any[] = [];
-    
+
     // Create a map of function names to chunk IDs
     const functionToChunkMap = new Map<string, string>();
     chunkPlan.chunks.forEach((chunk: any) => {
@@ -2045,9 +1967,9 @@ export class SolidityAnalyzer {
         functionToChunkMap.set(func.name, chunk.id);
       });
     });
-    
+
     // Build routes from manifest routes in analysis
-    analysis.manifestRoutes.forEach(route => {
+    analysis.manifestRoutes.forEach((route) => {
       const funcName = route.functionName || '';
       const chunkId = functionToChunkMap.get(funcName) || 'unknown-chunk';
       routes.push({
@@ -2056,30 +1978,30 @@ export class SolidityAnalyzer {
         chunkId,
         functionName: funcName,
         // In a real implementation, we would calculate actual facet addresses
-        facet: '<predicted_facet_address>'
+        facet: '<predicted_facet_address>',
       });
     });
-    
+
     return routes;
   }
-  
+
   /**
    * Find function signature by name
    */
   private findFunctionSignature(functions: FunctionInfo[], functionName: string): string {
-    const func = functions.find(f => f.name === functionName);
+    const func = functions.find((f) => f.name === functionName);
     return func ? func.signature : '';
   }
-  
+
   /**
    * Calculate verification data for manifest
    */
   private calculateManifestVerification(chunks: any[], routes: any[]): any {
     const chunkHashes: { [chunkId: string]: string } = {};
     let totalSize = 0;
-    
+
     // Calculate hash for each chunk
-    chunks.forEach(chunk => {
+    chunks.forEach((chunk) => {
       const chunkData = JSON.stringify({
         id: chunk.id,
         functions: chunk.functions.map((f: any) => f.name).sort(),
@@ -2088,11 +2010,11 @@ export class SolidityAnalyzer {
       chunkHashes[chunk.id] = this.calculateSHA256(chunkData);
       totalSize += chunk.estimatedSize;
     });
-    
+
     // Calculate merkle root from chunk hashes
     const sortedHashes = Object.values(chunkHashes).sort();
     const merkleRoot = this.calculateMerkleRoot(sortedHashes);
-    
+
     return {
       merkleRoot,
       chunkHashes,
@@ -2100,7 +2022,7 @@ export class SolidityAnalyzer {
       totalSize,
     };
   }
-  
+
   /**
    * Calculate SHA256 hash
    */
@@ -2108,7 +2030,7 @@ export class SolidityAnalyzer {
     // Use real SHA256 (node crypto) and return 0x-prefixed hex
     return this.sha256Hex(data);
   }
-  
+
   /**
    * Calculate merkle root from hashes
    */
@@ -2119,52 +2041,49 @@ export class SolidityAnalyzer {
     if (hashes.length === 1) {
       return hashes[0] || ZERO_HASH;
     }
-    
+
     const nextLevel: string[] = [];
     for (let i = 0; i < hashes.length; i += 2) {
       const left = hashes[i];
       const right = hashes[i + 1] || left; // Duplicate last hash if odd number
-  // combine raw hex strings; strip 0x if present
-  const leftRaw = left.startsWith('0x') ? left.slice(2) : left;
-  const rightRaw = right.startsWith('0x') ? right.slice(2) : right;
-  const combined = this.calculateSHA256(leftRaw + rightRaw);
+      // combine raw hex strings; strip 0x if present
+      const leftRaw = left.startsWith('0x') ? left.slice(2) : left;
+      const rightRaw = right.startsWith('0x') ? right.slice(2) : right;
+      const combined = this.calculateSHA256(leftRaw + rightRaw);
       nextLevel.push(combined);
     }
-    
+
     return this.calculateMerkleRoot(nextLevel);
   }
-  
+
   /**
    * Extract dependencies for manifest
    */
   private extractManifestDependencies(analysis: ParsedContract): string[] {
     const dependencies: string[] = [];
-    
+
     // Extract from imports
-    analysis.imports.forEach(imp => {
+    analysis.imports.forEach((imp) => {
       if (imp.path.startsWith('@openzeppelin') || imp.path.startsWith('@')) {
         dependencies.push(imp.path);
       }
     });
-    
+
     // Extract from inheritance
-    analysis.inheritance.forEach(inh => {
+    analysis.inheritance.forEach((inh) => {
       dependencies.push(inh);
     });
-    
+
     return [...new Set(dependencies)]; // Remove duplicates
   }
-  
+
   /**
    * Check security features for manifest
    */
   private checkManifestSecurity(analysis: ParsedContract): any {
     return {
       pausable: analysis.functions.some(
-        func =>
-          func.name === 'pause' ||
-          func.name === 'unpause' ||
-          func.name === 'paused'
+        (func) => func.name === 'pause' || func.name === 'unpause' || func.name === 'paused',
       ),
       upgradeable: true, // Assume upgradeable in PayRox context
     };
@@ -2188,7 +2107,7 @@ export class SolidityAnalyzer {
   private generateMarkdownReport(analysis: ParsedContract): string {
     let report = `# Contract Analysis Report\n\n`;
     report += `Generated: ${new Date().toISOString()}\n\n`;
-    
+
     report += `## Overview\n`;
     report += `- Contract Name: ${analysis.name}\n`;
     report += `- Functions: ${analysis.functions.length}\n`;
@@ -2198,33 +2117,33 @@ export class SolidityAnalyzer {
     report += `- Total Size: ${analysis.totalSize} bytes\n`;
     report += `- Deployment Strategy: ${analysis.deploymentStrategy}\n`;
     report += `- Chunking Required: ${analysis.chunkingRequired}\n\n`;
-    
+
     report += `## Functions\n`;
-    analysis.functions.forEach(func => {
+    analysis.functions.forEach((func) => {
       report += `- **${func.name}** (${func.visibility} ${func.stateMutability})\n`;
       report += `  - Selector: ${func.selector}\n`;
       report += `  - Signature: ${func.signature}\n`;
       report += `  - Gas Estimate: ${func.gasEstimate}\n`;
       report += `  - Code Size: ${func.codeSize} bytes\n\n`;
     });
-    
+
     report += `## State Variables\n`;
-    analysis.variables.forEach(variable => {
+    analysis.variables.forEach((variable) => {
       report += `- **${variable.name}** (${variable.type})\n`;
       report += `  - Visibility: ${variable.visibility}\n`;
       report += `  - Slot: ${variable.slot}\n`;
       report += `  - Size: ${variable.size} bytes\n\n`;
     });
-    
+
     report += `## Facet Recommendations\n`;
     const facetEntriesReport: Array<[string, any[]]> = analysis.facetCandidates
-      ? Array.from((analysis.facetCandidates as any).entries()) as Array<[string, any[]]>
+      ? (Array.from((analysis.facetCandidates as any).entries()) as Array<[string, any[]]>)
       : [];
 
     for (const [facetName, functions] of facetEntriesReport) {
       report += `- **${facetName}**: ${functions.length} functions\n`;
     }
-    
+
     return report;
   }
 
@@ -2233,7 +2152,7 @@ export class SolidityAnalyzer {
    */
   async parseContractLightweight(
     sourceCode: string,
-    contractName?: string
+    contractName?: string,
   ): Promise<ParsedContract> {
     try {
       // Parse the AST with tolerant mode for better performance
@@ -2255,7 +2174,7 @@ export class SolidityAnalyzer {
       const modifiers = this.extractModifiers(contractNode, sourceCode);
       const imports = this.extractImports(ast);
       const inheritance = this.extractInheritance(contractNode);
-      
+
       // Estimate size without full compilation for performance
       const totalSize = this.estimateContractSizeLightweight(sourceCode);
 
@@ -2263,10 +2182,7 @@ export class SolidityAnalyzer {
       const facetCandidates = this.identifyFacetCandidates(functions);
       const chunkingRequired = this.requiresChunking(totalSize);
       const storageCollisions = this.detectStorageCollisions(variables);
-      const deploymentStrategy = this.determineDeploymentStrategy(
-        totalSize,
-        functions.length
-      );
+      const deploymentStrategy = this.determineDeploymentStrategy(totalSize, functions.length);
 
       return {
         name: contractNode.name,
@@ -2291,11 +2207,8 @@ export class SolidityAnalyzer {
       if (error instanceof AnalysisError) {
         throw error;
       }
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new AnalysisError(
-        `Failed to parse contract: ${errorMessage}`
-      );
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new AnalysisError(`Failed to parse contract: ${errorMessage}`);
     }
   }
 
@@ -2306,7 +2219,7 @@ export class SolidityAnalyzer {
     // Rough estimation: 1 byte per 2 characters of source
     return Math.ceil(sourceCode.length / 2);
   }
-/**
+  /**
    * Parse functions using regex for lightweight analysis
    * Based on the Deployment Analysis Route implementation
    */
@@ -2315,7 +2228,7 @@ export class SolidityAnalyzer {
     const functions: any[] = [];
     let m: RegExpExecArray | null;
     const indices: number[] = [];
-    
+
     // Find all function matches
     while ((m = re.exec(sourceCode)) !== null) {
       indices.push(m.index);
@@ -2333,20 +2246,20 @@ export class SolidityAnalyzer {
         modifiers: [],
       });
     }
-    
+
     // Derive slices (rough): from this match index to next match index
     for (let i = 0; i < functions.length; i++) {
       const start = indices[i];
       const end = i + 1 < indices.length ? indices[i + 1] : sourceCode.length;
       functions[i].bodyOrDecl = sourceCode.slice(start, end);
     }
-    
+
     // Enrich with signatures/selectors and attribute heuristics
     for (const func of functions) {
       const types = this.parseParamTypes(func.paramsRaw);
       func.signature = `${func.name}(${types.join(',')})`;
       func.selector = this.calculateSelectorFromSignature(func.signature);
-      
+
       const blob = func.afterSigBlob;
       // visibility
       const vis = blob.match(/\b(public|external|internal|private)\b/);
@@ -2358,24 +2271,24 @@ export class SolidityAnalyzer {
       const mods = blob
         .replace(
           /\b(public|external|internal|private|pure|view|payable|virtual|override|returns)\b/g,
-          ' '
+          ' ',
         )
         .trim()
         .split(/\s+/)
         .filter(Boolean);
       func.modifiers = mods;
     }
-    
+
     return functions;
   }
-  
+
   /**
    * Parse parameter types from raw parameter string
    * Based on the Deployment Analysis Route implementation
    */
   private parseParamTypes(raw: string): string[] {
     if (!raw.trim()) return [];
-    return raw.split(',').map(p => {
+    return raw.split(',').map((p) => {
       const t = p
         .trim()
         // strip names & storage when detectible
@@ -2394,20 +2307,20 @@ export class SolidityAnalyzer {
       return t;
     });
   }
-  
+
   /**
    * Calculate selector from function signature
    * Based on the Deployment Analysis Route implementation
    */
   private calculateSelectorFromSignature(sig: string): string {
     try {
-  return this.selectorFromSignature(sig);
+      return this.selectorFromSignature(sig);
     } catch (err) {
       console.warn('Failed to calculate selector from signature:', sig, err);
       return '0x00000000';
     }
   }
-  
+
   /**
    * Check if function is an admin function
    * Based on the Deployment Analysis Route implementation
@@ -2428,69 +2341,55 @@ export class SolidityAnalyzer {
       /^configure/,
     ];
     return (
-      adminPatterns.some(rx => rx.test(name)) ||
-      modifiers.some(m => /owner|admin|auth|role/i.test(m))
+      adminPatterns.some((rx) => rx.test(name)) ||
+      modifiers.some((m) => /owner|admin|auth|role/i.test(m))
     );
   }
-  
+
   /**
    * Parse contract with ultra-lightweight mode for maximum UI performance
    * Based on the Deployment Analysis Route implementation
    */
-  async parseContractUltraLightweight(
-    sourceCode: string,
-    contractName?: string
-  ): Promise<any> {
+  async parseContractUltraLightweight(sourceCode: string, contractName?: string): Promise<any> {
     try {
       // Get basic contract info without AST parsing
       const sizeBytes = new TextEncoder().encode(sourceCode).length;
       const parsedFunctions = this.parseFunctionsLightweight(sourceCode);
       const functions = parsedFunctions.length;
-      
+
       // rough per-function size weights by slice length (in bytes)
       const fnSizes: Record<string, number> = {};
       const fnSigs: Record<string, string> = {};
       const fnSels: Record<string, string> = {};
-      
+
       let totalSliceBytes = 0;
-      const sliceBytes = parsedFunctions.map(
-        f => new TextEncoder().encode(f.bodyOrDecl).length
-      );
+      const sliceBytes = parsedFunctions.map((f) => new TextEncoder().encode(f.bodyOrDecl).length);
       totalSliceBytes = sliceBytes.reduce((a, b) => a + b, 0) || 1;
-      
+
       parsedFunctions.forEach((f, i) => {
         // weight by share of code slice; cap at source size
-        const est = Math.max(
-          300,
-          Math.floor((sliceBytes[i] / totalSliceBytes) * sizeBytes)
-        );
+        const est = Math.max(300, Math.floor((sliceBytes[i] / totalSliceBytes) * sizeBytes));
         // Key by name (UI expects this); if overloads exist, we aggregate
         fnSizes[f.name] = (fnSizes[f.name] || 0) + est;
         if (!fnSigs[f.name]) fnSigs[f.name] = f.signature;
         if (!fnSels[f.name]) fnSels[f.name] = f.selector;
       });
-      
+
       // Complexity (heuristic): size + loops + write vs read mix
       const loopCount = (sourceCode.match(/\b(for|while)\s*\(/g) || []).length;
       const writeCount = parsedFunctions.filter(
-        f => f.stateMutability !== 'view' && f.stateMutability !== 'pure'
+        (f) => f.stateMutability !== 'view' && f.stateMutability !== 'pure',
       ).length;
-      
+
       // EIP-170 runtime bytecode limit
       const RUNTIME_LIMIT = 24_576;
       const WARNING_THRESHOLD = Math.floor(RUNTIME_LIMIT * 0.8333);
-      
+
       let complexity: 'low' | 'medium' | 'high' = 'low';
-      if (
-        sizeBytes > WARNING_THRESHOLD ||
-        functions > 20 ||
-        loopCount > 0 ||
-        writeCount > 10
-      ) {
-        complexity =
-          sizeBytes > RUNTIME_LIMIT || functions > 35 ? 'high' : 'medium';
+      if (sizeBytes > WARNING_THRESHOLD || functions > 20 || loopCount > 0 || writeCount > 10) {
+        complexity = sizeBytes > RUNTIME_LIMIT || functions > 35 ? 'high' : 'medium';
       }
-      
+
       // Deployment strategy
       let deploymentStrategy: 'single' | 'faceted' | 'chunked' = 'single';
       if (sizeBytes > RUNTIME_LIMIT) {
@@ -2498,31 +2397,29 @@ export class SolidityAnalyzer {
       } else if (complexity !== 'low' || functions > 15 || writeCount > 8) {
         deploymentStrategy = 'faceted';
       }
-      
+
       // Group functions → facet candidates (admin/read/write)
       const adminFns = parsedFunctions
-        .filter(f => this.isAdminFunctionLightweight(f.name, f.modifiers))
-        .map(f => f.name);
+        .filter((f) => this.isAdminFunctionLightweight(f.name, f.modifiers))
+        .map((f) => f.name);
       const readFns = parsedFunctions
         .filter(
-          f =>
+          (f) =>
             !adminFns.includes(f.name) &&
-            (f.stateMutability === 'view' || f.stateMutability === 'pure')
+            (f.stateMutability === 'view' || f.stateMutability === 'pure'),
         )
-        .map(f => f.name);
+        .map((f) => f.name);
       const writeFns = parsedFunctions
-        .filter(f => !adminFns.includes(f.name) && !readFns.includes(f.name))
-        .map(f => f.name);
-      
+        .filter((f) => !adminFns.includes(f.name) && !readFns.includes(f.name))
+        .map((f) => f.name);
+
       const mkFacet = (name: string, list: string[]): any => {
         if (!list.length) return null;
         const estimatedSize = list.reduce((sum, n) => sum + (fnSizes[n] || 0), 0);
-        const signatures = list.map(n => fnSigs[n]).filter(Boolean) as string[];
-        const selectors = list
-          .map(n => fnSels[n])
-          .filter(Boolean) as string[];
+        const signatures = list.map((n) => fnSigs[n]).filter(Boolean) as string[];
+        const selectors = list.map((n) => fnSels[n]).filter(Boolean) as string[];
         const functionSizes: Record<string, number> = Object.fromEntries(
-          list.map(n => [n, fnSizes[n] || 0])
+          list.map((n) => [n, fnSizes[n] || 0]),
         );
         return {
           name,
@@ -2533,33 +2430,29 @@ export class SolidityAnalyzer {
           functionSizes,
         };
       };
-      
+
       const facetCandidates = [
         mkFacet('AdminFacet', adminFns),
         mkFacet('ReadFacet', readFns),
         mkFacet('WriteFacet', writeFns),
       ].filter(Boolean);
-      
+
       if (!facetCandidates.length && parsedFunctions.length) {
-        const list = parsedFunctions.map(f => f.name);
+        const list = parsedFunctions.map((f) => f.name);
         facetCandidates.push(mkFacet('MainFacet', list));
       }
-      
+
       // Warnings
       const warnings: string[] = [];
       if (sizeBytes > RUNTIME_LIMIT)
         warnings.push(
-          `Source size hint ${sizeBytes}B exceeds EIP-170 runtime limit (${RUNTIME_LIMIT}B).`
+          `Source size hint ${sizeBytes}B exceeds EIP-170 runtime limit (${RUNTIME_LIMIT}B).`,
         );
       if (functions !== (sourceCode.match(/function\s+\w+/g) || []).length)
-        warnings.push(
-          'Function parser found patterns beyond simple regex; results are heuristic.'
-        );
+        warnings.push('Function parser found patterns beyond simple regex; results are heuristic.');
       if (Object.keys(fnSizes).length === 0)
-        warnings.push(
-          'Could not derive per-function sizes; estimates will be uniform.'
-        );
-      
+        warnings.push('Could not derive per-function sizes; estimates will be uniform.');
+
       return {
         contractName: contractName || 'Unknown',
         functions,
@@ -2573,11 +2466,8 @@ export class SolidityAnalyzer {
         warnings,
       };
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      throw new AnalysisError(
-        `Failed to parse contract: ${errorMessage}`
-      );
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new AnalysisError(`Failed to parse contract: ${errorMessage}`);
     }
   }
 }

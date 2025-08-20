@@ -11,7 +11,8 @@ function readJson(p: string) {
 
 function normalizeToParsedContract(input: any): ParsedContract {
   if (input && Array.isArray(input.functions)) return input as ParsedContract;
-  if (input && Array.isArray(input.contracts) && input.contracts[0]) return input.contracts[0] as ParsedContract;
+  if (input && Array.isArray(input.contracts) && input.contracts[0])
+    return input.contracts[0] as ParsedContract;
   throw new Error('Unrecognized analyzer JSON: expected {functions:[]} or {contracts:[...]}');
 }
 
@@ -19,7 +20,9 @@ function main() {
   const flag = '--input';
   const idx = process.argv.indexOf(flag);
   if (idx === -1 || !process.argv[idx + 1]) {
-    console.error(JSON.stringify({ ok: false, error: `Usage: node plan.js ${flag} <analyzer.json>` }));
+    console.error(
+      JSON.stringify({ ok: false, error: `Usage: node plan.js ${flag} <analyzer.json>` }),
+    );
     process.exit(1);
   }
   const inputPath = path.resolve(process.cwd(), process.argv[idx + 1]);

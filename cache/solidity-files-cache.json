@@ -2613,6 +2613,83 @@
       "artifacts": [
         "VersionFacet"
       ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\test\\Example.sol": {
+      "lastModificationDate": 1755597237264,
+      "contentHash": "51da327d8ccdb2f7f50ffe2dd1185726",
+      "sourceName": "contracts/test/Example.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
+      "artifacts": [
+        "Base",
+        "Example"
+      ]
+    },
+    "C:\\PayRox-Go-Beyond-Ollama\\contracts\\_payrox_generated\\Example_Transformed.sol": {
+      "lastModificationDate": 1755600157850,
+      "contentHash": "e01a6996c863c9690cad7832cf27b5e4",
+      "sourceName": "contracts/_payrox_generated/Example_Transformed.sol",
+      "solcConfig": {
+        "version": "0.8.30",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "cancun",
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.30"
+      ],
+      "artifacts": [
+        "Base",
+        "Example",
+        "ExampleStorage"
+      ]
     }
   }
 }

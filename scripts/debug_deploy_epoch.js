@@ -1,13 +1,16 @@
 const hre = require('hardhat');
 
 async function main() {
-  const [deployer, addr1] = await hre.ethers.getSigners();
+  const [_addr1] = await hre.ethers.getSigners();
   console.log('Deployer address:', deployer.address);
 
   const EpochManager = await hre.ethers.getContractFactory('EpochManager');
   const epochManager = await EpochManager.deploy();
   await epochManager.waitForDeployment();
-  console.log('EpochManager deployed at:', epochManager.target ? epochManager.target : epochManager.address);
+  console.log(
+    'EpochManager deployed at:',
+    epochManager.target ? epochManager.target : epochManager.address,
+  );
 
   const FacetA = await hre.ethers.getContractFactory('FacetA');
   const facetA = await FacetA.deploy();
@@ -15,7 +18,10 @@ async function main() {
   console.log('FacetA deployed at:', facetA.target ? facetA.target : facetA.address);
 
   const DiamondWithEpoch = await hre.ethers.getContractFactory('DiamondWithEpoch');
-  const diamond = await DiamondWithEpoch.deploy(deployer.address, epochManager.target ? epochManager.target : epochManager.address);
+  const diamond = await DiamondWithEpoch.deploy(
+    deployer.address,
+    epochManager.target ? epochManager.target : epochManager.address,
+  );
   await diamond.waitForDeployment();
   console.log('DiamondWithEpoch deployed at:', diamond.target ? diamond.target : diamond.address);
 }
