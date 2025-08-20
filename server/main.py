@@ -67,7 +67,7 @@ def chunk_text(text: str, size: int = 1500, overlap: int = 150) -> List[str]:
 # -----------------------------------------------------------------------------
 # Globals / helpers (minimal defaults so module imports cleanly)
 # -----------------------------------------------------------------------------
-CONTRACTS_ROOT = Path(os.getenv('PRX_CONTRACTS_ROOT', r'C:\dev\contracts-sandbox\contracts')).resolve()
+CONTRACTS_ROOT = Path(os.getenv('PRX_CONTRACTS_ROOT', 'contracts')).resolve()
 ARCH_DIR = Path(os.getenv('PRX_ARCH_DIR', str(Path(CONTRACTS_ROOT) / 'arch'))).resolve()
 FACTS_PATH = ARCH_DIR / 'facts.json'
 
