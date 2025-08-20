@@ -2,23 +2,20 @@
 export class CrashGuard {
   static safeProcessExit(code: number = 0): never {
     console.log(`[CrashGuard] Attempting clean exit with code ${code}`);
-    
+
     // Give time for async operations to complete
     setTimeout(() => {
       process.exit(code);
     }, 100);
-    
+
     throw new Error(`Process exit requested with code ${code}`);
   }
 
-  static wrapWithErrorHandling<T extends (...args: any[]) => any>(
-    fn: T,
-    context: string
-  ): T {
-    return ((...args: any[]) => {
+  static wrapWithErrorHandling<T extends (..._args: any[]) => any>(fn: T, context: string): T {
+    return ((..._args: any[]) => {
       try {
-        const result = fn(...args);
-        
+        const result = fn(..._args);
+
         // Handle promises
         if (result && typeof result.catch === 'function') {
           return result.catch((error: Error) => {
@@ -27,7 +24,7 @@ export class CrashGuard {
             throw error;
           });
         }
-        
+
         return result;
       } catch (error) {
         console.error(`[CrashGuard] Synchronous error in ${context}:`, error);
@@ -39,38 +36,34 @@ export class CrashGuard {
   static async safeContractCall<T>(
     contractCall: () => Promise<T>,
     fallback?: T,
-    context: string = 'contract call'
+    context: string = 'contract call',
   ): Promise<T> {
     try {
       return await contractCall();
     } catch (error) {
       console.error(`[CrashGuard] Contract call failed in ${context}:`, error);
-      
+
       if (fallback !== undefined) {
         console.log(`[CrashGuard] Using fallback value for ${context}`);
         return fallback;
       }
-      
+
       throw error;
     }
   }
 
-  static safePropertyAccess<T>(
-    obj: any,
-    path: string,
-    fallback?: T
-  ): T | undefined {
+  static safePropertyAccess<T>(obj: any, path: string, fallback?: T): T | undefined {
     try {
       const keys = path.split('.');
       let current = obj;
-      
+
       for (const key of keys) {
         if (current === null || current === undefined) {
           return fallback;
         }
         current = current[key];
       }
-      
+
       return current;
     } catch (error) {
       console.error(`[CrashGuard] Property access failed for path "${path}":`, error);
@@ -87,12 +80,12 @@ export class EthersV6Helper {
       if (typeof contract.getAddress === 'function') {
         return await contract.getAddress();
       }
-      
+
       // Fall back to v5 property
       if (contract.address) {
         return contract.address;
       }
-      
+
       throw new Error('Cannot get contract address');
     } catch (error) {
       console.error('[EthersV6Helper] getAddress failed:', error);
@@ -107,13 +100,13 @@ export class EthersV6Helper {
         await contract.waitForDeployment();
         return;
       }
-      
+
       // Fall back to v5 method
       if (typeof contract.deployed === 'function') {
-        await contract.deployed();
+        await contract.waitForDeployment();
         return;
       }
-      
+
       console.warn('[EthersV6Helper] No deployment waiting method found');
     } catch (error) {
       console.error('[EthersV6Helper] waitForDeployment failed:', error);
@@ -124,6 +117,7 @@ export class EthersV6Helper {
   static getZeroAddress(): string {
     // Try v6 first
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const ethers = require('ethers');
       if (ethers.ZeroAddress) {
         return ethers.ZeroAddress;
@@ -134,6 +128,7 @@ export class EthersV6Helper {
 
     // Fall back to v5
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const ethers = require('ethers');
       if (ethers.constants?.AddressZero) {
         return ethers.constants.AddressZero;
@@ -148,6 +143,7 @@ export class EthersV6Helper {
 
   static keccak256(data: string): string {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const ethers = require('ethers');
       
       // Try v6 first
@@ -169,18 +165,19 @@ export class EthersV6Helper {
 
   static toUtf8Bytes(str: string): Uint8Array {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const ethers = require('ethers');
       
       // Try v6 first
       if (ethers.toUtf8Bytes) {
         return ethers.toUtf8Bytes(str);
       }
-      
+
       // Fall back to v5
       if (ethers.utils?.toUtf8Bytes) {
         return ethers.utils.toUtf8Bytes(str);
       }
-      
+
       throw new Error('No toUtf8Bytes function found');
     } catch (error) {
       console.error('[EthersV6Helper] toUtf8Bytes failed:', error);
